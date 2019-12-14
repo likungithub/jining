@@ -1,0 +1,70 @@
+@charset "utf-8";
+body, html {
+    font-family: "Helvetica Neue", "Luxi Sans", "DejaVu Sans", Tahoma, "Hiragino Sans GB", STHeiti, "Microsoft YaHei" !important;
+    font-size: 12px !important;
+}
+
+#publicHeader {
+    border-bottom: 1px solid #dadada;
+    height: 70px;
+    line-height: 70px;
+}
+#publicHeader>.totalWrap{
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+#publicHeader  .wrap:nth-child(1) {
+    float: left;
+}
+#publicHeader  .wrap:nth-child(1) a{
+    text-decoration: none;
+}
+
+#publicHeader  .wrap:nth-child(2) {
+    float: right;
+}
+
+#publicHeader  .wrap:nth-child(2) > span {
+    color: #999;
+    position: relative;
+    top: 10px;
+}
+
+#publicHeader  .wrap:nth-child(2) > span:nth-child(1) {
+    padding-right: 15px;
+}
+
+#publicFoot-m {
+    height: 60px;
+    line-height: 35px;
+    border-top: 1px solid #dadada;
+}
+
+#publicFoot-m > ul {
+    width: 850px;
+    margin: 0 auto;
+}
+#publicFoot-m > ul >li:nth-child(2){
+	margin-left:50px;
+}
+#publicFoot-m > ul >li:nth-child(2) a{
+	border-left:0;
+}
+#publicFoot-m > ul > li:nth-child(n+2) {
+    float: left;
+    padding-right: 15px;
+    text-align: center;
+}
+
+#publicFoot-m > ul > li > a, #publicFoot-m > ul > li > span {
+    color: #999 !important;
+}
+
+#publicFoot-m > ul > li > a {
+    border-left: 1px solid #999;
+    padding-left: 7px;
+}
+#publicFoot-m > ul > li:nth-child(1) > a {
+   border: none;
+}

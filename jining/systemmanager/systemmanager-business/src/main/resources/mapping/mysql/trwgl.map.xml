@@ -1,0 +1,243 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.xinhai.caiyun.systemmanager.dao.TrwglMapper">
+
+    <resultMap id="TrwglMap" type="com.xinhai.caiyun.systemmanager.api.Trwgl" >
+        <id column="ID" property="id" jdbcType="BIGINT" />
+        <result column="RWID" property="rwid" jdbcType="VARCHAR" />
+        <result column="RWMC" property="rwmc" jdbcType="VARCHAR" />
+        <result column="RW_TYPE" property="rwType" jdbcType="VARCHAR" />
+        <result column="BLZT" property="blzt" jdbcType="VARCHAR" />
+        <result column="CYRQ" property="cyrq" jdbcType="TIMESTAMP" />
+        <result column="CYDD" property="cydd" jdbcType="VARCHAR" />
+        <result column="CYLXR" property="cylxr" jdbcType="VARCHAR" />
+        <result column="BZXX" property="bzxx" jdbcType="VARCHAR" />
+        <result column="SCBZ" property="scbz" jdbcType="TINYINT" />
+        <result column="SJLY" property="sjly" jdbcType="VARCHAR" />
+        <result column="WTID" property="wtid" jdbcType="VARCHAR" />
+        <result column="WTDWMC" property="wtdwmc" jdbcType="VARCHAR" />
+        <result column="WT_TYPE" property="wtType" jdbcType="VARCHAR" />
+        <result column="BMDM" property="bmdm" jdbcType="VARCHAR" />
+        <result column="LRRY" property="lrry" jdbcType="VARCHAR" />
+        <result column="GXRY" property="gxry" jdbcType="VARCHAR" />
+        <result column="SCRY" property="scry" jdbcType="VARCHAR" />
+        <result column="LRRQ" property="lrrq" jdbcType="TIMESTAMP" />
+        <result column="GXRQ" property="gxrq" jdbcType="TIMESTAMP" />
+        <result column="SCRQ" property="scrq" jdbcType="TIMESTAMP" />
+        <result column="CYLXFS" property="cylxfs" jdbcType="VARCHAR" />
+        <result column="CYJS" property="cyjs" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <sql id="Base_Column_List" >
+        ID, RWID, RWMC, RW_TYPE, BLZT, CYRQ, CYDD, CYLXR, BZXX, SCBZ, SJLY, WTID, WTDWMC, WT_TYPE, BMDM, LRRY,
+        GXRY, SCRY, LRRQ, GXRQ, SCRQ
+    </sql>
+
+    <select id="findTrwgl" resultMap="TrwglMap" parameterType="java.lang.String" >
+        select
+         b.ID, b.RWID, b.RWMC, b.RW_TYPE, b.BLZT, b.CYRQ, b.CYDD, b.CYLXR, b.BZXX, b.SCBZ, b.SJLY, b.WTID, b.WTDWMC, b.WT_TYPE, b.BMDM, b.LRRY,
+        b.GXRY, b.SCRY, b.LRRQ, b.GXRQ, b.SCRQ,b.CYLXFS,b.CYJS,c.YPBM
+        from t_rwgl_jbxx b
+        left join t_ypgl_jbxx c on c.wtid=b.wtid
+        where b.ID = #{id}
+    </select>
+
+    <update id="deleteTrwglbyId" parameterType="java.lang.String" >
+        UPDATE t_rwgl_jbxx SET SCBZ = TRUE, scry= #{scry}, scrq = now()
+        where ID = #{id}
+    </update>
+
+    <select id="findTrwgllist" resultType="com.xinhai.caiyun.systemmanager.api.Trwgl">
+        SELECT c.GGXH,c.YPDJ,c.SCDW,c.JCLBDM,c.YPSL,c.SCRQ1,c.YPBM,c.BZQ,c.BZ,c.YPZT,c.BCTJ,d.ID, d.RWID, d.RWMC, d.RW_TYPE, d.BLZT, d.CYRQ, d.CYDD, d.CYLXR, d.BZXX, d.SCBZ, d.SJLY, d.WTID, d.WTDWMC, d.WT_TYPE, d.BMDM, d.LRRY,
+        d.GXRY, d.SCRY, d.LRRQ, d.GXRQ, d.SCRQ, d.HTMC, d.SFMC, d.CSMC,c.YPXTDM,c.YPBCTJ,c.ZLDJ,c.RQ,c.SCZDZ
+        FROM (
+        select
+        a.ID, a.RWID, a.RWMC, a.RW_TYPE, a.BLZT, a.CYRQ, a.CYDD, a.CYLXR, a.BZXX, a.SCBZ, a.SJLY, a.WTID, a.WTDWMC, a.WT_TYPE, a.BMDM, a.LRRY,
+        a.GXRY, a.SCRY, a.LRRQ, a.GXRQ, a.SCRQ, b.HTMC, b.SFMC, b.CSMC
+        from
+        t_rwgl_jbxx a,t_wt_jbxx b
+        where a.SCBZ = FALSE  and a.WTID = b.WTID
+        <if test="rwType != null">
+            and a.RW_TYPE = #{rwType}
+        </if>
+        <if test="rwzt !=004">
+            and a.blzt = #{rwzt}
+        </if>
+        <if test="wtType != null">
+            and a.WT_TYPE = #{wtType}
+        </if>
+        <if test="searchText != null">
+            and a.WTDWMC like CONCAT('%',#{searchText},'%')
+        </if>
+        AND (FuncAuthorityRW(a.WTID, #{zydm}, '4') = 1 or a.zxry like CONCAT('%',#{zydm},'%'))
+        ) d
+        left join
+        t_ypgl_jbxx c
+        on
+        c.wtid=d.wtid
+        order by d.LRRQ DESC
+        LIMIT #{start},#{len}
+    </select>
+
+    <select id="findTrwgllistNums" resultType="java.lang.Integer">
+        SELECT  COUNT(id)
+        FROM t_rwgl_jbxx
+        where SCBZ = FALSE
+        <if test="rwType != null">
+            and RW_TYPE = #{rwType}
+        </if>
+        <if test="wtType != null">
+            and WT_TYPE = #{wtType}
+        </if>
+        <if test="searchText != null">
+            and WTDWMC like CONCAT('%',#{searchText},'%')
+        </if>
+        AND FuncAuthorityRW(WTID, #{zydm}, '4') = 1;
+    </select>
+
+    <!--插入-->
+    <insert id="createTrwgl" parameterType="com.xinhai.caiyun.systemmanager.api.Trwgl" >
+    insert into t_rwgl_jbxx (RWID, RWMC, RW_TYPE, BLZT, CYRQ, CYDD, CYLXR, BZXX, SCBZ, SJLY, WTID, WTDWMC,
+      WT_TYPE, BMDM, LRRY, LRRQ, cylxfs, cydw, cyjs, cysj)
+    values (#{rwid,jdbcType=VARCHAR}, #{rwmc,jdbcType=VARCHAR},
+      #{rwType,jdbcType=VARCHAR}, #{blzt,jdbcType=VARCHAR}, #{cyrq}, #{cydd,jdbcType=VARCHAR}, #{cylxr,jdbcType=VARCHAR}, #{bzxx,jdbcType=VARCHAR},
+      FALSE, #{sjly,jdbcType=VARCHAR}, #{wtid,jdbcType=VARCHAR}, #{wtdwmc,jdbcType=VARCHAR},
+      #{wtType,jdbcType=VARCHAR}, #{bmdm,jdbcType=VARCHAR}, #{lrry,jdbcType=VARCHAR}, now(),#{cylxfs},#{cydw},#{cyjs},#{cysj},)
+  </insert>
+
+
+    <update id="updateTrwgl" parameterType="com.xinhai.caiyun.systemmanager.api.Trwgl" >
+        update t_rwgl_jbxx
+        <set >
+            <if test="rwid != null" >
+                RWID = #{rwid,jdbcType=VARCHAR},
+            </if>
+            <if test="rwmc != null" >
+                RWMC = #{rwmc,jdbcType=VARCHAR},
+            </if>
+            <if test="rwType != null" >
+                RW_TYPE = #{rwType,jdbcType=VARCHAR},
+            </if>
+            <if test="cyrq != null" >
+                CYRQ = #{cyrq,jdbcType=VARCHAR},
+            </if>
+            <if test="cydd != null" >
+                CYDD = #{cydd,jdbcType=VARCHAR},
+            </if>
+            <if test="cylxr != null" >
+                CYLXR = #{cylxr,jdbcType=VARCHAR},
+            </if>
+            <if test="bzxx != null" >
+                BZXX = #{bzxx,jdbcType=VARCHAR},
+            </if>
+            <if test="sjly != null" >
+                SJLY = #{sjly,jdbcType=VARCHAR},
+            </if>
+            <if test="wtid != null" >
+                WTID = #{wtid,jdbcType=VARCHAR},
+            </if>
+            <if test="wtdwmc != null" >
+                WTDWMC = #{wtdwmc,jdbcType=VARCHAR},
+            </if>
+            <if test="wtType != null" >
+                WT_TYPE = #{wtType,jdbcType=VARCHAR},
+            </if>
+            <if test="bmdm != null" >
+                BMDM = #{bmdm,jdbcType=VARCHAR},
+            </if>
+            <if test="cyjs !=null">
+                cyjs=#{cyjs,jdbcType=VARCHAR},
+            </if>
+            <if test="cylxfs !=null">
+                cylxfs=#{cylxfs,jdbcType=VARCHAR},
+            </if>
+            gxry = #{gxry},
+            gxrq = now()
+        </set>
+        where ID = #{id}
+    </update>
+
+    <update id="updateTrwglWtid" parameterType="com.xinhai.caiyun.systemmanager.api.Trwgl">
+        update t_rwgl_jbxx
+        <set>
+            <if test="cylxr != null" >
+                cylxr = #{cylxr,jdbcType=VARCHAR},
+            </if>
+            <if test="cylxfs != null" >
+                cylxfs = #{cylxfs,jdbcType=VARCHAR},
+            </if>
+            <if test="cydw !=null">
+                cydw=#{cydw,jdbcType=VARCHAR},
+            </if>
+            <if test="cydd !=null">
+                cydd=#{cydd,jdbcType=VARCHAR},
+            </if>
+            <if test="cyjs !=null">
+                cyjs=#{cyjs,jdbcType=VARCHAR},
+            </if>
+            <if test="cysj !=null">
+                cyjs=#{cyjs,jdbcType=VARCHAR},
+            </if>
+        </set>
+        where wtid = #{wtid}
+    </update>
+
+    <update id="updateCYYP" parameterType="com.xinhai.caiyun.systemmanager.api.T_ypgl">
+        update t_ypgl_jbxx
+        set if_cy = TRUE,
+        cysl=#{yp.cysl}
+        WHERE id = #{yp.id};
+    </update>
+    <update id="updateBlzt">
+        update t_rwgl_jbxx
+        set blzt = #{blzt}
+        <if test="if_jd != null">
+            ,if_jd=#{if_jd}
+        </if>
+        where id in
+        <foreach item="item" collection="idlist" separator="," open="(" close=")" index="">
+            #{item}
+        </foreach>
+    </update>
+
+    <update id="updateBlzt002" parameterType="java.util.ArrayList">
+        update t_rwgl_jbxx
+        set blzt = '001'
+        where id in
+        <foreach item="item" collection="idlist" separator="," open="(" close=")" index="">
+            #{item}
+        </foreach>
+    </update>
+
+    <delete id="deleteRw" parameterType="java.util.ArrayList">
+        update t_rwgl_jbxx
+        set zxry=null,
+        if_jd=null
+        where  wtid  in
+        <foreach collection="ypbm" item="ypbm" separator="," open="(" close=")">
+            #{ypbm}
+        </foreach>
+    </delete>
+    <!--分配任务-->
+    <update id="gxrwwry">
+        <foreach collection="wtid"  item="wtid">
+            update t_rwgl_jbxx
+            set zxry = #{zxry}
+            where id= #{wtid};
+        </foreach>
+    </update>
+    <!--查询样品Id-->
+    <select id="getYpId" parameterType="String" resultType="Integer">
+      select  id
+      from t_ypgl_jbxx
+      where ypbm=#{ypbm}
+    </select>
+    <!--提交任务-->
+    <update id="updatejszt">
+        update t_ypgl_jbxx
+        jszt=#{jszt}
+        where id=#{id}
+    </update>
+</mapper>

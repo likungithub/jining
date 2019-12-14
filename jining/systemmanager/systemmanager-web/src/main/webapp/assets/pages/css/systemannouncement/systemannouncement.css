@@ -1,0 +1,10 @@
+@CHARSET "UTF-8";
+/*系统公告样式开始*/
+.systemAnnouncement-m .publicInput{
+    width: 100px;
+}
+.systemAnnouncement-m .publicBtn
+{
+    height: 33px;
+    border-radius: 0 4px 4px 0!important;
+}

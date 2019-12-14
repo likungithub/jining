@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xinhai.caiyun.customermanage.dao.YprkMapper">
+    <!--查询样品入库列表-->
+    <select id="selectYprkAll"  parameterType="Map" resultType="Map">
+        SELECT
+        b.ypid,
+        a.ypmc,
+        b.crkly,
+        b.info,
+        Date_Format(b.crksj,"%Y-%m-%d") crksj,
+        b.syry,
+        b.zysl,
+        b.fysl,
+        b.bysl
+        FROM
+        t_ypkc_jbxx b
+        LEFT JOIN
+        t_ypgl_jbxx a ON a.ypbm = b.ypid
+        WHERE
+        b.crkzt = '1'
+        <if test="map.ypbm!=null and map.ypbm!=''">
+            and b.ypid like concat('%',#{map.ypbm}, '%')
+        </if>
+        <if test="map.ypmc!=null and map.ypmc!=''">
+            and a.ypmc like concat('%',#{map.ypmc}, '%')
+        </if>
+        limit #{map.start},#{map.length};
+    </select>
+    <select id="selectYprkCount" resultType="java.lang.Integer">
+        SELECT
+        count(*)
+        FROM
+        t_ypkc_jbxx b
+        LEFT JOIN
+        t_ypgl_jbxx a ON a.ypbm = b.ypid
+        WHERE
+        b.crkzt = '1'
+        <if test="map.ypbm!=null and map.ypbm!=''">
+            and b.ypid like concat('%',#{map.ypbm}, '%')
+        </if>
+        <if test="map.ypmc!=null and map.ypmc!=''">
+            and a.ypmc like concat('%',#{map.ypmc}, '%')
+        </if>
+    </select>
+    <!--通过ypbm查找入库样品-->
+    <select id="findByYpbm" resultType="com.xinhai.caiyun.customermanage.api.Yprk">
+        SELECT
+        b.ypid ypbm,
+        a.ypmc,
+        b.crkly,
+        b.info,
+        b.syry,
+        b.crksj,
+        b.zysl,
+        b.fysl,
+        b.bysl,
+        b.lrrq,
+        b.lrry
+        FROM
+        t_ypkc_jbxx b
+        LEFT JOIN
+        t_ypgl_jbxx a ON a.ypbm = b.ypid
+        WHERE
+        b.crkzt = '1' and b.ypid = #{map.ypbm}
+    </select>
+    <!--导入Excel数据-->
+    <insert id="importYprkExcel">
+        insert into t_ypkc_jbxx(ypid,crkly,crkzt,info,syry,crksj,lrry,lrrq,zysl,fysl,bysl)
+          values(#{map.ypid},#{map.crkly},'1',#{map.info},#{map.syry},STR_TO_DATE(#{map.crksj},"%Y-%m-%d"),#{map.lrry},now(),#{map.zysl},#{map.fysl},#{map.bysl})
+    </insert>
+    <!--查询样品是否存在-->
+    <select id="selectYpCount" parameterType="Map" resultType="String">
+        SELECT b.id
+        FROM t_ypkc_jbxx b
+        where 1=1
+        <if test="map.ypid!=null and map.ypid!=''">
+            and b.ypid = #{map.ypid}
+        </if>
+    </select>
+    <!--删除已存在的样品-->
+    <delete id="deleteYp">
+        delete from t_ypkc_jbxx where 1 = 1
+        <if test="id != '' and id !=null">
+            and id = #{id}
+        </if>
+    </delete>
+    <!--修改仪器设备台账信息-->
+    <update id="updateYprk">
+        update t_ypkc_jbxx set crkly =#{map.crkly},info =#{map.info},syry =#{map.syry},zysl =#{map.zysl},fysl =#{map.fysl},bysl =#{map.bysl}
+        where ypid = #{map.ypid}
+    </update>
+    <!--新增样品入库-->
+    <insert id="addYprk" parameterType="com.xinhai.caiyun.customermanage.api.Yprkxx">
+        insert into t_ypkc_jbxx(ypid,crkly,crkzt,info,syry,crksj,lrry,lrrq,zysl,fysl,bysl)
+        values (#{ypid},#{crkly},#{crkzt},#{info},#{syry},#{crksj},#{lrry},#{lrrq},#{zysl},#{fysl},#{bysl})
+    </insert>
+</mapper>

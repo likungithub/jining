@@ -1,0 +1,32 @@
+<jboss-deployment-structure>
+	<deployment>
+		<dependencies>
+			<module name="org.springframework" export="true" meta-inf="export"/>
+			<module name="com.fasterxml.jackson" export="true" meta-inf="export"/>
+			<module name="org.apache.logging.log4j" export="true" meta-inf="export"/>
+			<module name="org.mybatis" export="true" meta-inf="export"/>
+			<module name="org.apache.commons.dbcp2" export="true" meta-inf="export"/>
+			<module name="mysql" export="true" meta-inf="export"/>
+			<module name="javax.commons" export="true" meta-inf="export"/>
+			<module name="org.apache.zookeeper" />
+			<module name="com.hynnet.sqljdbc4"/>
+
+			<!--disconf-->
+			<module name="commons.io"/>
+			<module name="google.gson"/>
+			<module name="commons.lang"/>
+			<module name="aspectj.tools"/>
+			<module name="org.reflections"/>
+
+			<!--dubbo-->
+			<module name="google.guava"/>
+			<module name="org.apache.http"/>
+			<module name="org.javassist"/>
+			<module name="org.apache.commons.codec"/>
+			<module name="org.apache.commons.pool"/>
+			<module name="javax.servlet.api"/>
+			<module name="netty"/>
+			<module name="org.apache.curator"/>
+		</dependencies>
+	</deployment>
+</jboss-deployment-structure>

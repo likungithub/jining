@@ -1,0 +1,176 @@
+@CHARSET "UTF-8";
+/*评价管理-公司样式开始*/
+
+#evaluate-manager-content .change-btn, #evaluatestaff-manager-content .change-btn {
+    width: 200px;
+}
+
+.calendar-width {
+    width: 150px !important;
+    padding-left: 0;
+}
+
+#evaluate-manager-content .dis-bar, #evaluatestaff-manager-content .dis-bar {
+    display: inline-block;
+    width: 200px;
+    height: 30px;
+    border: 1px solid black;
+}
+
+#evaluate-manager-content .ui-layout-content, #evaluatestaff-manager-content .ui-layout-content {
+    padding: 0;
+}
+
+#evaluate-manager-content .portlet-title, #evaluatestaff-manager-content .portlet-title {
+    height: 50px;
+    background: #F4F9F8;
+    padding: 10px;
+    min-width: 1024px;
+}
+
+#evaluate-manager-content .btn-icon {
+    font-size: 20px !important;
+    margin-left: 20px;
+}
+
+#evaluate-manager-content .menu-evaluate, #evaluatestaff-manager-content .menu-evaluate {
+    border: 1px solid #ccc;
+    display: inline-block;
+    height: 40px;
+    line-height: 40px;
+    font-size: 14px;
+    font-weight: 100 !important;
+    padding: 0 10px;
+    position: relative;
+    background: #fff;
+    border-bottom: none;
+    cursor: pointer;
+}
+
+#evaluate-manager-content span.menu-evaluate .activerbar, #evaluatestaff-manager-content span.menu-evaluate .activerbar {
+    content: "";
+    display: none;
+    background: dodgerblue;
+    width: 100%;
+    height: 2px;
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+
+#evaluate-manager-content span.menu-evaluate .activerbar.active, #evaluatestaff-manager-content span.menu-evaluate .activerbar.active {
+    display: block;
+}
+
+#evaluate-manager-content .search-date, #evaluatestaff-manager-content .search-date {
+    height: 40px;
+    padding-left: 30px;
+    padding-top: 4px;
+}
+
+#evaluate-manager-content .table-toolbar, #evaluatestaff-manager-content .table-toolbar {
+    min-width: 1024px;
+    background: #F4F9F8;
+    padding-bottom: 20px;
+    margin-bottom: 0;
+}
+
+#evaluate-manager-content .table-toolbar .row, #evaluatestaff-manager-content .table-toolbar .row {
+    background: #fff;
+}
+
+#evaluate-manager-content .all-score > span:nth-child(1), #evaluatestaff-manager-content .all-score > span:nth-child(1) {
+    display: block;
+    color: #FE9200 !important;
+    margin-top: 30px;
+    font-size: 30px;
+}
+
+#evaluate-manager-content .dis-bar, #evaluatestaff-manager-content .dis-bar {
+    border: none;
+    width: 470px;
+    height: 14px;
+    background: #E7E7E7;
+    margin: 0 15px 0;
+    position: relative;
+}
+
+#evaluate-manager-content .dis-bar .bar-color, #evaluatestaff-manager-content .dis-bar .bar-color {
+    content: "";
+    display: block;
+    height: 100%;
+    width: 50%;
+    left: 0;
+    top: 0;
+    background: #FE9200;
+}
+
+#evaluate-manager-content .dis-square, #evaluatestaff-manager-content .dis-square {
+    line-height: 34px;
+    border-left: 1px solid #ccc;
+    padding-left: 60px;
+}
+
+/*#evaluate-manager-content .jstree-default .jstree-icon:empty,*/
+/*#evaluatestaff-manager-content .jstree-default .jstree-icon:empty {*/
+    /*display: none;*/
+/*}*/
+
+/*#evaluate-manager-content .jstree-default .jstree-wholerow,*/
+/*#evaluatestaff-manager-content .jstree-default .jstree-wholerow {*/
+    /*height: 38px;*/
+/*}*/
+
+/*#evaluate-manager-content .jstree-default .jstree-anchor,*/
+/*#evaluatestaff-manager-content .jstree-default .jstree-anchor {*/
+    /*line-height: 38px;*/
+    /*height: 38px;*/
+    /*padding-left: 20px;*/
+/*}*/
+
+/*#evaluate-manager-content .jstree-default .jstree-node,*/
+/*#evaluatestaff-manager-content .jstree-default .jstree-node {*/
+    /*min-height: 38px;*/
+    /*line-height: 38px;*/
+    /*min-width: 38px;*/
+    /*margin-left: 0px;*/
+/*}*/
+
+/*#evaluate-manager-content .jstree-default .jstree-wholerow-clicked, #evaluate-manager-content .jstree-wholerow .jstree-wholerow-clicked,*/
+/*#evaluatestaff-manager-content .jstree-default .jstree-wholerow-clicked, #evaluatestaff-manager-content .jstree-wholerow .jstree-wholerow-clicked {*/
+    /*background-color: #CAD1D9;*/
+/*}*/
+
+/*#evaluate-manager-content .jstree-default .jstree-wholerow-hovered,*/
+/*#evaluate-manager-content .jstree-wholerow .jstree-wholerow-hovered,*/
+/*#evaluatestaff-manager-content .jstree-default .jstree-wholerow-hovered,*/
+/*#evaluatestaff-manager-content .jstree-wholerow .jstree-wholerow-hovered {*/
+    /*border: 0;*/
+    /*background-color: #E9F4FA !important;*/
+    /*box-shadow: none;*/
+/*}*/
+.jstree-default .jstree-open>.jstree-ocl {
+    background-position: -132px -4px!important;
+}
+.jstree-default .jstree-leaf>.jstree-ocl {
+    background-position: -68px -4px!important;
+}
+
+.evaluate-labelcom {
+    position: relative;
+    bottom: 1px;
+    height: 34px;
+    width: 85px;
+    font-weight: 400 !important;
+    color: #333 !important;
+}
+
+.right-border-radius {
+    border-radius: 0 4px 4px 0 !important;
+}
+
+#evaluate-manager-content .ui-layout-content ,#evaluatestaff-manager-content .ui-layout-content{
+    overflow-x: hidden;
+}
+
+

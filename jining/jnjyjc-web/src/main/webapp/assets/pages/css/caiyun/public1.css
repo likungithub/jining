@@ -1,0 +1,587 @@
+@CHARSET "UTF-8";
+/*去掉所有按钮的outline*/
+button{
+    outline: none!important;
+}
+/*主菜单的图标左移*/
+.page-sidebar-closed.page-sidebar-fixed .page-sidebar:hover .page-sidebar-menu .sub-menu > li > a > i, .page-sidebar .page-sidebar-menu .sub-menu > li > a > i {
+    margin-left: 6px;
+
+}
+
+/*表单类公用样式*/
+.inputCommon {
+    border: 1px solid #e5e5e5 !important;
+    border-radius: 0 4px 4px 0 !important;
+    height: 33px;
+    outline: none;
+    text-indent: 10px;
+    float: left;
+}
+
+/*一列的input样式*/
+.inputWidth-col-one {
+    width: 500px !important;
+}
+
+/*二列的input样式*/
+.inputWidth-col-two {
+    width: 200px !important;
+}
+
+/* 新增按钮后的input查询框样式 */
+.inputSearch {
+    border: 1px solid #e5e5e5 !important;
+    border-radius: 4px !important;
+    height: 33px;
+    outline: none;
+    text-indent: 30px;
+}
+
+/*label公用样式
+*/
+.labelCommon {
+    border-radius: 4px 0 0 4px !important;
+    background: #f6f6f6 !important;
+    border: 1px solid #ccc !important;
+    border-right: none !important;
+    height: 33px;
+    line-height: 32px;
+    text-align: center;
+    /*font-weight: 800 !important;*/
+    float: left;
+    color: #333;
+}
+
+/*一列的input样式*/
+.labelWidth-col-one {
+    width: 110px !important;
+}
+
+/*二列的input样式*/
+.labelWidth-col-two {
+    width: 100px !important;
+}
+
+/*网站公用颜色*/
+
+/*字体颜色*/
+.color666 {
+    color: #666 !important;
+}
+
+.color999 {
+    color: #999 !important;
+}
+
+.color333 {
+    color: #333 !important;
+}
+
+.colorfff {
+    color: #fff !important;
+}
+
+.colorBlue-10a0f7 {
+    color: #f9964d !important;
+}
+
+.colorRed {
+    color: red !important;
+}
+
+.colorccc {
+    color: #ccc !important;
+}
+
+/*背景色*/
+.blueBg {
+    background: #10a0f7 !important;
+}
+
+.redBg {
+    background: #FF2625 !important;
+}
+
+.labelBg {
+    background: #f6f6f6 !important;
+    float: left;
+}
+
+.fffBg {
+    background: #fff !important;
+    color: #333!important;
+}
+
+body {
+    color: #333 !important;
+}
+
+.select2-container--bootstrap .select2-selection--single .select2-selection__rendered {
+    color: #666 !important;
+    font-size: 12px !important;
+}
+
+/*btn按钮颜色公用样式*/
+.btnAdd {
+    background: #E03A3A !important;
+    border: 1px solid #E03A3A !important;
+}
+
+.btnAdd:hover {
+    border: 1px solid rgba(224, 58, 58, .8) !important;
+    background: rgba(224, 58, 58, .8) !important;
+}
+
+.btnCancel {
+    background: #FF2625 !important;
+}
+
+/*添加按钮,后边带蓝色边框的按钮样式*/
+.btnBorderColor {
+    border: 1px solid rgba(224, 58, 58, .8) !important;
+}
+.fffBg  i{
+    color:rgba(224, 58, 58, .8) !important;
+}
+
+.btnBlue:hover {
+    opacity: 0.9;
+}
+
+/*清除按钮划过颜色*/
+.btn-default:hover,
+.btn-default:focus,
+.btn-default:active,
+.btn-default.active,
+.open .dropdown-toggle.btn-default {
+    /*background: rgba(16,160,247,.1) !important;*/
+    opacity: .8 !important;
+}
+
+.borderRadius4 {
+    border-radius: 4px !important;
+    /* color:#63be7b!important; */
+}
+
+/*蓝色按钮*/
+.btnBlue {
+    background: #E03A3A !important;
+    border: 1px solid #E03A3A !important;
+    color: #f3f3f3 !important;
+}
+
+/*table公用样式*/
+table, td, th {
+    border: none !important;
+}
+
+.table-hover > tbody > tr:hover > td,
+.table-hover > tbody > tr:hover > th {
+    background-color: #ECF9FF !important;
+
+}
+
+/*字体图标公用样式*/
+/*左侧灰色图标*/
+.iconFontColor-ECF9FF {
+    color: #ECF9FF !important;
+}
+
+.iconFontColor-FFF {
+    color: #fff !important;
+}
+
+.iconFontColor-10a0f7 {
+    color: #f9964d !important;
+}
+
+/*.iconFontSize{*/
+/*font-size: 14px !important;*/
+/*color: #F8964D!important;*/
+/*}*/
+
+.backgroundWhite {
+    background: white;
+}
+
+.contentBgColor .portlet-body {
+    /* background: #f4f8f9;*/
+}
+
+.contentBgColor {
+    background: #f4f8f9 !important;
+}
+
+.contentBgColor .table-toolbar {
+    margin: 10px;
+    width: 100%;
+    background: #fff;
+    height: 40px;
+    padding-left: 15px;
+    margin-left: 0px;
+    /*border-bottom: 1px solid #dedede;*/
+}
+
+#operatebtn > .wrap1 > ul > li > i {
+    color: #f9964d !important;
+}
+
+/*通用边距样式*/
+.mr {
+    margin-right: 10px !important;
+
+}
+
+.ml {
+    margin-left: 10px !important;
+}
+
+/* .dataTables_wrapper{
+	background:#fff !important;
+} */
+.portlet-form .form-body, .form .form-body {
+    padding-top: 0px !important;
+}
+
+.modal-content {
+    border-radius: 4px !important;
+}
+
+/*置空右侧的paading值*/
+.padding-reset-r {
+    padding-right: 0 !important;
+}
+
+/* 清除border */
+.borderNone {
+    border: none !important;
+}
+
+/* 清除元素背景色 */
+.bgNone {
+    background: transparent !important;
+}
+
+/*标题文本加粗*/
+.title-thick {
+    font-weight: 800 !important;
+}
+
+/* 清除bootstrap label默认底部边距 */
+label {
+    margin-bottom: 0 !important;
+}
+
+/* 验证错误显示的信息 */
+.error {
+    color: #a94442;
+}
+
+/* .control-label .required, .form-group .required{
+	color: #666 !important;
+    font-size: 12px;
+    padding-left: 2px;
+} */
+.fontSize12 {
+    font-size: 12px !important;
+}
+
+/*文本左对齐优先*/
+.text-left {
+    text-align: left !important;
+}
+
+/*重置bootstrap表格的样式*/
+.table td {
+    font-size: 12px;
+}
+
+/*重置datatables中th的字体*/
+table > thead > tr > th {
+    font-size: 12px !important;
+    color: #333 !important;
+    font-weight: 700 !important;
+}
+
+.help-block {
+    display: none !important;
+}
+
+.table > tbody > tr > td, .table > tbody > tr > th, .table > tfoot > tr > td, .table > tfoot > tr > th, .table > thead > tr > td, .table > thead > tr > th {
+    line-height: inherit;
+}
+
+/*保存和关闭按钮中文字和图标的间距*/
+.iconMr {
+    margin-right: 5px;
+    /* color:#b7b8bc!important; */
+}
+
+/*设置datepicker中label开始和结束的公共长度*/
+.dateLabel-m {
+    width: 60px !important;
+}
+
+.spinnerWrap {
+    width: 100%;
+    height: 100%;
+    position: fixed;
+    background: white;
+    z-index: 158566;
+}
+
+.loader {
+    position: absolute;
+    width: 5em;
+    height: 5em;
+    border-radius: 50%;
+    transform: rotate(165deg);
+    animation: rotate 2s infinite;
+    z-index: 1588778777;
+    top: 50%;
+    left: 50%;
+    margin-left: -2.5em;
+    margin-top: -2.5em;
+}
+
+@keyframes rotate {
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+.loader::before, .loader::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    display: block;
+    width: 0.5em;
+    height: 0.5em;
+    border-radius: 0.25em;
+    transform: translate(-50%, -50%);
+}
+
+.loader::before {
+    animation: before 2s infinite;
+}
+
+@keyframes before {
+    0% {
+        width: 0.5em;
+        box-shadow: 1em -0.5em 0.5em rgba(100, 156, 136, 0.75),
+        -1em 0.5em 0.5em rgba(150, 120, 20, 0.75);
+    }
+    55% {
+        width: 2.5em;
+        box-shadow: 0 -0.5em rgba(100, 156, 136, 0.75),
+        0 0.5em rgba(150, 120, 20, 0.75);
+    }
+    70% {
+        width: 0.5em;
+        box-shadow: -1em -0.5em rgba(100, 156, 136, 0.75),
+        1em 0.5em rgba(150, 120, 20, 0.75);
+    }
+    100% {
+        box-shadow: 1em -0.5em rgba(100, 156, 136, 0.75),
+        -1em 0.5em rgba(150, 120, 20, 0.75);
+    }
+}
+
+.loader::after {
+    animation: after 2s infinite;
+
+}
+
+@keyframes after {
+    0% {
+        height: 0.5em;
+        box-shadow: -0.5em -1em 0.5em rgba(200, 56, 36, 0.75),
+        0.5em 1em 0.5em rgba(50, 60, 80, 0.75);
+    }
+    55% {
+        height: 2.5em;
+        box-shadow: -0.5em 0 rgba(200, 56, 36, 0.75),
+        0.5em 0 rgba(50, 60, 80, 0.75);
+    }
+    70% {
+        height: 0.5em;
+        box-shadow: -0.5em 1em rgba(200, 56, 36, 0.75),
+        0.5em -1em rgba(50, 60, 80, 0.75);
+    }
+    100% {
+        box-shadow: -0.5em -1em rgba(200, 56, 36, 0.75),
+        0.5em 1em rgba(50, 60, 80, 0.75);
+    }
+}
+
+/*去掉tab选项卡右键菜单上变动的小三角*/
+.dropdown > .dropdown-menu:after, .dropdown-toggle > .dropdown-menu:after, .btn-group > .dropdown-menu:after,
+.dropdown > .dropdown-menu:before, .dropdown-toggle > .dropdown-menu:before, .btn-group > .dropdown-menu:before {
+    top: -1000px;
+}
+
+textarea {
+    resize: none !important;
+}
+
+.table > tbody > tr > td, .table > tbody > tr > th, .table > tfoot > tr > td, .table > tfoot > tr > th, .table > thead > tr > td, .table > thead > tr > th {
+    vertical-align: middle !important;
+}
+
+/* 处理分页器 */
+div.dataTables_wrapper div.dataTables_info {
+    padding-top: 3px !important;
+    padding-right: 10px !important;
+    height: 30px !important;
+    line-height: 20px !important;
+    padding-left: 8px !important;
+}
+
+/* 财税360btn */
+#finance .mid div.btn {
+    background: #fff !important;
+    border-color: #C72E30 !important;
+    color: #C72E30 !important;
+}
+
+#finance .mid div.btn:hover {
+    background: #C72E30 !important;
+    color: #fff !important;
+}
+
+#customerManage-manager-content .table .btn {
+   line-height: 27px;
+}
+
+.pagination > .active > a, .pagination > .active > a:focus, .pagination > .active > a:hover, .pagination > .active > span, .pagination > .active > span:focus, .pagination > .active > span:hover {
+    background-color: #C72E30 !important;
+    border-color: #C72E30 !important;
+}
+
+.active1 {
+    background: #C72E30 !important;
+    color: #fff !important;
+}
+
+.page-sidebar-closed .page-sidebar-closed.page-sidebar-fixed .page-sidebar:hover .page-sidebar-menu:hover .sub-menu, .page-sidebar-closed .page-sidebar .page-sidebar-menu:hover .sub-menu {
+    background-color: transparent;
+}
+
+/*placeholder的颜色*/
+input::-webkit-input-placeholder, textarea::-webkit-input-placeholder {
+    color: #dadada;
+}
+
+input:-moz-placeholder, textarea:-moz-placeholder {
+    color: #dadada;
+}
+
+input::-moz-placeholder, textarea::-moz-placeholder {
+    color: #dadada;
+}
+
+input:-ms-input-placeholder, textarea:-ms-input-placeholder {
+    color: #dadada;
+}
+
+/*主菜单的hover时候的颜色的重置*/
+.page-sidebar-closed.page-sidebar-fixed .page-sidebar:hover .page-sidebar-menu > li.active > a:hover, .page-sidebar-closed.page-sidebar-fixed .page-sidebar:hover .page-sidebar-menu > li.active.open > a:hover, .page-sidebar .page-sidebar-menu > li.active > a:hover, .page-sidebar .page-sidebar-menu > li.active.open > a:hover {
+    background: #fff;
+}
+
+.page-sidebar-closed.page-sidebar-fixed .page-sidebar:hover .page-sidebar-menu > li:hover > a > .arrow:before, .page-sidebar-closed.page-sidebar-fixed .page-sidebar:hover .page-sidebar-menu > li:hover > a > .arrow.open:before, .page-sidebar-closed.page-sidebar-fixed .page-sidebar:hover .page-sidebar-menu > li.open > a > .arrow:before, .page-sidebar-closed.page-sidebar-fixed .page-sidebar:hover .page-sidebar-menu > li.open > a > .arrow.open:before, .page-sidebar .page-sidebar-menu > li:hover > a > .arrow:before, .page-sidebar .page-sidebar-menu > li:hover > a > .arrow.open:before, .page-sidebar .page-sidebar-menu > li.open > a > .arrow:before, .page-sidebar .page-sidebar-menu > li.open > a > .arrow.open:before {
+    color: #E03A3A;
+}
+
+.page-sidebar-closed.page-sidebar-fixed .page-sidebar:hover .page-sidebar-menu li > a > .arrow:before, .page-sidebar-closed.page-sidebar-fixed .page-sidebar:hover .page-sidebar-menu li > a > .arrow.open:before, .page-sidebar .page-sidebar-menu li > a > .arrow:before, .page-sidebar .page-sidebar-menu li > a > .arrow.open:before {
+    color: #E03A3A;
+}
+
+.page-sidebar-closed.page-sidebar-fixed .page-sidebar:hover .page-sidebar-menu > li.active > a > .arrow:before, .page-sidebar-closed.page-sidebar-fixed .page-sidebar:hover .page-sidebar-menu > li.active > a > .arrow.open:before, .page-sidebar-closed.page-sidebar-fixed .page-sidebar:hover .page-sidebar-menu > li.active.open > a > .arrow:before, .page-sidebar-closed.page-sidebar-fixed .page-sidebar:hover .page-sidebar-menu > li.active.open > a > .arrow.open:before, .page-sidebar .page-sidebar-menu > li.active > a > .arrow:before, .page-sidebar .page-sidebar-menu > li.active > a > .arrow.open:before, .page-sidebar .page-sidebar-menu > li.active.open > a > .arrow:before, .page-sidebar .page-sidebar-menu > li.active.open > a > .arrow.open:before {
+    color: #E03A3A;
+}
+
+.page-sidebar-closed.page-sidebar-fixed .page-sidebar:hover .page-sidebar-menu .sub-menu > li:hover > a > i, .page-sidebar-closed.page-sidebar-fixed .page-sidebar:hover .page-sidebar-menu .sub-menu > li.open > a > i, .page-sidebar-closed.page-sidebar-fixed .page-sidebar:hover .page-sidebar-menu .sub-menu > li.active > a > i, .page-sidebar .page-sidebar-menu .sub-menu > li:hover > a > i, .page-sidebar .page-sidebar-menu .sub-menu > li.open > a > i, .page-sidebar .page-sidebar-menu .sub-menu > li.active > a > i {
+    color: #DE3E3E !important;
+}
+
+.page-sidebar-closed.page-sidebar-fixed .page-sidebar:hover .page-sidebar-menu > li.active > a > i, .page-sidebar-closed.page-sidebar-fixed .page-sidebar:hover .page-sidebar-menu > li.active.open > a > i, .page-sidebar .page-sidebar-menu > li.active > a > i, .page-sidebar .page-sidebar-menu > li.active.open > a > i {
+    color: #DE3E3E !important;
+}
+
+#page-container .close-tab-nav > li.active > a {
+    background: #F8964D;
+    color: #fff;
+}
+
+#page-container .close-tab-nav > li a {
+    /* margin-right: 0; */
+    margin: 5px 0px 0 5px;
+    background: #E1E1E1;
+    border-radius: 6px 6px 0 0 !important;
+    box-shadow: -2px -2px 4px #ccc;
+    position: relative;
+    top: -1px;
+    height: 36px;
+    color: #AEAEAE;
+}
+
+.page-sidebar-closed.page-sidebar-fixed .page-sidebar:hover .page-sidebar-menu > li.active > a, .page-sidebar-closed.page-sidebar-fixed .page-sidebar:hover .page-sidebar-menu > li.active.open > a, .page-sidebar .page-sidebar-menu > li.active > a, .page-sidebar .page-sidebar-menu > li.active.open > a {
+    border-top-color: transparent;
+    color: #DE3E3E !important;
+}
+
+/*跟进提醒的hover时候的样式*/
+#operatebtn > .wrap1 > ul > li:hover {
+    background: #a7a6a6 !important;
+    box-shadow: -2px -2px 2px #a7a6a6 !important;
+}
+
+/*图标的颜色设置*/
+.iconColor_m {
+    color: #F8964D !important;
+}
+
+.btnOrange {
+    background: #F8964D !important;
+    border: 1px solid #F8964D !important;
+}
+
+/*合同续约的三个按钮的颜色*/
+.contractcontinueM   .btnBorderColor{
+    color: #C72E30;
+    border:1px solid #C72E30;
+    outline:none;
+}
+/*收费审核里边的颜色*/
+ .activeClick{
+    background: #FBE9DB!important;
+}
+
+/*<让每个表格颜色>*/
+.table-striped>tbody>tr:nth-of-type(odd) {
+    background-color: #fff;
+}
+.table-striped>tbody>tr:nth-of-type(even) {
+    background-color: #f9f9f9;
+}
+.table-striped>thead>tr {
+    background-color: #f9f9f9;
+}
+table.table-striped.table-hover{
+    border-collapse: collapse!important;
+}
+.table-striped>thead>tr{
+    border-bottom: 1px solid #F8964D;
+}
+/*</让每个表格颜色>*/
+/*<搜索按钮大小>*/
+.searchIcoBtn{
+    font-size: 16px!important;
+}
+/*</搜索按钮大小>*/

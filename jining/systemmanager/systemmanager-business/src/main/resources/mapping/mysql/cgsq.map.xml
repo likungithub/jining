@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xinhai.caiyun.systemmanager.dao.CgsqMapper">
+    <!--申请提交修改状态-->
+    <update id="updatezt" parameterType="Integer">
+        update cgsq set sqzt = '002' where id = #{id}
+    </update>
+    <!--条件查询申请记录 chen-->
+    <select id="findByNaTy" resultType="map">
+        select id,hcmc,gg,jb,sl,cgsx,zbqx,(select name from user where zydm = c.sqr)as sqr,sqrq,
+        dj,zj,bz,sqzt,hclx,shzt,bzzt,sccj,cgmd
+        from t_cgsq_jbxx c
+        where sqr = #{map.sqr}
+        <if test="map.hclx==null or map.hclx==''">
+            and hclx != '5'
+        </if>
+        <if test="map.hclx!=null and map.hclx!=''">
+            and hclx = #{map.hclx}
+        </if>
+        <if test="map.sqzt!=null and map.sqzt!=''">
+            and sqzt = #{map.sqzt}
+        </if>
+        <if test="map.hcmc!=null and  map.hcmc!=''">
+            and hcmc like concat('%',#{map.hcmc},'%')
+        </if>
+        <if test="map.startDate!=null">
+            and sqrq >= #{map.startDate}
+        </if>
+        <if test="map.endDate!=null">
+            and #{map.endDate} >= sqrq
+        </if>
+        order by id desc
+        limit #{map.start},#{map.length};
+    </select>
+    <!--条件查询申请记录数 chen-->
+    <select id="findByNaTyNum" resultType="java.lang.Integer">
+        select count(id)
+        from t_cgsq_jbxx
+        where sqr = #{map.sqr}
+        <if test="map.hclx==null or map.hclx==''">
+            and hclx != '5'
+        </if>
+        <if test="map.hclx!=null and map.hclx!=''">
+            and hclx = #{map.hclx}
+        </if>
+        <if test="map.sqzt!=null and map.sqzt!=''">
+            and sqzt = #{map.sqzt}
+        </if>
+        <if test="map.hcmc!=null and  map.hcmc!=''">
+            and hcmc like concat('%',#{map.hcmc},'%')
+        </if>
+        <if test="map.startDate!=null">
+            and sqrq >= #{map.startDate}
+        </if>
+        <if test="map.endDate!=null">
+            and #{map.endDate} >= sqrq
+        </if>
+        order by id desc
+    </select>
+    <!-- 增加耗材申请的信息-->
+    <insert id="addCgsq">
+        insert into t_cgsq_jbxx
+        (hcmc,gg,jb,sl,sccj,cgmd,sqr,sqrq,dj,zj,bz,hclx,hcbm)
+        values
+        (#{map.hcmc},#{map.gg},#{map.jb},#{map.sl},#{map.sccj},#{map.cgmd},
+         #{map.sqr},now(),#{map.dj},#{map.zj},#{map.bz},#{map.hclx},#{map.hcbm});
+    </insert>
+    <!-- 插入Excel表格数据 陈-->
+    <insert id="addCgsqExcel">
+        insert into t_cgsq_jbxx
+        (hcmc,gg,jb,sl,sccj,cgmd,sqr,sqrq,dj,zj,bz,hclx,hcbm)
+        values
+        <foreach collection="list" item="map" index="index" separator=",">
+        (
+            #{map.hcmc},
+            #{map.gg},
+            #{map.jb},
+            #{map.sl},
+            #{map.sccj},
+            #{map.cgmd},
+            #{map.sqr},
+            now(),
+            #{map.dj},
+            #{map.zj},
+            #{map.bz},
+            #{map.hclx},
+            #{map.hcbm}
+          )
+        </foreach>
+    </insert>
+    <!-- 批量删除 陈-->
+    <delete id="deleteCgsq">
+        delete from t_cgsq_jbxx  where id  in
+        <foreach collection="ids" index="index" item="id" open="("  separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+<!--通过id 查找对应的耗材申信息  陈-->
+    <select id="findById" resultType="map">
+		select hcmc,gg,jb,sl,sqr,sqrq,dj,zj,bz,hclx,sccj,cgmd
+		from t_cgsq_jbxx
+		where id=#{id};
+	</select>
+<!-- 更新采够申请的信息 陈-->
+    <update id="updateCgsq">
+        update t_cgsq_jbxx
+        <set>
+            <if test="map.hcmc!=null">
+                hcmc= #{map.hcmc},
+            </if>
+            <if test="map.gg!=null">
+                gg=#{map.gg},
+            </if>
+            <if test="map.jb!=null">
+                jb=#{map.jb},
+            </if>
+            <if test="map.sl!=null">
+                sl=#{map.sl},
+            </if>
+            <if test="map.sccj!=null">
+                sccj=#{map.sccj},
+            </if>
+            <if test="map.cgmd!=null">
+                cgmd=#{map.cgmd},
+            </if>
+            <if test="map.dj!=null">
+                dj=#{map.dj},
+            </if>
+            <if test="map.zj!=null">
+                zj=#{map.zj},
+            </if>
+            <if test="map.bz!=null">
+                bz=#{map.bz},
+            </if>
+            <if test="map.hclx!=null">
+                hclx=#{map.hclx}
+            </if>
+        </set>
+        where
+        id=#{map.id} and  shzt = '001'
+    </update>
+</mapper>

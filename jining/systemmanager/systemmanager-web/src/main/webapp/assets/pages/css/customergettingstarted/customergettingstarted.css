@@ -1,0 +1,20 @@
+
+@CHARSET "UTF-8";
+/*1.新手入门*/
+
+#wangshuo1 table tr td:nth-child(3),
+#wangshuo1 table tr td:nth-child(1),
+#wangshuo1 table tr td:nth-child(2),
+#wangshuo1 table tr th:nth-child(3),
+#wangshuo1 table tr th:nth-child(1),
+#wangshuo1 table tr th:nth-child(2) {
+    text-align: left !important;
+}
+
+#wangshuo1 table tr th:nth-last-child(1) {
+    width: 100px;
+}
+
+#wangshuo1 table tr td:nth-last-child(1) {
+    text-align: center !important;
+}

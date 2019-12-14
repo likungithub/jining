@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xinhai.caiyun.customermanage.dao.YpzbfpMapper">
+    <!-- 获得制备任务分配的信息-->
+    <select id="queryAll" resultType="map">
+        select id,ypmc,ypbm,scdw,ypsl,ypdw,if_sgr,zbfpsj,zbfpzt,zbrydm,jszt,ypzbzt,zbrynames
+        from t_ypgl_jbxx
+        where jszt='002' and if_sgr='1'
+        <if test="map.ypbm!=null">
+            and ypbm like concat('%',#{map.ypbm},'%')
+        </if>
+        <if test="map.ypmc!=null">
+            and ypmc like concat('%',#{map.ypmc},'%')
+        </if>
+        <if test="map.zbfpzt!=null">
+            and zbfpzt = #{map.zbfpzt}
+        </if>
+        order by zbfpzt
+        limit #{map.start},#{map.length}
+    </select>
+    <!-- 获得制备任务分配的数量-->
+    <select id="queryAllNum" resultType="java.lang.Integer">
+        select count(id)
+        from t_ypgl_jbxx
+        where jszt='002' and if_sgr='1'
+        <if test="map.ypbm!=null">
+            and ypbm like concat('%',#{map.ypbm},'%')
+        </if>
+        <if test="map.ypmc!=null">
+            and ypmc like concat('%',#{map.ypmc},'%')
+        </if>
+        <if test="map.zbfpzt!=null">
+            and zbfpzt = #{map.zbfpzt}
+        </if>
+        order by zbfpzt
+    </select>
+    <!-- 保存任务分配的数据 -->
+    <update id="saveFp">
+        update t_ypgl_jbxx
+        <set>
+            <if test="map.zbrydm!=null">
+                zbrydm=#{map.zbrydm},
+            </if>
+            <if test="map.zbfpsj!=null">
+                zbfpsj=#{map.zbfpsj},
+            </if>
+            <if test="map.zbfpzt!=null">
+                zbfpzt=#{map.zbfpzt},
+            </if>
+            <if test="map.zbrynames">
+                zbrynames=#{map.zbrynames}
+            </if>
+        </set>
+        where id=#{map.ypid}
+    </update>
+    <!-- 通过职员代码获的职员的名字-->
+    <select id="getUserName" resultType="java.lang.String">
+        select name from user where zydm=#{zydm};
+    </select>
+    <!-- 制备任务退回-->
+    <update id="saveBack">
+         update t_ypgl_jbxx
+         set zbrydm=null,zbfpsj=null, zbfpzt=#{map.zbfpzt},zbrynames=null
+         where id=#{map.ypid};
+    </update>
+</mapper>

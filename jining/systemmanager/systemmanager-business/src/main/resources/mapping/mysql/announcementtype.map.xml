@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!-- namespace必须和接口名称一一对应 -->
+<mapper namespace="com.xinhai.caiyun.systemmanager.dao.AnnouncementTypeMapper">
+    <resultMap id="announcementTypeMap" type="com.xinhai.caiyun.systemmanager.api.AnnouncementType">
+        <id property="id" column="TZTGLX_DM"/>
+        <result property="announcementTypeName" column="TZTGLZ_MC"/>
+        <result property="agencyCode" column="DLJG_BM"/>
+        <result property="isDelete" column="SCBZ"/>
+        <result property="enterStaff" column="LRRY"/>
+        <result property="updateStaff" column="GXRY"/>
+        <result property="deleteStaff" column="SCRY"/>
+        <result property="enterDate" column="LRRQ"/>
+        <result property="updateDate" column="GXRQ"/>
+        <result property="deleteDate" column="SCRQ"/>
+    </resultMap>
+    <!-- 获取所有announcementtype  -->
+    <select id="getAllAnnouncementType" resultMap="announcementTypeMap">
+        SELECT TZTGLX_DM,TZTGLZ_MC,DLJG_BM,SCBZ,LRRY,GXRY,SCRY,LRRQ,GXRQ,SCRQ
+        FROM dm_tztglx WHERE SCBZ=0 AND DLJG_BM=#{agencyCode};
+    </select>
+    <!-- 添加announcementtype  -->
+    <insert id="addAnnouncementType" parameterType="com.xinhai.caiyun.systemmanager.api.AnnouncementType">
+        INSERT INTO dm_tztglx (TZTGLZ_MC,DLJG_BM,LRRY,LRRQ) VALUES (#{announcementType.announcementTypeName},
+        #{announcementType.agencyCode},#{announcementType.enterStaff},#{announcementType.enterDate});
+    </insert>
+    <!-- 根据ID查找announcementtype -->
+    <select id="getAnnouncementTypeById" resultMap="announcementTypeMap">
+        SELECT TZTGLX_DM,TZTGLZ_MC,DLJG_BM,SCBZ,LRRY,GXRY,SCRY,LRRQ,GXRQ,SCRQ
+        FROM dm_tztglx WHERE TZTGLX_DM=#{id} AND SCBZ=0;
+    </select>
+    <!-- 通过announcementtypeid修改announcementtype -->
+    <update id="updateAnnouncementType" parameterType="com.xinhai.caiyun.systemmanager.api.AnnouncementType">
+        UPDATE dm_tztglx
+        <set>
+            <if test="announcementType.announcementTypeName != null">
+                TZTGLZ_MC = #{announcementType.announcementTypeName},
+            </if>
+            <if test="announcementType.agencyCode != null">
+                DLJG_BM = #{announcementType.agencyCode},
+            </if>
+            <if test="announcementType.isDelete != null">
+                SCBZ = #{announcementType.isDelete},
+            </if>
+            <if test="announcementType.enterStaff != null">
+                LRRY = #{announcementType.enterStaff},
+            </if>
+            <if test="announcementType.updateStaff != null">
+                GXRY = #{announcementType.updateStaff},
+            </if>
+            <if test="announcementType.deleteStaff != null">
+                SCRY = #{announcementType.deleteStaff},
+            </if>
+            <if test="announcementType.enterDate != null">
+                LRRQ = #{announcementType.enterDate},
+            </if>
+            <if test="announcementType.updateDate != null">
+                GXRQ = #{announcementType.updateDate},
+            </if>
+            <if test="announcementType.deleteDate != null">
+                SCRQ = #{announcementType.deleteDate}
+            </if>
+        </set>
+        WHERE TZTGLX_DM = #{announcementType.id};
+    </update>
+    <!-- 获取公告类型使用数量 -->
+    <select id="getUsedAnnouncementType" resultType="java.lang.Integer">
+        SELECT COUNT(TZTGLX_DM) FROM pt_ggydqk WHERE TZTGLX_DM=#{id} AND SCBZ=0
+    </select>
+    <!-- 模糊搜索公告类型 -->
+    <select id="searchAnnouncementTypeByText" resultMap="announcementTypeMap">
+        SELECT TZTGLX_DM,TZTGLZ_MC,DLJG_BM,SCBZ,LRRY,GXRY,SCRY,LRRQ,GXRQ,SCRQ
+        FROM dm_tztglx
+        WHERE SCBZ=0 AND DLJG_BM=#{agencyCode} AND TZTGLZ_MC LIKE #{searchText}
+    </select>
+    <!-- 更新使用中的公告类型名称 -->
+    <update id="updateUsedAnnouncementTypeName" parameterType="java.lang.String">
+        UPDATE pt_ggydqk
+        <set>
+            <if test="announcementTypeName != null">
+                TZTGLX_MC = #{announcementTypeName}
+            </if>
+        </set>
+        WHERE TZTGLX_DM = #{id}
+    </update>
+    <!-- 获取公告类型数量 -->
+    <select id="getAnnouncementTypeTotalCount" resultType="java.lang.Long">
+        SELECT COUNT(TZTGLX_DM)
+        FROM dm_tztglx
+        WHERE DLJG_BM=#{agencyCode} AND SCBZ=0 AND TZTGLZ_MC LIKE #{searchText}
+    </select>
+    <!-- 根据分页获取announcementtype  -->
+    <select id="getAnnouncementTypeByPaging" resultMap="announcementTypeMap">
+        SELECT TZTGLX_DM,TZTGLZ_MC,DLJG_BM,SCBZ,LRRY,GXRY,SCRY,LRRQ,GXRQ,SCRQ
+        FROM dm_tztglx
+        WHERE SCBZ=0 AND DLJG_BM=#{agencyCode} AND TZTGLZ_MC LIKE #{searchText}
+        LIMIT #{start},#{length};
+    </select>
+</mapper>

@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xinhai.caiyun.customermanage.dao.GqyptzMapper">
+    <select id="selectGqypAll"  parameterType="Map" resultType="Map">
+        SELECT
+        tyj.ypbm,
+        tyj.ypmc,
+        tyj.wtid,
+        tyj.sb,
+        tyj.scdw,
+        tyj.scdwlxdh,
+        RIGHT(tyj.scrq, 10) scrq,
+        tyj.bzq
+        FROM
+        t_ypgl_jbxx tyj
+        LEFT JOIN
+        (SELECT
+        DATEDIFF(NOW(), DATE_FORMAT(IF(bzq LIKE '%年%', DATE_ADD(RIGHT(scrq, 10), INTERVAL SUBSTRING_INDEX(bzq, '年', 1) YEAR), IF(bzq LIKE '%月%', DATE_ADD(RIGHT(scrq, 10), INTERVAL SUBSTRING_INDEX(bzq, '个', 1) MONTH), IF(bzq LIKE '%天%', DATE_ADD(RIGHT(scrq, 10), INTERVAL SUBSTRING_INDEX(bzq, '天', 1) DAY), bzq))), '%Y-%m-%d')) sjjg,
+        IF(bzq LIKE '%年%', DATE_ADD(RIGHT(scrq, 10), INTERVAL SUBSTRING_INDEX(bzq, '年', 1) YEAR), IF(bzq LIKE '%月%', DATE_ADD(RIGHT(scrq, 10), INTERVAL SUBSTRING_INDEX(bzq, '个', 1) MONTH), IF(bzq LIKE '%天%', DATE_ADD(RIGHT(scrq, 10), INTERVAL SUBSTRING_INDEX(bzq, '天', 1) DAY), bzq))) newdate,
+        scrq,
+        bzq,
+        YPBM
+        FROM
+        t_ypgl_jbxx) bzq ON tyj.ypbm = bzq.ypbm
+        WHERE
+        bzq.sjjg > 0
+        <!--<if test="map.wtid!=null and map.wtid!=''">
+            and wtid = #{map.wtid}
+        </if>-->
+        <if test="map.ypmc!=null and map.ypmc!=''">
+            and ypmc like CONCAT('%',#{map.ypmc},'%')
+        </if>
+        limit #{map.start},#{map.length};
+    </select>
+    <select id="selectGqypCount" resultType="java.lang.Integer">
+        SELECT
+        COUNT(id)
+        FROM
+        t_ypgl_jbxx tyj
+        LEFT JOIN
+        (SELECT
+        DATEDIFF(NOW(), DATE_FORMAT(IF(bzq LIKE '%年%', DATE_ADD(RIGHT(scrq, 10), INTERVAL SUBSTRING_INDEX(bzq, '年', 1) YEAR), IF(bzq LIKE '%月%', DATE_ADD(RIGHT(scrq, 10), INTERVAL SUBSTRING_INDEX(bzq, '个', 1) MONTH), IF(bzq LIKE '%天%', DATE_ADD(RIGHT(scrq, 10), INTERVAL SUBSTRING_INDEX(bzq, '天', 1) DAY), bzq))), '%Y-%m-%d')) sjjg,
+        IF(bzq LIKE '%年%', DATE_ADD(RIGHT(scrq, 10), INTERVAL SUBSTRING_INDEX(bzq, '年', 1) YEAR), IF(bzq LIKE '%月%', DATE_ADD(RIGHT(scrq, 10), INTERVAL SUBSTRING_INDEX(bzq, '个', 1) MONTH), IF(bzq LIKE '%天%', DATE_ADD(RIGHT(scrq, 10), INTERVAL SUBSTRING_INDEX(bzq, '天', 1) DAY), bzq))) newdate,
+        scrq,
+        bzq,
+        YPBM
+        FROM
+        t_ypgl_jbxx) bzq ON tyj.ypbm = bzq.ypbm
+        WHERE
+        bzq.sjjg > 0
+        <!--<if test="map.wtid!=null and map.wtid!=''">
+            and wtid = #{map.wtid}
+        </if>-->
+        <if test="map.ypmc!=null and map.ypmc!=''">
+            and ypmc = #{map.ypmc}
+        </if>
+    </select>
+    <select id="findByYpbm" resultType="com.xinhai.caiyun.customermanage.api.Gqyptz">
+        SELECT
+            tyj.wtid,
+            tyj.jszt,
+            tyj.ypzbzt,
+            tyj.ypbm,
+            tyj.ypmc,
+            tyj.sb,
+            tyj.ggxh,
+            tyj.ypdj,
+            tyj.ypsl,
+            tyj.ypdw,
+            tyj.scrq,
+            tyj.ypphhbh,
+            tyj.ypzt,
+            tyj.ypbctj,
+            tyj.scdw,
+            tyj.scdwlxdh,
+            tyj.fyry,
+            tyj.fyzt,
+            tyj.ypddrq,
+            tyj.if_sgr,
+            tyj.if_ssg,
+            tyj.ypjczt,
+            tyj.sjjyzt,
+            tyj.sjsczt,
+            tyj.ybjs,
+            tyj.bzq,
+            tyj.zjr,
+            tyj.ypwt,
+            tyj.if_cy,
+            tyj.bgbzzt,
+            tyj.bgzbzt,
+            tyj.bgzjsp,
+            tyj.bgshzt,
+            tyj.bgpzzt,
+            tyj.bgdyzt,
+            tyj.bzxx,
+            tyj.lqry,
+            tyj.lqrybmdm,
+            tyj.lqrq,
+            tyj.zbrq,
+            tyj.clyy,
+            tyj.cydd
+        FROM
+            t_ypgl_jbxx tyj
+                LEFT JOIN
+            (SELECT
+                DATEDIFF(NOW(), DATE_FORMAT(IF(bzq LIKE '%年%', DATE_ADD(RIGHT(scrq, 10), INTERVAL SUBSTRING_INDEX(bzq, '年', 1) YEAR), IF(bzq LIKE '%月%', DATE_ADD(RIGHT(scrq, 10), INTERVAL SUBSTRING_INDEX(bzq, '个', 1) MONTH), IF(bzq LIKE '%天%', DATE_ADD(RIGHT(scrq, 10), INTERVAL SUBSTRING_INDEX(bzq, '天', 1) DAY), bzq))), '%Y-%m-%d')) sjjg,
+                    IF(bzq LIKE '%年%', DATE_ADD(RIGHT(scrq, 10), INTERVAL SUBSTRING_INDEX(bzq, '年', 1) YEAR), IF(bzq LIKE '%月%', DATE_ADD(RIGHT(scrq, 10), INTERVAL SUBSTRING_INDEX(bzq, '个', 1) MONTH), IF(bzq LIKE '%天%', DATE_ADD(RIGHT(scrq, 10), INTERVAL SUBSTRING_INDEX(bzq, '天', 1) DAY), bzq))) newdate,
+                    scrq,
+                    bzq,
+                    YPBM
+            FROM
+                t_ypgl_jbxx) bzq ON tyj.ypbm = bzq.ypbm
+        WHERE
+            bzq.sjjg > 0 and tyj.ypbm = #{map.ypbm}
+    </select>
+</mapper>

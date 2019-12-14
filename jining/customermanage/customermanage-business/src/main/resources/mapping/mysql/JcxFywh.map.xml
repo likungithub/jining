@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xinhai.caiyun.customermanage.dao.JcxFywhMapper">
+    <!-- 检测管理中获得显示的数据 -->
+    <select id="findAll" resultType="map">
+
+        <!-- 样品检测显示数据部分 -->
+        <if test="cxtj.bs=='jcxfywh'.toString()">
+            SELECT
+            a.id ypid,
+            b.id wtid,
+            b.wtid wtdbm,
+            a.ypbm ypbm,
+            a.ypmc,
+            GROUP_CONCAT( xm.ZWMC_BM ) AS jcxm,
+            date(fy.lrsj) as lrsj
+            FROM
+            t_wt_jbxx b
+            LEFT JOIN t_ypgl_jbxx a ON a.WTID = b.WTID
+            LEFT JOIN t_yp_jcxm ypxm ON a.id = ypxm.ypid
+            LEFT JOIN t_jcxm_jbxx xm ON xm.id = ypxm.jcxmid
+            LEFT JOIN t_jcx_fywh fy ON b.wtid = fy.wtid
+            WHERE
+            a.scbz = 0
+            <if test="cxtj.ypmc!=null">
+                and a.ypmc like concat('%',#{cxtj.ypmc}, '%')
+            </if>
+            <if test="cxtj.wtid!=null">
+                and a.wtid like concat('%',#{cxtj.wtid}, '%')
+            </if>
+            AND a.BGBZZT IN ( '001', '003', '002', '004' )
+            AND b.cxzt IN ( '001', '002', '004', '005' )
+            AND a.YPJCZT IN ( '000', '002' )
+            GROUP BY a.id
+            ORDER BY
+            b.id DESC
+            limit #{cxtj.start},#{cxtj.length};
+        </if>
+    </select>
+
+    <!-- 检测管理中获得显示的数量  chen-->
+    <select id="findCount" resultType="long">
+        <if test="cxtj.bs=='jcxfywh'.toString()">
+            select count(1)
+            from (
+            SELECT
+            a.id ypid
+            FROM
+            t_wt_jbxx b
+            LEFT JOIN t_ypgl_jbxx a ON a.WTID = b.WTID
+            LEFT JOIN t_yp_jcxm ypxm ON a.id = ypxm.ypid
+            LEFT JOIN t_jcxm_jbxx xm ON xm.id = ypxm.jcxmid
+            LEFT JOIN t_jcx_fywh fy ON b.wtid = fy.wtid
+            WHERE
+            a.scbz = 0
+            <if test="cxtj.ypmc!=null">
+                and a.ypmc like concat('%',#{cxtj.ypmc}, '%')
+            </if>
+            <if test="cxtj.wtid!=null">
+                and a.wtid like concat('%',#{cxtj.wtid}, '%')
+            </if>
+            AND a.BGBZZT IN ( '001', '003', '002', '004' )
+            AND b.cxzt IN ( '001', '002', '004', '005' )
+            AND a.YPJCZT IN ( '000', '002' )
+            GROUP BY a.id
+            ) a
+        </if>
+    </select>
+
+    <!-- 获得费用维护页面  检测项数据 -->
+    <select id="selectLrFykz" resultType="map">
+        SELECT distinct y.ypid as ypid,ty.wtid as wtid,y.id as jcxmid,o.zwmc_bm as zwmc,y.jcz as jcz,y.jcff as
+        jcff,y.wd,y.sd,o.xlz,y.yqnames,y.bzzt,y.bzwz,
+        u.name AS jcr,y.tjzt as tjzt,o.jcx as jcx,y.zbypbm,y.e_date,fy.fy,fy.bz
+        from
+        t_yp_jcxm y
+        LEFT JOIN t_jcxm_jbxx o ON o.id = y.jcxmid
+        LEFT JOIN t_ypgl_jbxx ty ON ty.id = y.ypid
+        LEFT JOIN t_jcx_fywh fy	 ON y.id = fy.jcxid
+        LEFT JOIN user u ON zydm = y.zxry_dm
+        where
+        y.ypid = #{map.ypid1}
+       <if test="map.jcxmc!=null and map.jcxmc!=''">
+            and o.zwmc_bm like CONCAT('%',#{map.jcxmc},'%')
+        </if>
+        order by y.bzzt
+        limit #{map.start},#{map.length}
+    </select>
+
+    <!-- 获得费用维护页面  检测项数据 -->
+    <select id="selectCountFykz" resultType="java.lang.Integer">
+        SELECT count(distinct y.jcxmid) from
+        t_yp_jcxm y
+        LEFT JOIN t_jcxm_jbxx o ON o.id = y.jcxmid
+        LEFT JOIN t_ypgl_jbxx ty ON ty.id = y.ypid
+        LEFT JOIN t_jcx_fywh fy	 ON y.id = fy.jcxid
+        LEFT JOIN user u ON zydm = y.zxry_dm
+        where
+        y.ypid = #{map.ypid1}
+        <if test="map.jcxmc!=null and map.jcxmc!=''">
+            and o.zwmc_bm like CONCAT('%',#{map.jcxmc},'%')
+        </if>
+    </select>
+
+    <insert id="insertFYKZ">
+        INSERT INTO t_jcx_fywh (ypid,wtid,jcxid,fy,lrry,lrsj,bz)
+			VALUES (#{map.ypid},#{map.wtid},#{map.jcxid},#{map.fy},#{map.lrry},now(),#{map.bz})
+
+    </insert>
+
+</mapper>

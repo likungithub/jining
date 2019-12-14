@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- namespace必须和接口名称一一对应 -->
+<mapper namespace="com.xinhai.caiyun.systemmanager.dao.ShortMessageMapper">
+	
+	<insert id="insertShortMessage" parameterType="com.xinhai.caiyun.systemmanager.api.ShortMessageLog">
+		INSERT INTO log_dxrz (JSR_DM,FSR_DM,BFSR,DLJG_BM,DXLX,DXNR,scbz,fssj,fszt) values
+		(#{jsr_dm},#{fsr_dm},#{bfsr},#{dljg_bm},#{dxlx},#{dxnr},0,now(),1);
+	</insert>
+	
+	<insert id="insertShortMessageList">
+        INSERT INTO log_dxrz (JSR_DM,FSR_DM,BFSR,DLJG_BM,DXLX,DXNR,scbz,fssj,fszt)
+        VALUES
+        <foreach collection="list" item="dxrz" index="index"
+            separator=",">
+            (#{dxrz.jsr_dm},#{dxrz.fsr_dm},#{dxrz.bfsr},#{dxrz.dljg_bm},#{dxrz.dxlx},#{dxrz.dxnr},0,now(),1)
+        </foreach>
+    </insert>
+	
+	<select id="findAllMs" resultType="com.xinhai.caiyun.systemmanager.api.ShortMessageLog">
+		select
+		ID,NSRSBH,JSR_DM,FSR_DM,BFSR,DLJG_BM,DXLX,DXNR,FSZT,FSSJ from log_dxrz where
+		scbz=0 order by id DESC ;
+	</select>
+	<update id="deleteAllShortMessage" parameterType="com.xinhai.caiyun.systemmanager.api.ShortMessageLog">
+		update log_dxrz
+		set SCBZ=1 where id=#{string}
+	</update>
+	<update id="deleteByOneShortMessage" parameterType="com.xinhai.caiyun.systemmanager.api.ShortMessageLog">
+		update
+		log_dxrz set SCBZ=1 where id=#{id}
+	</update>
+	<select id="view" resultType="com.xinhai.caiyun.systemmanager.api.ShortMessageLog">
+		select
+		ID,NSRSBH,JSR_DM,FSR_DM,BFSR,DLJG_BM,DXLX,DXNR,CASE FSZT WHEN '1' THEN '已发送' ELSE
+		'未发送' end as FSZT,FSSJ from log_dxrz where id=#{id} and SCBZ=0;
+	</select>
+	<select id="searchByZdy" resultType="com.xinhai.caiyun.systemmanager.api.ShortMessageLog">
+		select
+		ID,NSRSBH,JSR_DM,FSR_DM,BFSR,DLJG_BM,DXLX,DXNR,FSZT,DATE_FORMAT(FSSJ,'%Y-%m-%d') as
+		FSSJ,SCBZ from log_dxrz where DXLX like CONCAT('%',#{type},'%') and concat(BFSR,FSR_DM) like concat('%',#{searchText},'%')
+		and SCBZ=0
+		and DATE_FORMAT(FSSJ,'%Y-%m-%d') between #{beginTime} and
+		#{endTime} limit #{start},#{length}
+	</select>
+	<select id="findAllMsLen" resultType="java.lang.Long">
+		select count(1) from log_dxrz where DXLX like CONCAT('%',#{type},'%') and concat(BFSR,FSR_DM) like concat('%',#{searchText},'%')
+		and SCBZ=0
+		and DATE_FORMAT(FSSJ,'%Y-%m-%d') between #{beginTime} and
+		#{endTime}
+	</select>
+</mapper>

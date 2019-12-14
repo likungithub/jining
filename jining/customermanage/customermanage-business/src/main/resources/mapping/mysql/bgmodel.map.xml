@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xinhai.caiyun.customermanage.dao.BgmodelMapper">
+    <select id="getAll" resultType="map">
+        SELECT A.ID,A.BGNAME,A.BBH,A.SC_RYDM,A.SCRQ,A.CCDZ,A.SJZD,A.IF_QY,A.IF_SC,B.NAME
+        FROM T_BGMODEL A
+        LEFT JOIN USER B
+        ON A.SC_RYDM=B.ZYDM
+        WHERE A.IF_SC='001'
+        <if test=" BGNAME != null ">
+            and A.BGNAME like concat('%',#{BGNAME}, '%')
+        </if>
+        limit  ${start},${length}
+    </select>
+    <select id="getCount" resultType="Integer">
+        SELECT count(A.ID)
+        FROM T_BGMODEL A
+        LEFT JOIN USER B
+        ON A.SC_RYDM=B.ZYDM
+        WHERE A.IF_SC='001'
+        <if test=" BGNAME != null ">
+            and A.BGNAME like concat('%',#{BGNAME}, '%')
+        </if>
+    </select>
+    <!--上传模板信息-->
+    <insert id="addBgmodel">
+        INSERT INTO T_BGMODEL(BGNAME,BBH,SC_RYDM,SCRQ,CCDZ,SJZD,ID) VALUES (#{BGNAME},#{BBH},#{SC_RYDM},NOW(),#{CCDZ},#{SJZD},#{ID});
+    </insert>
+    <!--获取地址-->
+    <select id="getCcdzById" resultType="STRING">
+        SELECT CCDZ
+        FROM T_BGMODEL
+        WHERE ID=#{ID}
+    </select>
+    <!--更新数据字段-->
+    <select id="updateZD">
+        UPDATE T_BGMODEL
+        SET SJZD=#{SJZD}
+        WHERE ID=#{ID}
+    </select>
+    <!--删除-->
+    <update id="scbgmodel">
+        update T_BGMODEL
+        SET IF_SC = '002'
+        WHERE
+        ID in
+        <foreach collection="data" item="item" index="index" separator="," open="(" close=")">
+             #{item}
+        </foreach>
+    </update>
+    <!--获取新增报告模板id-->
+    <select id="findBgModelId" resultType="integer">
+        select max(id)
+        from t_bgmodel
+    </select>
+    <!--删除对应字段-->
+    <delete id="SCZD">
+        DELETE  FROM  T_BGMODEL_ZDLX
+        WHERE BGMODELID =#{BGMODELID};
+        <foreach collection="data" item="item" index="index" separator=";" close=";">
+            insert into T_BGMODEL_ZDLX (BGMODELID,BGMODELZD,LX)
+            values (#{BGMODELID},#{item.zd},#{item.lx})
+        </foreach>
+    </delete>
+</mapper>

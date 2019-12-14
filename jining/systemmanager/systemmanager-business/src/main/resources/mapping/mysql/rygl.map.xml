@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xinhai.caiyun.systemmanager.dao.RyglMapper">
+    <!--查询人员信息-->
+    <select id="selectRygl" resultType="Map">
+      select id,name,sex,csrq,mz,jg,zzmm,czdz,lxfs,ssks,zc,hyzk,csxl,xyxl,byyx from bgrygl
+        where id>0
+      <if test="map.name!=null and map.name!= ''">
+          and name = #{map.name}
+      </if>
+      limit ${map.start},${map.length}
+    </select>
+    <select id="selectRyglCount" resultType="java.lang.Integer">
+      select count(id) from bgrygl
+        where id>0
+        <if test="map.name!=null and map.name!= ''">
+            and name = #{map.name}
+        </if>
+    </select>
+    <!--增加人员信息-->
+    <insert id="addRygl">
+      insert into bgrygl(name,sex,csrq,mz,jg,zzmm,czdz,lxfs,ssks,zc,hyzk,csxl,xyxl,byyx)
+      values(#{map.name},#{map.sex},#{map.csrq},#{map.mz},#{map.jg},#{map.zzmm},#{map.czdz},#{map.lxfs},#{map.ssks},#{map.zc},#{map.hyzk},#{map.csxl},#{map.xyxl},#{map.byyx})
+    </insert>
+    <!--删除人员信息-->
+    <delete id="deleteRygl">
+      delete from bgrygl where id = #{map.id}
+    </delete>
+    <!--修改人员信息-->
+    <update id="updateRygl">
+      update bgrygl set name= #{map.name},sex = #{map.sex},
+      csrq = #{map.csrq},mz = #{map.mz},jg = #{map.jg},zzmm = #{map.zzmm},
+      czdz = #{map.czdz},lxfs = #{map.lxfs},ssks = #{map.ssks},zc = #{map.zc},hyzk = #{map.hyzk},csxl = #{map.csxl},xyxl = #{map.xyxl},byyx = #{map.byyx} where id = #{map.id}
+    </update>
+</mapper>

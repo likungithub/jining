@@ -1,0 +1,1 @@
+mvn install:install-file -Dfile=pageoffice4.4.0.4.jar -DgroupId=pageoffice -DartifactId=pageoffice -Dversion=4.4.0.4 -Dpackaging=jar

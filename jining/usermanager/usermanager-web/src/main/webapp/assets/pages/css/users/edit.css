@@ -1,0 +1,8 @@
+@CHARSET "UTF-8";
+/*员工管理编辑用户信息样式开始*/
+.edit-users-info .modal-dialog .modal-content {
+    border-radius: 4px !important;
+}
+.edit-users-info .modal-dialog .modal-content .modal-title{
+    font-weight: 800;
+}

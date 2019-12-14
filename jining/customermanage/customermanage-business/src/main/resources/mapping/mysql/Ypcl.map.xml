@@ -1,0 +1,241 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xinhai.caiyun.customermanage.dao.YpclMapper">
+
+    <!--  样品处理接收首页  查询全部  -->
+    <select id="getYpclJsAllM" resultType="map">
+        select cl.id id,cl.ypid ypid,cl.wtid wtid,cl.zl zl,cl.clyy clyy,cl.clfs clfs,cl.clry clry,
+        cl.zt zt,cl.sqry sqry,cl.sqsj sqsj,cl.qrry qrry,cl.qrsj qrsj,cl.bz bz,
+        gl.ypmc ypmc,gl.ypbm ypbm, sp.info info
+        FROM
+        t_ypcl_jbxx cl
+        LEFT JOIN t_ypgl_jbxx gl ON cl.ypid = gl.Id
+        LEFT JOIN t_ypcl_sp sp ON cl.id = sp.ypclid
+        WHERE
+        sp.id in (
+        SELECT MAX(id) FROM t_ypcl_sp GROUP BY ypclid
+        )
+       /* from t_ypcl_jbxx cl LEFT JOIN t_ypgl_jbxx gl ON cl.ypid = gl.Id
+        LEFT JOIN t_ypcl_sp sp on cl.id = sp.ypclid where 1=1*/
+       <if test="map.ypmc!=null and map.ypmc!=''">
+            and gl.ypmc like CONCAT('%',#{map.ypmc},'%')
+        </if>
+        <if test="map.wtid!=null and map.wtid!=''">
+            and cl.wtid like CONCAT('%',#{map.wtid},'%')
+        </if>
+        AND cl.zt in(0,2)
+        order by id
+        limit #{map.start},#{map.length};
+  </select>
+
+    <!--样品处理接收首页  查询总数-->
+    <select id="getYpclJsNumsM" resultType="java.lang.Integer">
+        select count(1)
+        from t_ypcl_jbxx cl LEFT JOIN t_ypgl_jbxx gl ON cl.ypid = gl.Id
+       where 1=1
+        <if test="map.ypmc!=null and map.ypmc!=''">
+            and gl.ypmc like CONCAT('%',#{map.ypmc},'%')
+        </if>
+        <if test="map.wtid!=null and map.wtid!=''">
+            and cl.wtid like CONCAT('%',#{map.wtid},'%')
+        </if>
+        AND cl.zt in(0,2)
+    </select>
+
+    <!--样品处理信息 添加-->
+    <insert id="setCreateYpclxxM" parameterType="com.xinhai.caiyun.customermanage.api.Ypclxx">
+        INSERT INTO t_ypcl_jbxx (ypid,wtid,zl,clyy,clfs,clry,zt,sqry,sqsj,qrry,qrsj,bz)
+        VALUES (#{ypid},#{wtid},#{zl},#{clyy},#{clfs},#{clry},#{zt},#{sqry},#{sqsj},#{qrry},
+        #{qrsj},#{bz});
+    </insert>
+
+    <!--  样品处理信息选择页面  查询全部样品信息  -->
+    <select id="getSampleChoiceAllM" resultType="map">
+       SELECT id,ypmc,ypbm,wtid,ybjs,ypsl,bzxx
+        from t_ypgl_jbxx where 1 = 1
+        order by id desc
+        limit #{start},#{length};
+    </select>
+
+    <!--样品处理信息选择页面  查询全部样品信息总数-->
+    <select id="getSampleChoiceNumsM" resultType="java.lang.Integer">
+        select count(1) from t_ypgl_jbxx
+    </select>
+
+    <!--样品处理信息选择页面  回显单条样品信息-->
+    <select id="getAloneSampleChoiceM" resultType="map" parameterType="java.lang.String">
+        SELECT id as ypid,ypmc,ypbm,wtid from t_ypgl_jbxx where id = #{id}
+    </select>
+
+    <!--样品处理详细信息页面  处理人查询，全部-->
+    <select id="getSampleProcessorPeopleM" resultType="map">
+       SELECT id,name from user
+    </select>
+
+    <!--回显单条样品处理信息-->
+    <select id="getAloneSampleHandleChoiceM" resultType="map" parameterType="java.lang.String">
+        select cl.id id,cl.ypid ypid,cl.wtid wtid,cl.zl zl,cl.clyy clyy,cl.clfs clfs,cl.clry clry,
+        cl.zt zt,cl.sqry sqry,cl.sqsj sqsj,cl.qrry qrry,cl.qrsj qrsj,cl.bz bz,
+        gl.ypmc ypmc,gl.ypbm ypbm, sp.info info
+        from t_ypcl_jbxx cl LEFT JOIN t_ypgl_jbxx gl ON cl.ypid = gl.Id
+        LEFT JOIN t_ypcl_sp sp on cl.id = sp.ypclid  where cl.id = #{id}
+    </select>
+
+    <!--//////////////////样品处理审批////////////////////////-->
+
+    <!--  样品处理审批首页  查询全部  -->
+    <select id="getYpclSPAllM" resultType="map">
+        select cl.id id,cl.ypid ypid,cl.wtid wtid,cl.zl zl,cl.clyy clyy,cl.clfs clfs,cl.clry clry,
+        cl.zt zt,cl.sqry sqry,cl.sqsj sqsj,cl.qrry qrry,cl.qrsj qrsj,cl.bz bz,
+        gl.ypmc ypmc,gl.ypbm ypbm, sp.info info
+        /*from t_ypcl_jbxx cl LEFT JOIN t_ypgl_jbxx gl ON cl.ypid = gl.Id
+        LEFT JOIN t_ypcl_sp sp on cl.id = sp.ypclid where 1=1*/
+        FROM
+        t_ypcl_jbxx cl
+        LEFT JOIN t_ypgl_jbxx gl ON cl.ypid = gl.Id
+        LEFT JOIN t_ypcl_sp sp ON cl.id = sp.ypclid
+        WHERE
+        sp.id in (
+        SELECT MAX(id) FROM t_ypcl_sp GROUP BY ypclid
+        )
+        <if test="map.ypmc!=null and map.ypmc!=''">
+            and gl.ypmc like CONCAT('%',#{map.ypmc},'%')
+        </if>
+        <if test="map.wtid!=null and map.wtid!=''">
+            and cl.wtid like CONCAT('%',#{map.wtid},'%')
+        </if>
+        AND cl.zt = 0
+        order by id
+        limit #{map.start},#{map.length};
+    </select>
+
+    <!--样品处理审批首页  查询总数-->
+    <select id="getYpclSPNumsM" resultType="java.lang.Integer">
+        select count(1)
+        from t_ypcl_jbxx cl LEFT JOIN t_ypgl_jbxx gl ON cl.ypid = gl.Id
+        where 1=1
+        <if test="map.ypmc!=null and map.ypmc!=''">
+            and gl.ypmc like CONCAT('%',#{map.ypmc},'%')
+        </if>
+        <if test="map.wtid!=null and map.wtid!=''">
+            and cl.wtid like CONCAT('%',#{map.wtid},'%')
+        </if>
+        AND cl.zt = 0
+    </select>
+
+    <!--样品处理申请  修改样品处理基本信息表内容-->
+    <update id="getSampleApprovalUpdateZTM">
+        UPDATE t_ypcl_jbxx set zt =#{zt} where id =#{id}
+    </update>
+
+    <!--样品处理审批 - 样品审批表添加-->
+    <insert id="getCreateYpclSPM" parameterType="com.xinhai.caiyun.customermanage.api.ypclsp">
+        INSERT INTO t_ypcl_sp (ypclid,info,spjg,spry,spsj)
+        VALUES (#{ypclid},#{info},#{spjg},#{spry},#{spsj});
+    </insert>
+
+    <!--//////////////////样品处理确认////////////////////////-->
+    <!--  样品处理确认首页  查询全部  -->
+    <select id="getYpclQRAllM" resultType="map">
+        select cl.id id,cl.ypid ypid,cl.wtid wtid,cl.zl zl,cl.clyy clyy,cl.clfs clfs,cl.clry clry,
+        cl.zt zt,cl.sqry sqry,cl.sqsj sqsj,cl.qrry qrry,cl.qrsj qrsj,cl.bz bz,
+        gl.ypmc ypmc,gl.ypbm ypbm, sp.info info
+        /*from t_ypcl_jbxx cl LEFT JOIN t_ypgl_jbxx gl ON cl.ypid = gl.Id
+        LEFT JOIN t_ypcl_sp sp on cl.id = sp.ypclid where 1=1*/
+        FROM
+        t_ypcl_jbxx cl
+        LEFT JOIN t_ypgl_jbxx gl ON cl.ypid = gl.Id
+        LEFT JOIN t_ypcl_sp sp ON cl.id = sp.ypclid
+        WHERE
+        sp.id in (
+        SELECT MAX(id) FROM t_ypcl_sp GROUP BY ypclid
+        )
+        <if test="map.ypmc!=null and map.ypmc!=''">
+            and gl.ypmc like CONCAT('%',#{map.ypmc},'%')
+        </if>
+        <if test="map.wtid!=null and map.wtid!=''">
+            and cl.wtid like CONCAT('%',#{map.wtid},'%')
+        </if>
+        AND cl.zt in(1,3)
+        order by id
+        limit #{map.start},#{map.length};
+    </select>
+
+    <!--样品处理确认首页  查询总数-->
+    <select id="getYpclQRNumsM" resultType="java.lang.Integer">
+        select count(1)
+        from t_ypcl_jbxx cl LEFT JOIN t_ypgl_jbxx gl ON cl.ypid = gl.Id
+        where 1=1
+        <if test="map.ypmc!=null and map.ypmc!=''">
+            and gl.ypmc like CONCAT('%',#{map.ypmc},'%')
+        </if>
+        <if test="map.wtid!=null and map.wtid!=''">
+            and cl.wtid like CONCAT('%',#{map.wtid},'%')
+        </if>
+        AND cl.zt in(1,3)
+    </select>
+
+    <!--根据角色id，查询角色名称-->
+    <select id="getCustomerNameM" resultType="java.lang.String" parameterType="java.lang.String">
+       SELECT name from user WHERE id =#{id}
+    </select>
+
+    <!--样品处理申请  修改样品处理基本信息表内容-->
+    <update id="getSampleInformationAllUpdateZTM" parameterType="Map">
+        UPDATE t_ypcl_jbxx set ypid = #{map.ypid},wtid = #{map.wtid},zl = #{map.zl},clyy = #{map.clyy},
+        clfs = #{map.clfs},clry = #{map.clry}, zt =#{map.zt},sqry = #{map.sqry}, sqsj = #{map.sqsj},
+        qrry = #{map.qrry},qrsj = #{map.qrsj},bz = #{map.bz} where id =#{map.id}
+    </update>
+
+    <!--根据样品编码查询样品id与委托id-->
+    <select id="findYpglByypbm" parameterType="Map" resultType="java.util.Map">
+        select wtid,id from t_ypgl_jbxx where ypbm = #{map.ypbm}
+    </select>
+    <!--导入Excel数据-->
+    <insert id="importYpclExcel">
+        insert into t_ypcl_jbxx (ypid,wtid,zl,clyy,clfs,clry,zt,sqry,sqsj,bz)
+        values (#{map.ypid},#{map.wtid},#{map.zl},#{map.clyy},#{map.clfs},#{map.clry},#{map.zt},#{map.sqry},now(),#{map.bz})
+    </insert>
+    <!--导出Excel数据-->
+    <select id="findByYpclid" resultType="com.xinhai.caiyun.customermanage.api.Ypcl">
+        SELECT
+            gl.ypbm,
+            gl.ypmc,
+            cl.zl,
+            cl.clyy,
+            cl.clfs,
+            us.name clry,
+            cl.bz,
+            cl.wtid,
+            cl.zt,
+            sp.info thyy,
+            uss.name sqry,
+            cl.sqsj
+        FROM
+            t_ypcl_jbxx cl
+                LEFT JOIN
+            t_ypgl_jbxx gl ON cl.ypid = gl.Id
+                LEFT JOIN
+            t_ypcl_sp sp ON cl.id = sp.ypclid
+                LEFT JOIN
+            user us ON us.id = cl.clry
+                LEFT JOIN
+            user uss ON uss.id = cl.sqry
+        WHERE
+            1 = 1 AND (cl.zt = 2 OR cl.zt = 0) and cl.id = #{map.id}
+    </select>
+    <!--通过处理人员名字查找id-->
+    <select id="findByclrymc" resultType="java.lang.String">
+        select id from user where 1=1
+        <if test="clrymc != null and clrymc != ''">
+            and name = #{clrymc}
+        </if>
+    </select>
+
+    <!--样品处理确认  修改样品处理基本信息表内容-->
+    <update id="getSampleInfoConfirmM" parameterType="Map">
+        UPDATE t_ypcl_jbxx set qrry = #{map.qrry},qrsj = #{map.qrsj},zt = #{map.zt} where id =#{map.id}
+    </update>
+
+
+</mapper>

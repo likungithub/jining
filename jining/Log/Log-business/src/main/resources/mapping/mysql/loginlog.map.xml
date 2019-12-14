@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!-- namespace必须和接口名称一一对应 -->
+<mapper namespace="com.xinhai.Log.dao.LoginlLogMapper">
+	<resultMap type="com.xinhai.Log.api.LoginLog" id="LoginLogMap">
+		<id column="ID" property="id"></id>
+		<result property="personcode" column="RYDM"></result>
+		<result property="loginaccount" column="DLZH"></result>
+		<result property="logintime" column="DLSJ"></result>
+		<result property="outtime" column="TCSJ"></result>
+		<result property="logintype" column="DLLX_DM"></result>
+		<result property="ip" column="YHIP"></result>
+		<result property="mac" column="MAC"></result>
+		<result property="usertype" column="QYLX_DM"></result>
+		<result property="personname" column="RYXM"></result>
+		<result property="dljg_bm" column="dljg_bm"></result>
+	</resultMap>
+	<!-- 插入LoginLog记录 -->
+	<insert id="createLoginLog" parameterType="com.xinhai.Log.api.LoginLog"
+		keyProperty="id" useGeneratedKeys="true">
+		INSERT INTO LOG_DLXX (RYDM, RYXM,
+		DLZH, DLSJ, TCSJ, DLLX_DM, YHIP, MAC, QYLX_DM,dljg_bm)
+		VALUES
+		(#{personcode},#{personname},#{loginaccount},#{logintime},#{outtime},#{logintype},#{ip},#{mac},#{usertype},#{dljg_bm});
+	</insert>
+	<!--获取一个LoginLog数据 -->
+	<select id="findLoginLog" resultMap="LoginLogMap" parameterType="String">
+		SELECT ID,RYDM,RYXM,DLZH,DLSJ,TCSJ,DLLX_DM,YHIP,MAC,QYLX_DM FROM
+		LOG_DLXX WHERE ID = #{id};
+	</select>
+	<!--获取所有LoginLog数据 -->
+	<select id="findAllLoginLog" resultMap="LoginLogMap">
+		SELECT ID,RYDM,RYXM,DLZH,DLSJ,TCSJ,DLLX_DM,YHIP,MAC,QYLX_DM FROM
+		LOG_DLXX where 1 = 1
+		<if test="starDate!=null">
+			and DLSJ >= #{starDate}
+		</if>
+		<if test="endDate!=null">
+			and #{endDate} >= DLSJ
+		</if>
+	</select>
+	<!--通过id,更新一条LoginLog数据 -->
+	<update id="updateLoginLog" parameterType="com.xinhai.Log.api.LoginLog">
+		UPDATE LOG_DLXX SET TCSJ = #{outtime} WHERE id = #{id};
+	</update>
+	<!--模糊查询 -->
+	<!-- <select id="searchLoginLog" resultType="com.xinhai.Log.api.LoginLog"> 
+		SELECT * FROM LOG_DLXX WHERE <if test="keyword != null and keyword != ''"> 
+		WHERE CONCAT(DLLX, YHIP, MAC) LIKE CONCAT('%',#{keyword},'%') OR YHBM = (SELECT 
+		YHBM FROM ??? WHERE YHM = ?); </if> </select> -->
+
+	<!--通过id删除一条employee数据 -->
+	<delete id="deleteLoginLog" parameterType="String">
+		DELETE FROM LOG_DLXX
+		WHERE id = #{id};
+	</delete>
+	<!-- 根据当前ip查询出最新登录日志 -->
+	<select id="findLoginLogByIP" resultType="com.xinhai.Log.api.LoginLog">
+		SELECT ID,RYDM,RYXM,DLZH,DLSJ,TCSJ,DLLX_DM,YHIP,MAC,QYLX_DM FROM LOG_DLXX
+		WHERE YHIP = #{ip} order by DLSJ desc limit 1;
+	</select>
+	<!-- 查询数量 -->
+	<select id="findAllLoginLogSize" resultType="long">
+		select count(id) from LOG_DLXX where 1=1
+		<if test="starDate!=null">
+			and DLSJ >= #{starDate}
+		</if>
+		<if test="endDate!=null">
+			and #{endDate} > DLSJ
+		</if>
+	</select>
+	<select id="getLoginLogByPage" resultMap="LoginLogMap">
+		SELECT ID,RYDM,RYXM,DLZH,DLSJ,TCSJ,DLLX_DM,YHIP,MAC,QYLX_DM FROM
+		LOG_DLXX WHERE 1=1
+		<if test="starDate!=null">
+			and DLSJ >= #{starDate}
+		</if>
+		<if test="endDate!=null">
+			and #{endDate} > DLSJ
+		</if>
+		LIMIT #{start},#{length};
+	</select>
+	<select id="allCustomerLoginCount" resultType="java.util.HashMap">
+		SELECT COUNT(id) AS count,DATE_FORMAT(dlsj,'%Y-%m-%d') AS DLSJ from log_dlxx
+		where DATE_FORMAT(dlsj,'%Y-%m-%d') BETWEEN #{begin} and #{end} GROUP
+		BY DATE_FORMAT(dlsj,'%Y-%m-%d')
+	</select>
+	<select id="allCustomerLoginCountByMonth" resultType="java.util.HashMap">
+		SELECT COUNT(id) AS count,DATE_FORMAT(dlsj,'%Y-%m') AS DLSJ from log_dlxx
+		where DATE_FORMAT(dlsj,'%Y-%m') BETWEEN #{begin} and #{end} GROUP
+		BY DATE_FORMAT(dlsj,'%Y-%m')
+	</select>
+	<select id="LoginStationByEveryDay" resultType="java.util.HashMap">
+	select COUNT(ID) as count ,DLZH from log_dlxx where dlsj BETWEEN #{begin} and #{end}  GROUP BY DLZH ORDER BY count DESC limit 0,10
+	</select>
+	<select id="loginStatByWeek" resultType="java.util.HashMap">
+		select COUNT(ID) as count ,date_format(dlsj,'%Y-%m-%d') as DAY from log_dlxx where date_format(dlsj,'%Y-%m-%d') BETWEEN #{begin} and #{end}  GROUP BY date_format(dlsj,'%Y-%m-%d') 
+	</select>
+
+
+	<select id="findLoginLogSize" resultType="long">
+		SELECT COUNT(id) FROM log_dlxx
+		WHERE DLJG_BM = #{dljgbm}
+		<if test="zydm!=null and zydm!=''">
+			AND RYDM = #{zydm}
+		</if>
+		<if test="starDate!=null and starDate!=''">
+			AND DLSJ > DATE(#{starDate})
+		</if>
+		<if test="endDate!=null and endDate!=''">
+			AND DATE(#{endDate}) > DLSJ
+		</if>
+	</select>
+
+	<select id="findLoginLogList" resultMap="LoginLogMap">
+		SELECT ID,RYDM,DLZH,DLSJ,TCSJ,DLLX_DM,YHIP,MAC,QYLX_DM,RYXM,DLJG_BM FROM log_dlxx
+		WHERE DLJG_BM = #{dljgbm}
+		<if test="zydm!=null and zydm!=''">
+			AND RYDM = #{zydm}
+		</if>
+		<if test="starDate!=null and starDate!=''">
+			AND DLSJ > DATE(#{starDate})
+		</if>
+		<if test="endDate!=null and endDate!=''">
+			AND DATE(#{endDate}) > DLSJ
+		</if> ORDER BY DLSJ DESC LIMIT #{start},#{length}
+	</select>
+</mapper>

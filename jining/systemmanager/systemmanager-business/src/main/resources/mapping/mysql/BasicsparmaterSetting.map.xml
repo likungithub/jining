@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- namespace必须和接口名称一一对应 -->
+<mapper
+	namespace="com.xinhai.caiyun.systemmanager.dao.BasicsParmaterSettingMapper">
+	<resultMap id="params1"
+		type="com.xinhai.caiyun.systemmanager.api.BasicsParmaterSetting">
+		<id property="id" column="ID" />
+		<result property="agencyNumber" column="DLJG_BM" />
+		<result property="remindTypeEncoding" column="TXLX_DM"/>
+		<result property="remindMessage" column="TXXX"/>
+		<result property="deleteFlag" column="SCBZ" />
+		<result property="inputPeople" column="LRRY" />
+		<result property="deletePeople" column="SCRY" />
+		<result property="updatePeople" column="GXRY" />
+		<result property="inputTime" column="LRRQ" />
+		<result property="updatetime" column="GXRQ" />
+		<result property="deletetime" column="SCRQ" />
+	</resultMap>
+
+	<!-- 插入params记录 -->
+<!-- 	<insert id="insertFile"
+		parameterType="com.xinhai.caiyun.systemmanager.api.BasicsParmaterSetting"
+		keyProperty="id" useGeneratedKeys="true">
+		INSERT INTO pt_xsrm (FJMC, FJMS, FJCCLJ,  DLJG_BM, SCBZ)
+		VALUES (#{fileName}, #{fileContent}, #{filePath},1,0);
+	</insert>
+	<update id="deleteFile"
+		parameterType="com.xinhai.caiyun.systemmanager.api.BasicsParmaterSetting">
+		update pt_xsrm set SCBZ=1 WHERE ID=#{id}
+	</update>
+	通过id,更新一条params数据
+	<update id="updateFileContent"
+		parameterType="com.xinhai.caiyun.systemmanager.api.BasicsParmaterSetting">
+		UPDATE pt_xsrm set FJMS = #{fileContent} WHERE ID = #{id};
+	</update>
+	获取一个params数据
+	<select id="findFile" resultMap="params1">
+		SELECT ID,FJMC,FJMS,FJCCLJ,NSRSBH FROM pt_xsrm WHERE SCBZ = 0;
+	</select>
+	<select id="findFileById" resultMap="params1">
+		SELECT ID,FJMS FROM pt_xsrm WHERE SCBZ = 0 and ID=#{id};
+	</select> -->
+	
+	
+	<!--模糊查询返回list -->
+	<!-- <select id="searchParamsList" resultMap="params1"> SELECT * FROM DM_JCCS 
+		WHERE CONCAT(CSDM) LIKE CONCAT('%',#{typecode},'%') and CSLX = #{type} and 
+		SCBZ = 0; </select> -->
+
+	<!-- <select id="getAllEmployee" resultType="com.alibaba.fastjson.JSONObject" 
+		statementType="CALLABLE"> <![CDATA[ {call testProc( #{id,mode=IN,jdbcType=INTEGER} 
+		)} ]]> </select> -->
+		
+		<select id="finddayByDl" resultMap="params1">
+		select TXXX,DLJG_BM from cs_cssz where DLJG_BM = #{dl} and SCBZ=0;
+		</select>
+		<!--获取所有params数据 -->
+		
+		<select id="findOneByDl" resultMap="params1">
+	        select DLJG_BM,TXLX_DM,TXXX,SCBZ,LRRY,SCRY,GXRY,LRRQ,GXRQ,SCRQ 
+	        from cs_cssz where DLJG_BM = #{dl} and TXLX_DM = 100 and SCBZ=0;
+        </select>
+        
+        <select id="findTwoByDl" resultMap="params1">
+	        select DLJG_BM,TXLX_DM,TXXX,SCBZ,LRRY,SCRY,GXRY,LRRQ,GXRQ,SCRQ 
+	        from cs_cssz where DLJG_BM = #{dl} and TXLX_DM = 200 and SCBZ=0;
+        </select>
+        
+        <select id="findThreeByDl" resultMap="params1">
+	        select DLJG_BM,TXLX_DM,TXXX,SCBZ,LRRY,SCRY,GXRY,LRRQ,GXRQ,SCRQ 
+	        from cs_cssz where DLJG_BM = #{dl} and TXLX_DM = 300 and SCBZ=0;
+        </select>
+        <select id="findByTaskOut" resultMap="params1">
+	        select DLJG_BM,TXLX_DM,TXXX,SCBZ,LRRY,SCRY,GXRY,LRRQ,GXRQ,SCRQ 
+	        from cs_cssz where DLJG_BM = #{dl} and TXLX_DM = 400 and SCBZ=0;
+        </select>
+        <select id="findByTaskExpiration" resultMap="params1">
+	        select DLJG_BM,TXLX_DM,TXXX,SCBZ,LRRY,SCRY,GXRY,LRRQ,GXRQ,SCRQ 
+	        from cs_cssz where DLJG_BM = #{dl} and TXLX_DM = 500 and SCBZ=0;
+        </select>
+         <select id="findByOnTrial" resultMap="params1">
+	        select DLJG_BM,TXLX_DM,TXXX,SCBZ,LRRY,SCRY,GXRY,LRRQ,GXRQ,SCRQ 
+	        from cs_cssz where DLJG_BM = #{dl} and TXLX_DM = 800 and SCBZ=0;
+        </select>
+        <select id="findAllByDl" resultMap="params1">
+	        select DLJG_BM,TXLX_DM,TXXX,SCBZ,LRRY,SCRY,GXRY,LRRQ,GXRQ,SCRQ 
+	        from cs_cssz where DLJG_BM = #{dl} and SCBZ=0;
+        </select>
+        
+        <select id="findMessage" resultMap="params1">
+            select DLJG_BM,TXLX_DM,TXXX,SCBZ,LRRY,SCRY,GXRY,LRRQ,GXRQ,SCRQ 
+            from cs_cssz where DLJG_BM = #{dl} and TXLX_DM = #{TXLX} and SCBZ=0;
+        </select>
+		
+		<update id="updateRemindDay1" parameterType="com.xinhai.caiyun.systemmanager.api.BasicsParmaterSetting">
+		update cs_cssz set TXXX=#{taxbeforeday} where DLJG_BM=#{dl} and TXLX_DM=100
+		</update>
+	<!--获取所有params数据 -->
+		<update id="updateRemindDay2" parameterType="com.xinhai.caiyun.systemmanager.api.BasicsParmaterSetting">
+		update cs_cssz set TXXX=#{paybeforeday} where DLJG_BM=#{dl} and TXLX_DM=200
+		</update>
+		<!--获取所有params数据 -->
+		
+		<update id="updateRemindDay3" parameterType="com.xinhai.caiyun.systemmanager.api.BasicsParmaterSetting">
+		update cs_cssz set TXXX=#{afterpayday} where DLJG_BM=#{dl} and TXLX_DM=300
+		</update>
+		<update id="updateTaskOut" parameterType="com.xinhai.caiyun.systemmanager.api.BasicsParmaterSetting">
+		update cs_cssz set TXXX=#{taxbeforeday} where DLJG_BM=#{dl} and TXLX_DM=400
+		</update>
+		<update id="updateTaskExpiration" parameterType="com.xinhai.caiyun.systemmanager.api.BasicsParmaterSetting">
+		update cs_cssz set TXXX=#{taxbeforeday} where DLJG_BM=#{dl} and TXLX_DM=500
+		</update>
+		<update id="updateExpirecontract" parameterType="com.xinhai.caiyun.systemmanager.api.BasicsParmaterSetting">
+		update cs_cssz set TXXX=#{day} where DLJG_BM=#{dl} and TXLX_DM=600
+		</update>
+		<update id="updateOverduecontract" parameterType="com.xinhai.caiyun.systemmanager.api.BasicsParmaterSetting">
+		update cs_cssz set TXXX=#{day} where DLJG_BM=#{dl} and TXLX_DM=700
+		</update>
+		<update id="updateOnTrial" parameterType="com.xinhai.caiyun.systemmanager.api.BasicsParmaterSetting">
+		update cs_cssz set TXXX=#{taxbeforeday} where DLJG_BM=#{dl} and TXLX_DM=800
+		</update>
+		<insert id="insertXx1" parameterType="com.xinhai.caiyun.systemmanager.api.BasicsParmaterSetting">
+		insert into cs_cssz(DLJG_BM,TXLX_DM,TXXX,SCBZ)values(#{dl},100,2,0);
+		</insert>
+		<insert id="insertXx2" parameterType="com.xinhai.caiyun.systemmanager.api.BasicsParmaterSetting">
+		insert into cs_cssz(DLJG_BM,TXLX_DM,TXXX,SCBZ)values(#{dl},200,2,0);
+		</insert>
+		<insert id="insertXx3" parameterType="com.xinhai.caiyun.systemmanager.api.BasicsParmaterSetting">
+		insert into cs_cssz(DLJG_BM,TXLX_DM,TXXX,SCBZ)values(#{dl},300,2,0);
+		</insert>
+		<insert id="insertXx4" parameterType="com.xinhai.caiyun.systemmanager.api.BasicsParmaterSetting">
+		insert into cs_cssz(DLJG_BM,TXLX_DM,TXXX,SCBZ)values(#{dl},400,2,0);
+		</insert>
+		<insert id="insertXx5" parameterType="com.xinhai.caiyun.systemmanager.api.BasicsParmaterSetting">
+		insert into cs_cssz(DLJG_BM,TXLX_DM,TXXX,SCBZ)values(#{dl},500,2,0);
+		</insert>
+		<insert id="insertXx6" parameterType="com.xinhai.caiyun.systemmanager.api.BasicsParmaterSetting">
+		insert into cs_cssz(DLJG_BM,TXLX_DM,TXXX,SCBZ)values(#{dl},600,2,0);
+		</insert>
+</mapper>

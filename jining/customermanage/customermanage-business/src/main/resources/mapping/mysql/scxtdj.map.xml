@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xinhai.caiyun.customermanage.dao.ScxtdjMapper">
+    <!--查询导入日志-->
+    <select id="selectRzAll"  parameterType="Map" resultType="Map">
+        select id,wtid,filename,lrry,Date_Format(lrrq,'%Y-%m-%d %T') lrrq from t_scxtdj_log where 1 = 1
+        <if test="map.wtid!=null and map.wtid!=''">
+            and wtid = #{map.wtid}
+        </if>
+        limit #{map.start},#{map.length};
+    </select>
+    <select id="selectRzCount" resultType="java.lang.Integer">
+        select count(*) from t_scxtdj_log where 1 = 1
+        <if test="map.wtid!=null and map.wtid!=''">
+            and wtid = #{map.wtid}
+        </if>
+    </select>
+    <!--查询导入日志表主键-->
+    <select id="selectLogid" parameterType="Map" resultType="String">
+        select max(id) from t_scxtdj_log
+    </select>
+    <!-- 插入Excel表格数据-->
+    <insert id="importcydExcelSc">
+        insert into t_scxtdj_jbxx(logid,wtid,cydbh,rwly,rwlx,cyrq,cydd,ypmc,cpzl,yply,cyfs,ypsx,yplx,sb,ypph,scrq,bzq,zxbz,ggxh,zldj,scxkzbh,dj,sfck,cyjs,cysl,cysldw,bysl,bzfl,ypxt,cysypdcctj,cyypbz,jsydz,jsypjzrq,bcydwmc,qylx,bcydwdz,bcydwfrdb,bcydwnxse,bcydwyyzz,bcydwlxr,bcydwdh,bcydwcz,bcydwyb,bssczmc,bssczdz,bssczlxr,bssczlxdh,cydwmc,cydwdz,cydwlxr,cydwlxdh,cydwcz,cydwyb,cyr,bz,cyhj,bcydwqygm,bcydwssqy,cyfw,spflid,jybgzt,scdrsj,sfby,cyrlxdh,sfztc,ytlx,xkzlx,rqxz,xkzh,jhl,kcl,cctjqt,cctjwd,cctjsd,ypbzqt,cygj,txm,cydwjb,cydwlxrdh,cydwlxremail)
+         values (#{map.logid},#{map.wtid},#{map.cydbh},#{map.rwly},#{map.rwlx},STR_TO_DATE(#{map.cyrq},"%Y-%m-%d"),#{map.cydd},#{map.ypmc},#{map.cpzl},#{map.yply},#{map.cyfs},#{map.ypsx},#{map.yplx},#{map.sb},#{map.ypph},#{map.scrq},#{map.bzq},#{map.zxbz},#{map.ggxh},#{map.zldj},#{map.scxkzbh},#{map.dj},#{map.sfck},#{map.cyjs},#{map.cysl},#{map.cysldw},#{map.bysl},#{map.bzfl},#{map.ypxt},#{map.cysypdcctj},#{map.cyypbz},#{map.jsydz},#{map.jsypjzrq},#{map.bcydwmc},#{map.qylx},#{map.bcydwdz},#{map.bcydwfrdb},#{map.bcydwnxse},#{map.bcydwyyzz},#{map.bcydwlxr},#{map.bcydwdh},#{map.bcydwcz},#{map.bcydwyb},#{map.bssczmc},#{map.bssczdz},#{map.bssczlxr},#{map.bssczlxdh},#{map.cydwmc},#{map.cydwdz},#{map.cydwlxr},#{map.cydwlxdh},#{map.cydwcz},#{map.cydwyb},#{map.cyr},#{map.bz},#{map.cyhj},#{map.bcydwqygm},#{map.bcydwssqy},#{map.cyfw},#{map.spflid},#{map.jybgzt},#{map.scdrsj},#{map.sfby},#{map.cyrlxdh},#{map.sfztc},#{map.ytlx},#{map.xkzlx},#{map.rqxz},#{map.xkzh},#{map.jhl},#{map.kcl},#{map.cctjqt},#{map.cctjwd},#{map.cctjsd},#{map.ypbzqt},#{map.cygj},#{map.txm},#{map.cydwjb},#{map.cydwlxrdh},#{map.cydwlxremail})
+    </insert>
+    <!--存储导入日志-->
+    <insert id="insertScdjLog">
+        insert into t_scxtdj_log(wtid,filename,lrry,lrrq) values(#{map.wtid},#{map.filename},#{map.lrry},now())
+    </insert>
+    <!--查询导入Excel详情-->
+    <select id="selectExcel"  parameterType="Map" resultType="Map">
+        select b.id,a.cydbh,a.rwly,a.rwlx,a.cyrq,a.cydd,a.ypmc,a.cpzl,a.yply,a.cyfs,a.ypsx,a.yplx,a.sb,a.ypph,a.scrq,a.bzq,a.zxbz,a.ggxh,a.zldj,a.scxkzbh,a.dj,a.sfck,a.cyjs,a.cysl,a.cysldw,a.bysl,a.bzfl,a.ypxt,a.cysypdcctj,a.cyypbz,a.jsydz,a.jsypjzrq,a.bcydwmc,a.qylx,a.bcydwdz,a.bcydwfrdb,a.bcydwnxse,a.bcydwyyzz,a.bcydwlxr,a.bcydwdh,a.bcydwcz,a.bcydwyb,a.bssczmc,a.bssczdz,a.bssczlxr,a.bssczlxdh,a.cydwmc,a.cydwdz,a.cydwlxr,a.cydwlxdh,a.cydwcz,a.cydwyb,a.cyr,a.bz,a.cyhj,a.bcydwqygm,a.bcydwssqy,a.cyfw,a.spflid
+        from t_scxtdj_jbxx a left join t_wt_jbxx b on a.wtid = b.wtid where 1=1
+        <if test="map.logid!=null and map.logid!=''">
+            and logid =#{map.logid}
+        </if>
+        limit #{map.start},#{map.length};
+    </select>
+    <select id="selectExcelCount"  parameterType="Map" resultType="java.lang.Integer">
+        select count(*) from t_scxtdj_jbxx where 1=1
+        <if test="map.logid!=null and map.logid!=''">
+            and logid =#{map.logid}
+        </if>
+    </select>
+</mapper>

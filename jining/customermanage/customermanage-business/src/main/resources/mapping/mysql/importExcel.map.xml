@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xinhai.caiyun.customermanage.dao.ImportExcelMapper">
+    <!--将一对多样品的信息批量导入数据库-->
+    <insert id="importCyypExcel">
+        <foreach collection="list" item="map" index="index" separator=";">
+            insert into t_ypgl_jbxx
+            (
+            wtid,ypbm,ypmc,ypdj,ggxh, ypsl,ypdw,sb,scrq, ypphhbh, ypzt, ypbctj,
+            scdw,scdwlxdh,fyry,fyzt,ybjs,bzq,ypwt,if_th,if_sgr,ypddrq,if_cy,cydd
+            )
+            values
+            (
+            #{map.wtid},#{map.ypbm},#{map.ypmc},#{map.ypdj},#{map.ggxh}, #{map.ypsl},#{map.ypdw},#{map.sb},#{map.scrq},
+            #{map.ypphhbh}, #{map.ypzt}, #{map.ypbctj},#{map.scdw},#{map.scdwlxdh},#{map.fyry},#{map.fyzt},#{map.ybjs},
+            #{map.bzq},#{map.ypwt},#{map.if_th},#{map.if_sgr},#{map.ypddrq},#{map.if_cy},#{map.cydd}
+            )
+        </foreach>
+    </insert>
+</mapper>

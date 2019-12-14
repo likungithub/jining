@@ -1,0 +1,16 @@
+@CHARSET "UTF-8";
+/*通用基础参数编辑模态页面开始*/
+.common-basic-params .modal-dialog {
+    border-radius: 4px !important;
+    width: 660px;
+}
+
+.common-basic-params .modal-dialog .modal-content .modal-footer {
+    padding-right: 22px;
+}
+
+.common-basic-params .modal-dialog .modal-content .modal-header h4 {
+    font-weight: 900;
+}
+
+/*通用基础参数编辑模态页面结束*/

@@ -1,0 +1,37 @@
+@CHARSET "UTF-8";
+.contentBgColor .rotate1
+{
+    transform: rotate(180deg);
+}
+.appcustomerinfo-input-m {
+    height: 33px;
+    width: 110px!important;
+    position: relative;
+    top: 1px;
+}
+.appcustomerinfo-label-m{
+    width: 70px;
+}
+.appcustomerinfo-btn-m
+{
+    height: 33px;
+    position: relative;
+    top: 1px;
+    border-radius: 0 4px 4px 0!important;
+}
+
+.appcustomerinfo-table thead tr th:nth-child(1){
+    width: 100px;
+}
+.appcustomerinfo-table tbody tr td:nth-last-child(-n+3),
+.appcustomerinfo-table tbody tr td:nth-child(2){
+    text-align: center!important;
+}
+.appcustomerinfo-table tbody tr td:nth-child(1),
+.appcustomerinfo-table thead tr th:nth-child(1),
+.appcustomerinfo-table tbody tr td:nth-child(3),
+.appcustomerinfo-table thead tr th:nth-child(3)
+{
+    text-align: left!important;
+}
+.appcustomerinfo-table tbody tr td:nth-child(2)

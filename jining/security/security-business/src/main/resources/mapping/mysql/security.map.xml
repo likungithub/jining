@@ -1,0 +1,392 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+		"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.xinhai.security.dao.SecurityMapper">
+	
+	<resultMap id="userMap" type="com.xinhai.usermanager.entity.User">
+        <id property="id" column="id"/>
+        <result property="userAccount" column="user_account"/>
+        <result property="password" column="password"/>
+        <result property="name" column="name"/>
+        <result property="enabled" column="is_enabled"/>
+        <result property="tel" column="tel"/>
+        <result property="email" column="email"/>
+        <result property="customerId" column="customer_id"/>
+        <result property="ygtx" column="ygtx"/>
+        <result property="orgId" column="org_id"/>
+        <result property="bmdm" column="bmdm"/>
+        <result property="bmqxdm" column="bmqxdm"/>
+        <result property="lastLoginDate" column="last_login_date"/>
+        <result property="createDate" column="create_date"/>
+        <result property="remark" column="remark"/>
+        <result property="ygid" column="ygid"/>
+        <result property="isDelete" column="is_delete"/>
+        <result property="ifManager" column="if_manager" />
+        <result property="is_first" column="if_first" />
+        <result property="zydm" column="zydm"/>
+        <result property="xbdm" column="xbdm"/>
+        <result property="csrq" column="csrq"/>
+        <result property="yddh" column="yddh"/>
+        <result property="qq" column="qq"/>
+        <result property="bzxx" column="bzxx"/>
+        <result property="lxdz" column="lxdz"/>
+        <result property="jsdm" column="jsdm"/>
+        <result property="nsrsbh" column="nsrsbh"/>
+        <result property="dljgBm" column="dljg_bm"/>
+        <result property="lrry" column="lrry"/>
+        <result property="gxry" column="gxry"/>
+        <result property="scry" column="scry"/>
+        <result property="gxrq" column="gxrq"/>
+        <result property="scrq" column="scrq"/>
+        <result property="isSync" column="is_sync"/>
+        <result property="fwksrq" column="fwksrq"/>
+        <result property="fwjsrq" column="fwjsrq"/>
+        <result property="shyj" column="shyj"/>
+        <result property="jfsj" column="jfsj"/>
+        <result property="jfzt" column="jfzt"/>
+    </resultMap>
+	
+	<resultMap id="orgMap" type="com.xinhai.organization.api.Organization">
+        <id property="bmid" column="bmid"/>
+        <result property="id" column="id"/>
+        <result property="code" column="code"/>
+        <result property="name" column="name"/>
+        <result property="parentId" column="parent_id"/>
+        <result property="independent" column="is_independent"/>
+        <result property="orgType" column="org_type"/>
+        <result property="path" column="path"/>
+        <result property="remark" column="remark"/>
+        <result property="orderNo" column="order_no"/>
+        <result property="customerId" column="customer_id"/>
+        <result property="isDelete" column="is_delete"/>
+        <result property="mjcd" column="mjcd"/>
+        <result property="nsrsbh" column="nsrsbh"/>
+        <result property="dljgBm" column="dljg_bm"/>
+        <result property="lrrq" column="lrrq"/>
+        <result property="updateDate" column="update_date"/>
+        <result property="scrq" column="scrq"/>
+    </resultMap>
+	<resultMap id="resMap" type="com.xinhai.resourcemanager.entity.Resource">
+		<id property="id" column="id"/>
+		<result property="funcId" column="func_id"/>
+		<result property="customerId" column="customer_id"/>
+		<result property="name" column="name"/>
+		<result property="description" column="description"/>
+		<result property="identifier" column="identifier"/>
+		<result property="menuIcon" column="menu_icon"/>
+		<result property="url" column="url"/>
+		<result property="category" column="category"/>
+		<result property="parentId" column="parent_id"/>
+		<result property="orderNo" column="order_no"/>
+		<result property="enabled" column="enabled"/>
+	</resultMap>
+	<resultMap id="customer" type="com.xinhai.security.api.Customer">
+		<id column="yhid" property="yhid"/>
+		<result column="id" property="id"/>
+		<result column="name" property="name"/>
+		<result column="code" property="code"/>
+		<result column="qylx_dm" property="qylxDm"/>
+		<result column="sjhm" property="sjhm"/>
+		<result column="zydm" property="zydm"/>
+		<result column="szsf" property="szsf"/>
+		<result column="szcs" property="szcs"/>
+		<result column="nsrsbh" property="nsrsbh"/>
+		<result column="email" property="email"/>
+		<result column="bzxx" property="bzxx"/>
+		<result column="yhzt_dm" property="yhztDm"/>
+		<result column="logo" property="logo"/>
+		<result column="scbz" property="scbz"/>
+		<result column="lrry" property="lrry"/>
+		<result column="gxry" property="gxry"/>
+		<result column="scry" property="scry"/>
+		<result column="create_date" property="createdate"/>
+	</resultMap>
+
+    <!-- 通过账户获取用户信息 -->
+	<select id="findUser" resultMap="userMap">
+		SELECT  id, ygid, user_account, name, password, is_enabled, tel, email, ygtx,
+		      customer_id, org_id, bmdm, bmqxdm, last_login_date, create_date, remark, 
+		      is_delete, if_manager, if_first, zydm, xbdm,csrq, yddh, qq, bzxx, lxdz, jsdm, nsrsbh, 
+		      dljg_bm, lrry, gxry, scry, gxrq, scrq, fwksrq, fwjsrq, shyj, jfsj, jfzt
+		FROM user
+		WHERE user_account = #{userAccount};
+	</select>
+    
+    <!-- 通过代理机构编码查找该代理机构管理员信息 -->
+    <select id="findManager" resultMap="userMap">
+        SELECT  id, ygid, user_account, name, password, is_enabled, tel, email, ygtx,
+              customer_id, org_id, bmdm, bmqxdm, last_login_date, create_date, remark, 
+              is_delete, if_manager, if_first, zydm, xbdm,csrq, yddh, qq, bzxx, lxdz, jsdm, nsrsbh, 
+              dljg_bm, lrry, gxry, scry, gxrq, scrq, fwksrq, fwjsrq, shyj, jfsj, jfzt
+        FROM user
+        WHERE dljg_bm = #{dljg_bm} AND if_manager=1 AND is_delete = false;
+    </select>
+	
+	<!-- 通过id获取user信息 -->
+	<select id="getUserById" resultMap="userMap">
+		SELECT  id, ygid, user_account, name, password, is_enabled, tel, email, ygtx,
+              customer_id, org_id, bmdm, bmqxdm, last_login_date, create_date, remark, 
+              is_delete, if_manager, if_first, zydm, xbdm,csrq, yddh, qq, bzxx, lxdz, jsdm, nsrsbh, 
+              dljg_bm, lrry, gxry, scry, gxrq, scrq, fwksrq, fwjsrq, shyj, jfsj, jfzt
+		FROM user
+		WHERE id = #{id};
+	</select>
+	
+	<select id="findOrganization" resultMap="orgMap">
+		SELECT id, bmid, customer_id, code, parent_id, org_type, path,
+            remark, order_no, lrrq, is_delete, mjcd, nsrsbh, dljg_bm
+		FROM organization
+		WHERE id = #{orgId} AND is_delete = false;
+	</select>
+	
+	<!--获取一个Customer数据  -->
+    <select id="getCustomerById" resultMap="customer" parameterType="string">
+        SELECT yhid,id,code,name,qylx_dm,sjhm,nsrsbh,zydm,szsf,szcs,email,
+            bzxx,yhzt_dm,logo,yyzz,gsjj,qyzz,qyyj,state,scbz,lrry,gxry,scry,
+            create_date,gxrq,scrq,fwksrq,fwjsrq,sh_date,jfsj,jfzt,shyj,zszt
+        FROM Customer 
+        WHERE id = #{id} and scbz=false;
+    </select>
+	
+	<!-- 通过bmdm查询出 organization内容-->
+	<select id="selectByCode" resultMap="orgMap">
+        SELECT id, bmid, customer_id, code, name, parent_id, is_independent,
+            org_type, path, remark, order_no, lrrq, is_delete, mjcd,
+            nsrsbh, dljg_bm, update_date, scrq
+        FROM organization
+        WHERE code = #{bmdm} AND is_delete = FALSE;
+    </select>
+    
+    <!-- 通过代理机构id查询机构信息 -->
+	<select id="findCustomerByUser" resultMap="customer">
+		SELECT yhid,id,code,name,qylx_dm,sjhm,nsrsbh,zydm,szsf,szcs,email,
+            bzxx,yhzt_dm,logo,yyzz,gsjj,qyzz,qyyj,state,scbz,lrry,gxry,scry,
+            create_date,gxrq,scrq,fwksrq,fwjsrq,sh_date,jfsj,jfzt,shyj,zszt
+		FROM customer
+		WHERE id = #{userId};
+	</select>
+	
+	<!-- 通过代理机构id查询机构信息 -->
+    <select id="findbycode" resultMap="customer">
+        SELECT yhid,id,code,name,qylx_dm,sjhm,nsrsbh,zydm,szsf,szcs,email,
+            bzxx,yhzt_dm,logo,yyzz,gsjj,qyzz,qyyj,state,scbz,lrry,gxry,scry,
+            create_date,gxrq,scrq,fwksrq,fwjsrq,sh_date,jfsj,jfzt,shyj,zszt
+        FROM customer
+        WHERE code = #{code} AND scbz = false;
+    </select>
+	
+	<!-- 查询用户资源权限 -->
+	<select id="findUserAuth" resultMap="resMap">
+		SELECT DISTINCT *
+		FROM
+			(
+				SELECT r.*
+				FROM user u
+					INNER JOIN user_auth ua ON u.id = ua.user_id
+					INNER JOIN resource r ON r.id = ua.resource_id
+				WHERE u.user_account = #{userAccount}
+					  AND u.is_delete = FALSE
+					  AND enabled = TRUE
+					  AND r.category = #{type}
+				UNION ALL
+				SELECT r.*
+				FROM user u
+					INNER JOIN user_role ur ON u.id = ur.user_id
+					INNER JOIN role_auth ra ON ur.role_id = ra.role_id
+					INNER JOIN resource r ON r.id = ra.resource_id
+				WHERE u.user_account = #{userAccount}
+					  AND u.is_delete = FALSE
+					  AND enabled = TRUE
+					  AND r.category = #{type}
+			) auth order by order_no, update_date desc
+	</select>
+	
+	<!-- 查询用户资源权限通过ID -->
+    <select id="findUserAuthById" resultMap="resMap">
+        SELECT DISTINCT id,name
+        FROM
+            (
+                SELECT r.*
+                FROM user u
+                    INNER JOIN user_auth ua ON u.id = ua.user_id
+                    INNER JOIN resource r ON r.id = ua.resource_id
+                WHERE u.user_account = #{userAccount}
+                      AND u.is_delete = FALSE
+                      AND enabled = TRUE
+                      AND r.category = #{type}
+                      AND  r.id in
+              <foreach item="id" collection="ids" open="(" separator=","
+              close=")">
+          #{id}
+            </foreach>
+                UNION ALL
+                SELECT r.*
+                FROM user u
+                    INNER JOIN user_role ur ON u.id = ur.user_id
+                    INNER JOIN role_auth ra ON ur.role_id = ra.role_id
+                    INNER JOIN resource r ON r.id = ra.resource_id
+                WHERE u.user_account = #{userAccount}
+                      AND u.is_delete = FALSE
+                      AND enabled = TRUE
+                      AND r.category = #{type}
+                        AND  r.id in
+              <foreach item="id" collection="ids" open="(" separator=","
+              close=")">
+          #{id}
+            </foreach>
+            ) auth order by order_no, update_date desc
+    </select>
+	
+	<!-- UNION ALL
+                SELECT r.*
+                FROM user u
+                    INNER JOIN user_role_kh ur ON u.id = ur.user_id
+                    INNER JOIN role_auth ra ON ur.role_id = ra.role_id
+                    INNER JOIN resource r ON r.id = ra.resource_id
+                WHERE u.user_account = #{userAccount}
+                      AND u.is_delete = FALSE
+                      AND enabled = TRUE
+                      AND r.category = #{type}   -->
+	
+	<!-- 无用 -->
+	<select id="findUserIndependentOrg" resultMap="orgMap">
+		SELECT *
+		FROM (
+				 SELECT
+					 org.*,
+					 u.org_id
+				 FROM user u
+					 INNER JOIN organization org
+						 ON u.customer_id = org.customer_id
+				 WHERE u.user_account = #{userAccount}
+			 ) a
+		WHERE is_delete = 0 AND is_independent = 1 AND (SELECT path
+														FROM organization
+														WHERE id = a.org_id) LIKE concat(path, '%')
+		ORDER BY length(path) DESC
+		LIMIT 1
+	</select>
+	
+	<!-- 无用 -->
+	<select id="findOrgAuthByOrgId" resultType="com.xinhai.security.api.OrgUrlAuthority">
+		SELECT
+			org.id AS orgId,
+			r.id,
+			r.name,
+			r.url
+		FROM organization org
+			INNER JOIN organization_auth oa ON org.id = oa.org_id
+			INNER JOIN resource r ON r.id = oa.resource_id
+		WHERE org.is_delete = FALSE AND r.category = #{type} AND org.id = #{orgId}
+	</select>
+	
+	<!-- 查询员工角色 -->
+	<select id="findUserRoles" resultType="java.lang.String">
+		SELECT r.name
+		FROM role r
+			LEFT JOIN user_role ur ON r.id = ur.role_id
+			LEFT JOIN user u ON ur.user_id = u.id
+		WHERE u.user_account = #{userAccount} and r.scbz = false;
+	</select>
+	<!-- LEFT JOIN user_role_kh urkh ON r.id = urkh.role_id -->
+
+    <!-- 根据id判断用户是否存在 -->
+	<select id="userIsExist"  resultType="java.lang.String">
+		SELECT id FROM user WHERE id = #{id};
+	</select>
+
+    <!-- 根据id判断部门是否存在 -->
+	<select id="orgIsExist"  resultType="java.lang.String">
+		SELECT id FROM organization WHERE id = #{id};
+	</select>
+
+	<insert id="addUser">
+		INSERT INTO "user" (id, user_account, name, password, is_enabled, tel, email,
+		customer_id, org_id, create_date, remark, is_delete, is_sync, if_manager)
+		VALUES (#{id}, #{userAccount}, #{name}, #{password}, #{enabled}, #{tel, jdbcType=VARCHAR}, #{email}, #{customerId}, #{orgId}, #{createDate}, #{remark}, 0, 1, 0)
+	</insert>
+
+	<insert id="addOrg">
+		INSERT INTO organization (
+		id,
+		customer_id,
+		code,
+		name,
+		parent_id,
+		is_independent,
+		org_type,
+		path,
+		remark,
+		order_no,
+		update_date, is_delete, is_sync)
+		VALUES
+		(
+		#{org.id},
+		#{customerId},
+		#{org.code},
+		#{org.name},
+		#{org.parentId},
+		#{org.independent},
+		#{org.orgType},
+		#{org.path},
+		#{org.remark},
+		#{org.orderNo},
+		sysdate, 0, 1)
+	</insert>
+
+	<update id="updateUser">
+		UPDATE "user"
+		SET name = #{user.name},
+		tel = #{user.tel, jdbcType=VARCHAR},
+		email = #{user.email},
+		org_id = #{user.orgId},
+		remark = #{user.remark}
+		WHERE id = #{id}
+	</update>
+
+	<update id="updateOrg">
+		UPDATE organization
+		SET
+		name           = #{org.name},
+		org_type       = #{org.orgType},
+		remark         = #{org.remark},
+		update_date    = sysdate
+		WHERE id = #{id}
+	</update>
+
+    <!-- 无用 -->
+	<select id="getAllSyncUsers" resultType="java.lang.String">
+		SELECT ID FROM "user" WHERE is_sync = 1
+	</select>
+    
+    <!-- 无用 -->
+	<select id="getAllSyncOrgs" resultType="java.lang.String">
+		SELECT ID FROM organization WHERE is_sync = 1
+	</select>
+	
+	<!-- 批量更新纳税人识别号 -->
+    <update id="updateNsrsbh" parameterType="java.lang.String">
+        UPDATE customer set nsrsbh=#{newNsrsbh} where code=#{dljgbm};
+    </update>
+
+	<select id="checkNsrsbh" resultType="java.lang.Integer" parameterType="java.lang.String">
+		SELECT COUNT(0) FROM customer WHERE nsrsbh=#{newNsrsbh} and code &lt;&gt; #{dljgbm} and scbz = false;
+	</select>
+
+	<delete id="deleteSyncUser">
+		UPDATE "user" SET is_delete = 1 WHERE id IN
+		<foreach item="id" collection="allUsers" open="(" separator=","
+				 close=")">
+			#{id}
+		</foreach>
+	</delete>
+
+	<delete id="deleteSyncOrg">
+		UPDATE organization SET is_delete = 1 WHERE id IN
+		<foreach item="id" collection="allOrgs" open="(" separator=","
+				 close=")">
+			#{id}
+		</foreach>
+	</delete>
+</mapper>

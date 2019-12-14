@@ -1,0 +1,677 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!-- namespace必须和接口名称一一对应 -->
+<mapper namespace="com.xinhai.caiyun.dao.WelcomeMapper">
+
+	<resultMap id="login" type="com.xinhai.caiyun.bean.LoginLog">
+		<id property="id" column="ID"/>
+		<result property="personcode" column="rydm"/>
+		<result property="loginaccount" column="dlzh"/>
+		<result property="logintime" column="dlsj"/>
+		<result property="outtime" column="tcsj"/>
+		<result property="logintype" column="dllx_dm"/>
+		<result property="ip" column="yhip"/>
+		<result property="mac" column="mac"/>
+		<result property="usertype" column="qylx_dm"/>
+		<result property="personname" column="ryxm"/>
+		<result property="dljg_bm" column="dljg_bm"/>
+		<result property="dljg_mc" column="dljg_mc"/>
+		<result property="applx" column="applx"/>
+	</resultMap>
+
+	<!--收费排名 -->
+	<select id="charge" resultType="java.util.HashMap">
+		SELECT sum(a.sjsk) MONEY, b.name as LRRMC
+		FROM PT_SFGL_SFXX a
+		Left join user b on a.lrry = b.zydm
+		WHERE a.DLJG_BM =#{dljgbm} and a.scbz = false and a.sfzt='004' -- and a.shzt_dm &lt;&gt; '000'
+		GROUP BY a.lrry
+		ORDER BY MONEY DESC LIMIT 10;
+	</select>
+
+	<!--收费排名(收费数据为空时) -->
+	<select id="chargeIsNull" resultType="java.util.HashMap">
+		SELECT 0 MONEY, name as LRRMC
+		from user
+		WHERE DLJG_BM =#{dljgbm} and is_delete = false
+		LIMIT 10;
+	</select>
+
+	<!--新增客户 -->
+	<select id="newCountCustomer" resultType="java.util.HashMap">
+		SELECT COUNT(KHBM) AS NUM,DATE_FORMAT(LRRQ,'%Y%m') AS MONTH FROM PT_KHXX
+		WHERE DATE_FORMAT(LRRQ,'%Y%m')>DATE_FORMAT(DATE_SUB(CURDATE(),
+		INTERVAL 12 MONTH),'%Y%m') AND DLJG_BM =#{dljgbm} and scbz = false GROUP BY MONTH ORDER
+		BY MONTH DESC
+	</select>
+
+	<!-- 普通用户统计客户等级 -->
+	<select id="customerGradeByDljgbm" resultType="java.util.HashMap">
+		SELECT ifnull(COUNT(KHDJ_DM),0) AS KHDJ_SL,KHDJ_DM as KHDJ_MC FROM PT_KHXX WHERE
+		DLJG_BM=#{dljgbm} and scbz = false GROUP BY KHDJ_DM ;
+	</select>
+
+	<!-- 管理员用户统计客户等级 -->
+	<select id="customerGradeByAdmin" resultType="java.util.HashMap">
+		SELECT COUNT(KHDJ_DM) AS KHDJ_DM,KHDJ_MC FROM PT_KHXX WHERE scbz = false GROUP BY KHDJ_DM ;
+	</select>
+
+	<select id="lossCustomerList" resultType="java.util.HashMap">
+		select count(KHBM) as count, DATE_FORMAT(LRRQ,'%Y%m') as MONTH from pt_khxx
+		where Date_Format(LRRQ,'%Y%m')>DATE_FORMAT(DATE_SUB(CURDATE(),
+		INTERVAL 12 MONTH),'%Y%m') AND DLJG_BM =#{dljgbm} and scbz = false AND FWZT_DM='0' GROUP BY MONTH ORDER
+		BY MONTH
+	</select>
+	
+	<select id="getLCKhNum" resultType="java.lang.Integer">
+        select count(KHBM) from pt_khxx
+        where DLJG_BM=#{dljgbm} and scbz = false and fwzt_dm = true;
+    </select>
+
+	<select id="findHztj" resultType="com.xinhai.caiyun.bean.PtKhtj" parameterType="java.lang.String">
+		<!--
+			*             1 商机转换率
+			*             2 代理机构当月记账汇总
+			*             3 代理机构当月报税汇总
+			 /*with rollup*/
+			 left join (
+				select khbm,jzbz from pt_khjzgl where SCBZ=FALSE and ssny= date_format(curdate(),'%Y%m') ) n on m.khbm=n.khbm
+				left join ( select khbm,bsbz from pt_khbsgl where SCBZ=FALSE and ssny= date_format(curdate(),'%Y%m') ) n on m.khbm=n.khbm
+		-->
+		<if test='tjlx == "1" '>
+			<![CDATA[
+				select ifnull(count(n.dlzh),0) tj, '未同步' lxmc from pt_app_khxx n where TJRDLJG=#{dljgbm} and scbz = false and n.TBZT = 0 and FuncAuthorityYXKH(#{zydm},yxkhbm)=1
+				union
+				select ifnull(count(n.dlzh),0) tj, '已同步' lxmc from pt_app_khxx n where TJRDLJG=#{dljgbm} and scbz = false and n.TBZT = 1 and FuncAuthorityYXKH(#{zydm},yxkhbm)=1
+				union
+				select ifnull(count(n.dlzh),0) tj, '总数' lxmc from pt_app_khxx n where TJRDLJG=#{dljgbm} and scbz = false and FuncAuthorityYXKH(#{zydm},yxkhbm)=1
+			]]>
+		</if>
+		<if test='tjlx == "2" '>
+			<![CDATA[
+				select ifnull(count(m.khbm),0) tj, '已记账' as lxmc 
+				from pt_khxx m left join ( 
+				select khbm,jzbz from pt_khjzgl where SCBZ=FALSE and ssny= date_format(curdate(),'%Y%m') ) n on m.khbm=n.khbm
+				where
+				m.DLJG_BM=#{dljgbm} and m.scbz = false and FuncAuthorityKh(#{zydm}, m.KHBM, 1) = 1 and n.jzbz = 1
+				union
+				select ifnull(count(m.khbm),0) tj, '未记账' as lxmc
+				from pt_khxx m 
+				where
+			    m.DLJG_BM=#{dljgbm} and m.scbz = false and m.KHBM not in (select khbm from pt_khjzgl where SCBZ=FALSE AND JZBZ = TRUE and ssny= date_format(curdate(),'%Y%m') ) and FuncAuthorityKh(#{zydm}, m.KHBM, 1) = 1
+				union
+				select ifnull(count(m.khbm),0) tj, '总数' as lxmc 
+				from pt_khxx m
+				where
+				m.DLJG_BM=#{dljgbm} and m.scbz = false and FuncAuthorityKh(#{zydm}, m.KHBM ,1) = 1;
+			]]>
+		</if>
+
+		<if test='tjlx == "3" '>
+			<![CDATA[
+			select ifnull(count(m.khbm),0) tj,'已报税' lxmc 
+			from pt_khxx m left join ( select khbm,bsbz from pt_khbsgl where SCBZ=FALSE and ssny= date_format(curdate(),'%Y%m') ) n on m.khbm=n.khbm
+			where
+			m.DLJG_BM=#{dljgbm} and m.scbz = false and FuncAuthorityKh(#{zydm}, m.KHBM ,1) = 1 and n.bsbz = 1
+			union
+			select ifnull(count(m.khbm),0) tj,'未报税' lxmc 
+			from pt_khxx m 
+			where
+			m.DLJG_BM=#{dljgbm} and m.scbz = false and m.khbm not in ( select khbm from pt_khbsgl where SCBZ=FALSE AND BSBZ = TRUE and ssny= date_format(curdate(),'%Y%m') )
+			and FuncAuthorityKh(#{zydm}, m.KHBM, 1) = 1
+			union
+			select ifnull(count(m.khbm),0) tj,'总数' lxmc 
+			from pt_khxx m
+			where
+			m.DLJG_BM=#{dljgbm} and m.scbz = false and FuncAuthorityKh(#{zydm}, m.KHBM, 1) = 1
+           ]]>
+		</if>
+	</select>
+
+	<!-- select count(n.dlzh) tj, CASE ifnull(n.TBZT,0) WHEN 1 THEN '已同步' ELSE '未同步' END lxmc  from pt_app_khxx n
+		where TJRDLJG=#{dljgbm} group by n.TBZT -->
+
+	<!-- select count(m.khbm) tj,CASE ifnull(n.jzbz,0) WHEN 1 THEN '已记账' ELSE '未记账' END lxmc from pt_khxx m
+	left join
+	( select khbm,jzbz from pt_khjzgl where SCBZ='0'  and ssny= date_format(curdate(),'%Y%m') ) n
+	on  m.khbm=n.khbm
+	where
+	m.FWZT_DM=true
+	and m.DLJG_BM=#{dljgbm}
+	and FuncAuthorityKh(#{zydm}, m.KHBM)
+	group by n.jzbz	 -->
+
+	<!-- select count(m.khbm) tj,CASE ifnull(n.bsbz,0) WHEN 1 THEN '已报税' ELSE '未报税' END lxmc from pt_khxx m
+		left join
+		( select khbm,bsbz from pt_khbsgl where SCBZ='0'  and ssny= date_format(curdate(),'%Y%m') ) n
+		on  m.khbm=n.khbm
+		where
+		m.FWZT_DM=true
+		and m.DLJG_BM=#{dljgbm}
+		and FuncAuthorityKh(#{zydm}, m.KHBM)
+		group by n.bsbz -->
+
+
+	<!--记账列表-->
+	<select id="findJZList" resultType="com.xinhai.caiyun.bean.PtKhtj" parameterType="java.lang.String">
+		SELECT b.khbm,b.gsmc,b.bz from
+		  (SELECT a.KHBM,a.GSMC,a.bz FROM
+			(select pt.KHBM,pt.GSMC,1 AS bz from pt_khjzgl pk
+			LEFT JOIN pt_khxx pt ON pt.KHBM = pk.KHBM
+			WHERE pk.DLJG_BM=#{dljgbm} AND pk.SSNY = #{pt.ssny} AND pk.SCBZ = FALSE AND pk.JZBZ = 1 and pt.scbz = false
+			UNION
+			select pt.KHBM,pt.GSMC,0 AS bz FROM pt_khxx pt
+			WHERE <!-- pt.FWZT_DM = 1 AND --> pt.DLJG_BM=#{dljgbm} and pt.scbz = false) a
+		  GROUP BY a.KHBM) b
+		WHERE b.GSMC LIKE CONCAT('%',#{pt.gsmc},'%')
+		<if test='pt.bz != "all" '> <!--不为全部时 1为记账；0为未记账-->
+			AND b.bz = #{pt.bz}
+		</if>
+		AND FuncAuthorityKh(#{zydm}, b.KHBM, 1) order by b.bz;
+	</select>
+
+	<!--报税列表-->
+	<select id="findBSList" resultType="com.xinhai.caiyun.bean.PtKhtj" parameterType="java.lang.String">
+		SELECT b.khbm,b.gsmc,b.bz from
+		(SELECT a.KHBM,a.GSMC,a.bz FROM
+		(select pt.KHBM,pt.GSMC,1 AS bz from pt_khbsgl pk
+		LEFT JOIN pt_khxx pt ON pt.KHBM = pk.KHBM
+		WHERE pk.DLJG_BM=#{dljgbm} AND pk.SSNY = #{pt.ssny} AND pk.SCBZ = FALSE AND pk.BSBZ = 1 and pt.scbz = false
+		UNION
+		select pt.KHBM,pt.GSMC,0 AS bz FROM pt_khxx pt
+		WHERE <!-- pt.FWZT_DM = 1 AND -->  pt.DLJG_BM=#{dljgbm} and pt.scbz = false) a
+		GROUP BY a.KHBM) b
+		WHERE b.GSMC LIKE CONCAT('%',#{pt.gsmc},'%')
+		<if test='pt.bz != "all" '> <!--不为全部时 1为记账；0为未记账-->
+			AND b.bz = #{pt.bz}
+		</if>
+		AND FuncAuthorityKh(#{zydm}, b.KHBM, 1) order by b.bz;
+	</select>
+
+	<!-- 查询首页三个图-->
+	<select id="threeDatas" resultType="java.util.HashMap">
+		<!--
+		实收
+		将收费信息表中的部门代码截取到一级部门处，按照部门分组，得到所有一级部门数据
+		加上管理员的数据
+		-->
+		<if test='type == "1" '>
+			<![CDATA[
+				SELECT GROUP_CONCAT(cc.name) bmmc,GROUP_CONCAT(cc.thissk) thissk,GROUP_CONCAT(cc.lastsk) lastsk from
+				  (
+					SELECT o.name,IFNULL(SUM(aa.sjsk),0.00)/10000 thissk,IFNULL(SUM(bb.sjsk),0.00)/10000 lastsk FROM organization o
+					LEFT JOIN (
+					  select IFNULL(SUM(SJSK),0.00) sjsk,left(bmdm,10) bmdm
+					  from pt_sfgl_sfxx pss where sfzt='004' and dljg_bm=#{dljgbm} and scbz = false AND SFSJ BETWEEN #{firstStartDate} AND #{firstEndDate} GROUP BY BMDM
+					  ) aa ON aa.BMDM = o.code
+					LEFT JOIN (
+					  select IFNULL(SUM(SJSK),0.00) sjsk,left(bmdm,10) bmdm
+					  from pt_sfgl_sfxx pss where sfzt='004' and dljg_bm=#{dljgbm} and scbz = false AND SFSJ BETWEEN #{lastStartDate} AND #{lastEndDate} GROUP BY BMDM
+					  ) bb ON bb.BMDM = o.code
+					WHERE o.parent_code=#{bmdm} AND o.is_delete=FALSE GROUP BY o.code
+					UNION
+					select '管理员' name, dd.sjsk/10000 thissk, IFNULL(SUM(pss.SJSK),0.00)/10000 lastsk
+					from pt_sfgl_sfxx pss ,
+					(
+					  select IFNULL(SUM(ee.SJSK),0.00) sjsk
+					  from pt_sfgl_sfxx ee where ee.sfzt='004' and ee.dljg_bm=#{dljgbm} AND ee.BMDM=#{bmdm} and ee.scbz = false AND ee.SFSJ BETWEEN #{firstStartDate} AND #{firstEndDate}
+					) dd
+					where pss.sfzt='004' and pss.dljg_bm=#{dljgbm} AND pss.BMDM=#{bmdm} and pss.scbz = false AND pss.SFSJ BETWEEN #{lastStartDate} AND #{lastEndDate}
+				) cc;
+			]]>
+		</if>
+		<!--
+		预收：统计出sksj在当前时间段内，且sfnf与sfyf的组合 > 所选时间段的最后一天
+		-->
+		<if test='type == "2" '><!-- 预收 -->
+			SELECT GROUP_CONCAT(cc.name) bmmc,GROUP_CONCAT(cc.thissk) thissk,GROUP_CONCAT(cc.lastsk) lastsk from
+			(
+				SELECT o.name,IFNULL(SUM(aa.sjsk),0.00)/10000 thissk,IFNULL(SUM(bb.sjsk),0.00)/10000 lastsk FROM organization o
+				LEFT JOIN (
+					select IFNULL(SUM(zz.SJSK),0.00) sjsk, zz.bmdm, zz.rq FROM (
+						SELECT sjsk,left(bmdm,10) bmdm,IFNULL(DATE_FORMAT(str_to_date(CONCAT(pss.SFNF,pss.SFYF),'%Y%m'),'%Y-%m'),DATE_FORMAT(#{newDate},'%Y-%m')) rq
+						from pt_sfgl_sfxx pss where sfzt='004' and dljg_bm=#{dljgbm} and scbz = false AND SFSJ BETWEEN #{firstStartDate} AND #{firstEndDate}
+					) zz
+					WHERE zz.rq > DATE_FORMAT(#{firstEndDate},'%Y-%m')
+					GROUP BY zz.BMDM
+				) aa ON aa.BMDM = o.code
+				LEFT JOIN (
+					select IFNULL(SUM(xx.SJSK),0.00) sjsk, xx.bmdm, xx.rq FROM (
+						SELECT sjsk,left(bmdm,10) bmdm,IFNULL(DATE_FORMAT(str_to_date(CONCAT(pss.SFNF,pss.SFYF),'%Y%m'),'%Y-%m'),DATE_FORMAT(#{newDate},'%Y-%m')) rq
+						from pt_sfgl_sfxx pss where sfzt='004' and dljg_bm=#{dljgbm} and scbz = false AND SFSJ BETWEEN #{lastStartDate} AND #{lastEndDate}
+					) xx
+					WHERE xx.rq > DATE_FORMAT(#{lastEndDate},'%Y-%m')
+					GROUP BY xx.bmdm
+				) bb ON bb.BMDM = o.code
+				WHERE o.parent_code=#{bmdm} AND o.is_delete=FALSE GROUP BY o.code
+				UNION
+				select '管理员' name, ee.sjsk/10000 thissk, dd.SJSK/10000 lastsk
+				from
+				(
+					select IFNULL(SUM(res3.sjsk),0.00) sjsk, res3.rq FROM (
+						SELECT SUM(pss.SJSK) sjsk,IFNULL(DATE_FORMAT(str_to_date(CONCAT(pss.SFNF,pss.SFYF),'%Y%m'),'%Y-%m'),DATE_FORMAT(#{newDate},'%Y-%m')) rq
+						from pt_sfgl_sfxx pss where sfzt='004' and dljg_bm=#{dljgbm} AND pss.BMDM=#{bmdm} and scbz = false AND SFSJ BETWEEN #{firstStartDate} AND #{firstEndDate}
+					) res3
+					WHERE res3.rq > DATE_FORMAT(#{firstEndDate},'%Y-%m')
+				)  ee,
+				(
+					select IFNULL(SUM(res4.sjsk),0.00) sjsk, res4.rq FROM (
+						SELECT SUM(pss.SJSK) sjsk,IFNULL(DATE_FORMAT(str_to_date(CONCAT(pss.SFNF,pss.SFYF),'%Y%m'),'%Y-%m'),DATE_FORMAT(#{newDate},'%Y-%m')) rq
+						from pt_sfgl_sfxx pss where sfzt='004' and dljg_bm=#{dljgbm} AND pss.BMDM=#{bmdm} and scbz = false AND SFSJ BETWEEN #{lastStartDate} AND #{lastEndDate}
+					) res4
+					WHERE res4.rq > DATE_FORMAT(#{lastEndDate},'%Y-%m')
+				) dd
+			) cc;
+		</if>
+
+		<!--
+		欠收：统计出收费状态为欠费，sfnf+sfyf组合在所选时间段内
+		-->
+		<if test='type == "3" '> <!-- 欠收-->
+			<![CDATA[
+				SELECT GROUP_CONCAT(cc.name) bmmc,GROUP_CONCAT(cc.thissk) thissk,GROUP_CONCAT(cc.lastsk) lastsk from
+				  (
+					SELECT o.name,IFNULL(SUM(aa.sjsk),0.00)/10000 thissk,IFNULL(SUM(bb.sjsk),0.00)/10000 lastsk FROM organization o
+					LEFT JOIN (
+						select IFNULL(SUM(zz.SJSK),0.00) sjsk, zz.bmdm, zz.rq FROM (
+						  SELECT sjsk,left(bmdm,10) bmdm,IFNULL(DATE_FORMAT(str_to_date(CONCAT(pss.SFNF,pss.SFYF),'%Y%m'),'%Y-%m'),DATE_FORMAT(#{newDate},'%Y-%m')) rq
+						  from pt_sfgl_sfxx pss where sfzt='002' and dljg_bm=#{dljgbm} and scbz = false
+						) zz
+						WHERE zz.rq BETWEEN #{firstStartDate} AND #{firstEndDate}
+						GROUP BY zz.BMDM
+					) aa ON aa.BMDM = o.code
+					LEFT JOIN (
+						select IFNULL(SUM(xx.SJSK),0.00) sjsk, xx.bmdm, xx.rq FROM (
+						  SELECT sjsk,left(bmdm,10) bmdm,IFNULL(DATE_FORMAT(str_to_date(CONCAT(pss.SFNF,pss.SFYF),'%Y%m'),'%Y-%m'),DATE_FORMAT(#{newDate},'%Y-%m')) rq
+						  from pt_sfgl_sfxx pss where sfzt='002' and dljg_bm=#{dljgbm} and scbz = false
+						) xx
+						WHERE xx.rq BETWEEN #{lastStartDate} AND #{lastEndDate}
+						GROUP BY xx.bmdm
+					) bb ON bb.BMDM = o.code
+					WHERE o.parent_code=#{bmdm} AND o.is_delete=FALSE GROUP BY o.code
+					UNION
+					select '管理员' name, dd.sjsk/10000 thissk, ee.SJSK/10000 lastsk
+					from
+				  	(
+						select IFNULL(SUM(res3.sjsk),0.00) sjsk, res3.rq FROM (
+							SELECT SUM(pss.SJSK) sjsk,IFNULL(DATE_FORMAT(str_to_date(CONCAT(pss.SFNF,pss.SFYF),'%Y%m'),'%Y-%m'),DATE_FORMAT(#{newDate},'%Y-%m')) rq
+							from pt_sfgl_sfxx pss where sfzt='002' AND dljg_bm=#{dljgbm} AND pss.BMDM=#{bmdm} AND scbz = FALSE
+						) res3
+					WHERE res3.rq BETWEEN #{firstStartDate} AND #{firstEndDate}
+					)  ee,
+					(
+						select IFNULL(SUM(res4.sjsk),0.00) sjsk, res4.rq FROM (
+					  		SELECT SUM(pss.SJSK) sjsk,IFNULL(DATE_FORMAT(str_to_date(CONCAT(pss.SFNF,pss.SFYF),'%Y%m'),'%Y-%m'),DATE_FORMAT(#{newDate},'%Y-%m')) rq
+					  		from pt_sfgl_sfxx pss where sfzt='002' and dljg_bm=#{dljgbm}  AND scbz = false AND pss.BMDM=#{bmdm}
+						) res4
+					WHERE res4.rq BETWEEN #{lastStartDate} AND #{lastEndDate}
+					) dd
+				) cc;
+			]]>
+		</if>
+	</select>
+
+	<!-- 查询首页毛利的实收金额-->
+	<select id="getProfitOne" resultType="java.util.HashMap">
+		<!--
+        根据日期表查出12个月，再进行左连接，分别查出每个月总额
+        -->
+		SELECT GROUP_CONCAT(aa.months) months, GROUP_CONCAT(aa.sjsk) sjsk, GROUP_CONCAT(bb.lastsjsk) lastsjsk FROM
+		(
+			SELECT a.months,IFNULL(b.sjsk,0.00)/10000 sjsk, a.m FROM
+			(
+				SELECT DISTINCT(DATE_FORMAT(DAY_SHORT_DESC,'%Y/%m')) months, DATE_FORMAT(DAY_SHORT_DESC,'%m') m FROM pt_date WHERE DAY_SHORT_DESC BETWEEN #{firstStartDate} AND #{firstEndDate} GROUP BY DAY_SHORT_DESC
+			) a
+			LEFT JOIN
+			(
+				SELECT SUM(pss.SJSK) sjsk,DATE_FORMAT(sfsj,'%Y/%m') months FROM pt_sfgl_sfxx pss WHERE pss.DLJG_BM=#{dljgbm}
+				<if test='bmdm != "0" '> <!--不为全部时-->
+					AND pss.BMDM LIKE CONCAT(#{bmdm},'%')
+				</if>
+				AND pss.SCBZ = FALSE AND pss.SFZT='004' GROUP BY months
+			) b ON b.months = a.months
+			ORDER BY months
+		) aa
+		LEFT JOIN
+		(
+			SELECT c.months AS lasetmonths,IFNULL(d.sjsk,0.00)/10000 lastsjsk, c.m FROM
+			(
+				SELECT DISTINCT(DATE_FORMAT(DAY_SHORT_DESC,'%Y/%m')) months, DATE_FORMAT(DAY_SHORT_DESC,'%m') m FROM pt_date WHERE DAY_SHORT_DESC BETWEEN #{lastStartDate} AND #{lastEndDate} GROUP BY DAY_SHORT_DESC
+			) c
+			LEFT JOIN
+			(
+				SELECT SUM(pss.SJSK) sjsk,DATE_FORMAT(sfsj,'%Y/%m') months FROM pt_sfgl_sfxx pss WHERE pss.DLJG_BM=#{dljgbm}
+				<if test='bmdm != "0" '> <!--不为全部时-->
+					AND pss.BMDM LIKE CONCAT(#{bmdm},'%')
+				</if>
+				AND pss.SCBZ = FALSE AND pss.SFZT='004' GROUP BY months
+			) d ON d.months = c.months
+			ORDER BY lasetmonths
+		) bb ON aa.m = bb.m
+	</select>
+
+	<!-- 查询首页毛利的垫付金额-->
+	<select id="getProfitTwo" resultType="java.util.HashMap">
+		<!--
+        根据日期表查出12个月，再进行左连接，分别查出每个月总额
+        -->
+		SELECT GROUP_CONCAT(aa.months) months ,GROUP_CONCAT(aa.je) je, GROUP_CONCAT(bb.lastje) lastje FROM
+		(
+			SELECT a.months,IFNULL(b.je,0.00)/10000 je, a.m FROM
+			(
+				SELECT DISTINCT(DATE_FORMAT(DAY_SHORT_DESC,'%Y/%m')) months, DATE_FORMAT(DAY_SHORT_DESC,'%m') m FROM pt_date WHERE DAY_SHORT_DESC BETWEEN #{firstStartDate} AND #{firstEndDate} GROUP BY DAY_SHORT_DESC
+			) a
+			LEFT JOIN
+			(
+				SELECT SUM(prs.JE) je,DATE_FORMAT(sfsj,'%Y/%m') months FROM pt_rwgl_sfjl prs WHERE prs.DLJGBM=#{dljgbm}
+				<if test='bmdm != "0" '> <!--不为全部时-->
+					AND prs.BMDM LIKE CONCAT(#{bmdm},'%')
+				</if>
+				AND prs.SCBZ = FALSE AND prs.SFBZ = TRUE GROUP BY months
+			) b ON b.months = a.months
+			ORDER BY months
+			) aa
+		LEFT JOIN
+		(
+			SELECT c.months AS lasetmonths,IFNULL(d.je,0.00)/10000 lastje, c.m FROM
+			(
+				SELECT DISTINCT(DATE_FORMAT(DAY_SHORT_DESC,'%Y/%m')) months, DATE_FORMAT(DAY_SHORT_DESC,'%m') m FROM pt_date WHERE DAY_SHORT_DESC BETWEEN #{lastStartDate} AND #{lastEndDate} GROUP BY DAY_SHORT_DESC
+			) c
+			LEFT JOIN
+			(
+				SELECT SUM(prs.JE) je,DATE_FORMAT(sfsj,'%Y/%m') months FROM pt_rwgl_sfjl prs WHERE prs.DLJGBM=#{dljgbm}
+				<if test='bmdm != "0" '> <!--不为全部时-->
+					AND prs.BMDM LIKE CONCAT(#{bmdm},'%')
+				</if>
+				AND prs.SCBZ = FALSE AND prs.SFBZ = TRUE GROUP BY months
+			) d ON d.months = c.months
+			ORDER BY lasetmonths
+		) bb ON aa.m = bb.m;
+	</select>
+
+	<!-- 查询代理所在地数量-->
+	<select id="getCustomerScreenData1" resultType="java.util.HashMap">
+		SELECT aa.name,aa.nums AS value FROM (
+		  SELECT COUNT(a.yhid) AS nums, a.szcs, dx.XZQH_MC AS name, dx.X, dx.Y FROM customer a
+		  LEFT JOIN dm_xzqh dx ON a.szcs = dx.XZQH_DM
+		  WHERE a.scbz = FALSE AND a.szsf NOT IN ('110000','120000','500000','310000') GROUP BY a.szcs
+		  UNION
+		  SELECT COUNT(a.yhid) AS nums, a.szsf, dx.XZQH_MC AS name, dx.X, dx.Y FROM customer a
+		  LEFT JOIN dm_xzqh dx ON a.szsf = dx.XZQH_DM
+		  WHERE a.scbz = FALSE AND a.szsf IN ('110000','120000','500000','310000') GROUP BY a.szsf <!--仅包括直辖市-->
+		) aa;
+
+	</select>
+
+	<!-- 查询代理所在地位置-->
+	<select id="getCustomerScreenData2" resultType="java.util.HashMap">
+		SELECT aa.name,aa.loc AS value FROM (
+			SELECT COUNT(a.yhid) AS nums, a.szcs, dx.XZQH_MC AS name, CONCAT_WS(',',dx.X,dx.Y) AS loc FROM customer a
+			LEFT JOIN dm_xzqh dx ON a.szcs = dx.XZQH_DM
+			WHERE a.scbz = FALSE AND a.szsf NOT IN ('110000','120000','500000','310000') GROUP BY a.szcs
+			UNION
+			SELECT COUNT(a.yhid) AS nums, a.szsf, dx.XZQH_MC AS name, CONCAT_WS(',',dx.X,dx.Y) AS loc FROM customer a
+			LEFT JOIN dm_xzqh dx ON a.szsf = dx.XZQH_DM
+			WHERE a.scbz = FALSE AND a.szsf IN ('110000','120000','500000','310000') GROUP BY a.szsf <!--仅包括直辖市-->
+		) aa;
+	</select>
+
+	<!-- 查询客户所在地数量-->
+	<select id="getKhScreenData1" resultType="java.util.HashMap">
+		SELECT nums AS value,name FROM(
+			SELECT COUNT(a.ID) AS nums, dx.XZQH_MC AS name FROM
+			(
+				SELECT pk.ID,pk.KHBM,pk.GSMC,c.szsf AS SFDM, c.szcs AS CSDM FROM pt_khxx pk
+				LEFT JOIN customer c ON c.code = pk.DLJG_BM
+				WHERE pk.SCBZ = FALSE AND pk.FWZT_DM = TRUE AND pk.CSDM = '0'
+				UNION
+				SELECT pk.ID,pk.KHBM,pk.GSMC,pk.SFDM, pk.CSDM AS CSDM FROM pt_khxx pk
+				WHERE pk.SCBZ = FALSE AND pk.FWZT_DM = TRUE AND pk.CSDM &lt;&gt; '0'
+			) a
+			LEFT JOIN dm_xzqh dx ON dx.XZQH_DM = a.CSDM
+			WHERE a.SFDM NOT IN ('110000','120000','500000','310000') GROUP BY a.CSDM
+			UNION
+			SELECT COUNT(a.ID) AS nums, dx.XZQH_MC AS name FROM
+			(
+				SELECT pk.ID,pk.KHBM,pk.GSMC,c.szsf AS SFDM, c.szcs AS CSDM FROM pt_khxx pk
+				LEFT JOIN customer c ON c.code = pk.DLJG_BM
+				WHERE pk.SCBZ = FALSE AND pk.FWZT_DM = TRUE AND pk.CSDM = '0'
+				UNION
+				SELECT pk.ID,pk.KHBM,pk.GSMC,pk.SFDM, pk.CSDM AS CSDM FROM pt_khxx pk
+				WHERE pk.SCBZ = FALSE AND pk.FWZT_DM = TRUE AND pk.CSDM &lt;&gt; '0'
+			) a
+			LEFT JOIN dm_xzqh dx ON dx.XZQH_DM = a.SFDM
+			WHERE a.SFDM IN ('110000','120000','500000','310000') GROUP BY a.SFDM
+		) b;
+	</select>
+
+	<!-- 查询客户所在地位置-->
+	<select id="getKhScreenData2" resultType="java.util.HashMap">
+		SELECT name,b.loc AS value FROM(
+			SELECT COUNT(a.ID) AS nums, dx.XZQH_MC AS name, CONCAT_WS(',',dx.X,dx.Y) AS loc FROM
+			(
+				SELECT pk.ID,pk.KHBM,pk.GSMC,c.szsf AS SFDM, c.szcs AS CSDM FROM pt_khxx pk
+				LEFT JOIN customer c ON c.code = pk.DLJG_BM
+				WHERE pk.SCBZ = FALSE AND pk.FWZT_DM = TRUE AND pk.CSDM = '0'
+				UNION
+				SELECT pk.ID,pk.KHBM,pk.GSMC,pk.SFDM, pk.CSDM AS CSDM FROM pt_khxx pk
+				WHERE pk.SCBZ = FALSE AND pk.FWZT_DM = TRUE AND pk.CSDM &lt;&gt; '0'
+			) a
+			LEFT JOIN dm_xzqh dx ON dx.XZQH_DM = a.CSDM
+			WHERE a.SFDM NOT IN ('110000','120000','500000','310000') GROUP BY a.CSDM
+			UNION
+			SELECT COUNT(a.ID) AS nums, dx.XZQH_MC AS name, CONCAT_WS(',',dx.X,dx.Y) AS loc FROM
+			(
+				SELECT pk.ID,pk.KHBM,pk.GSMC,c.szsf AS SFDM, c.szcs AS CSDM FROM pt_khxx pk
+				LEFT JOIN customer c ON c.code = pk.DLJG_BM
+				WHERE pk.SCBZ = FALSE AND pk.FWZT_DM = TRUE AND pk.CSDM = '0'
+				UNION
+				SELECT pk.ID,pk.KHBM,pk.GSMC,pk.SFDM, pk.CSDM AS CSDM FROM pt_khxx pk
+				WHERE pk.SCBZ = FALSE AND pk.FWZT_DM = TRUE AND pk.CSDM &lt;&gt; '0'
+			) a
+			LEFT JOIN dm_xzqh dx ON dx.XZQH_DM = a.SFDM
+			WHERE a.SFDM IN ('110000','120000','500000','310000') GROUP BY a.SFDM
+		) b;
+	</select>
+
+	<!-- 查询最近7天的交易记录-->
+	<select id="getBussinessData" resultType="java.util.HashMap">
+
+		<if test='type == "1" '> <!--周-->
+			SELECT pd.DAY_SHORT_DESC AS rq ,FORMAT(IFNULL(SUM(a.SJSK), 0.00)/10000, 2) AS money FROM pt_date pd
+			LEFT JOIN (
+			SELECT pss.*, DATE_FORMAT(pss.SFSJ,'%Y-%m-%d') m FROM pt_sfgl_sfxx pss WHERE pss.SCBZ = FALSE AND pss.SFZT = '004'
+			) a ON a.m = pd.DAY_SHORT_DESC
+			WHERE pd.DAY_SHORT_DESC >= #{before} AND pd.DAY_SHORT_DESC &lt; #{tomorrow} GROUP BY pd.DAY_SHORT_DESC;
+		</if>
+
+		<if test='type == "2" '> <!--月-->
+			SELECT pd.MONTH_SHORT_DESC rq ,FORMAT(IFNULL(SUM(a.SJSK), 0.00)/10000, 2) AS money FROM pt_date pd
+			LEFT JOIN (
+			SELECT pss.*, DATE_FORMAT(pss.SFSJ,'%Y-%m') m FROM pt_sfgl_sfxx pss WHERE pss.SCBZ = FALSE AND pss.SFZT = '004'
+			) a ON a.m = pd.MONTH_SHORT_DESC
+			WHERE pd.DAY_SHORT_DESC >= #{before} AND pd.DAY_SHORT_DESC &lt; #{tomorrow} GROUP BY pd.MONTH_SHORT_DESC;
+		</if>
+
+		<if test='type == "3" '> <!--年-->
+			SELECT pd.DAY_SHORT_DESC AS rq ,FORMAT(IFNULL(SUM(a.SJSK), 0.00)/10000, 2) AS money FROM pt_date pd
+			LEFT JOIN (
+			SELECT pss.*, DATE_FORMAT(pss.SFSJ,'%Y') m FROM pt_sfgl_sfxx pss WHERE pss.SCBZ = FALSE AND pss.SFZT = '004'
+			) a ON a.m = pd.DAY_SHORT_DESC
+			WHERE pd.DAY_SHORT_DESC >= #{before} AND pd.DAY_SHORT_DESC &lt; #{tomorrow} GROUP BY pd.DAY_SHORT_DESC;
+		</if>
+
+	</select>
+
+	<!-- 查询最近7天的交易记录-->
+	<select id="getSumBussinessData" resultType="java.util.HashMap">
+
+		SELECT FORMAT(IFNULL(SUM(SJSK), 0.00)/10000, 2) sjsk FROM pt_sfgl_sfxx pss WHERE pss.SCBZ = FALSE AND pss.SFZT = '004';
+
+	</select>
+
+	<!-- 会计评价-->
+	<select id="getKJPJData" resultType="java.util.HashMap">
+
+		SELECT AVG(pyg.ZCD) zcd, AVG(pyg.ZYSP) zysp, AVG(pyg.YGGL) yggl, AVG(pyg.YWNL) twnl FROM pt_ygpj_gspj pyg
+
+	</select>
+
+	<!-- 企业规模-->
+	<select id="getQYGMData" resultType="java.util.HashMap">
+
+		SELECT COUNT(a.khbm) value, '一般纳税人' AS name FROM (
+			SELECT pk.KHBM,IFNULL(cs.KHFL_MC,'其他') khflmc
+			FROM pt_khxx pk
+			LEFT JOIN cs_khfl cs ON pk.KHFL_DM = cs.KHFL_DM AND cs.SCBZ = FALSE
+			WHERE pk.SCBZ = FALSE AND pk.FWZT_DM = TRUE
+		) a
+		WHERE a.khflmc = '一般纳税人'
+		union
+		SELECT COUNT(a.khbm) value, '小规模纳税人' AS name FROM (
+			SELECT pk.KHBM,IFNULL(cs.KHFL_MC,'其他') khflmc
+			FROM pt_khxx pk
+			LEFT JOIN cs_khfl cs ON pk.KHFL_DM = cs.KHFL_DM AND cs.SCBZ = FALSE
+			WHERE pk.SCBZ = FALSE AND pk.FWZT_DM = TRUE
+		) a
+		WHERE a.khflmc = '小规模'
+		union
+		SELECT COUNT(a.khbm) value, '其他' AS name FROM (
+			SELECT pk.KHBM,IFNULL(cs.KHFL_MC,'其他') khflmc
+			FROM pt_khxx pk
+			LEFT JOIN cs_khfl cs ON pk.KHFL_DM = cs.KHFL_DM AND cs.SCBZ = FALSE
+			WHERE pk.SCBZ = FALSE AND pk.FWZT_DM = TRUE
+		) a
+		WHERE a.khflmc &lt;&gt; '小规模' AND a.khflmc &lt;&gt; '一般纳税人';
+
+	</select>
+
+	<!-- 查询代理所在地数量-->
+	<select id="getCustomerLocData" resultType="java.util.HashMap">
+		<if test='type == "1" '><!-- 省份排名 -->
+			select b.name,b.value from(
+				SELECT aa.name,aa.nums AS value FROM (
+					SELECT COUNT(a.yhid) AS nums, a.szsf, dx.XZQH_MC AS name FROM customer a
+					LEFT JOIN dm_xzqh dx ON a.szsf = dx.XZQH_DM
+					WHERE a.scbz = FALSE GROUP BY a.szsf
+				) aa
+				ORDER BY value DESC LIMIT 10
+			) b
+			ORDER BY b.value ASC;
+		</if>
+		<if test='type == "2" '><!-- 城市排名 -->
+			select b.name,b.value from(
+				SELECT aa.name,aa.nums AS value FROM (
+					SELECT COUNT(a.yhid) AS nums, a.szcs, dx.XZQH_MC AS name, dx.X, dx.Y FROM customer a
+					LEFT JOIN dm_xzqh dx ON a.szcs = dx.XZQH_DM
+					WHERE a.scbz = FALSE AND a.szsf NOT IN ('110000','120000','500000','310000') GROUP BY a.szcs
+				) aa
+				ORDER BY value DESC LIMIT 10
+			) b
+			ORDER BY b.value ASC;
+		</if>
+	</select>
+
+	<!-- 最近15天代理和客户的新增情况-->
+	<select id="getaddCusAndKhData" resultType="java.util.HashMap">
+		<if test='type == "1" '><!-- 代理排名 -->
+			SELECT pd.DAY_SHORT_DESC AS rq ,IFNULL(count(a.yhid), 0) AS nums FROM pt_date pd
+			LEFT JOIN (
+				SELECT c.yhid,DATE_FORMAT(c.create_date,'%Y-%m-%d') m  FROM customer c WHERE c.scbz = FALSE AND c.state = TRUE
+			) a ON a.m = pd.DAY_SHORT_DESC
+			WHERE pd.DAY_SHORT_DESC >= #{before} AND pd.DAY_SHORT_DESC &lt; #{tomorrow} GROUP BY pd.DAY_SHORT_DESC;
+		</if>
+		<if test='type == "2" '><!-- 客户排名 -->
+		</if>
+		SELECT pd.DAY_SHORT_DESC AS rq ,IFNULL(count(a.id), 0) AS nums FROM pt_date pd
+		LEFT JOIN (
+			SELECT pk.id,DATE_FORMAT(pk.LRRQ,'%Y-%m-%d') m  FROM pt_khxx pk WHERE pk.scbz = FALSE
+		) a ON a.m = pd.DAY_SHORT_DESC
+		WHERE pd.DAY_SHORT_DESC >= #{before} AND pd.DAY_SHORT_DESC &lt; #{tomorrow} GROUP BY pd.DAY_SHORT_DESC;
+
+	</select>
+
+	<!-- 手机登陆统计 -->
+	<select id="phoneDLData" resultType="java.util.HashMap">
+
+		<if test='type == "1" '><!-- 财云互联APP排名 -->
+			SELECT DATE_FORMAT(pd.DAY_SHORT_DESC,'%m-%d') AS rq ,IFNULL(count(a.id), 0) AS nums FROM pt_date pd
+			LEFT JOIN (
+			SELECT ld.ID, DATE_FORMAT(ld.DLSJ,'%Y-%m-%d') m FROM log_dlxx ld WHERE ld.APPLX = '0'
+			) a ON a.m = pd.DAY_SHORT_DESC
+			WHERE pd.DAY_SHORT_DESC >= #{before} AND pd.DAY_SHORT_DESC &lt; #{tomorrow} GROUP BY pd.DAY_SHORT_DESC;
+		</if>
+		<if test='type == "0" '><!-- 代理APP排名 -->
+			SELECT DATE_FORMAT(pd.DAY_SHORT_DESC,'%m-%d') AS rq ,IFNULL(count(a.id), 0) AS nums FROM pt_date pd
+			LEFT JOIN (
+			SELECT ld.ID, DATE_FORMAT(ld.DLSJ,'%Y-%m-%d') m FROM log_dlxx ld WHERE ld.APPLX = '1'
+			) a ON a.m = pd.DAY_SHORT_DESC
+			WHERE pd.DAY_SHORT_DESC >= #{before} AND pd.DAY_SHORT_DESC &lt; #{tomorrow} GROUP BY pd.DAY_SHORT_DESC;
+		</if>
+
+	</select>
+
+	<!-- PC登陆及浏览统计 -->
+	<select id="PCDLData" resultType="java.util.HashMap">
+
+		<if test='type == "1" '><!-- PV 浏览量 -->
+			SELECT DATE_FORMAT(pd.DAY_SHORT_DESC,'%m-%d') AS rq ,IFNULL(count(a.id), 0) AS nums FROM pt_date pd
+			LEFT JOIN (
+			SELECT ld.ID, DATE_FORMAT(ld.CZSJ,'%Y-%m-%d') m FROM log_czrz ld
+			) a ON a.m = pd.DAY_SHORT_DESC
+			WHERE pd.DAY_SHORT_DESC >= #{before} AND pd.DAY_SHORT_DESC &lt; #{tomorrow} GROUP BY pd.DAY_SHORT_DESC;
+		</if>
+		<if test='type == "0" '><!-- UV 访客 -->
+			SELECT DATE_FORMAT(pd.DAY_SHORT_DESC,'%m-%d') AS rq ,IFNULL(count(a.id), 0) AS nums FROM pt_date pd
+			LEFT JOIN (
+				SELECT ld.ID, DATE_FORMAT(ld.DLSJ,'%Y-%m-%d') m FROM log_dlxx ld WHERE ld.APPLX = '' OR ld.APPLX IS NULL
+			) a ON a.m = pd.DAY_SHORT_DESC
+			WHERE pd.DAY_SHORT_DESC >= #{before} AND pd.DAY_SHORT_DESC &lt; #{tomorrow} GROUP BY pd.DAY_SHORT_DESC;
+		</if>
+
+	</select>
+
+	<!-- 手机登陆统计(详细列表) -->
+	<select id="getAPPDLData" resultMap="login">
+
+		SELECT a.id, a.rydm, a.dlzh, a.dlsj, a.tcsj, a.dllx_dm, a.yhip, a.mac, a.qylx_dm, a.ryxm, a.dljg_bm, a.applx, b.name as dljg_mc
+		FROM log_dlxx a
+		LEFT JOIN customer b ON a.dljg_bm = b.code
+		WHERE
+		a.applx=#{type}
+		LIMIT #{start},#{length};
+		<!--<if test='before != null '>-->
+			<!--AND dlsj >= #{before}-->
+		<!--</if>-->
+		<!--<if test='tomorrow != null '>-->
+			<!--AND dlsj &lt; #{tomorrow}-->
+		<!--</if>;-->
+
+	</select>
+
+	<!-- 手机登陆统计(详细列表) -->
+	<select id="getAPPDLDataNum" resultType="java.lang.Integer">
+
+		SELECT COUNT(id) as nums
+		FROM log_dlxx
+		WHERE
+		applx=#{type};
+
+	</select>
+
+	<!-- 查询客户总数-->
+	<select id="getAllKhNum" resultType="java.util.HashMap">
+		SELECT COUNT(khbm) + 20000 AS  VALUE, '客户总数' AS  NAME  FROM pt_khxx
+		WHERE scbz = FALSE;
+	</select>
+
+	<!-- 查询代理总数-->
+	<select id="getAllDlNum" resultType="java.util.HashMap">
+		SELECT COUNT(id) AS  VALUE, '代理总数' AS  NAME  FROM customer
+		WHERE scbz = FALSE AND code &lt;&gt; 'DL0000000001';
+	</select>
+
+
+</mapper>

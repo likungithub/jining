@@ -1,0 +1,646 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.xinhai.caiyun.customermanage.dao.TjcxmMapper">
+
+  <resultMap id="BaseResultMap" type="com.xinhai.caiyun.customermanage.api.TjcxmJbxx" >
+    <id column="ID" property="id" />
+    <result column="ZWMC_BM" property="zwmcBm" jdbcType="VARCHAR" />
+    <result column="XL" property="xl" jdbcType="VARCHAR" />
+    <result column="CYL" property="cyl" jdbcType="VARCHAR" />
+    <result column="YL" property="yl" jdbcType="VARCHAR" />
+    <result column="CPDLDM" property="cpdldm" jdbcType="VARCHAR" />
+    <result column="CPDLMC" property="cpdlmc" jdbcType="VARCHAR" />
+    <result column="JCLBDM" property="jclbdm" jdbcType="VARCHAR" />
+    <result column="JCFA" property="jcfa" jdbcType="VARCHAR" />
+    <result column="PDYJ" property="pdyj" jdbcType="VARCHAR" />
+    <result column="PDYJMC" property="pdyjmc" jdbcType="VARCHAR" />
+    <result column="ZM" property="zm" jdbcType="VARCHAR" />
+    <result column="BL" property="bl" jdbcType="VARCHAR" />
+    <result column="IF_PD" property="ifPd" jdbcType="TINYINT" />
+    <result column="BJF" property="bjf" jdbcType="VARCHAR" />
+    <result column="PDNH" property="pdnh" jdbcType="VARCHAR" />
+    <result column="XLZMRZ" property="xlzmrz" jdbcType="VARCHAR" />
+    <result column="JCYJ" property="jcyj" jdbcType="VARCHAR" />
+    <result column="JCYJMC" property="jcyjmc" jdbcType="VARCHAR" />
+    <result column="IF_CMA" property="ifCma" jdbcType="TINYINT" />
+    <result column="IF_CMAF" property="ifCmaf" jdbcType="TINYINT" />
+    <result column="IF_CNAS" property="ifCnas" jdbcType="TINYINT" />
+    <result column="IF_CATL" property="ifCatl" jdbcType="TINYINT" />
+    <result column="JCX" property="jcx" jdbcType="VARCHAR" />
+    <result column="XLZ" property="xlz" jdbcType="VARCHAR" />
+    <result column="JLDW" property="jldw" jdbcType="VARCHAR" />
+    <result column="YWMC" property="ywmc" jdbcType="VARCHAR" />
+    <result column="SCBZ" property="scbz" jdbcType="TINYINT" />
+    <result column="BZXX" property="bzxx" jdbcType="VARCHAR" />
+    <result column="LRRY" property="lrry" jdbcType="VARCHAR" />
+    <result column="BMDM" property="bmdm" jdbcType="VARCHAR" />
+    <result column="GXRY" property="gxry" jdbcType="VARCHAR" />
+    <result column="SCRY" property="scry" jdbcType="VARCHAR" />
+    <result column="LRRQ" property="lrrq" jdbcType="TIMESTAMP" />
+    <result column="GXRQ" property="gxrq" jdbcType="TIMESTAMP" />
+    <result column="SCRQ" property="scrq" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    ID, ZWMC_BM, XL, CYL, YL, CPDLDM, CPDLMC, JCLBDM, JCFA, PDYJ, PDYJMC, ZM, BL,
+    IF_PD, BJF, PDNH, XLZMRZ, JCYJ, JCYJMC, IF_CMA, IF_CMAF, IF_CNAS, IF_CATL, JCX, XLZ, 
+    JLDW, YWMC, SCBZ, BZXX, LRRY, BMDM, GXRY, SCRY, LRRQ, GXRQ, SCRQ
+  </sql>
+
+  <select id="findTjcxm" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    ID, ZWMC_BM, XL, CYL, YL, CPDLDM, CPDLMC, JCLBDM, JCFA, PDYJ, PDYJMC, ZM, BL,
+    IF_PD, BJF, PDNH, XLZMRZ, JCYJ, JCYJMC, IF_CMA, IF_CMAF, IF_CNAS, IF_CATL, JCX, XLZ,
+    JLDW, YWMC, SCBZ, BZXX, LRRY, BMDM, GXRY, SCRY, LRRQ, GXRQ, SCRQ
+    from t_jcxm_jbxx
+    where ID = #{id};
+  </select>
+
+  <select id="findTjcxmlist"  resultType="map" >
+    select jcxm.id,
+    jcxm.zwmc_bm,ifnull(jcxm.xl,'') as xl,ifnull(jcxm.cyl,'') as cyl,ifnull(jcxm.yl,'') as yl,jcxm.cpdlmc,jcxm.cpdldm,ifnull(jcxm.jclbdm,'') as jclbdm,jcxm.jcfa,jcxm.pdyj,jcxm.pdyjmc,jcxm.zm, jcxm.bl, jcxm.if_pd,jcxm.bjf,jcxm.pdnh,jcxm.xlzmrz,jcxm.jcyj,jcxm.jcyjmc,jcxm.if_cma, jcxm.if_cmaf,jcxm.if_cnas,jcxm.if_catl, jcxm.jcx,
+    jcxm.xlz,jcxm.jldw, jcxm.bzffjcxdw,jcxm.bzzxyxx,jcxm.bzzxyxxdw,jcxm.bzzdyxx,jcxm.bzzdyxxdw,jcxm.wswnz,jcxm.wswmz,jcxm.wswcz,jcxm.if_xtpd, jcxm.jg, jcxm.if_bzff, jcxm.zbzl, jcxm.zbzldw,jcxm.yyckjz, jcxm.bz
+    from t_jcxm_jbxx jcxm
+    <if test="ypid != null">
+    left join t_yp_jcxm  ypjc on ypjc.jcxmid = jcxm.id
+    </if>
+    WHERE jcxm.scbz = FALSE
+    <if test="jcxm != null">
+      and jcxm.ZWMC_BM like CONCAT('%',#{jcxm},'%')
+    </if>
+    <if test='yl != null '>
+      and jcxm.yl like CONCAT('%',#{yl},'%')
+    </if>
+    <if test='xl != null '>
+      and jcxm.xl like CONCAT('%',#{xl},'%')
+    </if>
+    <if test='jclbdm != null and jclbdm != ""'>
+      and jcxm.jclbdm = #{jclbdm}
+    </if>
+    <if test = 'ypid!=null'>
+      and ypjc.ypid = #{ypid}
+    </if>
+    <if test='pdyj != null '>
+      and jcxm.PDYJ like CONCAT('%',#{pdyj},'%')
+    </if>
+    <if test='jyyj != null '>
+      and jcxm.JCYJ like CONCAT('%',#{jyyj},'%')
+    </if>
+    limit #{start},#{len};
+  </select>
+
+  <!--  001产品大类 002亚类 003次亚类 004细类 -->
+  <select id="getCpmc" resultType="map">
+    <if test='type == "001"'> <!-- 获取产品大类名称 -->
+      select CPDLMC from t_jcxm_jbxx WHERE scbz = 0 and CPDLMC is not null  group by CPDLMC
+    </if>
+    <if test='type == "002"'> <!-- 获取亚类名称 -->
+      select YL from t_jcxm_jbxx WHERE scbz = 0 and YL is not null group by YL
+    </if>
+    <if test='type == "003"'> <!-- 获取次亚类名称 -->
+      select CYL from t_jcxm_jbxx WHERE scbz = 0 and CYL is not null  group by CYL
+    </if>
+    <if test='type == "004"'> <!-- 获取细类名称 -->
+      select XL from t_jcxm_jbxx WHERE scbz = 0 and XL is not null  group by XL
+    </if>
+  </select>
+ <select id="getYpzbJcxm" resultType="map">
+    select * from t_ypzb_jcxm where ypid = #{ypid}
+  </select>
+  <select id="getYpJcxm" resultType="map">
+     select * from t_yp_jcxm where ypid = #{ypid}
+  </select>
+  <select id="findTjcxmlistNums" resultType="java.lang.Integer" parameterType="java.lang.String" >
+    select
+    COUNT(jcxm.ID)
+    from t_jcxm_jbxx jcxm
+
+    <if test="ypid != null">
+    left join t_yp_jcxm  ypjc on ypjc.jcxmid = jcxm.id
+    </if>
+    WHERE jcxm.scbz = FALSE
+    <if test="jcxm != null">
+      and jcxm.ZWMC_BM like CONCAT('%',#{jcxm},'%')
+    </if>
+    <if test='yl != null '>
+      and jcxm.yl like CONCAT('%',#{yl},'%')
+    </if>
+    <if test='xl != null '>
+      and jcxm.xl like CONCAT('%',#{xl},'%')
+    </if>
+    <if test='jclbdm != null and jclbdm != ""'>
+      and jcxm.jclbdm = #{jclbdm}
+    </if>
+     <if test = 'ypid!=null'>
+      and ypjc.ypid = #{ypid}
+    </if>
+    <if test='pdyj != null '>
+      and jcxm.PDYJ like CONCAT('%',#{pdyj},'%')
+    </if>
+    <if test='jyyj != null '>
+      and jcxm.JCYJ like CONCAT('%',#{jyyj},'%')
+    </if>
+  </select>
+
+  <update id="deleteTjcxmbyId" parameterType="java.lang.String" >
+    UPDATE t_jcxm_jbxx SET SCBZ = TRUE , SCRY = #{scry}, SCRQ = now()
+    where ID = #{id}
+  </update>
+
+  <insert id="createTjcxm" parameterType="com.xinhai.caiyun.customermanage.api.TjcxmJbxx" >
+    insert into t_jcxm_jbxx (ID, ZWMC_BM, XL, CYL, YL, CPDLDM,
+      CPDLMC, JCLBDM, JCFA, PDYJ, PDYJMC, ZM, BL, IF_PD, BJF, PDNH, XLZMRZ,
+      JCYJ, JCYJMC, IF_CMA, IF_CMAF, IF_CNAS, IF_CATL, JCX, XLZ, JLDW, YWMC,
+      SCBZ, BZXX, LRRY, BMDM, LRRQ)
+    values (#{id,jdbcType=BIGINT}, #{zwmcBm,jdbcType=VARCHAR},
+      #{xl,jdbcType=VARCHAR}, #{cyl,jdbcType=VARCHAR}, #{yl,jdbcType=VARCHAR}, #{cpdldm,jdbcType=VARCHAR}, 
+      #{cpdlmc,jdbcType=VARCHAR}, #{jclbdm,jdbcType=VARCHAR}, #{jcfa,jdbcType=VARCHAR}, 
+      #{pdyj,jdbcType=VARCHAR}, #{pdyjmc,jdbcType=VARCHAR}, #{zm,jdbcType=VARCHAR}, #{bl,jdbcType=VARCHAR}, 
+      #{ifPd,jdbcType=VARCHAR}, #{bjf,jdbcType=VARCHAR}, #{pdnh,jdbcType=VARCHAR}, #{xlzmrz,jdbcType=VARCHAR}, 
+      #{jcyj,jdbcType=VARCHAR}, #{jcyjmc,jdbcType=VARCHAR}, #{ifCma,jdbcType=TINYINT}, 
+      #{ifCmaf,jdbcType=TINYINT}, #{ifCnas,jdbcType=TINYINT}, #{ifCatl,jdbcType=TINYINT}, 
+      #{jcx,jdbcType=VARCHAR}, #{xlz,jdbcType=VARCHAR}, #{jldw,jdbcType=VARCHAR}, #{ywmc,jdbcType=VARCHAR}, 
+      false, #{bzxx,jdbcType=VARCHAR}, #{lrry,jdbcType=VARCHAR}, #{bmdm,jdbcType=VARCHAR}, now())
+  </insert>
+
+
+  <update id="updateTjcxm" parameterType="com.xinhai.caiyun.customermanage.api.TjcxmJbxx" >
+    update t_jcxm_jbxx
+    <set >
+      <if test="zwmcBm != null" >
+        ZWMC_BM = #{zwmcBm,jdbcType=VARCHAR},
+      </if>
+      <if test="xl != null" >
+        XL = #{xl,jdbcType=VARCHAR},
+      </if>
+      <if test="cyl != null" >
+        CYL = #{cyl,jdbcType=VARCHAR},
+      </if>
+      <if test="yl != null" >
+        YL = #{yl,jdbcType=VARCHAR},
+      </if>
+      <if test="cpdldm != null" >
+        CPDLDM = #{cpdldm,jdbcType=VARCHAR},
+      </if>
+      <if test="cpdlmc != null" >
+        CPDLMC = #{cpdlmc,jdbcType=VARCHAR},
+      </if>
+      <if test="jclbdm != null" >
+        JCLBDM = #{jclbdm,jdbcType=VARCHAR},
+      </if>
+      <if test="jcfa != null" >
+        JCFA = #{jcfa,jdbcType=VARCHAR},
+      </if>
+      <if test="pdyj != null" >
+        PDYJ = #{pdyj,jdbcType=VARCHAR},
+      </if>
+      <if test="pdyjmc != null" >
+        PDYJMC = #{pdyjmc,jdbcType=VARCHAR},
+      </if>
+      <if test="zm != null" >
+        ZM = #{zm,jdbcType=VARCHAR},
+      </if>
+      <if test="bl != null" >
+        BL = #{bl,jdbcType=VARCHAR},
+      </if>
+      <if test="ifPd != null" >
+        IF_PD = #{ifPd,jdbcType=TINYINT},
+      </if>
+      <if test="bjf != null" >
+        BJF = #{bjf,jdbcType=VARCHAR},
+      </if>
+      <if test="pdnh != null" >
+        PDNH = #{pdnh,jdbcType=VARCHAR},
+      </if>
+      <if test="xlzmrz != null" >
+        XLZMRZ = #{xlzmrz,jdbcType=VARCHAR},
+      </if>
+      <if test="jcyj != null" >
+        JCYJ = #{jcyj,jdbcType=VARCHAR},
+      </if>
+      <if test="jcyjmc != null" >
+        JCYJMC = #{jcyjmc,jdbcType=VARCHAR},
+      </if>
+      <if test="ifCma != null" >
+        IF_CMA = #{ifCma,jdbcType=TINYINT},
+      </if>
+      <if test="ifCmaf != null" >
+        IF_CMAF = #{ifCmaf,jdbcType=TINYINT},
+      </if>
+      <if test="ifCnas != null" >
+        IF_CNAS = #{ifCnas,jdbcType=TINYINT},
+      </if>
+      <if test="ifCatl != null" >
+        IF_CATL = #{ifCatl,jdbcType=TINYINT},
+      </if>
+      <if test="jcx != null" >
+        JCX = #{jcx,jdbcType=VARCHAR},
+      </if>
+      <if test="xlz != null" >
+        XLZ = #{xlz,jdbcType=VARCHAR},
+      </if>
+      <if test="jldw != null" >
+        JLDW = #{jldw,jdbcType=VARCHAR},
+      </if>
+      <if test="ywmc != null" >
+        YWMC = #{ywmc,jdbcType=VARCHAR},
+      </if>
+      <if test="bzxx != null" >
+        BZXX = #{bzxx,jdbcType=VARCHAR},
+      </if>
+      <if test="gxry != null" >
+        GXRY = #{gxry,jdbcType=VARCHAR},
+      </if>
+      GXRQ = now()
+    </set>
+    where ID = #{id}
+  </update>
+
+  <insert id="insertYpJcxmList" parameterType="java.util.List">
+    INSERT INTO t_yp_jcxm
+    (ypid,jcxmid)
+    VALUES
+    <foreach collection="ids" item="id" index="index" separator=",">
+      (#{ypid},#{id})
+    </foreach>
+  </insert>
+
+  <update id="delYpzbJcxmList" parameterType="java.lang.String">
+    DELETE  FROM t_ypzb_jcxm
+    WHERE ypid=#{ypid};
+  </update>
+
+  <insert id="insertYpzbJcxmList" parameterType="java.util.List">
+    INSERT INTO t_ypzb_jcxm
+    (ypid,jcxmid)
+    VALUES
+    <foreach collection="ids" item="id" index="index" separator=",">
+      (#{ypid},#{id})
+    </foreach>
+  </insert>
+
+  <update id="delYpJcxmList" parameterType="java.lang.String">
+    DELETE  FROM t_yp_jcxm
+    WHERE ypid=#{ypid};
+  </update>
+  <select id="findJcxmByYpid" resultMap="BaseResultMap" >
+    select
+    jcxm.ID, jcxm.ZWMC_BM, jcxm.XL, jcxm.CYL, jcxm.YL, jcxm.CPDLDM, jcxm.CPDLMC, jcxm.JCLBDM, jcxm.JCFA, jcxm.PDYJ, jcxm.PDYJMC, jcxm.ZM, jcxm.BL,
+    jcxm.IF_PD, jcxm.BJF, jcxm.PDNH, jcxm.XLZMRZ, jcxm.JCYJ, jcxm.JCYJMC, jcxm.IF_CMA, jcxm.IF_CMAF, jcxm.IF_CNAS, jcxm.IF_CATL, jcxm.JCX, jcxm.XLZ,
+    jcxm.JLDW, jcxm.YWMC, jcxm.SCBZ, jcxm.BZXX, jcxm.LRRY, jcxm.BMDM, jcxm.GXRY, jcxm.SCRY, jcxm.LRRQ, jcxm.GXRQ, jcxm.SCRQ
+    from t_jcxm_jbxx jcxm
+    left join t_yp_jcxm ypjc on ypjc.jcxmid = jcxm.id
+    WHERE jcxm.scbz = FALSE and ypjc.ypid=#{ypid}
+    <if test=' searchText != null'>
+      <if test='type == "001" '>
+        AND CONCAT(ZWMC_BM) LIKE CONCAT('%',#{searchText},'%')
+      </if>
+    </if>
+    limit #{start},#{len};
+  </select>
+
+  <select id="findJcxmByYpidNums" resultType="java.lang.Integer" parameterType="java.lang.String" >
+    select
+    COUNT(jcxm.ID)
+    from t_jcxm_jbxx jcxm
+    left join t_yp_jcxm ypjc on ypjc.jcxmid = jcxm.id
+    WHERE jcxm.scbz = FALSE and ypjc.ypid=#{ypid}
+    <if test=' searchText != null'>
+      <if test='type == "001" '>
+        AND CONCAT(ZWMC_BM) LIKE CONCAT('%',#{searchText},'%')
+      </if>
+    </if>
+  </select>
+  <!-- 将excel中的数据放到数据库中-->
+  <insert id="addJcxmExcel">
+    insert into t_jcxm_jbxx
+    (
+    zwmc_bm,xl,cyl,yl,cpdlmc,cpdldm,jclbdm,jcfa,pdyj,pdyjmc,zm, bl, if_pd,bjf,pdnh,xlzmrz,jcyj,jcyjmc,if_cma, if_cmaf,if_cnas,if_catl, jcx,
+    xlz,jldw, bzffjcxdw,  bzzxyxx,bzzxyxxdw,bzzdyxx,bzzdyxxdw, wswnz,wswmz,wswcz,if_xtpd, jg, if_bzff, zbzl, zbzldw,yyckjz, bz
+    )
+    values
+    <foreach collection="list" index="index" item="it" separator=",">
+      (
+      #{it.zwmc_bm},#{it.xl},#{it.cyl},#{it.yl},#{it.cpdlmc},#{it.cpdldm},#{it.jclbdm},#{it.jcfa},#{it.pdyj},#{it.pdyjmc},
+      #{it.zm}, #{it.bl}, #{it.if_pd},#{it.bjf},#{it.pdnh},#{it.xlzmrz},#{it.jcyj},#{it.jcyjmc},#{it.if_cma}, #{it.if_cmaf},
+      #{it.if_cnas},#{it.if_catl}, #{it.jcx},#{it.xlz},#{it.jldw}, #{it.bzffjcxdw}, #{it.bzzxyxx},#{it.bzzxyxxdw},#{it.bzzdyxx},#{it.bzzdyxxdw},
+      #{it.wswnz},#{it.swmz},#{it.wswcz},#{it.if_xtpd}, #{it.jg}, #{it.if_bzff}, #{it.zbzl}, #{it.zbzldw},#{it.yyckjz}, #{it.bz}
+      )
+    </foreach>
+  </insert>
+
+  <!--删除检测项目-->
+  <delete id="delJxcmJbxx">
+    delete from t_jcxm_jbxx where id=#{id};
+  </delete>
+
+  <select id="findJcxm" resultType="com.xinhai.caiyun.customermanage.api.TjcxmJbxx" parameterType="java.lang.String">
+        select
+        id,zwmc_bm,cpdlmc,cpdldm,yl,cyl,xl,jclbdm, jcfa,pdyj,pdyjmc,zm,bl,
+        bjf,pdnh,xlzmrz,jcyj,jcyjmc,jcx,xlz,jldw,bzffjcxdw,bzzxyxx,bzzxyxxdw,bzzdyxx,bzzdyxxdw,
+        wswnz,wswmz,wswcz,jg,zbzl,zbzldw,yyckjz,bz,if_pd,if_cma,if_cmaf,if_cnas,if_catl,if_xtpd,if_bzff
+        from t_jcxm_jbxx
+        where id = #{id};
+    </select>
+
+  <insert id="addJcxm" parameterType="com.xinhai.caiyun.customermanage.api.Tjcxm" >
+        insert into t_jcxm_jbxx (zwmc_bm,cpdlmc,cpdldm,YL,CYL,XL,jclbdm,JCFA,PDYJ,pdyjmc,zm,bl,bjf,
+        pdnh,xlzmrz,jcyj,jcyjmc,jcx,xlz,jldw,bzffjcxdw,bzzxyxx,bzzxyxxdw,bzzdyxx,bzzdyxxdw,wswnz,wswmz,wswxmz,
+        wswcz,jg,zbzl,zbzldw,yyckjz,bz,if_pd,if_cma,if_cmaf,if_cnas,if_catl,if_xtpd,if_bzff)
+        values(#{zwmc_bm},#{cpdlmc},#{cpdldm},#{yl},#{cyl},#{xl},#{jclbdm},#{jcfa},#{pdyj},#{pdyjmc},#{zm},#{bl},
+        #{bjf},#{pdnh},#{xlzmrz},#{jcyj},#{jcyjmc},#{jcx},#{xlz},#{jldw},#{bzffjcxdw},#{bzzxyxx},#{bzzxyxxdw},
+        #{bzzdyxx},#{bzzdyxxdw},#{wswnz},#{wswmz},#{wswxmz},#{wswcz},#{jg},#{zbzl},#{zbzldw},#{yyckjz},#{bz},
+        #{if_pd},#{if_cma},#{if_cmaf},#{if_cnas},#{if_catl},#{if_xtpd},#{if_bzff})
+  </insert>
+
+  <update id="updateJcxm" parameterType="com.xinhai.caiyun.customermanage.api.Tjcxm">
+    update t_jcxm_jbxx
+    <set>
+      <if test="zwmc_bm != null">
+        zwmc_bm = #{zwmc_bm},
+      </if>
+      <if test="cpdlmc != null">
+        cpdlmc = #{cpdlmc},
+      </if>
+      <if test="cpdldm != null">
+        cpdldm = #{cpdldm},
+      </if>
+      <if test="yl != null">
+        YL = #{yl},
+      </if>
+      <if test="cyl != null">
+        CYL = #{cyl},
+      </if>
+      <if test="xl != null">
+        XL = #{xl},
+      </if>
+      <if test="jclbdm != null">
+        jclbdm = #{jclbdm},
+      </if>
+      <if test="jcfa != null">
+        JCFA = #{jcfa},
+      </if>
+      <if test="pdyj != null">
+        PDYJ = #{pdyj},
+      </if>
+      <if test="pdyjmc != null">
+        pdyjmc = #{pdyjmc},
+      </if>
+      <if test="zm != null">
+        zm = #{zm},
+      </if>
+      <if test="bl != null">
+        bl = #{bl},
+      </if>
+      <if test="bjf != null">
+        bjf = #{bjf},
+      </if>
+      <if test="pdnh != null">
+        pdnh = #{pdnh},
+      </if>
+      <if test="xlzmrz != null">
+        xlzmrz = #{xlzmrz},
+      </if>
+      <if test="jcyj != null">
+        jcyj = #{jcyj},
+      </if>
+      <if test="jcyjmc != null">
+        jcyjmc = #{jcyjmc},
+      </if>
+      <if test="jcx != null">
+        jcx = #{jcx},
+      </if>
+      <if test="xlz != null">
+        xlz = #{xlz},
+      </if>
+      <if test="jldw != null">
+        jldw = #{jldw},
+      </if>
+      <if test="bzffjcxdw != null">
+        bzffjcxdw = #{bzffjcxdw},
+      </if>
+      <if test="bzzxyxx != null">
+        bzzxyxx = #{bzzxyxx},
+      </if>
+      <if test="bzzxyxxdw != null">
+        bzzxyxxdw = #{bzzxyxxdw},
+      </if>
+      <if test="bzzdyxx != null">
+        bzzdyxx = #{bzzdyxx},
+      </if>
+      <if test="bzzdyxxdw != null">
+        bzzdyxxdw = #{bzzdyxxdw},
+      </if>
+      <if test="wswnz != null">
+        wswnz = #{wswnz},
+      </if>
+      <if test="wswmz != null">
+        wswmz = #{wswmz},
+      </if>
+      <if test="wswcz != null">
+        wswcz = #{wswcz},
+      </if>
+      <if test="jg != null">
+        jg = #{jg},
+      </if>
+      <if test="zbzl != null">
+        zbzl = #{zbzl},
+      </if>
+      <if test="zbzldw != null">
+        zbzldw = #{zbzldw},
+      </if>
+      <if test="yyckjz != null">
+        yyckjz = #{yyckjz},
+      </if>
+      <if test="bz != null">
+        bz = #{bz},
+      </if>
+      <if test="if_pd != null">
+        if_pd = #{if_pd},
+      </if>
+      <if test="if_cma != null">
+        if_cma = #{if_cma},
+      </if>
+      <if test="if_cmaf != null">
+        if_cmaf = #{if_cmaf},
+      </if>
+      <if test="if_cnas != null">
+        if_cnas = #{if_cnas},
+      </if>
+      <if test="if_catl != null">
+        if_catl = #{if_catl},
+      </if>
+      <if test="if_xtpd != null">
+        if_xtpd = #{if_xtpd},
+      </if>
+      <if test="if_bzff != null">
+        if_bzff = #{if_bzff}
+      </if>
+      WHERE id = #{id};
+    </set>
+  </update>
+  <!-- 通过样品id和检测项目id查询样品表的中数据 -->
+  <select id="getDataByYpidAndJcxmid" resultType="java.lang.String">
+      select id from t_yp_jcxm where ypid=#{ypid} and jcxmid=#{jcxmid};
+  </select>
+  <!-- 检测项目包管理 下 增加检测项目 查询用 -->
+  <select id="findAddTjcxmlist"  resultType="map" >
+    select jcxm.id,
+    jcxm.zwmc_bm,ifnull(jcxm.xl,'') as xl,ifnull(jcxm.cyl,'') as cyl,ifnull(jcxm.yl,'') as yl,jcxm.cpdlmc,jcxm.cpdldm,ifnull(jcxm.jclbdm,'') as jclbdm,
+    ifnull(jcxm.jcfa,' ') as jcfa,
+    jcxm.pdyj,jcxm.pdyjmc,jcxm.zm, jcxm.bl, jcxm.if_pd,jcxm.bjf,jcxm.pdnh,jcxm.xlzmrz,ifnull(jcxm.jcyj,'') as jcyj,jcxm.jcyjmc,jcxm.if_cma, jcxm.if_cmaf,jcxm.if_cnas,jcxm.if_catl, jcxm.jcx,
+    jcxm.xlz,jcxm.jldw, jcxm.bzffjcxdw,jcxm.bzzxyxx,jcxm.bzzxyxxdw,jcxm.bzzdyxx,jcxm.bzzdyxxdw,jcxm.wswnz,jcxm.wswmz,jcxm.wswcz,jcxm.if_xtpd, jcxm.jg, jcxm.if_bzff, jcxm.zbzl, jcxm.zbzldw,jcxm.yyckjz, jcxm.bz
+    from t_jcxm_jbxx jcxm
+    WHERE jcxm.scbz = FALSE
+    <if test='cxtj.jcxm != null and cxtj.jcxm != ""' >
+      and jcxm.ZWMC_BM like CONCAT('%',#{cxtj.jcxm},'%')
+    </if>
+    <if test="cxtj.cpdl != null">
+      and jcxm.cpdlmc like CONCAT('%',#{cxtj.cpdl},'%')
+    </if>
+    <if test='cxtj.yl != null '>
+      and jcxm.yl like CONCAT('%',#{cxtj.yl},'%')
+    </if>
+    <if test='cxtj.cyl != null '>
+      and jcxm.cyl like CONCAT('%',#{cxtj.cyl},'%')
+    </if>
+    <if test='cxtj.xl != null '>
+      and jcxm.xl like CONCAT('%',#{cxtj.xl},'%')
+    </if>
+    <if test='cxtj.jclbdm != null and jclbdm != ""'>
+      and jcxm.jclbdm = #{cxtj.jclbdm}
+    </if>
+    <if test = 'cxtj.ypid!=null'>
+      and ypjc.ypid = #{ypid}
+    </if>
+    <if test='cxtj.pdyj != null '>
+      and jcxm.PDYJ like CONCAT('%',#{cxtj.pdyj},'%')
+    </if>
+    <if test='cxtj.jyyj != null '>
+      and jcxm.JCYJ like CONCAT('%',#{cxtj.jyyj},'%')
+    </if>
+    limit ${cxtj.start},${cxtj.length}
+  </select>
+
+  <select id="findAddTjcxmlistNums" resultType="java.lang.Integer" parameterType="java.lang.String" >
+    select
+    COUNT(jcxm.ID)
+    from t_jcxm_jbxx jcxm
+    WHERE jcxm.scbz = FALSE
+    <if test='cxtj.jcxm != null and cxtj.jcxm != ""' >
+      and jcxm.ZWMC_BM like CONCAT('%',#{cxtj.jcxm},'%')
+    </if>
+    <if test="cxtj.cpdl != null">
+      and jcxm.cpdlmc like CONCAT('%',#{cxtj.cpdl},'%')
+    </if>
+    <if test='cxtj.yl != null '>
+      and jcxm.yl like CONCAT('%',#{cxtj.yl},'%')
+    </if>
+    <if test='cxtj.cyl != null '>
+      and jcxm.cyl like CONCAT('%',#{cxtj.cyl},'%')
+    </if>
+    <if test='cxtj.xl != null '>
+      and jcxm.xl like CONCAT('%',#{cxtj.xl},'%')
+    </if>
+    <if test='cxtj.jclbdm != null and jclbdm != ""'>
+      and jcxm.jclbdm = #{cxtj.jclbdm}
+    </if>
+    <if test = 'cxtj.ypid!=null'>
+      and ypjc.ypid = #{ypid}
+    </if>
+    <if test='cxtj.pdyj != null '>
+      and jcxm.PDYJ like CONCAT('%',#{cxtj.pdyj},'%')
+    </if>
+    <if test='cxtj.jyyj != null '>
+      and jcxm.JCYJ like CONCAT('%',#{cxtj.jyyj},'%')
+    </if>
+  </select>
+  <!--20190830添加新方法列表-->
+  <select id="findTjcxmlistNew"  resultType="map" >
+    select jcxm.id,
+    jcxm.zwmc_bm,ifnull(jcxm.xl,'') as xl,ifnull(jcxm.cyl,'') as cyl,ifnull(jcxm.yl,'') as yl,jcxm.cpdlmc,jcxm.cpdldm,ifnull(jcxm.jclbdm,'') as jclbdm,jcxm.jcfa,jcxm.pdyj,jcxm.pdyjmc,jcxm.zm, jcxm.bl, jcxm.if_pd,jcxm.bjf,jcxm.pdnh,jcxm.xlzmrz,jcxm.jcyj,jcxm.jcyjmc,jcxm.if_cma, jcxm.if_cmaf,jcxm.if_cnas,jcxm.if_catl, jcxm.jcx,
+    jcxm.xlz,jcxm.jldw, jcxm.bzffjcxdw,jcxm.bzzxyxx,jcxm.bzzxyxxdw,jcxm.bzzdyxx,jcxm.bzzdyxxdw,jcxm.wswnz,jcxm.wswmz,jcxm.wswcz,jcxm.if_xtpd, jcxm.jg, jcxm.if_bzff, jcxm.zbzl, jcxm.zbzldw,jcxm.yyckjz, jcxm.bz
+    from t_jcxm_jbxx jcxm
+    <if test="cxtj.ypid != null">
+      left join t_yp_jcxm  ypjc on ypjc.jcxmid = jcxm.id
+    </if>
+    WHERE jcxm.scbz = FALSE
+    <if test="cxtj.jcxm != null">
+      and jcxm.ZWMC_BM like CONCAT('%',#{cxtj.jcxm},'%')
+    </if>
+    <if test='cxtj.yl != null '>
+      and jcxm.yl like CONCAT('%',#{cxtj.yl},'%')
+    </if>
+    <if test='cxtj.xl != null '>
+      and jcxm.xl like CONCAT('%',#{cxtj.xl},'%')
+    </if>
+    <if test='cxtj.jclbdm != null and cxtj.jclbdm != ""'>
+      and jcxm.jclbdm = #{cxtj.jclbdm}
+    </if>
+    <if test = 'cxtj.ypid!=null'>
+      and ypjc.ypid = #{cxtj.ypid}
+    </if>
+    <if test='cxtj.pdyj != null '>
+      and jcxm.PDYJ like CONCAT('%',#{cxtj.pdyj},'%')
+    </if>
+    <if test='cxtj.jyyj != null '>
+      and jcxm.JCYJ like CONCAT('%',#{cxtj.jyyj},'%')
+    </if>
+    <if test='cxtj.dl != null '>
+      and jcxm.cpdlmc like CONCAT('%',#{cxtj.dl},'%')
+    </if>
+    <if test='cxtj.cyl != null '>
+      and jcxm.cyl like CONCAT('%',#{cxtj.cyl},'%')
+    </if>
+    <if test='cxtj.jcff != null '>
+      and jcxm.jcfa like CONCAT('%',#{cxtj.jcff},'%')
+    </if>
+    limit ${cxtj.start},${cxtj.length};
+  </select>
+  <select id="findTjcxmlistNumsNew" resultType="java.lang.Integer">
+    select
+    COUNT(jcxm.ID)
+    from t_jcxm_jbxx jcxm
+
+    <if test="cxtj.ypid != null">
+      left join t_yp_jcxm  ypjc on ypjc.jcxmid = jcxm.id
+    </if>
+    WHERE jcxm.scbz = FALSE
+    <if test="cxtj.jcxm != null">
+      and jcxm.ZWMC_BM like CONCAT('%',#{cxtj.jcxm},'%')
+    </if>
+    <if test='cxtj.yl != null '>
+      and jcxm.yl like CONCAT('%',#{cxtj.yl},'%')
+    </if>
+    <if test='cxtj.xl != null '>
+      and jcxm.xl like CONCAT('%',#{cxtj.xl},'%')
+    </if>
+    <if test='cxtj.jclbdm != null and cxtj.jclbdm != ""'>
+      and jcxm.jclbdm = #{cxtj.jclbdm}
+    </if>
+    <if test = 'cxtj.ypid!=null'>
+      and ypjc.ypid = #{cxtj.ypid}
+    </if>
+    <if test='cxtj.pdyj != null '>
+      and jcxm.PDYJ like CONCAT('%',#{cxtj.pdyj},'%')
+    </if>
+    <if test='cxtj.jyyj != null '>
+      and jcxm.JCYJ like CONCAT('%',#{cxtj.jyyj},'%')
+    </if>
+    <if test='cxtj.dl != null '>
+      and jcxm.cpdlmc like CONCAT('%',#{cxtj.dl},'%')
+    </if>
+    <if test='cxtj.cyl != null '>
+      and jcxm.cyl like CONCAT('%',#{cxtj.cyl},'%')
+    </if>
+    <if test='cxtj.jcff != null '>
+      and jcxm.jcfa like CONCAT('%',#{cxtj.jcff},'%')
+    </if>
+  </select>
+  <!-- 20190909添加通过样品id和检测项目id查询样品表的中数据 -->
+  <select id="getDataByYpidAndJcxmName" resultType="java.lang.String">
+      select a.ZWMC_BM from t_jcxm_jbxx a,t_yp_jcxm b
+      where a.id = b.jcxmid
+      AND b.ypid=#{ypid}
+      and a.ZWMC_BM=#{jcxmName};
+  </select>
+</mapper>

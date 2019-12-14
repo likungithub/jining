@@ -1,0 +1,234 @@
+create database seal;
+
+use seal;
+
+ 
+
+Create table HTMLSealLog
+
+(
+
+  ID int auto_increment not null primary key,
+
+  OPDate date,
+
+  OPType nvarchar(50),
+
+  OPUser nvarchar(50),
+
+  PageID int,
+
+  PageTitle nvarchar(255),
+
+  SealID int,
+
+  SealName nvarchar(50),
+
+  SignerName nvarchar(50),
+
+  SignatureID nvarchar(50),
+
+  DeptID int,
+
+  DeptName nvarchar(100),
+
+  CertSerialNum nvarchar(50),
+
+  IssueTo nvarchar(50),
+
+  IssueBy nvarchar(50),
+
+  IP nvarchar(50)
+
+);
+
+ 
+
+Create table HTMLSignature
+
+(
+
+  ID int auto_increment not null primary key,
+
+  PageID nvarchar(100),
+
+  SealID int,
+
+  Signature text
+
+);
+
+ 
+
+create table RootCerts
+
+(
+
+  ID int auto_increment not null primary key,
+
+  CertName nvarchar(50),
+
+  CertSerialNum nvarchar(50),
+
+  ValidFrom date,
+
+  ValidTo date,
+
+  Description nvarchar(255),
+
+  CertPKCS7 text,
+
+  CreateTime date
+
+);
+
+ 
+
+Create table SealLog
+
+(
+
+  ID int auto_increment not null primary key,
+
+  OPDate date,
+
+  OPType nvarchar(20),
+
+  SealID int,
+
+  SealName nvarchar(50),
+
+  DeptID int,
+
+  DeptName nvarchar(100),
+
+  SignerName nvarchar(50),
+
+  CertSerialNum nvarchar(50),
+
+  IssueTo nvarchar(50),
+
+  IssueBy nvarchar(50),
+
+  FileName nvarchar(255)
+
+);
+
+ 
+
+Create table Seals
+
+(
+
+  ID int auto_increment not null primary key,
+
+  SealName nvarchar(100) not null,
+
+  SealType nvarchar(10),
+
+  DeptID int,
+
+  DeptName nvarchar(100),
+
+  SignerID int,
+
+  SignerName nvarchar(50),
+
+  CreateTime date,
+
+  UpdateTime date,
+
+  Status nvarchar(20),
+
+  Description nvarchar(255),
+
+  AuthType nvarchar(10),
+
+  CertSerialNum nvarchar(50),
+
+  IssueTo nvarchar(50),
+
+  IssueBy nvarchar(50),
+
+  ValidFrom date,
+
+  ValidTo date,
+
+  CertPKCS7 text,   
+
+  SealImage MEDIUMBLOB,
+
+  SealImageType nvarchar(20),
+
+  Vcode nvarchar(40)
+
+);
+
+ 
+
+Create table SYSLog
+
+(
+
+  ID int auto_increment not null primary key,
+
+  OPDate date,
+
+  OPUserID int,
+
+  OPUserName nvarchar(50),
+
+  OPType nvarchar(50),
+
+  OPDesc nvarchar(250)
+
+);
+
+ 
+
+Create table Users
+
+(
+
+  ID int auto_increment not null primary key,
+
+  UserName nvarchar(50),
+
+  Password nvarchar(40),
+
+  DeptID int,
+
+  DeptName nvarchar(100),
+
+  RoleID int,
+
+  RoleName nvarchar(50),
+
+  CreateTime date,
+
+  UpdateTime date,
+
+  EmployNo nvarchar(30),
+
+  Duty nvarchar(50),
+
+  Sex nvarchar(2),
+
+  Tel nvarchar(100),
+
+  Email nvarchar(255),
+
+  Description nvarchar(255),
+
+  IP nvarchar(255),
+
+  CertPKCS7 text,
+
+  Status nvarchar(10)
+
+);
+
+INSERT INTO USERS (USERNAME, PASSWORD, DEPTID, DEPTNAME, ROLEID, ROLENAME) VALUES('admin','45B9E269439E3F31314F0BE264884338',1,'Office','1','超级管理员');
+ 
+
+INSERT INTO USERS (USERNAME, PASSWORD, DEPTID, DEPTNAME, ROLEID, ROLENAME) VALUES('admin','45B9E269439E3F31314F0BE264884338',1,'Office','1','超级管理员')

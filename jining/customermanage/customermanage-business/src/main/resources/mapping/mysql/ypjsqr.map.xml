@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.xinhai.caiyun.customermanage.dao.YpjsqrMapper">
+
+    <select id="findAllYpjsqr" resultType="map">
+        SELECT  y.ypmc,y.ypbm,y.ypsl,y.ypdw,ypk.jszt,ypk.ypjssj,ypk.id
+        FROM t_ypk_jbxx ypk,t_ypgl_jbxx y
+         <where>
+             ypk.ypid=y.id  and ypk.zxr like concat('%',#{map.zydm},'%')
+             <if test="map.ypmc!=null and map.ypmc!=''">
+                and  y.ypmc like concat('%',#{map.ypmc},'%')
+             </if>
+             <if test="map.jszt!=null and map.jszt!=''">
+                 and  ypk.jszt=#{map.jszt}
+             </if>
+         </where>
+        order by ypk.jszt
+        LIMIT #{map.start},#{map.length};
+    </select>
+
+    <select id="findAllYpjsqrNum" resultType="java.lang.Integer">
+        SELECT  count(*)
+        FROM t_ypk_jbxx ypk,t_ypgl_jbxx y
+        <where>
+            ypk.ypid=y.id  and ypk.zxr like concat('%',#{map.zydm},'%')
+            <if test="map.ypmc!=null and map.ypmc!=''">
+                and  y.ypmc like concat('%',#{map.ypmc},'%')
+            </if>
+            <if test="map.jszt!=null and map.jszt!=''">
+                and  ypk.jszt=#{map.jszt}
+            </if>
+        </where>
+    </select>
+    <!-- 改变样品接收的状态-->
+    <update id="updateJszt">
+        update t_ypk_jbxx set jszt='1',ypjssj=now()  where id=#{id};
+    </update>
+</mapper>

@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.xinhai.caiyun.customermanage.dao.HtcxMapper">
+
+    <select id="findAllWt" resultType="map">
+        SELECT *
+        FROM t_wt_jbxx
+        <where>
+            <if test="map.htmc!=null and map.htmc!=''">
+                HTMC like CONCAT('%',#{map.htmc},'%')
+            </if>
+            <if test="map.dwmc!=null and map.dwmc!=''">
+                and  DWMC  like CONCAT('%',#{map.dwmc},'%')
+            </if>
+            <choose>
+                <when test="map.startDate!=null and map.endDate!=null">
+                    and LRRQ between #{map.startDate} and #{map.endDate}
+                </when>
+                <otherwise>
+                    <choose>
+                        <when test="map.startDate!=null and map.endDate==null">
+                            and LRRQ  &gt;= #{map.startDate}
+                        </when>
+                        <otherwise>
+                            <choose>
+                                <when test="map.startDate==null and map.endDate!=null">
+                                    and LRRQ &lt;= #{map.endDate}
+                                </when>
+                            </choose>
+                        </otherwise>
+                    </choose>
+                </otherwise>
+            </choose>
+        </where>
+        order by id desc
+        LIMIT #{map.start},#{map.length};
+    </select>
+
+    <select id="findWtCount" resultType="java.lang.Integer">
+        SELECT COUNT(*)
+        FROM t_wt_jbxx
+        <where>
+            <if test="map.htmc!=null and map.htmc!=''">
+                HTMC like CONCAT('%',#{map.htmc},'%')
+            </if>
+            <if test="map.dwmc!=null and map.dwmc!=''">
+                and  DWMC  like CONCAT('%',#{map.dwmc},'%')
+            </if>
+            <choose>
+                <when test="map.startDate!=null and map.endDate!=null">
+                    and LRRQ between #{map.startDate} and #{map.endDate}
+                </when>
+                <otherwise>
+                    <choose>
+                        <when test="map.startDate!=null and map.endDate==null">
+                            and LRRQ  &gt;= #{map.startDate}
+                        </when>
+                        <otherwise>
+                            <choose>
+                                <when test="map.startDate==null and map.endDate!=null">
+                                    and LRRQ &lt;= #{map.endDate}
+                                </when>
+                            </choose>
+                        </otherwise>
+                    </choose>
+                </otherwise>
+            </choose>
+        </where>
+    </select>
+
+    <select id="findYpByWtid"  resultType="map">
+        select YPMC,ID,GGXH,YPDJ,SCDW,YPSL,SCRQ,YPPHHBH,BZQ,YPJCZT,SB
+        from t_ypgl_jbxx
+        where wtid=#{map.wtid}
+        limit #{map.start},#{map.length};
+    </select>
+
+    <select id="findYpNum" resultType="java.lang.Integer">
+        select count(*)
+        from t_ypgl_jbxx
+        where wtid=#{map.wtid};
+    </select>
+</mapper>

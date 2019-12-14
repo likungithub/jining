@@ -1,0 +1,8 @@
+@CHARSET "UTF-8";
+.announcementType-dialog .modal-dialog{
+    width: 654px;
+    border-radius: 4px;
+}
+.announcementType-dialog .modal-dialog h4{
+    font-weight: 800;
+}

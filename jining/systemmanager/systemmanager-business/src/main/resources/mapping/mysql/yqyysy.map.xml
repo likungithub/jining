@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xinhai.caiyun.systemmanager.dao.YqyysyMapper">
+<select id="findAllYq"  resultType="map">
+    <!-- 查找仪器-->
+    select id,name,number,gzrq,wxzq,dqzt,sccj,scrq,sbbh,sybm,type
+    from yqsbtz
+    <where>
+        <if test="map.yqmc!=null and map.yqmc!=''">
+            name like concat('%',#{map.yqmc},'%')
+        </if>
+        <choose>
+            <when test="map.startDate!=null and map.endDate!=null">
+                and gzrq between #{map.startDate} and #{map.endDate}
+            </when>
+            <otherwise>
+                <choose>
+                    <when test="map.startDate!=null and map.endDate==null">
+                        and gzrq  &gt;= #{map.startDate}
+                    </when>
+                    <otherwise>
+                        <choose>
+                            <when test="map.startDate==null and map.endDate!=null">
+                                and gzrq  &lt;= #{map.endDate}
+                            </when>
+                        </choose>
+                    </otherwise>
+                </choose>
+            </otherwise>
+        </choose>
+    </where>
+    limit #{map.start},#{map.length};
+</select>
+<!-- 查找仪器数量-->
+    <select id="findAllYqNum"  resultType="java.lang.Integer">
+        select count(*)
+        from yqsbtz
+        <where>
+            <if test="map.yqmc!=null and map.yqmc!=''">
+                name like concat('%',#{map.yqmc},'%')
+            </if>
+            <choose>
+                <when test="map.startDate!=null and map.endDate!=null">
+                    and gzrq between #{map.startDate} and #{map.endDate}
+                </when>
+                <otherwise>
+                    <choose>
+                        <when test="map.startDate!=null and map.endDate==null">
+                            and gzrq &gt;= #{map.startDate}
+                        </when>
+                        <otherwise>
+                            <choose>
+                                <when test="map.startDate==null and map.endDate!=null">
+                                    and gzrq  &lt;= #{map.endDate}
+                                </when>
+                            </choose>
+                        </otherwise>
+                    </choose>
+                </otherwise>
+            </choose>
+        </where>
+    </select>
+    <!-- 查找检测项目-->
+    <select id="findAllJcxm" resultType="map">
+        select id,zwmc_bm,xl,cyl,yl,pdyj,jcyj,if_yqfp
+        from t_jcxm_jbxx
+        <where>
+            if_yqfp="001" or if_yqfp=""
+            <if test="map.jcxmc!=null and map.jcxmc!=''">
+               and zwmc_bm like concat('%',#{map.jcxmc},'%')
+            </if>
+        </where>
+        limit #{map.start},#{map.length};
+    </select>
+    <!--查找检测项目的所有数据-->
+    <select id="findAllJcxmNum" resultType="java.lang.Integer">
+        select count(*)
+        from t_jcxm_jbxx
+        <where>
+            if_yqfp="001" or if_yqfp=""
+            <if test="map.jcxmc!=null and map.jcxmc!=''">
+               and  zwmc_bm like concat('%',#{map.jcxmc},'%')
+            </if>
+        </where>
+    </select>
+<!-- 更新检测项目的if_yqfp 是否仪器分配-->
+    <update id="updataJcxm_If_yqfp">
+        update t_jcxm_jbxx set
+        IF_YQFP=#{map.if_yqfp}
+        where id=#{map.id}
+    </update>
+    <!-- 更新仪器项目dqzt 当前的状态-->
+    <update id="updateYq_dqzt">
+        update yqsbtz set
+         dqzt=#{map.dqzt}
+         where id=#{map.id}
+    </update>
+    <!-- 增加检测项和仪器表-->
+    <insert id="addJcxYq">
+        insert into t_jcxm_yq(jcxmid,yqid)
+        values (#{map.jcxmid},#{map.yqid})
+    </insert>
+</mapper>

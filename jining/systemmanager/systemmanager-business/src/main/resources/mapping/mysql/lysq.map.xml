@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xinhai.caiyun.systemmanager.dao.LysqMapper">
+    <!--得到领用申请的信息 陈-->
+    <select id="queryLysqAll" resultType="map">
+        select rk.hcmc,rk.id as kcid,rk.gg,rk.jb,rk.sl,ly.id as id,rk.sccj,rk.hclx,
+        (select name from user where zydm=ly.lyr) as lyr,
+        ly.lyrq,ly.lysl,ly.lyzt,ly.lysp1,ly.lysp2
+        from t_hcly_jbxx ly
+        left join t_cgrk_jbxx rk
+        on ly.kcid=rk.id
+        where lyr=#{map.lyr}
+        <if test="map.hclx==null or map.hclx==''">
+            and rk.hclx != '5'
+        </if>
+        <if test="map.hclx!=null and map.hclx!=''">
+            and rk.hclx=#{map.hclx}
+        </if>
+        order by ly.id desc
+        limit #{map.start},#{map.length};
+    </select>
+    <!--得到领用申请的信息的数量 陈-->
+    <select id="queryLysqAllNum" resultType="java.lang.Integer">
+        select count(ly.id)
+        from t_hcly_jbxx ly
+        left join t_cgrk_jbxx rk
+        on ly.kcid=rk.id
+        where lyr=#{map.lyr}
+        <if test="map.hclx==null or map.hclx==''">
+            and rk.hclx != '5'
+        </if>
+        <if test="map.hclx!=null and map.hclx!=''">
+            and rk.hclx=#{map.hclx}
+        </if>
+        order by ly.id desc;
+    </select>
+    <!--通过hcbm  在采购申请表中查找信息 陈-->
+    <select id="queryCgrkByHcbm" resultType="map">
+        select id,hcmc,gg,jb,sl
+        from t_cgrk_jbxx
+        where hcbm=#{hcbm};
+    </select>
+    <!-- 将申请表中的信息 放入入库表中 陈-->
+    <insert id="addHclyFromCgrk">
+        insert into t_hcly_jbxx (kcid,lyr,lyrq,lysl,lysp1,lysp2,lyzt)
+        values
+        (#{map.id},#{map.lyr},now(),#{map.lysl},'002','002','002');
+        update t_cgrk_jbxx set sl=#{map.sl} where id=#{map.id};
+    </insert>
+    <!--  根据耗材编码查找id 陈-->
+    <select id="queryIdByHcbm" resultType="string">
+        select id from t_cgrk_jbxx where hcbm=#{hcbm};
+     </select>
+    <!-- 删除领用信息信息 陈-->
+    <delete id="delLysq">
+        delete from t_hcly_jbxx  where id=#{id};
+    </delete>
+    <!-- 得到库存的数量 陈-->
+    <select id="queryKcNum" resultType="java.lang.String">
+        select sl from t_cgrk_jbxx where hcbm=#{hcbm};
+    </select>
+</mapper>

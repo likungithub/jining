@@ -1,0 +1,28 @@
+@CHARSET "UTF-8";
+#role-manager-content #roleForm{
+    min-width: 630px;
+}
+
+#role-manager-content .textArea{
+    height: 86px;
+    width: 500px;
+    border-bottom-right-radius: 4px !important;
+    border-top-right-radius: 4px !important;
+    padding:15px;
+    border:1px solid #e5e5e5;
+}
+#role-manager-content .save>button{
+    display: block;
+    margin-left: 538px;
+}
+#role-manager-content   .beizhulabel{
+    height: 114px;
+    line-height: 95px;
+    text-align: center;
+    position: relative;
+    bottom: 1px;
+}
+#role-manager-content   .beizhulabel+textarea{
+    resize: none;
+    border-radius: 0 4px 4px 0!important;
+}

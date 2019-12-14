@@ -1,0 +1,140 @@
+html,body{
+	width: 100%;
+	height: 100%;
+}
+*{
+	margin: 0;
+	padding: 0;
+	list-style: none;
+	text-decoration: none;
+	outline: none;
+}
+#imPhone{
+	width: 100%;
+	height: 100%;
+    overflow: hidden;
+}
+#imPhone .messageSearch{
+	background: #F5F5F5;
+    height: .8rem;
+    padding-top: .2rem;
+}
+#imPhone .messageSearch i{
+    font-size: 0.35rem;
+    margin-left: .2rem;
+    color: #999;
+    vertical-align: middle;
+    float: left;
+    margin-top: .1rem;
+    margin-right: .2rem;
+}
+#imPhone .messageSearch input{
+    width: 5rem;
+    height: .4rem;
+    border: 0;
+    font-size: .29rem;
+    padding: 0 0.2rem;
+    background: #fff;
+    color: #999;
+    /* margin-left: .2rem; */
+    vertical-align: middle;
+    float: left;
+    margin-top: .1rem;
+    margin-bottom: .1rem;
+    padding-left: 0;
+}
+#imPhone .tabClick{
+	height: .85rem;
+	/*overflow: hidden;*/
+	margin-bottom: .1rem;
+    border-bottom: .04rem solid #f0f0f0;
+	
+}
+#imPhone .tabClick li{
+    width: 50%;
+    height: .85rem;
+    line-height: .85rem;
+    text-align: center;
+    float: left;
+    font-size: .3rem;
+}
+#imPhone .tabClick li a{
+    padding: .24rem .2rem;
+
+}
+#imPhone .messageList{
+    padding: 0rem 0.1rem;
+    overflow-y: auto;
+   height: 13.5rem;
+}
+#imPhone .messageList li {
+	padding: .1rem .2rem;
+    border-bottom: .01rem solid #f0f0f0;
+    position: relative;
+}
+#imPhone .messageList li img{
+    width: .9rem;
+    height: .9rem;
+    border-radius: 50%;
+    float: left;
+}
+#imPhone .messageList li .userMain{
+    width: 4.9rem;
+    height: 1rem;
+    line-height: 1rem;
+    float: left;
+}
+#imPhone .messageList li .userMain .messageName{
+    font-size: .28rem;
+    margin-left: .15rem;
+    float: left;
+    height: 43%;
+    line-height: 0.5rem;
+}
+#imPhone .messageList li .userMain .messageDate{
+    float: right;
+    font-size: .24rem;
+    color: #666;
+    line-height: .5rem;
+    transform: scale(.8);
+}
+#imPhone .clear{
+	clear: both;
+}
+.tabStyle{
+    border-bottom: .03rem solid #EB8A05;
+}
+input::-webkit-input-placeholder{
+    color:#999;
+}
+input::-moz-placeholder{   /* Mozilla Firefox 19+ */
+    color:#999;
+}
+input:-moz-placeholder{    /* Mozilla Firefox 4 to 18 */
+    color:#999;
+}
+input:-ms-input-placeholder{  /* Internet Explorer 10-11 */ 
+    color:#fefefe;
+}
+.messageRed{
+    position: absolute;
+    width: .25rem;
+    height: .25rem;
+    background: red;
+    border-radius: 50%;
+    top: .1rem;
+    left: .9rem;
+    display: none;
+}
+.messageShow{
+    display: block!important;
+}
+
+.lastMessage{
+    font-size: .2rem;
+    margin: 0;
+    height: .3rem;
+    line-height: .3rem;
+    padding: 0 .16rem;
+    color: #ccc;
+}

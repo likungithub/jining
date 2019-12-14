@@ -1,0 +1,12 @@
+@CHARSET "UTF-8";
+.followRemind-m .modal-content {
+    width: 1200px;
+    position: absolute;
+    left: 50%;
+    margin-left: -600px;
+    top: 10px;
+}
+
+#SWSBDiv span.select2-container--bootstrap {
+    width: 150px !important;
+}

@@ -1,0 +1,840 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD 
+
+ Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd ">
+
+<mapper namespace="com.xinhai.usermanager.dao.UserMapper">
+
+	<resultMap id="userResultMap" type="com.xinhai.usermanager.entity.User">
+		<id property="id" column="id" />
+		<result property="userAccount" column="user_account" />
+		<result property="password" column="password" />
+		<result property="name" column="name" />
+		<result property="enabled" column="is_enabled" />
+		<result property="ifManager" column="if_manager" />
+		<result property="tel" column="tel" />
+		<result property="email" column="email" />
+		<result property="customerId" column="customer_id" />
+		<result property="orgId" column="org_id" />
+		<result property="bmdm" column="bmdm" />
+		<result property="lastLoginDate" column="last_login_date" />
+		<result property="createDate" column="create_date" />
+		<result property="shDate" column="sh_date" />
+		<result property="remark" column="remark" />
+		<result property="ygid" column="ygid" />
+		<result property="ygtx" column="ygtx" />
+		<result property="isDelete" column="is_delete" />
+		<result property="zydm" column="zydm" />
+		<result property="xbdm" column="xbdm" />
+		<result property="csrq" column="csrq" />
+		<result property="ygxl" column="ygxl" />
+		<result property="sfzhm" column="sfzhm" />
+		<result property="cyzz" column="cyzz" />
+		<result property="cyrq" column="cyrq" />
+		<result property="yddh" column="yddh" />
+		<result property="qq" column="qq" />
+		<result property="bzxx" column="bzxx" />
+		<result property="lxdz" column="lxdz" />
+		<result property="jsdm" column="jsdm" />
+		<result property="nsrsbh" column="nsrsbh" />
+		<result property="dljgBm" column="dljg_bm" />
+		<result property="lrry" column="lrry" />
+		<result property="gxry" column="gxry" />
+		<result property="scry" column="scry" />
+		<result property="gxrq" column="gxrq" />
+		<result property="scrq" column="scrq" />
+		<result property="is_first" column="if_first"/>
+		<result property="fwksrq" column="fwksrq"/>
+        <result property="fwjsrq" column="fwjsrq"/>
+        <result property="shyj" column="shyj"/>
+        <result property="jfsj" column="jfsj"/>
+        <result property="jfzt" column="jfzt"/>
+	</resultMap>
+
+    <resultMap id="userInfoImageMap" type="com.xinhai.usermanager.entity.UserInfoImage">
+        <id property="id" column="id"/>
+        <result property="zydm" column="zydm"/>
+        <!-- <result property="nsrsbh" column="nsrsbh"/> -->
+        <result property="dljg_bm" column="dljg_bm"/>
+        <result property="fjmc" column="fjmc"/>
+        <result property="fjlx" column="fjlx"/>
+        <result property="fjcclj" column="fjcclj"/>
+        <result property="wjlx" column="wjlx"/>
+        <result property="wjdx" column="wjdx"/>
+        <result property="xzcs" column="xzcs"/>
+        <result property="scbz" column="scbz"/>
+        <result property="lrry" column="lrry"/>
+        <result property="gxry" column="gxry"/>
+        <result property="scry" column="scry"/>
+        <result property="scsj" column="scsj"/>
+        <result property="gxrq" column="gxrq"/>
+        <result property="scrq" column="scrq"/>
+    </resultMap>
+
+	<insert id="addUser" parameterType="com.xinhai.usermanager.entity.User"
+		keyProperty="id" useGeneratedKeys="true">
+		INSERT INTO user (id, user_account,
+		name, password, is_enabled, if_manager, tel, email,
+		customer_id, org_id, bmdm, bmqxdm, create_date, remark, is_delete, zydm, xbdm, csrq,
+		ygxl, sfzhm, cyzz, cyrq, yddh, qq, bzxx, lxdz, jsdm, nsrsbh, dljg_bm, lrry, jfzt)
+		VALUES (#{id},
+		#{userAccount}, #{name}, #{password}, #{enabled}, #{ifManager}, #{tel}, #{email},
+		#{customerId}, #{orgId}, #{bmdm}, #{bmqxdm}, now(), #{remark}, false,
+		#{zydm}, #{xbdm}, #{csrq}, #{ygxl}, #{sfzhm}, #{cyzz}, #{cyrq}, #{yddh}, #{qq}, #{bzxx}, #{lxdz}, #{jsdm},
+		#{nsrsbh}, #{dljgBm}, #{lrry}, false);
+	</insert>
+	<insert id="setUserRole">
+		INSERT INTO user_role (user_id, role_id) VALUES
+		<foreach collection="roleIds" item="roleId" index="index"
+			separator=",">
+			(#{id}, #{roleId})
+		</foreach>
+	</insert>
+	<insert id="setUserRole2"> <!-- 新的 -->
+        INSERT INTO user_role (user_id, role_id) VALUES
+        <foreach collection="ids" item="id" index="index"
+            separator=",">
+            (#{id}, #{roleId})
+        </foreach>
+    </insert>
+	<insert id="setUserAuth">
+		INSERT INTO user_auth (user_id, resource_id) VALUES
+		<foreach collection="authIds" item="authId" index="index"
+			separator=",">
+			(#{id}, #{authId})
+		</foreach>
+	</insert>
+	<update id="updateUserPassword">
+		UPDATE user
+		SET password = #{yhmm}
+		where user_account = #{yhzh};
+	</update>
+	<update id="deleteUser">
+		UPDATE user
+		SET is_delete = TRUE
+		WHERE id = #{id};
+	</update>
+
+	<update id="deleteUserbyzydm">
+		delete from user where zydm = #{zydm};
+	</update>
+	
+	<update id="deleteList" parameterType="List">
+        UPDATE user
+        SET is_delete = TRUE,
+        scry = #{scry},
+        scrq = now()
+        WHERE id in
+        <foreach item="id" collection="ids" open="(" separator=","
+            close=")">
+            #{id}
+        </foreach>
+    </update>
+    
+    <update id="revertList" parameterType="List">
+        UPDATE user
+        SET is_delete = false
+        WHERE id in
+        <foreach item="id" collection="ids" open="(" separator=","
+            close=")">
+            #{id}
+        </foreach>
+    </update>
+    
+	<update id="updateUser">
+		UPDATE user
+		SET name = #{user.name},
+		xbdm = #{user.xbdm},
+		csrq = #{user.csrq},
+        <if test="user.ygxl != null">
+		    ygxl = #{user.ygxl},
+        </if>
+        <if test="user.sfzhm != null">
+	    	sfzhm = #{user.sfzhm},
+        </if>
+        <if test="user.cyzz != null">
+	    	cyzz = #{user.cyzz},
+        </if>
+        <if test="user.cyrq != null">
+	    	cyrq = #{user.cyrq},
+        </if>
+		qq = #{user.qq},
+		tel = #{user.tel},
+		yddh = #{user.yddh},
+		email = #{user.email},
+		lxdz = #{user.lxdz},
+		<if test="user.bmdm != null and user.bmdm != ''">
+		  bmdm = #{user.bmdm},
+		</if>
+		<if test="user.bmqxdm != null and user.bmqxdm != ''">
+          bmqxdm = #{user.bmqxdm},
+        </if>
+		remark = #{user.remark}
+		WHERE id = #{id};
+	</update>
+	
+	<!-- 重置密码 -->
+	<update id="resetUserPwd" parameterType="List">
+		UPDATE user
+		SET password = #{pwd}
+		WHERE id in
+        <foreach item="id" collection="ids" open="(" separator=","
+            close=")">
+            #{id}
+        </foreach>
+	</update>
+	<update id="setUserStatus">
+		UPDATE user
+		SET is_enabled = #{status}
+		WHERE id =
+		#{id};
+	</update>
+	<!-- 更改员工部门 -->
+	<update id="changeOrg" parameterType="List">
+		UPDATE user
+		SET bmdm = #{orgId}
+		<!-- (
+		  select code from organization
+		  where id = #{orgId}
+		  ) -->
+		WHERE id in
+        <foreach item="id" collection="ids" open="(" separator=","
+            close=")">
+            #{id}
+        </foreach>
+	</update>
+	<update id="updateUserPwd">
+		UPDATE user
+		SET password = #{newPwd}
+		WHERE user_account
+		= #{currentAccount};
+	</update>
+	<!-- 更新用户表中的角色 -->
+	<update id="updateTole" parameterType="List">
+		UPDATE user
+		SET jsdm = #{roleIds}
+		WHERE id in
+        <foreach item="id" collection="ids" open="(" separator=","
+            close=")">
+            #{id}
+        </foreach>
+	</update>
+	
+	<!-- 更新用户表中的单个角色 -->
+    <update id="updateToleOne" >
+        UPDATE user
+        SET jsdm = #{roleIds}
+        WHERE id = #{id}
+    </update>
+    
+	<delete id="deleteUserRole" parameterType="List">
+		DELETE FROM user_role
+		WHERE user_id in
+        <foreach item="id" collection="ids" open="(" separator=","
+            close=")">
+            #{id}
+        </foreach>
+	</delete>
+
+	<delete id="deleteUserRoleOne">
+        DELETE FROM user_role
+        WHERE user_id = #{id}
+    </delete>
+    
+    <delete id="deleteKhRoleOne">
+        DELETE FROM user_role_kh
+        WHERE user_id in
+        <foreach item="id" collection="ids" open="(" separator=","
+            close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+	<delete id="deleteUserAuth">
+		DELETE FROM user_auth
+		WHERE user_id = #{id};
+	</delete>
+	<select id="getUser" resultMap="userResultMap">
+		SELECT id, user_account,
+        name, password, is_enabled, if_manager, tel, email,
+        customer_id, org_id, bmdm, bmqxdm, last_login_date, create_date, sh_date, 
+        remark, ygid, ygtx, is_delete, zydm, xbdm, csrq, ygxl, sfzhm, cyzz, cyrq,
+        yddh, qq, bzxx, lxdz, jsdm, nsrsbh, dljg_bm, lrry, if_first, fwksrq, fwjsrq, shyj, jfsj, jfzt
+		FROM user
+		WHERE id = #{id};
+		<!-- AND is_delete = FALSE -->
+	</select>
+	<!-- 未使用 -->
+	<select id="getUserByCustomerId" resultMap="userResultMap">
+		SELECT id, user_account,
+        name, password, is_enabled, if_manager, tel, email,
+        customer_id, org_id, bmdm, bmqxdm, last_login_date, create_date, sh_date, 
+        remark, ygid, ygtx, is_delete, zydm, xbdm, csrq, ygxl, sfzhm, cyzz, cyrq,
+        yddh, qq, bzxx, lxdz, jsdm, nsrsbh, dljg_bm, lrry, fwksrq, fwjsrq, shyj, jfsj, jfzt
+        FROM user
+		WHERE customer_id = #{customer_id} AND is_delete = FALSE;
+	</select>
+	
+	<!-- 根据zydm获取用户信息 -->
+	<select id="getUserByZydm" resultMap="userResultMap">
+        SELECT id, user_account,
+        name, password, is_enabled, if_manager, tel, email,
+        customer_id, org_id, bmdm, bmqxdm, last_login_date, create_date, sh_date, 
+        remark, ygid, ygtx, is_delete, zydm, xbdm, csrq, ygxl, sfzhm, cyzz, cyrq,
+        yddh, qq, bzxx, lxdz, jsdm, nsrsbh, dljg_bm, lrry, fwksrq, fwjsrq, shyj, jfsj, jfzt
+        FROM user
+        WHERE zydm = #{zydm};
+    </select>
+    
+    <!-- 根据zydm或者用户ID获取 用户账号 -->
+    <select id="getUserAccount" resultType="java.lang.String">
+        SELECT  zydm
+        FROM user 
+        <where>
+          <if test='ids != null and ids.size() > 0'>
+            id in
+              <foreach item="id" collection="ids" open="(" separator=","
+              close=")">
+          #{id}
+            </foreach>
+         </if>
+          <if test='zydms != null and zydms.size() > 0'>
+           or zydm  in
+              <foreach item="zydm" collection="zydms" open="(" separator=","
+              close=")">
+           #{zydm}
+            </foreach>
+          </if>
+        </where>
+    </select>
+    
+    <!-- 根据代理机构id查询全部未离职的非管理员员工 -->
+	<select id="getUsers" resultMap="userResultMap">
+		SELECT id, user_account,
+        name, password, is_enabled, if_manager, tel, email,
+        customer_id, org_id, bmdm, bmqxdm, last_login_date, create_date, sh_date, 
+        remark, ygid, ygtx, is_delete, zydm, xbdm, csrq, ygxl, sfzhm, cyzz, cyrq,
+        yddh, qq, bzxx, lxdz, jsdm, nsrsbh, dljg_bm, lrry, fwksrq, fwjsrq, shyj, jfsj, jfzt
+		FROM user
+		WHERE is_delete
+		= FALSE and if_manager = 0 AND customer_id = #{customerId}
+		order by create_date desc;
+	</select>
+	
+	<!-- 查出有该资源节点的全部角色id -->
+	<select id="getRolesByResourceId1" resultType="java.lang.String">
+        select role_id 
+        from role_auth 
+        where resource_id=#{resourceId}
+    </select>
+	
+	<!-- 查出本机构中有该角色的所有用户 -->
+	<select id="getRolesByResourceId2" resultType="java.lang.String">
+        SELECT u.id FROM user u
+        LEFT JOIN user_role ur ON u.id = ur.user_id
+        WHERE is_delete = FALSE AND
+        ur.role_id = #{roleId}
+        and dljg_bm = #{dljgBm}
+    </select>
+    
+    <!-- 用户登录账户是否已经存在 -->
+	<select id="hasAccountExist" resultType="java.lang.Integer">
+		SELECT COUNT(0)
+		FROM user
+		WHERE user_account = #{account};
+	</select>
+	
+	<!-- 未使用 -->
+	<select id="getUserAuth" resultType="java.lang.String">
+		SELECT resource_id
+		FROM
+		user_auth
+		WHERE user_id = #{id};
+	</select>
+	
+	<!-- 根据员工id查询员工所在部门id -->
+	<select id="getUserOrg" resultType="java.lang.String">
+		SELECT id
+		from organization
+		where code=(SELECT bmdm
+		FROM user
+		WHERE id = #{id} AND is_delete = false
+		);
+	</select>
+	
+	<!-- 查询该用户全部的角色id -->
+	<select id="getUserRole" resultType="java.lang.String">
+		SELECT role_id
+		FROM user_role
+		WHERE user_id = #{id};
+	</select>
+	
+	<!-- 根据 代理机构uuid和部门编码查找该部门下的用户 -->
+	<select id="getUsersByOrg" resultMap="userResultMap">
+		SELECT id, user_account,
+        name, password, is_enabled, if_manager, tel, email,
+        customer_id, org_id, bmdm, bmqxdm, last_login_date, create_date, sh_date, 
+        remark, ygid, ygtx, is_delete, zydm, xbdm, csrq, ygxl, sfzhm, cyzz, cyrq,
+        yddh, qq, bzxx, lxdz, jsdm, nsrsbh, dljg_bm, lrry, fwksrq, fwjsrq, shyj, jfsj, jfzt
+        FROM user WHERE is_delete = FALSE
+		AND customer_id = #{customerId}
+		AND bmdm LIKE CONCAT('%',#{bmdm},'%' );
+	</select>
+	
+	<!-- 根据代理机构编码获得机构下所有员工信息 -->
+	<select id="getUsersByDljgBm" resultMap="userResultMap">
+        SELECT id, zydm, name,if_manager
+        FROM user
+        WHERE dljg_bm = #{dljgBm} AND is_delete = false;
+    </select>
+	
+	<!-- 通过多个roleID查询出Role姓名集合，并用，连接起来 -->
+	<select id="getRoleNames" resultType="java.lang.String">
+		select group_concat(name)
+		from role
+		WHERE id in
+		<foreach item="id" collection="ids" open="(" separator=","
+			close=")">
+			#{id}
+		</foreach>
+	</select>
+	
+	<!-- 查询出该角色对应的未删除的用户 -->
+	<select id="getUsersByIds" resultType="java.lang.Integer">
+		SELECT count(1) FROM user WHERE is_delete = FALSE
+		AND id in
+		<foreach item="id" collection="ids" open="(" separator=","
+			close=")">
+			#{id}
+		</foreach>
+	</select>
+	
+	<!-- 通过代理机构id和下属的bmdm查询所有未删除的费管理员用户 -->
+	<select id="getUsersByBmdm" resultMap="userResultMap">
+		SELECT id, user_account,
+        name, password, is_enabled, if_manager, tel, email,
+        customer_id, org_id, bmdm, bmqxdm, last_login_date, create_date, sh_date, 
+        remark, ygid, ygtx, is_delete, zydm, xbdm, csrq, ygxl, sfzhm, cyzz, cyrq,
+        yddh, qq, bzxx, lxdz, jsdm, nsrsbh, dljg_bm, lrry, fwksrq, fwjsrq, shyj, jfsj, jfzt 
+		FROM user WHERE is_delete = FALSE
+		AND customer_id = #{customerId}
+		and if_manager = 0
+		AND bmdm in
+		<foreach item="bmdm" collection="bmdms" open="(" separator=","
+			close=")">
+			#{bmdm}
+		</foreach>
+		order by create_date desc
+	</select>
+	
+	<!-- 通过代理机构id查询所有未删除的费管理员用户 -->
+    <select id="getUsersByBmdmAndSearChText" resultMap="userResultMap">
+        SELECT a.id, a.user_account, a.name, a.if_manager, a.tel, a.email,
+        a.customer_id, a.org_id, a.bmdm, c.name as orgName, a.create_date, 
+        a.ygid, a.ygtx, a.is_delete, a.zydm,
+        a.yddh, a.qq, a.lxdz, b.name as jsdm, a.nsrsbh, a.dljg_bm, a.lrry
+        FROM user a
+        left join role b on a.jsdm = b.id
+        left join organization c on a.bmdm = c.code
+        where a.dljg_bm = #{dljgBm} and a.is_delete = false <!--and a.if_manager = false-->
+        <if test="searchText != null and searchText != ''">
+            and CONCAT(a.user_account,a.name) like CONCAT('%',#{searchText},'%')
+        </if>
+        <if test='ygssbm != "0" '>
+            and a.bmdm = #{ygssbm}
+        </if>
+        <if test='ygssjs != "0" '>
+            and a.jsdm = #{ygssjs}
+        </if>
+        <if test="createTime != null">
+            and #{createTime} >= a.create_date
+        </if>
+		and FuncAuthorityUser(#{zydm}, a.bmdm, a.zydm) = 1
+        order by a.create_date desc;
+    </select>
+    
+    <!-- 查找本人权限 -->
+    <select id="findOnlySelf" resultMap="userResultMap">
+        SELECT id, user_account,
+        name, password, is_enabled, if_manager, tel, email,
+        customer_id, org_id, bmdm, bmqxdm, last_login_date, create_date, sh_date, 
+        remark, ygid, ygtx, is_delete, zydm, xbdm, csrq, ygxl, sfzhm, cyzz, cyrq,
+        yddh, qq, bzxx, lxdz, jsdm, nsrsbh, dljg_bm, lrry, fwksrq, fwjsrq, shyj, jfsj, jfzt 
+        FROM user WHERE is_delete = FALSE
+        AND zydm = #{zydm}
+        <if test="searchText != null and searchText != ''">
+          and CONCAT(user_account,name) like CONCAT('%',#{searchText},'%')
+        </if>
+    </select>
+   
+	
+	<!-- 通过代理机构id查询所有已删除的非管理员用户 -->
+	<select id="getUsersByBmdmDel" resultMap="userResultMap">
+	
+	    SELECT a.id, a.user_account, a.name, a.if_manager, a.tel, a.email,
+        a.customer_id, a.org_id, a.bmdm, c.name as orgName, a.create_date, 
+        a.ygid, a.ygtx, a.is_delete, a.zydm,
+        a.yddh, a.qq, a.lxdz, b.name as jsdm, a.nsrsbh, a.dljg_bm, a.lrry
+        FROM user a
+        left join role b on a.jsdm = b.id
+        left join organization c on a.bmdm = c.code
+        where a.dljg_bm = #{dljgBm} and a.is_delete = true and a.if_manager = false
+        <if test="searchText != null and searchText != ''">
+            and CONCAT(a.user_account,a.name) like CONCAT('%',#{searchText},'%')
+        </if>
+        <if test='ygssbm != "0" '>
+            and a.bmdm = #{ygssbm}
+        </if>
+        <if test='ygssjs != "0" '>
+            and a.jsdm = #{ygssjs}
+        </if>
+        <if test="createTime != null">
+            and #{createTime} >= a.create_date
+        </if>
+		and FuncAuthorityUser(#{zydm}, a.bmdm, a.zydm) = 1
+        order by a.create_date desc;
+        
+    </select>
+    
+    <!-- 通过代理机构id查询所有已删除的费管理员用户 -->
+    <select id="getUsersDel" resultMap="userResultMap">
+        SELECT id, user_account,
+        name, password, is_enabled, if_manager, tel, email,
+        customer_id, org_id, bmdm, bmqxdm, last_login_date, create_date, sh_date, 
+        remark, ygid, ygtx, is_delete, zydm, xbdm, csrq, ygxl, sfzhm, cyzz, cyrq,
+        yddh, qq, bzxx, lxdz, jsdm, nsrsbh, dljg_bm, lrry, fwksrq, fwjsrq, shyj, jfsj, jfzt 
+        FROM user WHERE is_delete = true
+        AND customer_id = #{customerId}
+        and if_manager = 0
+    </select>
+    
+    <!-- 通过代理机构id和下属的bmdm和员工姓名查询所有已删除的费管理员用户 -->
+	<select id="getUsersByBmdmLikeKey" resultMap="userResultMap">
+	    SELECT id, user_account,
+        name, password, is_enabled, if_manager, tel, email,
+        customer_id, org_id, bmdm, bmqxdm, last_login_date, create_date, sh_date, 
+        remark, ygid, ygtx, is_delete, zydm, xbdm, csrq, ygxl, sfzhm, cyzz, cyrq,
+        yddh, qq, bzxx, lxdz, jsdm, nsrsbh, dljg_bm, lrry, fwksrq, fwjsrq, shyj, jfsj, jfzt 
+        FROM user WHERE is_delete = FALSE
+        AND customer_id = #{customerId}
+        AND CONCAT(name) LIKE CONCAT('%',#{key},'%')
+        AND bmdm in
+        <foreach item="bmdm" collection="bmdms" open="(" separator=","
+            close=")">
+            #{bmdm}
+        </foreach>
+	</select>
+	
+	<!-- 查询具有该角色的全部员工 -->
+	<select id="getUsersByRoleId" resultMap="userResultMap">
+		SELECT u.id, u.user_account,
+        u.name, u.password, u.is_enabled, u.if_manager, u.tel, u.email,
+        u.customer_id, u.org_id, u.bmdm, u.bmqxdm, u.last_login_date, u.create_date, u.sh_date, 
+        u.remark, u.ygid, u.ygtx, u.is_delete, u.zydm, u.xbdm, u.csrq, u.ygxl, u.sfzhm, u.cyzz, u.cyrq,
+        u.yddh, u.qq, u.bzxx, u.lxdz, u.jsdm, u.nsrsbh, u.dljg_bm, u.lrry, u.fwksrq, u.fwjsrq, u.shyj, u.jfsj, u.jfzt  
+        FROM user u
+		LEFT JOIN user_role ur ON u.id = ur.user_id
+		WHERE is_delete = FALSE AND
+		ur.role_id = #{roleId}
+	</select>
+	
+	<!-- 根据登陆账户获取用户信息 -->
+	<select id="getUserByAccount" resultMap="userResultMap">
+		SELECT id, user_account,
+        name, password, is_enabled, if_manager, tel, email,
+        customer_id, org_id, bmdm, bmqxdm, last_login_date, create_date, sh_date, 
+        remark, ygid, ygtx, is_delete, zydm, xbdm, csrq, ygxl, sfzhm, cyzz, cyrq,
+        yddh, qq, bzxx, lxdz, jsdm, nsrsbh, dljg_bm, lrry, fwksrq, fwjsrq, shyj, jfsj, jfzt 
+		FROM user
+		WHERE
+		is_delete = FALSE AND user_account = #{userAccount};
+	</select>
+	
+	<!-- 通过员工id查询 -->
+	<select id="getUserByYgid" parameterType="java.lang.String" resultMap="userResultMap">
+        SELECT id, user_account,
+        name, password, is_enabled, if_manager, tel, email,
+        customer_id, org_id, bmdm, bmqxdm, last_login_date, create_date, sh_date, 
+        remark, ygid, ygtx, is_delete, zydm, xbdm, csrq, ygxl, sfzhm, cyzz, cyrq,
+        yddh, qq, bzxx, lxdz, jsdm, nsrsbh, dljg_bm, lrry, fwksrq, fwjsrq, shyj, jfsj, jfzt 
+        FROM user
+        WHERE
+        is_delete = FALSE AND ygid = #{ygid};
+    </select>
+    
+    <!-- 校验密码 -->
+	<select id="verifyPwd" resultType="java.lang.Integer">
+		SELECT COUNT(0)
+		FROM user
+		WHERE
+		is_delete = FALSE AND user_account = #{currentAccount} AND password =
+		#{originPwd};
+	</select>
+	
+	<!-- 查询最大的职员代码 -->
+	<select id="selectMaxYgid" resultType="java.lang.Integer">
+		SELECT MAX(ygid)
+		FROM user
+	</select>
+	
+	<!-- 无用 -->
+	<select id="findUser" resultMap="userResultMap">
+		select name,zydm from user where DLJG_BM=#{dl} and is_delete='0'
+	</select>
+	
+	<!-- 获取全部用户信息（具有某项权限的） -->
+	<select id="getUsersWithAuth" resultMap="userResultMap">
+        
+        select id, user_account,
+        name, password, is_enabled, if_manager, tel, email,
+        customer_id, org_id, bmdm, bmqxdm, last_login_date, create_date, sh_date, 
+        remark, ygid, ygtx, is_delete, zydm, xbdm, csrq, ygxl, sfzhm, cyzz, cyrq,
+        yddh, qq, bzxx, lxdz, jsdm, nsrsbh, dljg_bm, lrry, fwksrq, fwjsrq, shyj, jfsj, jfzt  
+        from user as a
+          where exists
+          (
+            select 1 from (
+                select distinct(a.id) 
+              from user a 
+              left join user_role b on a.id = b.user_id
+              where b.role_id in (
+                select distinct(role_id) 
+                from role_auth  
+                where resource_id = #{resourceId}
+              )
+              ) as b where a.id = b.id
+        )
+        
+        
+        <!-- select id, user_account,
+        name, password, is_enabled, if_manager, tel, email,
+        customer_id, org_id, bmdm, last_login_date, create_date, sh_date, 
+        remark, ygid, ygtx, is_delete, zydm, xbdm, csrq, ygxl, sfzhm, cyzz, cyrq,
+        yddh, qq, bzxx, lxdz, jsdm, nsrsbh, dljg_bm, lrry  
+        from user where id in (
+          select distinct(a.id) 
+          from user a 
+          left join user_role b on a.id = b.user_id 
+          where b.role_id in (
+            select distinct(role_id) 
+            from role_auth  
+            where resource_id = #{resourceId}
+          )
+        ) -->
+    </select>
+	
+	<update id="addUserHeadImg">
+	   UPDATE user
+        SET ygtx = #{user.ygtx}
+        WHERE id = #{id};
+	</update>
+	
+	<!-- 无用 -->
+	<select id="findUserByname" resultType="java.lang.String">
+	select zydm from user where name=#{xcgjr}
+	</select>
+	
+	<!-- 获取全部用户信息（具有权限管理（代理）的） -->
+	<select id="findUserBydlByresource" resultMap="userResultMap">
+       SELECT id, user_account,
+        name, password, is_enabled, if_manager, tel, email,
+        customer_id, org_id, bmdm, bmqxdm, last_login_date, create_date, sh_date, 
+        remark, ygid, ygtx, is_delete, zydm, xbdm, csrq, ygxl, sfzhm, cyzz, cyrq,
+        yddh, qq, bzxx, lxdz, jsdm, nsrsbh, dljg_bm, lrry, fwksrq, fwjsrq, shyj, jfsj, jfzt 
+        from user where dljg_bm = #{dl} and is_delete = false and is_enabled=1 and if_manager= false and id in (
+            select distinct(user_id) from user_role where role_id in (
+                select distinct(role_id) from role_auth where resource_id = 'f7f19217-004a-42f0-8306-f1192de8d12a'
+            )
+        )
+    </select>
+	<update id="updateByUser">
+	update user set if_first='1' where ID=#{userZydm}
+	</update>
+    <insert id="insertUserInfoImage" parameterType="com.xinhai.usermanager.entity.UserInfoImage">
+        INSERT INTO pt_ygxx_fjxx (zydm,dljg_bm,fjmc,fjcclj,wjlx,wjdx,fjlx,xzcs,lrry,gxry,scry,scsj,gxrq,scrq)
+        VALUES (#{userInfoImage.zydm},#{userInfoImage.dljg_bm},#{userInfoImage.fjmc},#{userInfoImage.fjcclj},
+        #{userInfoImage.wjlx},#{userInfoImage.wjdx},#{userInfoImage.fjlx},#{userInfoImage.xzcs},
+        #{userInfoImage.lrry},#{userInfoImage.gxry},#{userInfoImage.scry},
+        #{userInfoImage.scsj},#{userInfoImage.gxrq},#{userInfoImage.scrq});
+    </insert>
+    <select id="findUserImageList" resultMap="userInfoImageMap">
+        SELECT id,zydm,dljg_bm,fjmc,fjcclj,wjlx,wjdx,fjlx,xzcs,lrry,gxry,scry,scsj,gxrq,scrq
+        FROM pt_ygxx_fjxx
+        WHERE scbz=0 AND dljg_bm=#{dljgbm} AND zydm=#{zydm} AND fjlx=#{fjlx};
+    </select>
+    <select id="findUserInfoImageById" resultMap="userInfoImageMap">
+        SELECT id,zydm,dljg_bm,fjmc,fjcclj,wjlx,wjdx,fjlx,xzcs,lrry,gxry,scry,scsj,gxrq,scrq
+        FROM pt_ygxx_fjxx
+        WHERE scbz=0 AND id=#{id}
+    </select>
+    <update id="deleteUserImage">
+        update pt_ygxx_fjxx
+        set scbz=1, scrq=#{userInfoImage.scrq},scry=#{userInfoImage.scry}
+        where id = #{id};
+    </update>
+    <update id="updateFileDownload">
+        update pt_ygxx_fjxx set xzcs = xzcs+1 where id = #{id};
+    </update>
+	<select id="countImageSize" resultType="java.lang.Integer">
+        SELECT COUNT(ID)
+        FROM pt_ygxx_fjxx
+        WHERE SCBZ=0 AND DLJG_BM=#{dljgbm} AND ZYDM=#{zydm} AND FJLX=#{fjlx}
+    </select>
+    <update id="updateFileInfo">
+        update pt_ygxx_fjxx set zydm = #{zydm} where zydm = #{zydmuuid};
+    </update>
+    <update id="updateGSPJ">
+        update pt_ygpj_gspj 
+        <set>
+            <if test="name!=null">
+               YGXM = #{name},    
+            </if>
+            <if test="grtx!=null">
+                YGTX = #{grtx},
+            </if>
+        </set>
+        where DLJG_BM = #{dljgBm} and ZYDM = #{zydm}
+    </update>
+    <update id="updateKHPJ">
+        update pt_ygpj_khpj 
+        <set>
+            <if test="name!=null">
+               YGXM = #{name},    
+            </if>
+            <if test="grtx!=null">
+                YGTX = #{grtx},
+            </if>
+        </set>
+        where DLJG_BM = #{dljgBm} and ZYDM = #{zydm}
+    </update>
+    
+    
+	<select id="findAlldlByOneDay" resultType="int">
+		select count(id) as count from user where create_date between #{begin} and
+		#{end} and is_enabled=1 and is_delete = false;
+	</select>
+	<select id="findAlldlByOneMonth" resultType="int">
+		select count(id) as count from user where create_date between #{begin} and
+		#{end} and is_enabled=1 and is_delete = false;
+	</select>
+	<select id="findAllApprovedl" resultType="int">
+		select count(id) as count from user where DLJG_BM != 'DL0000000001' AND IF_MANAGER='1' and is_delete = false
+	</select>
+	<select id="approveProportion" resultType="java.util.HashMap">
+		select count(1) as count,case state when '1' then '审核已通过' when '0'
+		then '审核未通过' end as is_enabled from customer where code != 'DL0000000001' and scbz=false group by state;
+	</select>
+	<select id="searchCountByMonth" resultType="java.util.HashMap">
+		select count(id) as count ,DATE_FORMAT(create_date,'%Y-%m-%d') as DAY from user
+		where DATE_FORMAT(create_date,'%Y-%m-%d') between #{begin} and
+		#{end} and is_enabled=1 group by
+		DATE_FORMAT(create_date,'%Y-%m-%d');
+	</select>
+	
+	<!-- 员工360使用 -->
+	<select id="getAllUsers" resultMap="userResultMap">
+	    SELECT a.id, a.user_account, a.name, a.if_manager, a.tel, a.email,
+        a.customer_id, a.org_id, a.bmdm, c.name as orgName, a.create_date, 
+        a.ygid, a.ygtx, a.is_delete, a.zydm,
+        a.yddh, a.qq, a.lxdz, b.name as jsdm, a.nsrsbh, a.dljg_bm, a.lrry
+        FROM user a
+        left join role b on a.jsdm = b.id
+        left join organization c on a.bmdm = c.code
+        where a.dljg_bm = #{dljgBm} and a.is_delete = false <!-- and a.if_manager = false -->
+		and FuncAuthorityUser(#{zydm}, a.bmdm, a.zydm) = 1
+        order by a.create_date desc;
+	</select>
+
+	<!-- 员工360使用(平台管理员) -->
+	<select id="getAllUsersByPt" resultMap="userResultMap">
+		SELECT a.id, a.user_account, a.name, a.if_manager, a.tel, a.email,
+		a.customer_id, a.org_id, a.bmdm, c.name as orgName, a.create_date,
+		a.ygid, a.ygtx, a.is_delete, a.zydm,
+		a.yddh, a.qq, a.lxdz, b.name as jsdm, a.nsrsbh, a.dljg_bm, a.lrry
+		FROM user a
+		left join role b on a.jsdm = b.id
+		left join organization c on a.bmdm = c.code
+		where a.dljg_bm = #{dljgBm} and a.is_delete = false <!-- and a.if_manager = false -->
+		order by a.create_date desc;
+	</select>
+
+	<select id="getUsersByDljgBmWithOneBm" resultMap="userResultMap">
+		select name,zydm,bmdm from user where dljg_bm=#{dl} and bmdm like CONCAT('%',#{other},'%');
+		<!--select name,zydm,BMDM from user where dljg_bm='DL0000000019' AND BMDM LIKE CONCAT('%','100002_001','%')-->
+	</select>
+	<!-- 批量更新员工姓名 -->
+    <select id="changName" statementType="CALLABLE" parameterType="java.lang.String">
+        <![CDATA[
+            call P_updateZYMC(
+                #{zydm,mode=IN},#{zymc,mode=IN}
+            )
+        ]]>
+    </select>
+    
+    <!-- 查询出该角色对应的未删除的用户 -->
+    <select id="getZydmsByIds" resultType="string">
+        SELECT distinct(zydm) FROM user WHERE
+        id in
+        <foreach item="id" collection="ids" open="(" separator=","
+            close=")">
+            #{id}
+        </foreach>
+    </select>
+    
+    <!-- 查询该机构所有的人员所在部门 -->
+    <select id="getAllZydmBm" resultMap="userResultMap">
+		select name as bmmc ,code as bmdm from organization where code in (
+		  select distinct(bmdm) from user where dljg_bm=#{dljgBm} and if_manager = false and is_delete = false
+		)
+    </select>
+    
+    <!-- 查询该机构所有的人员所属角色 -->
+    <select id="getAllZydmJs" resultMap="userResultMap">
+        select name as jsname ,id as jsdm from role where id in (
+            select distinct(jsdm) from user where dljg_bm=#{dljgBm} and if_manager = false
+            ) 
+    </select>
+
+	<!-- 根据账号查询人员手机号 -->
+	<select id="getPhone" resultType="map">
+		select password, yddh from user where user_account=#{account}
+	</select>
+    <select id="booleanUserZydm" resultMap="userResultMap">
+		select zydm,name from user where is_delete=0  and  DLJG_BM=#{dl}  and FuncAuthorityKh(zydm,#{zydm},2)=1
+	</select>
+	<select id="findByAgencyAndEmployeeCode" resultMap="userResultMap">
+		select zydm,name from user where is_delete=0 and   DLJG_BM=#{dl} and zydm=#{zydm}
+	</select>
+	
+	<!-- 根据权限查询用户 -->
+	<select id="getUsersByResourceAllId" resultType="java.util.HashMap">
+        SELECT IFNULL(zydm,'') zydm ,IFNULL(name,'') name FROM user
+                  WHERE is_delete  = FALSE 
+                  AND dljg_bm = #{dljgBm}
+                  AND jsdm IN (SELECT role_id FROM role_auth WHERE resource_id = #{resourceId})
+    </select>
+
+	<!-- 查询所有作为客户主管的员工 -->
+	<select id="getAllKhzg" resultMap="userResultMap">
+		SELECT zydm ,name FROM user
+		WHERE is_delete  = FALSE
+		AND dljg_bm = #{dljgBm}
+		AND zydm != #{zydm};
+	</select>
+
+	<update id="updateZh" parameterType="java.lang.String">
+		update user set user_account=#{newZh} where user_account=#{oldZh};
+	</update>
+
+	<select id="getZyByBmdm" parameterType="java.lang.String" resultType="com.xinhai.usermanager.entity.User">
+		select zydm, name from user where bmdm like #{bmdm} and is_delete = false;
+	</select>
+
+	<select id="getMananger" resultMap="userResultMap">
+		select id, user_account,
+		name, password, is_enabled, if_manager, tel, email,
+		customer_id, org_id, bmdm, bmqxdm, create_date, remark, is_delete, zydm, xbdm, csrq,
+		ygxl, sfzhm, cyzz, cyrq, yddh, qq, bzxx, lxdz, jsdm, nsrsbh, dljg_bm, lrry, jfzt,ygtx from user where dljg_bm=#{dljgBm} and if_manager=TRUE
+	</select>
+</mapper>

@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+    http://www.springframework.org/schema/beans/spring-beans-3.2.xsd">
+
+  <bean
+          class="org.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor"/>
+  <bean id="genericObjectPoolConfig"
+        class="redis.clients.jedis.JedisPoolConfig">
+    <property name="maxTotal" value="${redis.maxActive}"/>
+    <property name="maxIdle" value="${redis.maxIdle}"/>
+    <property name="maxWaitMillis" value="${redis.maxWaitMillis}"/>
+    <property name="testOnBorrow" value="${redis.testOnBorrow}"/>
+  </bean>
+  <bean id="jedisPool" class="redis.clients.jedis.JedisPool">
+     <constructor-arg name="poolConfig" ref="genericObjectPoolConfig"/>
+      <constructor-arg name="host" value="${redis.host}"/>
+      <!--  <constructor-arg name="host" value="192.168.0.45"/>-->
+
+      <constructor-arg name="port" value="${redis.port}"/>
+      <constructor-arg name="timeout" value="${redis.timeout}"/> 
+      <!--阿里云测试环境-->
+     <!--  <constructor-arg name="password" value="cys!,@2017xl_lxp!%"/> -->
+      <!--阿里云正式环境-->
+      <!-- <constructor-arg name="password" value="${redis.password}"/>-->
+
+      <!--开发环境也需要注释掉此信息，阿里云测试环境redis，发布正式环境时需要注释此链接-->
+    <!-- <constructor-arg name="database" value="1"/>-->
+       <!--  <constructor-arg name="database" value="${redis.database}"/> -->
+  </bean>
+</beans>

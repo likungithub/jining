@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- namespace必须和接口名称一一对应 -->
+<mapper
+	namespace="com.xinhai.caiyun.systemmanager.dao.MessageTypeMapper">
+	<resultMap id="mapper"
+		type="com.xinhai.caiyun.systemmanager.api.MessageType">
+		<id property="id" column="ID" />
+		<result property="messageTypeCode" column="XXLX_DM" />
+		<result property="messageTypeName" column="XXLX_MC" />
+		<result property="remarkContent" column="BZXX" />
+		<result property="deleteFlag" column="SCBZ" />
+		<result property="inputPeople" column="LRRY" />
+		<result property="updatePeople" column="GXRY" />
+		<result property="deletePeople" column="SCRY" />
+		<result property="inputTime" column="LRRQ" />
+		<result property="updatetime" column="GXRQ" />
+		<result property="deletetime" column="SCRQ" />
+	</resultMap>
+	<select id="findAllType" resultMap="mapper">
+		select xxlx_dm,xxlx_mc,bzxx from dm_xxlx where scbz=0;
+	</select>
+</mapper>

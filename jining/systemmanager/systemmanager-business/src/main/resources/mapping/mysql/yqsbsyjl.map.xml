@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xinhai.caiyun.systemmanager.dao.YqsbsyjlMapper">
+    <!--查询skbh-->
+    <select id="selectSKbh" resultType="Map">
+        select skbh from t_yqsbtz where sbmc like concat('%',#{map.sbmc}, '%')
+    </select>
+    <select id="selectSyjl" resultType="Map">
+        select id,(SELECT sbmc from t_yqsbtz where skbh = j.skbh)as yqmc,(SELECT ypmc from t_ypgl_jbxx where id = j.ypid)as ypmc,
+        (select ZWMC_BM from t_jcxm_jbxx where id = jcxmid)as jcxm,kssj,jssj,yqzk,yhzk,(select name from user where zydm = j.czr)as czr from t_yqsyjl j
+        where j.id>0
+        <if test="map.skbh!=null and map.skbh!=''">
+            and j.skbh = #{map.skbh}
+        </if>
+        order by j.kssj desc
+        limit #{map.start},#{map.length};
+    </select>
+    <select id="selectSyjlCount" resultType="java.lang.Integer">
+        select count(j.jcxmid) from t_yqsyjl j
+        where j.id>0
+        <if test="map.skbh!=null and map.skbh!=''">
+            and j.skbh = #{map.skbh}
+        </if>
+    </select>
+
+    <select id="selectYqsb" resultType="Map">
+        select skbh,sbmc from t_yqsbtz
+    </select>
+    <select id="selectYpxx" resultType="Map">
+        select ypmc,id from t_ypgl_jbxx
+    </select>
+    <select id="selectYqjcx" resultType="Map">
+        select a.ZWMC_BM as jcxm,a.id as jcxmid
+        from t_jcxm_jbxx a,(select jcxmid from t_yp_jcxm where ypid =#{map.ypid})b where a.id = b.jcxmid
+    </select>
+    <!--添加仪器设备使用记录-->
+    <insert id="addYqsyjl">
+        insert into t_yqsyjl(skbh,ypid,jcxmid,kssj,yqzk,yhzk,czr)
+        values(#{map.skbh},#{map.ypid},#{map.jcxmid},#{map.dqsj},#{map.yqzk},#{map.yhzk},#{map.czr})
+    </insert>
+    <!--查找重复-->
+    <select id="selectcfwt" resultType="java.lang.Integer">
+        select count(*) from t_yqsyjl where kssj = #{map.dqsj} and skbh = #{map.skbh}
+    </select>
+    <!--仪器使用完毕时间登记-->
+    <update id="finishYqsy">
+        update t_yqsyjl set jssj = now() where id = #{map.id}
+    </update>
+</mapper>

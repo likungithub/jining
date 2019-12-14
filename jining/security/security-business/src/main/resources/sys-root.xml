@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:aop="http://www.springframework.org/schema/aop"
+	   xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd">
+
+	<aop:aspectj-autoproxy proxy-target-class="true"/>
+	<!-- 使用disconf必须添加以下配置 -->
+	<bean id="disconfMgrBean" class="com.baidu.disconf.client.DisconfMgrBean"
+		  destroy-method="destroy">
+		<!--配置自动扫描包，使用配置文件的类所在的包-->
+		<property name="scanPackage" value="com.xinhai.*.business"/>
+	</bean>
+	<bean id="disconfMgrBean2" class="com.baidu.disconf.client.DisconfMgrBeanSecond"
+		  init-method="init" destroy-method="destroy">
+	</bean>
+
+	<!--
+		使用托管方式的disconf配置(无代码侵入, 配置更改不会自动reload)
+		此处加载所有的配置文件，即resources/properties文件夹下的所有属性文件
+		dubbo-provider.xml 和 spring-mybatis.xml文件可以直接使用配置文件中的属性
+		如果有其他的xml文件，亦可使用此处加载的配置文件中的属性
+		此处可以加载多个配置文件，在list配置节中增加value即可
+	-->
+	<bean id="autoConfigurerNotReload"
+		  class="com.baidu.disconf.client.addons.properties.ReloadablePropertiesFactoryBean">
+		<property name="locations">
+			<list>
+				<value>classpath*:**/global.properties</value>
+				<value>classpath*:**/custom.properties</value>
+			</list>
+		</property>
+	</bean>
+
+	<bean id="propertyConfigurerNotReload"
+		  class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+		<property name="ignoreResourceNotFound" value="true"/>
+		<property name="ignoreUnresolvablePlaceholders" value="true"/>
+		<property name="propertiesArray">
+			<list>
+				<ref bean="autoConfigurerNotReload"/>
+			</list>
+		</property>
+	</bean>
+
+	<import resource="classpath:spring/spring-mybatis.xml"/>
+	<import resource="classpath:dubbo/dubbo-provider.xml"/>
+</beans>

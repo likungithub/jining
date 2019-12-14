@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xinhai.caiyun.systemmanager.dao.BzkcxMapper">
+    <!-- 获取标准项目管理所有表数据-->
+    <select id="findAllBzkcx" resultType="map">
+         select zwmc_bm as jcxmc, ywmc,id,
+         pdnh,if_pd,yyckjz,bl,jcff,jcyjmc,jcyj,pdyj,
+         pdyjmc,wswnz,wswcz,wswmz,xlz,xlzmrz,
+         bzffjcxdw as jcxdw,bzzxyxx as zxyxx,bzzxyxxdw as zxyxxdw,bzzdyxx as zdyxx,bzzdyxxdw as zdyxxdw,
+         if_xtpd,jg,if_bzff,if_cma,if_cmaf,if_cnas,if_catl,
+         zbzl,zbzldw,bz from
+         t_jcxm_jbxx
+        <where>
+            <if test="map.jcxmc!=null and map.jcxmc!=''">
+                zwmc_bm like concat('%',#{map.jcxmc},'%')
+            </if>
+        </where>
+        order by id desc
+        limit #{map.start},#{map.length};
+    </select>
+    <!-- 获取标准项目管理所有表数据的数量-->
+    <select id="findAllBzkcxNum" resultType="java.lang.Integer">
+        select count(*)  from
+        t_jcxm_jbxx
+        <where>
+            <if test="map.jcxmc!=null and map.jcxmc!=''">
+                zwmc_bm like concat('%',#{map.jcxmc},'%');
+            </if>
+        </where>
+    </select>
+<delete id="deleteBzkcxById">
+    delete from  t_jcxm_jbxx
+    where id=#{id};
+</delete>
+<insert id="addBzkcx" parameterType="map">
+  insert into t_jcxm_jbxx(zwmc_bm , ywmc,id,
+         pdnh,if_pd,yyckjz,bl,jcff,jcyjmc,jcyj,pdyj,
+         pdyjmc,wswnz,wswcz,wswmz,xlz,xlzmrz,
+         bzffjcxdw,bzzxyxx,bzzxyxxdw,bzzdyxx ,bzzdyxxdw,
+         if_xtpd,jg,if_bzff,if_cma,if_cmaf,if_cnas,if_catl,
+         zbzl,zbzldw,bz
+         )
+         values (#{map.zwmc_bm}, #{map.ywmc},#{map.id},
+         #{map.pdnh},#{map.if_pd},#{map.yyckjz},#{map.bl},#{map.jcff},#{map.jcyjmc},#{map.jcyj},#{map.pdyj},
+         #{map.pdyjmc},#{map.wswnz},#{map.wswcz},#{map.wswmz},#{map.xlz},#{map.xlzmrz},
+         #{map.bzffjcxdw}, #{map.bzzxyxx},#{map.bzzxyxxdw},#{map.bzzdyxx},#{map.zdyxxdw},
+         #{map.if_xtpd},#{map.jg},#{map.if_bzff},#{map.if_cma},#{map.if_cmaf},#{map.if_cnas},#{map.if_catl},
+         #{map.zbzl},#{map.zbzldw},#{map.bz});
+</insert>
+
+    <!--通过id 获得单个值-->
+    <select id="findBzkcxById" resultType="map">
+        select * from
+        t_jcxm_jbxx
+        where id=#{id};
+    </select>
+    <!--更新数据-->
+    <update id="updateBzkcx">
+        update t_jcxm_jbxx set zwmc_bm=#{map.zwmc_bm},ywmc=#{map.ywmc},id=#{map.id},
+         pdnh=#{map.pdnh},if_pd=#{map.if_pd},yyckjz=#{map.yyckjz},bl=#{map.bl},jcff=#{map.jcff},jcyjmc=#{map.jcyjmc},jcyj=#{map.jcyj},pdyj=#{map.pdyj},
+         pdyjmc=#{map.pdyjmc},wswnz=#{map.wswnz},wswcz=#{map.wswcz},wswmz=#{map.wswmz},xlz=#{map.xlz},xlzmrz=#{map.xlzmrz},
+         bzffjcxdw=#{map.bzffjcxdw},bzzxyxx= #{map.bzzxyxx},bzzxyxxdw=#{map.bzzxyxxdw},bzzdyxx=#{map.bzzdyxx},bzzdyxxdw=#{map.bzzdyxxdw},
+         if_xtpd=#{map.if_xtpd},jg=#{map.jg},if_bzff=#{map.if_bzff},if_cma=#{map.if_cma},if_cmaf=#{map.if_cmaf},if_cnas=#{map.if_cnas},if_catl=#{map.if_catl},
+         zbzl=#{map.zbzl},zbzldw=#{map.zbzldw},bz=#{map.bz}
+         where id=#{map.id}
+    </update>
+    <!-- Excel插入数据-->
+    <insert id="addExcelBzkcx">
+        insert into  t_jcxm_jbxx(zwmc_bm ,ywmc,pdnh,if_pd,yyckjz,bl,jcff,jcyjmc,jcyj,
+        wswnz,wswcz,wswmz,xlz,xlzmrz,
+        bzffjcxdw,bzzxyxx,bzzxyxxdw,bzzdyxx ,bzzdyxxdw,
+        if_xtpd,jg,if_bzff,if_cma,if_cmaf,if_cnas,if_catl,
+        zbzl,zbzldw) values
+        <foreach collection="list" item="item" index="index" separator=",">
+            (#{item.jcxmc},#{item.ywmc},#{item.pdnh},#{item.if_pd},#{item.yyckjz},#{item.bl},#{item.jcff},#{item.jcyjmc},#{item.jcyj},
+            #{item.wswnz},#{item.wswcz},#{item.wswmz},#{item.xlz},#{item.xlzmrz},
+            #{item.jcxdw}, #{item.zxyxx},#{item.zxyxxdw},#{item.zdyxx},#{item.zdyxxdw},
+            #{item.if_xtpd},#{item.jg},#{item.if_bzff},#{item.if_cma},#{item.if_cmaf},#{item.if_cnas},#{item.if_catl},
+            #{item.zbzl},#{item.zbzldw})
+        </foreach>
+    </insert>
+    <!-- 查询条导出的数据-->
+    <select id="findExcelBzkcxById" resultType="com.xinhai.caiyun.systemmanager.api.Bzkcx">
+        select zwmc_bm as jcxmc,ywmc,pdnh,if_pd,yyckjz,bl,jcff,jcyjmc,jcyj,
+        wswnz,wswcz,wswmz,xlz,xlzmrz,
+        bzffjcxdw as jcxdw,bzzxyxx as zxyxx,bzzxyxxdw as zxyxxdw,bzzdyxx as zdyxx,bzzdyxxdw as zdyxxdw,
+        if_xtpd,jg,if_bzff,if_cma,if_cmaf,if_cnas,if_catl,
+        zbzl,zbzldw
+        from t_jcxm_jbxx
+        where id=#{id};
+    </select>
+</mapper>

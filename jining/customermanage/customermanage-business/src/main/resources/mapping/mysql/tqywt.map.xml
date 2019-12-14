@@ -1,0 +1,581 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.xinhai.caiyun.customermanage.dao.TqywtMapper">
+    <!--根据id查询相关数据-->
+    <select id="findTqywt" resultType="com.xinhai.caiyun.customermanage.api.Tqywt" parameterType="java.lang.String">
+        SELECT  ifnull(a.id,"") as id, ifnull(a.wtid,"") as wtid, ifnull(a.dwmc,"") as dwmc, ifnull(a.lxdh,"") as lxdh, ifnull(a.yzbm,"") as yzbm, ifnull(a.sfdm,"") as sfdm,
+        ifnull(a.sfmc,"") as sfmc, ifnull(a.csdm,"") as csdm, ifnull(a.csmc,"") as csmc, ifnull(a.xjdm,"") as xjdm, ifnull(a.xjmc,"") as xjmc, ifnull(a.xxdz,"") as xxdz,
+        ifnull(a.wtdw,"") as wtdw, ifnull(a.jylb,"") as jylb, ifnull(a.cplb,"") as cplb, ifnull(a.jyfb,"") as jyfb, ifnull(a.bz,"") as bz, ifnull(a.bgjffs,"") as bgjffs,
+        ifnull(a.syry,"") as syry, ifnull(a.syrq,"") as syrq, ifnull(a.jyyjbz,"") as jyyjbz, ifnull(b.if_sgr,"") as if_sgr, ifnull(b.if_ssg,"") as if_ssg, ifnull(b.ypbm,"") as ypbm,
+        ifnull(b.ypmc,"") as ypmc, ifnull(b.sb,"") as sb, ifnull(b.ggxh,"") as ggxh, b.ypdj, b.ypsl, b.ypdw, ifnull(b.scrq,"") as scrq, b.ypphhbh, b.ypzt, b.scdw, b.ypbctj, b.ybjs, b.bzq, b.ypwt, a.jyxm, b.if_th,
+        a.textField1,a.textField2,a.textField3,a.textField4,a.textField5,a.textField6,a.textField7,a.textField8,a.textField9,a.textField10,
+        a.dateField1,a.dateField2,a.dateField3,a.dateField4,a.dateField5,a.dateField6,a.dateField7,a.dateField8,a.dateField9,a.dateField10,
+        a.selectField1,a.selectField2,a.selectField3,a.selectField4,a.selectField5,a.selectField6,a.selectField7,a.selectField8,a.selectField9,a.selectField10,
+        a.jyyj,a.jyyjbzqt,a.jswj,a.jswjqt,a.yzjl,a.jywcrq,a.jysm,a.clyj,a.jffs,a.wtdwdz,a.wtdwyzbm,a.wtdwdh,b.if_by,b.bysl,b.qyyply,b.ccyqqt,b.cydd,b.wtcyfs,
+        b.ypzxbz,b.ftbh,a.readonly,a.bgfl1,a.bgfl,a.shouyry,b.rkrq,a.rwlx,a.cydbm,a.dybqsl,a.zfbs,a.zfyy
+        FROM t_wt_jbxx a LEFT JOIN t_ypgl_jbxx b ON a.WTID=b.WTID
+        where a.ID = #{id}
+    </select>
+    <!--根据条件查询所有相关数据-->
+    <select id="findTqywtAll" resultType="com.xinhai.caiyun.customermanage.api.Tqywt">
+        SELECT a.ID, a.WTID, a.DWMC,a.wtdw,a.wtdwdh,a.wtdwyzbm, a.LXDH, a.YZBM, b.YPMC, CONCAT(b.YPSL,b.ypdw) as YPSL,b.ypdw, a.if_sl,b.ypbm,a.readonly,a.cydbm
+        FROM t_wt_jbxx a LEFT JOIN t_ypgl_jbxx b ON a.WTID=b.WTID
+        <where>
+            <if test="wtdwmc != null">
+                a.wtdw like CONCAT('%',#{wtdwmc},'%') and
+            </if>
+            <if test="ypmc != null">
+                b.ypmc like CONCAT('%',#{ypmc},'%') and
+            </if>
+            <if test="ypbm != null">
+                b.ypbm like CONCAT('%',#{ypbm},'%') and
+            </if>
+            <if test="ny != null">
+                date_format(a.LRRQ,'%Y-%m') = #{ny} and
+            </if>
+            a.cxzt = '001' and
+            a.type = #{type}
+        </where>
+        order by a.readonly,a.id desc
+        LIMIT #{start},#{len} ;
+    </select>
+    <!--根据条件查询所有相关数据量-->
+    <select id="findTqywtAllNums" resultType="java.lang.Integer">
+        SELECT COUNT(a.id)
+        FROM t_ypgl_jbxx b LEFT JOIN t_wt_jbxx a ON a.WTID=b.WTID
+        <where>
+            <if test="wtdwmc != null">
+                a.wtdw like CONCAT('%',#{wtdwmc},'%') and
+            </if>
+            <if test="ypmc != null">
+                b.ypmc like CONCAT('%',#{ypmc},'%') and
+            </if>
+            <if test="ypbm != null">
+                b.ypbm like CONCAT('%',#{ypbm},'%') and
+            </if>
+            <if test="ny != null">
+                date_format(a.LRRQ,'%Y-%m') = #{ny} and
+            </if>
+            a.cxzt = '001' and
+            a.type = #{type}
+        </where>
+    </select>
+    <!--根据条件查询所有相关数据-->
+    <select id="findTqywtAllsy" resultType="com.xinhai.caiyun.customermanage.api.Tzfwt">
+        SELECT ID, wtid, cydd, cydwxxdz, cydwlxr, cydwlxdh, cyrq, sjdw, cxzt
+        FROM t_wt_jbxx
+        <where>
+            <if test="wtid != null">
+                wtid like CONCAT('%',#{wtid},'%') and
+            </if>
+            cxzt = '003' or cxzt = '006'
+        </where>
+        order by id desc
+        LIMIT #{start},#{len} ;
+    </select>
+    <!--根据条件查询所有相关数据量-->
+    <select id="findTqywtAllNumssy" resultType="java.lang.Integer">
+        SELECT COUNT(id)
+        FROM t_wt_jbxx
+        <where>
+            <if test="wtid != null">
+                wtid like CONCAT('%',#{wtid},'%') and
+            </if>
+            cxzt = '003' or cxzt = '006'
+        </where>
+    </select>
+    <!--插入-->
+    <insert id="createTqywt" parameterType="com.xinhai.caiyun.customermanage.api.Tqywt" keyProperty="id"
+            useGeneratedKeys="true">
+        INSERT INTO t_wt_jbxx(wtid, type,cydbm, dwmc, lxdh, yzbm, sfdm, sfmc, csdm, csmc, xjdm, xjmc, xxdz, wtdw, jylb, cplb, jyfb, bz, bgjffs, shouyry, syry, syrq, jyyjbz, if_sl, cxzt,
+        jyyj,jyyjbzqt,jswj,jswjqt,yzjl,jywcrq,jysm,clyj,jffs,wtdwdz,wtdwyzbm,wtdwdh,lrry,lrrq,rwlx,dybqsl,slrq,wtslr,zfbs,zfyy
+        )
+        VALUES
+        (#{wtid}, #{type}, #{cydbm},#{dwmc}, #{lxdh}, #{yzbm}, #{sfdm}, #{sfmc}, #{csdm}, #{csmc}, #{xjdm}, #{xjmc}, #{xxdz}, #{wtdw}, #{jylb}, #{cplb}, #{jyfb}, #{bz}, #{bgjffs}, #{shouyry},#{syry},
+        #{syrq}, #{jyyjbz}, #{if_sl}, '001',
+        #{jyyj},#{jyyjbzqt},#{jswj},#{jswjqt},#{yzjl},#{jywcrq},#{jysm},#{clyj},#{jffs},#{wtdwdz},#{wtdwyzbm},#{wtdwdh},#{lrry},now(),#{rwlx},#{dybqsl},#{slrq},#{wtslr},#{zfbs},#{zfyy}
+        );
+    </insert>
+    <!--根据id修改-->
+    <update id="updateTqywt" parameterType="com.xinhai.caiyun.customermanage.api.Tqywt">
+        UPDATE t_wt_jbxx
+        <set>
+           <!-- <if test="tqywt.wtid != null">
+                wtid = #{tqywt.wtid},
+            </if>-->
+            <if test="tqywt.cydbm != null">
+                cydbm = #{tqywt.cydbm},
+            </if>
+            <if test="tqywt.dwmc != null">
+                dwmc = #{tqywt.dwmc},
+            </if>
+            <if test="tqywt.lxdh != null">
+                lxdh = #{tqywt.lxdh},
+            </if>
+            <if test="tqywt.yzbm != null">
+                yzbm = #{tqywt.yzbm},
+            </if>
+            <if test="tqywt.sfdm != null">
+                sfdm = #{tqywt.sfdm},
+            </if>
+            <if test="tqywt.sfmc != null">
+                sfmc = #{tqywt.sfmc},
+            </if>
+            <if test="tqywt.csdm != null">
+                csdm = #{tqywt.csdm},
+            </if>
+            <if test="tqywt.csmc != null">
+                csmc = #{tqywt.csmc},
+            </if>
+            <if test="tqywt.xjdm != null">
+                xjdm = #{tqywt.xjdm},
+            </if>
+            <if test="tqywt.xjmc != null">
+                xjmc = #{tqywt.xjmc},
+            </if>
+            <if test="tqywt.xxdz != null">
+                xxdz = #{tqywt.xxdz},
+            </if>
+            <if test="tqywt.wtdw != null">
+                wtdw = #{tqywt.wtdw},
+            </if>
+            <if test="tqywt.jylb != null">
+                jylb = #{tqywt.jylb},
+            </if>
+            <if test="tqywt.jyyjbz != null">
+                jyyjbz = #{tqywt.jyyjbz},
+            </if>
+            <if test="tqywt.jyfb != null">
+                jyfb = #{tqywt.jyfb},
+            </if>
+            <if test="tqywt.bz != null">
+                bz = #{tqywt.bz},
+            </if>
+            <if test="tqywt.cplb != null">
+                cplb = #{tqywt.cplb},
+            </if>
+            <if test="tqywt.bgjffs != null">
+                bgjffs = #{tqywt.bgjffs},
+            </if>
+            <if test="tqywt.shouyry != null">
+                shouyry = #{tqywt.shouyry},
+            </if>
+            <if test="tqywt.syry != null">
+                syry = #{tqywt.syry},
+            </if>
+            <if test="tqywt.syrq != null">
+                syrq = #{tqywt.syrq},
+            </if>
+            <if test="tqywt.jyyj != null">
+                jyyj = #{tqywt.jyyj},
+            </if>
+
+            <if test="tqywt.jyyjbzqt != null">
+                jyyjbzqt = #{tqywt.jyyjbzqt},
+            </if>
+            <if test="tqywt.jswj != null">
+                jswj = #{tqywt.jswj},
+            </if>
+            <if test="tqywt.jswjqt != null">
+                jswjqt = #{tqywt.jswjqt},
+            </if>
+            <if test="tqywt.yzjl != null">
+                yzjl = #{tqywt.yzjl},
+            </if>
+            <if test="tqywt.jywcrq != null">
+                jywcrq = #{tqywt.jywcrq},
+            </if>
+            <if test="tqywt.jysm != null">
+                jysm = #{tqywt.jysm},
+            </if>
+            <if test="tqywt.clyj != null">
+                clyj = #{tqywt.clyj},
+            </if>
+            <if test="tqywt.jffs != null">
+                jffs = #{tqywt.jffs},
+            </if>
+            <if test="tqywt.wtdwdz != null">
+                wtdwdz = #{tqywt.wtdwdz},
+            </if>
+            <if test="tqywt.wtdwyzbm != null">
+                wtdwyzbm = #{tqywt.wtdwyzbm},
+            </if>
+            <if test="tqywt.wtdwdh != null">
+                wtdwdh = #{tqywt.wtdwdh},
+            </if>
+
+            <if test="tqywt.if_sl != null">
+                if_sl = #{tqywt.if_sl},
+            </if>
+            <if test="tqywt.wtslr != null">
+                wtslr = #{tqywt.wtslr},
+            </if>
+            <if test="tqywt.slrq != null">
+                slrq = #{tqywt.slrq},
+            </if>
+
+            <if test="tqywt.lrry != null">
+                lrry = #{tqywt.lrry},
+            </if>
+            <if test="tqywt.zfbs != null">
+                zfbs = #{tqywt.zfbs},
+            </if>
+            <if test="tqywt.zfyy != null">
+                zfyy = #{tqywt.zfyy},
+            </if>
+            <if test="tqywt.dybqsl != null">
+                dybqsl = #{tqywt.dybqsl}
+            </if>
+            WHERE ID = #{tqywt.id}
+        </set>
+    </update>
+    <!--根据id删除委托信息-->
+    <update id="deleteTqywtbyId" parameterType="java.lang.String">
+        delete from t_wt_jbxx where id = #{id}
+    </update>
+    <!--查询委托id做大值-->
+    <select id="findWtid" parameterType="java.lang.String" resultType="String">
+        select
+        max(wtid)
+        from t_wt_jbxx
+        WHERE WTID LIKE CONCAT('%',#{s},'%');
+    </select>
+    <!--查询信息生成委托单-->
+    <select id="findById" resultType="map">
+        SELECT
+        ifnull(a.WTID,"") as wtid, ifnull(b.YPMC,"") as ypmc, ifnull(b.SB,"") as sb, ifnull(b.GGXH,"") as ggxh, ifnull(b.YPDJ,"") as ypdj, ifnull(b.YPSL,"") as ypsl,
+        ifnull(b.YPDW,"") as ypdw, ifnull(b.SCRQ,"") as scrq, ifnull(b.YPPHHBH,"") as ypphhbh, ifnull(b.YPZT,"") as ypzt, ifnull(a.DWMC,"") as dwmc,ifnull(a.SFMC,"") as sfmc,
+        ifnull(a.CSMC,"") as csmc, ifnull(a.XJMC,"") as xjmc, ifnull(a.xxdz,"") as jdmc, ifnull(a.LXDH,"") as lxdh, ifnull(a.YZBM,"") as yzbm, ifnull(b.SCDW,"") as scdw,
+        ifnull(b.ypbctj,"") as ypbctj, ifnull(a.jyyjbz,"") as jyyjbz, ifnull(a.bz,"") as bz, ifnull(a.bgjffs,"") as bgjffs, ifnull(a.syry,"") as syry,
+        ifnull(a.syrq,"") as syrq, ifnull(a.slrq,"") as slrq,ifnull(a.wtslr,"") as wtslr,ifnull(a.wtjbr,"") as wtjbr
+        FROM t_wt_jbxx a left join t_ypgl_jbxx b on a.wtid = b.wtid
+        WHERE a.ID = #{id};
+    </select>
+    <!--更新委托单生成路径-->
+    <update id="updateWtdlj">
+        update t_wt_jbxx
+        set wtdlj = #{wtdlj}
+        where id = #{id}
+    </update>
+    <!--根据id查询委托单路径-->
+    <select id="getWtdljById" resultType="String">
+        select wtdlj
+        from t_wt_jbxx
+        where id = #{id}
+    </select>
+    <!--根据样品id查询委托报告路径-->
+    <select id="getWtbgljById" resultType="String">
+        select BGLJ
+        from t_ypgl_jbxx
+        where id = #{ypid}
+    </select>
+    <!--根据id查询委托id-->
+    <select id="findwtidw" resultType="String">
+        select wtid from t_wt_jbxx where id = #{id}
+    </select>
+    <!--根据id查询抽样单编号-->
+    <select id="findcydbh" resultType="String">
+        select wtid from t_wt_jbxx where id = #{id}
+    </select>
+    <select id="selectwtid" resultType="String">
+        select id from t_wt_jbxx where wtid in (select wtid from t_ypgl_jbxx where id = #{id})
+    </select>
+    <!--根据id获取检测项目名称-->
+    <select id="findJcxm" resultType="String">
+        select zwmc_bm from t_jcxm_jbxx where id = #{id}
+    </select>
+    <!--根据委托id查询样品id-->
+    <select id="findypid" resultType="String">
+        select id from t_ypgl_jbxx where wtid = #{wtid} LIMIT 1
+    </select>
+    <!--通过样品编码查询样品id-->
+    <select id="findYpidByYpbm" resultType="String">
+        select id from t_ypgl_jbxx where ypbm = #{ypbm} LIMIT 1
+    </select>
+    <!--根据抽样单编号查询样品id-->
+    <select id="findcyypid" resultType="String">
+        select id from t_ypgl_jbxx where wtid = #{wtid}
+    </select>
+    <!--根据id更新检测项目名称-->
+    <insert id="insertjcxm" parameterType="java.lang.String">
+        update t_wt_jbxx
+        set jyxm = #{jcxm}
+        where id = #{id}
+    </insert>
+    <!--根据id更新样品接收状态-->
+    <update id="updateYpzt">
+        update t_ypgl_jbxx
+        set jszt = "200"
+        where id = #{id}
+    </update>
+    <!--根据样品id获取委托id-->
+    <select id="findwtidd" resultType="String">
+        select wtid from t_ypgl_jbxx where id = #{id}
+    </select>
+    <!--根据委托id获取id-->
+    <select id="findid" resultType="String">
+        select id from t_wt_jbxx where wtid = #{wtid}
+    </select>
+    <!--更新受理状态  受理人  受理日期-->
+    <update id="updateslQYWT">
+        update t_wt_jbxx
+        set
+        if_sl = #{if_sl},
+        wtslr = #{wtslr},
+        slrq = #{slrq}
+        where id = #{id}
+    </update>
+    <!--根据委托id获取查询状态-->
+    <select id="findCxzt" resultType="String">
+        select cxzt from t_wt_jbxx where id = #{id}
+    </select>
+    <!--根据委托id查询委托报告路径-->
+    <select id="getYddcybgljById" resultType="String">
+        select BGLJ
+        from t_wt_jbxx
+        where id = #{id}
+    </select>
+    <!--根据样品id查询报告主检审批人-->
+    <select id="getBgzjsp" resultType="String">
+        select bgzjspr from t_ypgl_jbxx where id = #{ypid}
+    </select>
+    <!--根据样品id查询报告审核人-->
+    <select id="getBgsh" resultType="String">
+        select bgshr from t_ypgl_jbxx where id = #{ypid}
+    </select>
+    <!--根据样品id查询报告批准人-->
+    <select id="getBgpz" resultType="String">
+        select bgpzr from t_ypgl_jbxx where id = #{ypid}
+    </select>
+    <!-- 通过样品id 获得样品下的所有检测项目-->
+    <select id="getJcxmDataByYpid" resultType="map">
+        SELECT j.id as jcxmid,j.jcfa,j.xl,j.jcx,j.zwmc_bm,j.xlz,j.jcyj
+        FROM t_jcxm_jbxx j
+        LEFT JOIN t_yp_jcxm yj ON j.id = yj.jcxmid
+        WHERE
+        yj.ypid =#{map.ypid}
+        <if test="map.jcxmc!=null">
+            and j.zwmc_bm like concat('%',#{map.jcxmc},'%')
+        </if>
+        limit #{map.start},#{map.length};
+    </select>
+    <!-- 通过样品id 获得样品下的所有检测项目的数量-->
+    <select id="getJcxmDataNumByYpid" resultType="java.lang.Integer">
+        SELECT count(j.id)
+        FROM t_jcxm_jbxx j
+        LEFT JOIN t_yp_jcxm yj ON j.id = yj.jcxmid
+        WHERE
+        yj.ypid =#{map.ypid}
+        <if test="map.jcxmc!=null">
+            and j.zwmc_bm like concat('%',#{map.jcxmc},'%')
+        </if>
+    </select>
+    <!-- 通过样品id和检测项目id  删除对应的检测项目 -->
+    <delete id="delYpJcxm">
+        <foreach collection="list" index="index" item="map" separator=";">
+            delete from t_yp_jcxm where ypid=#{map.ypid} and jcxmid=#{map.jcxmid}
+        </foreach>
+    </delete>
+    <!-- 通过样品编码查找数据 ch-->
+    <select id="checkYpbm" resultType="java.lang.String">
+        select id  from t_ypgl_jbxx where ypbm=#{ypbm};
+    </select>
+    <!-- 通过委托id查找数据 ch-->
+    <select id="checkWtid" resultType="java.lang.String">
+        select id  from t_wt_jbxx where wtid=#{wtid};
+    </select>
+
+    <select id="findYpidByWtid" resultType="java.util.Map">
+        select * from (
+        SELECT
+            '检样' AS yplx,
+            IFNULL(b.ypbm, '/') ypbm,
+            IFNULL(b.ypmc, '/') ypmc,
+            IFNULL(a.CYDBM, '/') cydbm,
+            b.ypzxbz
+        FROM
+            t_wt_jbxx a
+                LEFT JOIN
+            t_ypgl_jbxx b ON a.wtid = b.wtid
+        WHERE
+            a.id  in (${map.id}) OR a.wtid  in (${map.id})
+        UNION ALL SELECT
+            '备样' AS yplx,
+            IFNULL(b.ypbm, '/') ypbm,
+            IFNULL(b.ypmc, '/') ypmc,
+            IFNULL(a.CYDBM, '/') cydbm,
+            b.ypzxbz
+        FROM
+            t_wt_jbxx a
+                LEFT JOIN
+            t_ypgl_jbxx b ON a.wtid = b.wtid
+        WHERE
+            a.id in (${map.id}) OR a.wtid in (${map.id})) as c order by ypbm,yplx desc
+    </select>
+
+    <select id="findYpidByCydbm" resultType="java.util.Map">
+        SELECT
+            '检样' AS yplx,
+            IFNULL(b.ypbm, '/') ypbm,
+            IFNULL(b.ypmc, '/') ypmc,
+            IFNULL(a.CYDBM, '/') cydbm,
+            b.ypzxbz
+        FROM
+            t_wt_jbxx a
+                LEFT JOIN
+            t_ypgl_jbxx b ON a.wtid = b.wtid
+        WHERE
+            a.cydbm = #{map.id} OR a.wtid = #{map.id}
+        UNION ALL SELECT
+            '备样' AS yplx,
+            IFNULL(b.ypbm, '/') ypbm,
+            IFNULL(b.ypmc, '/') ypmc,
+            IFNULL(a.CYDBM, '/') cydbm,
+            b.ypzxbz
+        FROM
+            t_wt_jbxx a
+                LEFT JOIN
+            t_ypgl_jbxx b ON a.wtid = b.wtid
+        WHERE
+            a.cydbm = #{map.id} OR a.wtid = #{map.id}
+    </select>
+
+    <select id="findwtByWtid" resultType="java.util.Map">
+        SELECT
+            a.id,
+            b.id,
+            b.cydbm,
+            a.ypbm,
+            a.wtid,
+            b.jylb,
+            b.jyyj,
+            b.jyyjbzqt,
+            a.ypmc,
+            a.sb,
+            a.ggxh,
+            a.ypsl,
+            a.bysl,
+            a.ypzt,
+            a.ypzxbz,
+            a.scrq,
+            a.ypdj,
+            a.scdw,
+            a.qyyply as yplaiyuan,
+            a.cydd as sydd,
+            a.ccyqqt,
+            a.cyfangshi,
+            a.ybjs,
+            a.ftbh,
+            a.ypbctj,
+            b.jswj,
+            b.jswjqt,
+            b.yzjl,
+            date_format(b.jywcrq,'%Y-%m-%d') jywcrq,
+            b.jysm,
+            b.clyj,
+            (select count(1) from t_jcxm_yq c where c.ypid = a.id) jcxmcount,
+            b.bz as qtsm,
+            b.jffs,
+            b.bgjffs,
+            b.wtdw,
+            b.wtdwdz,
+            b.wtdwyzbm,
+            b.wtdwdh,
+            b.wtjbr,
+            date_format(b.syrq,'%Y-%m-%d') syrq,
+            b.wtslr,
+            ifnull(date_format(a.YPJCSJ,'%Y-%m-%d'),'/') ypjcsj,
+            b.slrq
+        FROM
+            t_ypgl_jbxx a
+                LEFT JOIN
+            t_wt_jbxx b ON a.wtid = b.wtid
+            where b.id = #{map.id}
+    </select>
+    <select id="jcxmAllCount" resultType="String">
+        select count(1) jcxmcount  from t_jcxm_jbxx
+    </select>
+    <select id="ypJcxm" resultType="String">
+        SELECT
+            GROUP_CONCAT(d.ZWMC_BM) jcxmmc
+        FROM
+            t_yp_jcxm c
+                LEFT JOIN
+            t_jcxm_jbxx d ON c.jcxmid = d.id
+        WHERE
+            c.ypid = (SELECT
+                    a.id
+                FROM
+                    t_ypgl_jbxx a
+                WHERE
+                    a.wtid = (SELECT
+                            b.wtid
+                        FROM
+                            t_wt_jbxx b
+                        WHERE
+                            b.id = #{map.id}))
+    </select>
+    <select id="findYpmc" resultType="java.lang.String">
+        select ypmc from t_ypgl_jbxx where ypbm = #{map.ypbm}
+    </select>
+    <select id="findCydbm" resultType="java.lang.String">
+        select b.cydbm from t_ypgl_jbxx a LEFT JOIN t_wt_jbxx b ON (a.wtid = b.wtid) where ypbm = #{map.ypbm}
+    </select>
+    <!--更新 readOnly 值-->
+    <update id="tjUpdateIf_sl">
+        update t_wt_jbxx
+        set
+        if_sl = #{if_sl},
+        readonly = "1"
+        where id = #{id}
+    </update>
+
+    <select id="getDwInfo" resultType="java.util.Map" parameterType="java.lang.String">
+        SELECT IFNULL(SJDW,'') SJDW,IFNULL(qylx,'') qylx,IFNULL(bcjdwdz,'') bcjdwdz,
+        IFNULL(frdb,'') frdb,IFNULL(nxse,'') nxse,IFNULL(yyzzh,'') yyzzh,
+        IFNULL(bcjdwlxr,'') bcjdwlxr,IFNULL(spxkzbh,'') spxkzbh,IFNULL(sjdwlxdh,'') sjdwlxdh,
+        IFNULL(bcjdwyddh,'') bcjdwyddh, IFNULL(bcjdwyb,'') bcjdwyb,
+        IFNULL(wtdw,'') wtdw,IFNULL(wtdwdz,'') wtdwdz,
+        IFNULL(wtdwdh,'') wtdwdh,IFNULL(wtdwyzbm,'') wtdwyzbm
+        FROM t_wt_jbxx
+        <if test="val != null">
+          where SJDW like CONCAT('%',#{val},'%')
+        </if>
+        GROUP BY SJDW,qylx,bcjdwdz,frdb,bcjdwlxr
+    </select>
+
+    <select id="findWtForSave" resultType="Integer">
+        select count(1)  from t_wt_jbxx a left join t_ypgl_jbxx b on a.wtid=b.wtid
+        where a.cydbm = #{map.cydbm}
+        <!--and b.ypmc = #{map.ypmc}-->
+        <!--and b.ypzxbz = #{map.zxbz}-->
+        <if test="map.id != null">
+            and a.id != #{map.id}
+        </if>
+</select>
+
+<!--根据id查询相关数据-->
+    <select id="findTqywtByYpbm" resultType="com.xinhai.caiyun.customermanage.api.Tqywt" parameterType="java.lang.String">
+        SELECT  ifnull(a.id,"") as id, ifnull(a.wtid,"") as wtid, ifnull(a.dwmc,"") as dwmc, ifnull(a.lxdh,"") as lxdh, ifnull(a.yzbm,"") as yzbm, ifnull(a.sfdm,"") as sfdm,
+        ifnull(a.sfmc,"") as sfmc, ifnull(a.csdm,"") as csdm, ifnull(a.csmc,"") as csmc, ifnull(a.xjdm,"") as xjdm, ifnull(a.xjmc,"") as xjmc, ifnull(a.xxdz,"") as xxdz,
+        ifnull(a.wtdw,"") as wtdw, ifnull(a.jylb,"") as jylb, ifnull(a.cplb,"") as cplb, ifnull(a.jyfb,"") as jyfb, ifnull(a.bz,"") as bz, ifnull(a.bgjffs,"") as bgjffs,
+        ifnull(a.syry,"") as syry, ifnull(a.syrq,"") as syrq, ifnull(a.jyyjbz,"") as jyyjbz, ifnull(b.if_sgr,"") as if_sgr, ifnull(b.if_ssg,"") as if_ssg, ifnull(b.ypbm,"") as ypbm,
+        ifnull(b.ypmc,"") as ypmc, ifnull(b.sb,"") as sb, ifnull(b.ggxh,"") as ggxh, b.ypdj, b.ypsl, b.ypdw, ifnull(b.scrq,"") as scrq, b.ypphhbh, b.ypzt, b.scdw, b.ypbctj, b.ybjs, b.bzq, b.ypwt, a.jyxm, b.if_th,
+        a.textField1,a.textField2,a.textField3,a.textField4,a.textField5,a.textField6,a.textField7,a.textField8,a.textField9,a.textField10,
+        a.dateField1,a.dateField2,a.dateField3,a.dateField4,a.dateField5,a.dateField6,a.dateField7,a.dateField8,a.dateField9,a.dateField10,
+        a.selectField1,a.selectField2,a.selectField3,a.selectField4,a.selectField5,a.selectField6,a.selectField7,a.selectField8,a.selectField9,a.selectField10,
+        a.jyyj,a.jyyjbzqt,a.jswj,a.jswjqt,a.yzjl,a.jywcrq,a.jysm,a.clyj,a.jffs,a.wtdwdz,a.wtdwyzbm,a.wtdwdh,b.if_by,b.bysl,b.qyyply,b.ccyqqt,b.cydd,b.wtcyfs,
+        b.ypzxbz,b.ftbh,a.readonly,a.bgfl1,a.bgfl,a.shouyry,b.rkrq,a.rwlx,a.cydbm,a.dybqsl
+        FROM t_wt_jbxx a LEFT JOIN t_ypgl_jbxx b ON a.WTID=b.WTID
+        where a.wtid = #{ypbm}
+    </select>
+
+    <!-- 根据 获取 委托单信息-->
+    <select id="findWtInfoById" resultType="map">
+        SELECT ID, wtid,type
+        FROM t_wt_jbxx
+         where id=#{id}
+    </select>
+</mapper>

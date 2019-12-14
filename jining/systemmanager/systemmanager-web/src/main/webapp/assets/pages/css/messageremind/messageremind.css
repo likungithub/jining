@@ -1,0 +1,33 @@
+@CHARSET "UTF-8";
+#messageremindasdf .datePikerInput{
+    height: 33px;
+}
+#messageremindasdf .help-block {
+    margin: 0!important;
+}
+#messageremindasdf .calendarIcon{
+    height: 33px;
+    border-radius: 0 4px 4px 0!important;
+}
+#messageremindasdf .input-small{
+    width:85px!important;
+}
+#messageremindasdf .label-sm{
+    width: 90px!important;
+}
+#messageremindasdf .searchBtn
+{
+    background: #fff;
+    border: 1px dashed #ccc;
+    height: 33px;
+    outline: none;
+    border-radius: 4px!important;
+    /*padding-top: 9px;*/
+}
+#messageremindasdf .activeBtn{
+    border:1px solid #438de4!important;
+    color: #438de4!important;
+}
+#type option{
+    height: 33px;
+}

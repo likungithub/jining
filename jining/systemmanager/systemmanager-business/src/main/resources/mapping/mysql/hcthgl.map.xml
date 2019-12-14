@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xinhai.caiyun.systemmanager.dao.HcthglMapper">
+    <!--得到领用申请的信息 -->
+    <select id="queryHcthglAll" resultType="map">
+        select rk.hcmc,rk.id as kcid,rk.gg,rk.jb,rk.sl,th.id,rk.sccj,rk.hclx,
+        (select name from user where zydm=th.thr) as thr,
+        th.thrq,th.thsl
+        from t_hcth_jbxx th
+        left join t_cgrk_jbxx rk
+        on th.kcid=rk.id
+        <where>
+            <if test="map.hclx==null or map.hclx==''">
+                and rk.hclx != '5'
+            </if>
+            <if test="map.hclx!=null and map.hclx!=''">
+                and rk.hclx=#{map.hclx}
+            </if>
+            <if test="map.hcmc!=null and map.hcmc!=''">
+                and rk.hcmc like concat('%',#{map.hcmc},'%')
+            </if>
+            <if test="map.startDate!=null">
+                and th.thrq >=  #{map.startDate}
+            </if>
+            <if test="map.endDate!=null">
+                and  #{map.endDate} >= th.thrq
+            </if>
+        </where>
+
+        order by th.id desc
+        limit #{map.start},#{map.length};
+    </select>
+    <!--得到领用申请的信息的数量 -->
+    <select id="queryHcthglAllNum" resultType="java.lang.Integer">
+        select count(th.id)
+        from t_hcth_jbxx th
+        left join t_cgrk_jbxx rk
+        on th.kcid=rk.id
+        <where>
+            <if test="map.hclx==null or map.hclx==''">
+                and rk.hclx != '5'
+            </if>
+            <if test="map.hclx!=null and map.hclx!=''">
+                and rk.hclx= #{map.hclx}
+            </if>
+            <if test="map.hcmc!=null and map.hcmc!=''">
+                and rk.hcmc like concat('%',#{map.hcmc},'%')
+            </if>
+            <if test="map.startDate!=null">
+                and th.thrq >=  #{map.startDate}
+            </if>
+            <if test="map.endDate!=null">
+                and  #{map.endDate} >= th.thrq
+            </if>
+        </where>
+        order by th.id desc
+    </select>
+    <select id="getReportData" resultType="map">
+        SELECT
+        rk.hcmc,
+        rk.id AS kcid,
+        rk.gg,
+        rk.jb,
+        rk.sl as kcsl,
+        th.id AS id,
+        rk.sccj,
+        rk.hclx,
+        rk.cfwz,
+        (select name from user where zydm = th.thr) AS thr,
+        th.thrq,
+        th.thsl
+        FROM
+        t_hcth_jbxx th
+        LEFT JOIN t_cgrk_jbxx rk ON th.kcid = rk.id
+        where th.id in
+        <foreach collection="ids" item="id" index="index" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </select>
+    <!-- 批量删除数据-->
+    <delete id="delThgl">
+        delete from t_hcth_jbxx where id in
+        <foreach collection="ids" index="index" item="id" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

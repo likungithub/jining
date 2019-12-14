@@ -1,0 +1,17 @@
+@CHARSET "UTF-8";
+#shortmessage #searchByTime .inputsmall{
+    width: 100px;
+    height: 33px;
+}
+#shortmessage #searchByTime .borderRR{
+    border-radius:4px!important;
+}
+#shortmessage #searchByTime #shortMessageType
+{
+    height: 33px;
+    border-radius: 4px!important;
+}
+
+#shortmessage  .rotate1 {
+    transform: rotate(180deg);
+}

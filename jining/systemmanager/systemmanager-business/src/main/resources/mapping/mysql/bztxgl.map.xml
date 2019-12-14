@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xinhai.caiyun.systemmanager.dao.BztxglMapper">
+    <!-- 获取标准项目管理所有表数据-->
+    <select id="findAllBzxmgl" resultType="map">
+        select y.id as ypid,y.ypmc as ypmc,y.ypbm as ypbm,j.zwmc_bm as xmbm, j.ywmc as ywmc,y.rq as jcrq,j.id as jcxmid,yj.id as yjid,
+        j.pdnh as pdnh,j.if_pd as if_pd,j.yyckjz as yyckjz,j.bl as bl,j.jcff as jcff,j.jcyjmc as jcyjmc,j.jcyj as jcyj,j.pdyj as pdyj,
+        j.pdyjmc as pdyjmc,j.wswnz as wswnz,j.wswcz as wswcz,j.wswmz as wswmz,j.xlz as xlz,j.xlzmrz as xlzmrz,
+        j.bzffjcxdw as jcxdw,j.bzzxyxx as zxyxx,j.bzzxyxxdw as zxyxxdw,j.bzzdyxx as zdyxx,j.bzzdyxxdw as zdyyxdw,
+        j.if_xtpd as if_xtpd,j.jg as jg,j.if_bzff as if_bzff,j.if_cma as if_cma,j.if_cmaf as if_cmaf,j.if_cnas as if_cnas,j.if_catl as if_catl,
+        j.zbzl as zbzl,j.zbzldw as zbzldw,j.bz as bz
+        from t_ypgl_jbxx y ,
+        t_jcxm_jbxx j ,
+        t_yp_jcxm yj
+        <where>
+            yj.jcxmid=j.id and yj.ypid=y.id
+            <if test="map.htmc!=null and map.htmc!=''">
+                and  y.htmc like concat('%',#{map.htmc},'%')
+            </if>
+            <if test="map.ypmc!=null and map.ypmc!=''">
+                and y.ypmc like concat('%',#{map.ypmc},'%')
+            </if>
+            <choose>
+                <when test="map.startDate!=null and map.endDate!=null">
+                    and y.rq between #{map.startDate} and #{map.endDate}
+                </when>
+                <otherwise>
+                    <choose>
+                        <when test="map.startDate!=null and map.endDate==null">
+                            and y.rq &gt;= #{map.startDate}
+                        </when>
+                        <otherwise>
+                            <choose>
+                                <when test="map.startDate==null and map.endDate!=null">
+                                    and y.rq &lt;= #{map.endDate}
+                                </when>
+                            </choose>
+                        </otherwise>
+                    </choose>
+                </otherwise>
+            </choose>
+        </where>
+        order by y.id desc
+        limit #{map.start},#{map.length};
+    </select>
+    <!-- 获取标准项目管理所有表数据的数量-->
+    <select id="findBzxmglNum" resultType="java.lang.Integer">
+        select count(*)
+        from t_ypgl_jbxx y ,
+        (select * from t_jcxm_jbxx) j ,
+        t_yp_jcxm yj
+        <where>
+            yj.jcxmid=j.id and yj.ypid=y.id
+            <if test="map.htmc!=null and map.htmc!=''">
+                and  y.htmc like concat('%',#{map.htmc},'%')
+            </if>
+            <if test="map.ypmc!=null and map.ypmc!=''">
+                and y.ypmc like concat('%',#{map.ypmc},'%')
+            </if>
+            <choose>
+                <when test="map.startDate!=null and map.endDate!=null">
+                    and y.rq between #{map.startDate} and #{map.endDate}
+                </when>
+                <otherwise>
+                    <choose>
+                        <when test="map.startDate!=null and map.endDate==null">
+                            and y.rq &gt;= #{map.startDate}
+                        </when>
+                        <otherwise>
+                            <choose>
+                                <when test="map.startDate==null and map.endDate!=null">
+                                    and y.rq &lt;= #{map.endDate}
+                                </when>
+                            </choose>
+                        </otherwise>
+                    </choose>
+                </otherwise>
+            </choose>
+        </where>
+    </select>
+    <!-- 标准项目管理 增加分析检测项目登记信息-->
+    <insert id="addBzxmglJcx">
+        insert into t_jcxm_jbxx(zwmc_bm,ywmc,pdnh,if_pd,yyckjz,bl,jcff,jcyj,wswmz, xlz,xlzmrz,bzffjcxdw,jcyjmc,pdyj,pdyjmc,wswnz,wswcz,bzzxyxx,bzzxyxxdw,bzzdyxx,bzzdyxxdw,if_xtpd,
+         if_bzff,if_cma,if_cmaf,if_cnas,if_catl,zbzl,zbzldw,bz)
+        values (
+          #{map.zwmc_bm},#{map.ywmc},#{map.pdnh},#{map.if_pd},#{map.yyckjz},#{map.bl},#{map.jcff},#{map.jcyj},#{map.wswmz},#{map.xlz},#{map.xlzmrz},#{map.bzffjcxdw},
+          #{map.jcyjmc},#{map.pdyj},#{map.pdyjmc},#{map.wswnz},#{map.wswcz},#{map.bzzxyxx},#{map.bzzxyxxdw},#{map.bzzdyxx},#{map.bzzdyxxdw},#{map.if_xtpd},
+          #{map.if_bzff},#{map.if_cma},#{map.if_cmaf},#{map.if_cnas},#{map.if_catl},#{map.zbzl},#{map.zbzldw},#{map.bz}
+         );
+    </insert>
+    <!-- 查找ypid 和 jcxmid-->
+    <select id="findYJid" resultType="map">
+        select ypid,jcxmid from t_yp_jcxm
+        where id=#{yjid};
+    </select>
+<!-- 通过ypid 查找样品信息-->
+    <select id="findOneYp" resultType="map">
+        select * from t_ypgl_jbxx
+        where id=#{ypid};
+    </select>
+ <!-- 通过jcxmid 查找检测项信息-->
+    <select id="findOneJcxm" resultType="map">
+        select * from t_jcxm_jbxx
+        where id=#{jcxmid}
+    </select>
+    <update id="updateJcxm">
+        update t_jcxm_jbxx set
+         zwmc_bm=#{map.zwmc_bm},ywmc=#{map.ywmc},pdnh=#{map.pdnh},if_pd=#{map.if_pd},yyckjz=#{map.yyckjz},bl=#{map.bl},jcff=#{map.jcff},jcyj=#{map.jcyj},wswmz=#{map.wswmz},xlz=#{map.xlz},xlzmrz=#{map.xlzmrz},bzffjcxdw=#{map.bzffjcxdw},
+        jcyjmc=#{map.jcyjmc},pdyj=#{map.pdyj},pdyjmc=#{map.pdyjmc},wswnz=#{map.wswnz},wswcz=#{map.wswcz},bzzxyxx=#{map.bzzxyxx},bzzxyxxdw=#{map.bzzxyxxdw},bzzdyxx=#{map.bzzdyxx},bzzdyxxdw=#{map.bzzdyxxdw},if_xtpd=#{map.if_xtpd},
+        if_bzff=#{map.if_bzff},if_cma=#{map.if_cma},if_cmaf=#{map.if_cmaf},if_cnas=#{map.if_cnas},if_catl=#{map.if_catl},zbzl=#{map.zbzl},zbzldw=#{map.zbzldw},bz=#{map.bz}
+        where id=#{map.jcxmid};
+    </update>
+<!-- 更新样品-->
+    <update id="updateYp">
+        update t_ypgl_jbxx set
+        ypmc= #{map.ypmc},ypbm=#{map.ypbm},rq=#{map.rq}
+        where id=#{map.ypid};
+    </update>
+    <!-- 通过样品id 删除样品 -->
+    <delete id="delYpById">
+        delete from t_ypgl_jbxx
+        where ID=#{id};
+    </delete>
+</mapper>

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xinhai.caiyun.customermanage.dao.YplzMapper">
+    <!--获取检测任务分配人员及时间-->
+    <select id="findJcDataAndZxry" resultType="map">
+        SELECT ypid,lrrq,ZXRY_DM
+        FROM t_jcgl_rydm WHERE lx ='1' AND ypid = #{ypid} and SCBZ = '0' and th='0'
+    </select>
+    <select id="findlrrqAndZxry" resultType="map">
+        SELECT a.ypid,a.JCXMID,a.LRRQ,a.ZXRY_DM ,b.ZWMC_BM
+        FROM t_yp_jcxm a
+        left JOIN t_jcxm_jbxx b ON a.JCXMID = b.ID
+        WHERE a.YPID = #{ypid} and a.ZXRY_DM = #{zxry}
+    </select>
+</mapper>

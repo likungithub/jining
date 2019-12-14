@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:dubbo="http://code.alibabatech.com/schema/dubbo"
+	   xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
+	http://code.alibabatech.com/schema/dubbo http://code.alibabatech.com/schema/dubbo/dubbo.xsd">
+
+	<!--
+		name 当前应用名称，该名称不能与其他的provider重复
+		owner 当前应用负责人，用于服务治理，一般为公司的名称，可以重复
+		organization 组织名称，此配置项建议直接写死在配置中
+	-->
+	<dubbo:application name="statisticalanalysis-consumer" owner="com.xinhai.caiyun"
+					   organization="com.xinhai.caiyun"/>
+
+	<!--
+		注册中心服务器地址
+		同一集群内的多个地址用逗号分隔，如：ip:port, ip:port
+		不同集群的注册中心，请配置多个<dubbo:registry>标签
+		${dubbo.registry.address} 值为properties/dubbo.properties配置文件中的属性值
+	-->
+	<dubbo:registry address="${dubbo.registry.address}"/>
+	<dubbo:protocol name="dubbo" serialization="kryo" />
+
+	<!--该模块需要调用的服务接口，对应statisticalanalysis-api中的服务接口-->
+	<dubbo:reference id="employeeService" interface="com.xinhai.caiyun.statisticalanalysis.api.EmployeeService"/>
+</beans>

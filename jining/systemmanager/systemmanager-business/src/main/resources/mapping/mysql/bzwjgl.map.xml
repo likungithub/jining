@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xinhai.caiyun.systemmanager.dao.BzwjglMapper">
+    <!-- 获取标准文件管理所有表数据-->
+    <select id="findAllBzwjgl" resultType="map">
+        select * from  t_wj_jbxx
+        <where>
+            <if test="map.wjml!=null and map.wjml!=''">
+                 WJML like concat('%',#{map.wjml},'%')
+            </if>
+        </where>
+        order by id desc
+        limit #{map.start},#{map.length};
+    </select>
+    <!-- 获取标准文件管理所有数-->
+    <select id="findAllBzwjglNum" resultType="java.lang.Integer">
+            select count(*) from t_wj_jbxx
+          <where>
+            <if test="map.wjml!=null and map.wjml!=''">
+                WJML like concat('%',#{map.wjml},'%')
+            </if>
+          </where>
+    </select>
+    <!-- 增加数据-->
+    <insert id="addlBzwjgl">
+        insert into t_wj_jbxx(wjmc,wjml,wjbb,wjbh,scr,scsj,file_path,wdsm)
+        values (#{map.wjmc},#{map.wjml},#{map.wjbb},#{map.wjbh},#{map.scr},now(),#{map.path},#{map.wdsm});
+    </insert>
+    <!-- 删除数据-->
+    <delete id="delBzwjgl">
+        delete from t_wj_jbxx where ID=#{id};
+    </delete>
+<!-- 更新语句-->
+    <update id="enditBzwjgl">
+        update t_wj_jbxx set wjmc=#{map.wjmc},wjml=#{map.wjml},wjbb=#{map.wjbb},wjbh=#{map.wjbh},scr=#{map.scr},scsj=#{map.scsj},wdsm=#{map.wdsm}
+        where ID=#{map.id};
+    </update>
+    <!-- 通过id查找一个文件管理信息-->
+    <select id="findOneBzwjgl" resultType="map">
+        select * from t_wj_jbxx
+        where ID=#{id};
+    </select>
+    <!-- 增加审核-->
+    <update id="addShenhe">
+        update t_wj_jbxx set SHSJ=now(),SHR=#{map.name}
+        where ID=#{map.id}
+    </update>
+
+    <!-- 增加修订-->
+    <update id="addXiuding">
+        update t_wj_jbxx set XDSJ=now(),XDR=#{map.name}
+        where ID=#{map.id}
+    </update>
+    <!-- 增加借阅-->
+    <update id="addJieyue">
+        update t_wj_jbxx set JYSJ=now(),JYR=#{map.name}
+        where ID=#{map.id}
+    </update>
+    <!-- 增加回收-->
+    <update id="addHuishou">
+        update t_wj_jbxx set HSSJ=now(),HSR=#{map.name}
+        where ID=#{map.id}
+    </update>
+</mapper>

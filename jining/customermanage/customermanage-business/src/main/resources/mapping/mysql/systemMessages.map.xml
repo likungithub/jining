@@ -1,0 +1,403 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- namespace必须和接口名称一一对应 -->
+<!-- 消息提醒数据库SQL -->
+<mapper namespace="com.xinhai.caiyun.customermanage.dao.SystemMessagesMapper">
+	<!--获取所有数据 -->
+	<!-- <select id="findAllSystemMessages" resultType="com.xinhai.caiyun.customermanage.api.SystemMessages"> 
+		SELECT ID,TXLX_DM,DLJG_BM,TXBT,TXNR,FSRY_DM,FSRY_MC,JSRY_DM,JSRY_MC,FSSJ,YDSJ,YDZT_DM,SCRY_DM,SCRY_MC,SCBZ,SCRQ 
+		FROM PT_XXTX; </select> -->
+	<insert id="addSystemMessages" parameterType="com.xinhai.caiyun.customermanage.api.SystemMessages"
+		keyProperty="id" useGeneratedKeys="true">
+		INSERT INTO PT_XXTX
+		(XXID,TXLX_DM,DLJG_BM,TXBT,TXNR,FSRY_DM,FSRY_MC,JSRY_DM,JSRY_MC,FSSJ,YDZT_DM,SCBZ,GLBM,GLBM_CY,TXFS)
+		VALUES
+		(#{xxid},#{txlx_dm},#{dljg_bm},#{txbt},#{txnr},#{fsry_dm},#{fsry_mc},#{jsry_dm},#{jsry_mc},#{fssj},0,0,#{glbm},#{glbm_cy},#{txfs});
+	</insert>
+	<insert id="addSystemMessagesByUserList" parameterType="com.xinhai.caiyun.customermanage.api.SystemMessages"
+        keyProperty="id" useGeneratedKeys="true">
+        INSERT INTO PT_XXTX
+        (TXLX_DM,DLJG_BM,TXBT,TXNR,FSRY_DM,FSRY_MC,JSRY_DM,JSRY_MC,FSSJ,YDZT_DM,SCBZ,GLBM,GLBM_CY,TXFS,XXID)
+        VALUES
+        <foreach collection="list" index="index" item="item" open="" separator="," close="">
+        (#{sysmes.txlx_dm},#{sysmes.dljg_bm},#{sysmes.txbt},#{sysmes.txnr},#{sysmes.fsry_dm},#{sysmes.fsry_mc},#{item.zydm},#{item.name},#{sysmes.fssj},0,0,#{sysmes.glbm},#{sysmes.glbm_cy},#{sysmes.txfs},#{item.xxid})
+        </foreach>
+    </insert>
+    <insert id="addSystemMessagesByHtbmList" parameterType="com.xinhai.caiyun.customermanage.api.SystemMessages"
+        keyProperty="id" useGeneratedKeys="true">
+        INSERT INTO PT_XXTX
+        (TXLX_DM,DLJG_BM,TXBT,TXNR,FSRY_DM,FSRY_MC,JSRY_DM,JSRY_MC,FSSJ,YDZT_DM,SCBZ,GLBM,GLBM_CY,TXFS,XXID)
+        VALUES
+        <foreach collection="list" index="index" item="item" open="" separator="," close="">
+        (#{sysmes.txlx_dm},#{sysmes.dljg_bm},#{sysmes.txbt},#{item.txnr},#{sysmes.fsry_dm},#{sysmes.fsry_mc},#{item.jsdm},#{item.jsmc},#{sysmes.fssj},0,0,#{item.glzy},#{item.glcy},#{sysmes.txfs},#{item.xxid})
+        </foreach>
+    </insert>
+	
+	<select id="searchByAll" resultType="com.xinhai.caiyun.customermanage.api.SystemMessages">
+		SELECT ID,TXBT,TXNR,FSSJ,YDZT_DM,FSRY_MC FROM pt_xxtx WHERE
+		DLJG_BM=#{dl} AND JSRY_DM=#{ygdm} AND SCBZ='0' limit #{start},#{length} order by FSSJ desc
+	</select>
+	<update id="deleteById">
+		UPDATE pt_xxtx SET SCBZ=1 WHERE DLJG_BM=#{dl} AND
+		JSRY_DM=#{ygdm} AND ID=#{id}
+	</update>
+	<update id="updateById">
+		UPDATE pt_xxtx SET YDZT_DM=1 WHERE DLJG_BM=#{dl} AND
+		JSRY_DM=#{ygdm} AND ID=#{id}
+	</update>
+	<select id="searchByType" resultType="com.xinhai.caiyun.customermanage.api.SystemMessages">
+		SELECT ID,TXBT,TXNR,FSSJ,YDZT_DM,FSRY_MC FROM pt_xxtx WHERE
+		DLJG_BM=#{dl} AND JSRY_DM=#{ygdm} AND SCBZ='0' AND
+		YDZT_DM=#{readStat} order by FSSJ desc
+	</select>
+	<select id="findByWeek" resultType="com.xinhai.caiyun.customermanage.api.SystemMessages">
+		SELECT ID,TXBT,TXNR,FSSJ,YDZT_DM,FSRY_MC FROM pt_xxtx WHERE
+		DLJG_BM=#{dl} AND JSRY_DM=#{ygdm} AND SCBZ='0' AND
+		YDZT_DM LIKE CONCAT('%',#{cxzt},'%' ) AND FSSJ BETWEEN #{lastWeek} AND
+		#{nowWeek} AND TXLX_DM LIKE CONCAT('%',#{typeTx},'%' ) order by FSSJ desc limit #{start},#{length} 
+	</select>
+	<select id="findByMonth" resultType="com.xinhai.caiyun.customermanage.api.SystemMessages">
+		SELECT ID,TXBT,TXNR,FSSJ,YDZT_DM,FSRY_MC FROM pt_xxtx WHERE
+		DLJG_BM=#{dl} AND JSRY_DM=#{ygdm} AND SCBZ='0' AND
+		YDZT_DM LIKE CONCAT('%',#{cxzt},'%' ) AND FSSJ BETWEEN #{begin} AND
+		#{end}  AND TXLX_DM LIKE CONCAT('%',#{typeTx},'%' ) order by FSSJ desc limit #{start},#{length} 
+	</select>
+
+	<select id="findByLastMonth" resultType="com.xinhai.caiyun.customermanage.api.SystemMessages">
+		SELECT ID,TXBT,TXNR,FSSJ,YDZT_DM,FSRY_MC FROM pt_xxtx WHERE
+		DLJG_BM=#{dl} AND JSRY_DM=#{ygdm} AND SCBZ='0' AND
+		YDZT_DM LIKE CONCAT('%',#{cxzt},'%' ) AND FSSJ BETWEEN #{begin} AND
+		#{end}  AND TXLX_DM LIKE CONCAT('%',#{typeTx},'%' ) order by FSSJ desc limit #{start},#{length} 
+	</select>
+	<select id="findByYear" resultType="com.xinhai.caiyun.customermanage.api.SystemMessages">
+		SELECT ID,TXBT,TXNR,FSSJ,YDZT_DM,FSRY_MC FROM pt_xxtx WHERE
+		DLJG_BM=#{dl} AND JSRY_DM=#{ygdm} AND SCBZ='0' AND
+		YDZT_DM LIKE CONCAT('%',#{cxzt},'%' ) AND FSSJ BETWEEN #{begin} AND
+		#{end}  AND TXLX_DM LIKE CONCAT('%',#{typeTx},'%' ) order by FSSJ desc limit #{start},#{length} 
+	</select>
+	<select id="findByZdy" resultType="com.xinhai.caiyun.customermanage.api.SystemMessages">
+		SELECT ID,TXBT,TXNR,FSSJ,YDZT_DM,FSRY_MC FROM pt_xxtx WHERE
+		DLJG_BM=#{dl} AND JSRY_DM=#{ygdm} AND SCBZ='0' AND
+		YDZT_DM LIKE CONCAT('%',#{cxzt},'%' ) AND FSSJ BETWEEN #{begin} AND
+		#{end}  AND TXLX_DM LIKE CONCAT('%',#{typeTx},'%' ) order by FSSJ desc limit #{start},#{length}
+	</select>
+	<select id="searchCount" resultType="int">
+	SELECT COUNT(0) FROM pt_xxtx WHERE JSRY_DM=#{zydm} AND DLJG_BM=#{dl} AND SCBZ=false AND YDZT_DM=false AND TXLX_DM='001'
+	</select>
+	
+	<select id="searchDLCount" resultType="int">
+    SELECT COUNT(0) FROM pt_xxtx WHERE DLJG_BM=#{dl} AND SCBZ=false AND YDZT_DM=false AND TXLX_DM='001'
+    </select>
+    
+	<select id="searchBytxType" resultType="com.xinhai.caiyun.customermanage.api.SystemMessages">
+	SELECT ID,TXBT,TXNR,FSSJ,YDZT_DM,FSRY_MC FROM pt_xxtx WHERE
+		DLJG_BM=#{dl} AND JSRY_DM=#{ygdm} AND SCBZ='0' AND
+		CONCAT(TXLX_DM) LIKE CONCAT('%',#{typeTx},'%') AND CONCAT(YDZT_DM) LIKE CONCAT('%',#{xlbz},'%') order by FSSJ desc limit #{start},#{length} 
+	</select>
+	<select id="searchBytx" resultType="com.xinhai.caiyun.customermanage.api.SystemMessages">
+	SELECT ID,TXBT,TXNR,FSSJ,YDZT_DM,FSRY_MC FROM pt_xxtx WHERE
+	DLJG_BM=#{dl} AND JSRY_DM=#{ygdm} AND SCBZ='0' AND YDZT_DM=#{xlbz} order by FSSJ desc limit #{start},#{length} 
+	</select>
+	<select id="searchById" resultType="com.xinhai.caiyun.customermanage.api.SystemMessages">
+	select TXLX_DM,DLJG_BM,TXBT,TXNR,FSRY_DM,FSRY_MC,JSRY_DM,JSRY_MC,FSSJ,YDZT_DM,SCBZ FROM pt_xxtx WHERE ID=#{id} order by FSSJ desc
+	</select>
+	<select id="searchCountIndex" resultType="int">
+    SELECT COUNT(#{zydm}) FROM pt_xxtx WHERE JSRY_DM=#{zydm} AND DLJG_BM=#{dljgBm} AND SCBZ='0' AND YDZT_DM='0'
+    </select>
+    <select id="searchByCountWeek" resultType="long">
+	select count(1) from pt_xxtx where 
+	DLJG_BM=#{dl} AND JSRY_DM=#{ygdm} AND SCBZ='0' AND
+		YDZT_DM LIKE CONCAT('%',#{ydbz},'%' ) AND FSSJ BETWEEN #{begin} AND
+		#{end} AND TXLX_DM LIKE CONCAT('%',#{type},'%' )
+	</select>
+	<select id="searchByCountMonth" resultType="long">
+	select count(1) from pt_xxtx WHERE
+		DLJG_BM=#{dl} AND JSRY_DM=#{ygdm} AND SCBZ='0' AND
+		YDZT_DM LIKE CONCAT('%',#{ydbz},'%' ) AND FSSJ BETWEEN #{begin} AND
+		#{end}  AND TXLX_DM LIKE CONCAT('%',#{type},'%' )
+	</select>
+	<select id="searchByCountByLastWeek" resultType="long">
+	select count(1) from pt_xxtx WHERE
+		DLJG_BM=#{dl} AND JSRY_DM=#{ygdm} AND SCBZ='0' AND
+		YDZT_DM LIKE CONCAT('%',#{ydbz},'%' ) AND FSSJ BETWEEN #{begin} AND
+		#{end}  AND TXLX_DM LIKE CONCAT('%',#{type},'%' )
+	</select>
+	<select id="searchCountByYear" resultType="long">
+	select count(1) from pt_xxtx WHERE
+		DLJG_BM=#{dl} AND JSRY_DM=#{ygdm} AND SCBZ='0' AND
+		YDZT_DM LIKE CONCAT('%',#{ydbz},'%' ) AND FSSJ BETWEEN #{begin} AND
+		#{end}  AND TXLX_DM LIKE CONCAT('%',#{type},'%' )
+	</select>
+	<select id="searchCountByZdy" resultType="long">
+	select count(1) from pt_xxtx WHERE
+		DLJG_BM=#{dl} AND JSRY_DM=#{ygdm} AND SCBZ='0' AND
+		YDZT_DM LIKE CONCAT('%',#{ydbz},'%' ) AND FSSJ BETWEEN #{begin} AND
+		#{end}  AND TXLX_DM LIKE CONCAT('%',#{type},'%' )
+	</select>
+	<select id="searchCountByAll" resultType="long">
+	select count(1) from pt_xxtx WHERE
+	DLJG_BM=#{dl} AND JSRY_DM=#{ygdm} and SCBZ='0'
+	</select>
+	<select id="searchCountBytype" resultType="long">
+	select count(1) from pt_xxtx where 
+	DLJG_BM=#{dl} AND JSRY_DM=#{ygdm} AND TXLX_DM LIKE CONCAT('%',#{type},'%' ) AND YDZT_DM LIKE CONCAT('%',#{ydbz},'%' ) and SCBZ='0'
+	</select>
+	<select id="searchCountByTx" resultType="Long">
+	select count(1) from pt_xxtx where 
+	DLJG_BM=#{dl} AND JSRY_DM=#{ygdm} and YDZT_DM LIKE CONCAT('%',#{ydbz},'%' ) and SCBZ='0'
+	</select>
+	
+	<!-- 查找所有存在消息的客户列表 -->
+	<select id="searchAllKhList" parameterType="java.lang.String" resultType="java.util.Map">
+ <!--   SELECT T3.KHBM id ,IFNULL(T2.GSMC,'') name,IFNULL(T2.GRTX,'') img
+	FROM PT_MESSAGES T1,PT_APP_KHXX T2,PT_KHXX T3
+	WHERE ((t2.KHBM = t3.KHBM AND t1.M_FSRID = t2.KHBM AND t1.M_JSRID = t3.DLJG_BM) OR (t2.KHBM = t3.KHBM AND t1.M_FSRID = t3.DLJG_BM AND t1.M_JSRID =t2.KHBM))
+	AND T3.DLJG_BM = #{dljgBm} and T3.scbz = false
+	GROUP BY T3.KHBM; -->
+	
+	<!-- SELECT T2.KHBM id, IFNULL(T2.GSMC,'') name, IFNULL(T2.GRTX,'') img ,  t1.M_ydzt,sum( case t1.M_ydzt when 0 then 0 else 1 end) ydzt
+		FROM PT_MESSAGES T1,PT_APP_KHXX T2
+		WHERE 
+		 ((T1.M_FSRID = #{zydm} AND T1.M_JSRID =  T2.KHBM) 
+		  OR
+		(T1.M_JSRID = #{zydm} AND T1.M_FSRID =  T2.KHBM))
+    GROUP BY T2.KHBM; -->
+	
+	<!-- 获取准确的已读状态修改后的SQL -->
+	SELECT d.id,d.name,d.img,d.ydzt,DATE_FORMAT(d.fssj, '%Y-%m-%d %H:%i:%s') fssj
+			FROM (
+			SELECT T2.KHBM id, IFNULL(T2.GSMC,'') name, IFNULL(T2.GRTX,'') img,SUM(CASE t1.M_ydzt WHEN 0 THEN 0 ELSE 1 END) ydzt,max(t1.M_FSSJ) fssj
+			FROM PT_MESSAGES T1,PT_APP_KHXX T2
+			WHERE 
+			         (
+			        (T1.M_JSRID = #{zydm} AND T1.M_FSRID = T2.KHBM))
+			        group by T2.KHBM 
+			         UNION ALL
+			SELECT T2.KHBM id, IFNULL(T2.GSMC,'') name, IFNULL(T2.GRTX,'') img,  0 ydzt,max(t1.M_FSSJ) fssj
+			FROM PT_MESSAGES T1,PT_APP_KHXX T2
+			WHERE 
+			         (
+			        (T1.M_FSRID = #{zydm} AND T1.M_JSRID = T2.KHBM))
+			            group by T2.KHBM 
+			        ) d
+			GROUP BY d.id;
+    </select>
+    
+         <!-- App查找所有存在消息的客户列表 -->
+    <select id="getAllAppKhList" parameterType="java.lang.String" resultType="java.util.Map">
+            SELECT d.id,d.name,d.img,d.ydzt,DATE_FORMAT(d.fssj, '%Y-%m-%d %H:%i:%s') fssj
+			FROM (
+			SELECT T2.ZYDM id, IFNULL(T2.name,'') name, IFNULL(T2.ygtx,'') img,SUM(CASE t1.M_ydzt WHEN 0 THEN 0 ELSE 1 END) ydzt,max(t1.M_FSSJ) fssj
+			FROM PT_MESSAGES T1,user T2
+			WHERE 
+			         (
+			        (T1.M_JSRID = #{khbm} AND T1.M_FSRID = T2.ZYDM))
+			        group by T2.ZYDM 
+			         UNION ALL
+			SELECT T2.ZYDM id, IFNULL(T2.name,'') name, IFNULL(T2.ygtx,'') img,  0 ydzt,max(t1.M_FSSJ) fssj
+			FROM PT_MESSAGES T1,user T2
+			WHERE 
+			         (
+			        (T1.M_FSRID = #{khbm} AND T1.M_JSRID = T2.ZYDM))
+			            group by T2.ZYDM 
+			        ) d
+			GROUP BY d.id;
+
+    </select>
+    
+    
+    <!-- 查找客户列表 -->
+    <select id="findAllPtKhxx" parameterType="java.lang.String" resultType="java.util.Map">
+			 SELECT a.khbm id,IFNULL(a.gsmc,'') name,IFNULL(t2.GRTX,'') img
+			FROM pt_khxx a
+			LEFT JOIN (
+			SELECT KHBM
+			FROM pt_sfgl_sfxx
+			WHERE DLJG_BM=#{dljgbm}  AND SFXM_DM='001' AND scbz = FALSE) c ON a.KHBM=c.KHBM 
+			 left join pt_app_khxx t2 on a.KHBM = t2.khbm 
+			
+			WHERE a.dljg_bm = #{dljgbm} AND a.scbz = FALSE AND FuncAuthorityKh( #{zydm}, a.KHBM, 1) = 1
+		    and t2.khbm is not null 
+			 <if test="gsmc!=null and gsmc != '' ">
+            AND a.gsmc LIKE CONCAT('%',#{gsmc},'%')
+            </if>
+			
+			GROUP BY a.KHBM
+			ORDER BY a.id DESC
+    </select>
+    
+     <!-- APP查找客户列表 -->
+    <select id="findAllAppPtKhxx" parameterType="java.lang.String" resultType="java.util.Map">
+           SELECT a.ZYXM name,a.ZYDM id, b.ygtx img
+				FROM pt_khxx a
+				inner JOIN USER b ON b.zydm = a.ZYDM
+				WHERE a.khbm=#{khbm}
+				 <if test="gsmc!=null and gsmc != '' ">
+            AND a.zyxm LIKE CONCAT('%',#{gsmc},'%')
+                </if>
+				UNION
+				SELECT 
+				
+				a.khjl_mc name,a.KHJL_DM id,c.ygtx img
+				FROM pt_khxx a
+				inner JOIN USER c ON c.zydm = a.KHJL_DM
+				WHERE a.khbm=#{khbm}
+				 <if test="gsmc!=null and gsmc != '' ">
+            AND a.khjl_mc LIKE CONCAT('%',#{gsmc},'%')
+                </if>
+				 UNION
+				SELECT 
+				 d.name ,a.LRRY id,d.ygtx img
+				FROM pt_khxx a
+				inner JOIN USER d ON d.zydm = a.LRRY
+				WHERE a.khbm=#{khbm}
+				 <if test="gsmc!=null and gsmc != '' ">
+            AND d.name LIKE CONCAT('%',#{gsmc},'%')
+                </if>
+				
+				UNION
+				SELECT IFNULL(name,'') name ,zydm id,ygtx img
+				FROM USER
+				WHERE zydm IN (
+				SELECT zydm
+				FROM pt_pggl
+				WHERE khbm=#{khbm} AND scbz = FALSE
+				 <if test="gsmc!=null and gsmc != '' ">
+            AND name LIKE CONCAT('%',#{gsmc},'%')
+                </if>
+				)
+    </select>
+    
+
+    
+    
+    <resultMap type="com.xinhai.caiyun.customermanage.api.PtLtxx" id="getLtxxMap">
+        <result property="userId" column="KHBM"></result>
+        <!-- 一对多  -->
+        <collection property="messages" javaType="java.util.List" ofType="com.xinhai.caiyun.customermanage.api.PtLtxxMx"> 
+            <result property="text" column="M_LYXX"></result>
+            <result property="date" column="M_FSSJ"></result>
+            <result property="self" column="self"></result>
+        </collection> 
+    </resultMap>
+    
+    <!-- 查找客户聊天内容 -->
+   <select id="searchLtxx" parameterType="java.lang.String" resultType="java.util.Map">
+  <!--    <![CDATA[ SELECT T3.KHBM userId,T1.M_LYXX text,DATE_FORMAT(M_FSSJ,'%Y-%m-%d %h:%i:%s') date, CASE WHEN T1.M_FSRID <> #{dljgBm} THEN '' ELSE '!0' END AS self
+	FROM PT_MESSAGES T1,PT_APP_KHXX T2,PT_KHXX T3
+	WHERE ((T2.KHBM = T3.KHBM AND T1.M_FSRID = T2.KHBM AND T1.M_JSRID = T3.DLJG_BM) OR (T2.KHBM = T3.KHBM AND T1.M_FSRID = T3.DLJG_BM AND T1.M_JSRID =T2.KHBM)) 
+	AND T3.KHBM = #{khbm} AND T3.DLJG_BM = #{dljgBm} and T3.scbz = false  ORDER BY T1.M_FSSJ ASC;
+    ]]>  --> 
+     <![CDATA[
+    SELECT CASE WHEN T1.M_FSRID <> #{zydm} THEN T1.M_FSRID ELSE T1.M_JSRID END AS userId,
+T1.M_LYXX text, DATE_FORMAT(M_FSSJ,'%Y-%m-%d %h:%i:%s') date, CASE WHEN T1.M_FSRID <> #{zydm} THEN '' ELSE '!0' END AS self,T1.M_YDZT ydzt
+FROM PT_MESSAGES T1
+WHERE (T1.M_JSRID = #{khbm} AND T1.M_FSRID = #{zydm} ) OR
+(T1.M_JSRID = #{zydm}  AND T1.M_FSRID = #{khbm})
+ORDER BY T1.M_FSSJ ASC;
+     ]]> 
+      
+    
+    </select> 
+	
+	<update id="updateLtxx" parameterType="com.xinhai.caiyun.customermanage.api.PtLtxxMx">
+        UPDATE PT_MESSAGES SET M_YDZT = 0 WHERE M_DLJGBM=#{dljgbm} AND
+        M_FSRID=#{fsrid}  AND M_JSRID = #{jsrid}
+    </update>
+	
+      <!-- 插入聊天记录 -->
+    <insert id="addLtxx" parameterType="com.xinhai.caiyun.customermanage.api.PtLtxxMx"
+        keyProperty="id" useGeneratedKeys="true">
+        INSERT INTO PT_MESSAGES
+        (M_LYXX,M_FSSJ,M_DLJGBM,M_FSRID,M_JSRID,M_YDZT)
+        VALUES
+        (#{text},now(),#{dljgbm},#{fsrid},#{jsrid},#{ydzt});   
+    </insert>
+	
+	<select id="searchByAllAndAdmin" resultType="com.xinhai.caiyun.customermanage.api.SystemMessages">
+		SELECT ID,TXBT,TXNR,FSSJ,YDZT_DM,FSRY_MC FROM pt_xxtx WHERE
+		DLJG_BM=#{dl}  AND SCBZ='0' AND
+		CONCAT(TXLX_DM) LIKE CONCAT('%',#{type},'%') AND CONCAT(YDZT_DM) LIKE CONCAT('%',#{ydbz},'%') order by FSSJ desc limit #{start},#{length} 
+	</select>
+	<select id="searchByAllAndAdmincount" resultType="long">
+		select count(1)  FROM pt_xxtx WHERE
+		DLJG_BM=#{dl}  AND SCBZ='0' AND
+		CONCAT(TXLX_DM) LIKE CONCAT('%',#{type},'%') AND CONCAT(YDZT_DM) LIKE CONCAT('%',#{ydbz},'%')
+	</select>
+	
+	<select id="searchByAllAndAdmincountNew" resultType="long">
+	   select count(id) from pt_xxtx where DLJG_BM=#{dljgBm} and scbz = false and JSRY_DM = #{zydm}
+	   <if test="ydbz!=3">
+	       and YDZT_DM = #{ydbz}
+	   </if>
+	   <if test="type!=100">
+	       and TXLX_DM = #{type}
+	   </if>
+	   <if test="selectTime=='week'">
+	       and FSSJ >=DATE_SUB(CURDATE(), INTERVAL 7 DAY) 
+	   </if>
+	   <if test="selectTime=='month'">
+           and DATE_FORMAT(FSSJ, '%Y%m') = DATE_FORMAT(CURDATE(), '%Y%m')
+       </if>
+       <if test="selectTime=='lastMonth'">
+           and PERIOD_DIFF(date_format(now(), '%Y%m'),date_format(FSSJ, '%Y%m'))=1
+       </if>
+       <if test="selectTime=='year'">
+           and DATE_FORMAT(FSSJ, '%Y') = DATE_FORMAT(CURDATE(), '%Y')
+       </if>
+       <if test="ssDate!=null">
+           and FSSJ > #{ssDate}
+       </if>
+       <if test="seDate!=null">
+           and #{seDate} > FSSJ
+       </if>
+	</select>
+	
+	<select id="searchByAllAndAdminNew" resultType="com.xinhai.caiyun.customermanage.api.SystemMessages">
+	   SELECT ID,TXBT,TXNR,FSSJ,YDZT_DM,FSRY_MC,GLBM,GLBM_CY,TXLX_DM FROM pt_xxtx WHERE DLJG_BM=#{dljgbm} and scbz = false and JSRY_DM = #{zydm}
+       <if test="ydbz!=3">
+           and YDZT_DM = #{ydbz}
+       </if>
+       <if test="type!=100">
+           and TXLX_DM = #{type}
+       </if>
+       <if test="selectTime=='week'">
+           and FSSJ >=DATE_SUB(CURDATE(), INTERVAL 7 DAY) 
+       </if>
+       <if test="selectTime=='month'">
+           and DATE_FORMAT(FSSJ, '%Y%m') = DATE_FORMAT(CURDATE(), '%Y%m')
+       </if>
+       <if test="selectTime=='lastMonth'">
+           and PERIOD_DIFF(date_format(now(), '%Y%m'),date_format(FSSJ, '%Y%m'))=1
+       </if>
+       <if test="selectTime=='year'">
+           and DATE_FORMAT(FSSJ, '%Y') = DATE_FORMAT(CURDATE(), '%Y')
+       </if>
+       <if test="ssDate!=null">
+           and FSSJ > #{ssDate}
+       </if>
+       <if test="seDate!=null">
+           and #{seDate} > FSSJ
+       </if> order by FSSJ desc  limit #{start}, #{length}
+	</select>
+	
+	<!-- 给拥有审核权限的职员发送消息 -->
+	<select id="addSystemMessagesByUserString" statementType="CALLABLE" parameterMap="sendMap">
+	   <![CDATA[
+            call P_insertMessage(
+                ?,?,?,?,?,?,?,?
+            )
+        ]]>
+	</select>
+	<parameterMap id="sendMap" type="java.util.HashMap">    
+	   <parameter property="map_txlx_dm" jdbcType="VARCHAR" javaType="java.lang.String" mode="IN"/>    
+	    <parameter property="map_dljg_bm" jdbcType="VARCHAR" javaType="java.lang.String" mode="IN"/>    
+	    <parameter property="map_txbt" jdbcType="VARCHAR" javaType="java.lang.String" mode="IN"/>    
+	    <parameter property="map_txnr" jdbcType="VARCHAR" javaType="java.lang.String" mode="IN"/>    
+	    <parameter property="map_fsry_dm" jdbcType="VARCHAR" javaType="java.lang.String" mode="IN"/>  
+	    <parameter property="map_glbm" jdbcType="VARCHAR" javaType="java.lang.String" mode="IN"/>
+	    <parameter property="map_glbm_cy" jdbcType="VARCHAR" javaType="java.lang.String" mode="IN"/>
+	    <parameter property="map_list" jdbcType="VARCHAR" javaType="java.lang.String" mode="IN"/>       
+	</parameterMap> 
+</mapper>

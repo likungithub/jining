@@ -1,0 +1,42 @@
+@CHARSET "UTF-8";
+#resource-manager-content #resourceForm div.row{
+    margin-bottom: 15px;
+}
+#resource-manager-content  .save{
+   margin-left: 550px;
+}
+#resource-manager-content .input-group-addon {
+    padding:0;
+    line-height: 32px;
+}
+#resource-manager-content span.select2-container
+{
+    width: 497px!important;
+    left: -15px;
+}
+#resource-manager-content span.select2-selection {
+    height: 33px;
+    border-radius: 0 4px 4px 0!important;
+}
+#resource-manager-content textarea{
+    width: 500px!important;
+    resize: none;
+    border-radius: 0 4px 4px 0!important;
+    border: 1px solid #ccc!important;
+    height:86px;
+}
+
+#list-description-m{
+    height: 86px;
+    margin-right: 0!important;
+    line-height: 86px!important;
+}
+
+.isOrNoUse-m{
+    border: 1px solid #ccc;
+    float: left;
+    width: 500px;
+    height: 33px;
+    padding-left: 15px;
+    border-radius: 0 4px 4px 0!important;
+}

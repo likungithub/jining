@@ -1,0 +1,21 @@
+#registrationProtocol{
+	width:800px;
+	margin:0 auto;
+}
+#registrationProtocol h3{
+	text-align:center;
+	font-weight:900;
+	color:#666;
+	font-family:"Microsoft YaHei";
+}
+#registrationProtocol .page-head{
+	font-weight:900;
+	color:#333;
+	text-indent:0;
+}
+#registrationProtocol p{
+	font-size:12px;
+	line-height:20px;
+	color:#333;
+	text-indent:22px
+}

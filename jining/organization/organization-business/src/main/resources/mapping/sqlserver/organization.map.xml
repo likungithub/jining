@@ -1,0 +1,222 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.xinhai.organization.dao.OrganizationMapper">
+    <resultMap id="orgaizationMap" type="com.xinhai.organization.api.Organization">
+        <id property="id" column="id"/>
+        <result property="code" column="code"/>
+        <result property="name" column="name"/>
+        <result property="parentId" column="parent_id"/>
+        <result property="independent" column="is_independent"/>
+        <result property="orgType" column="org_type"/>
+        <result property="path" column="path"/>
+        <result property="remark" column="remark"/>
+        <result property="orderNo" column="order_no"/>
+		<result property="extendAttribute1" column="attr1"/>
+		<result property="extendAttribute2" column="attr2"/>
+		<result property="extendAttribute3" column="attr3"/>
+		<result property="extendAttribute4" column="attr4"/>
+		<result property="extendAttribute5" column="attr5"/>
+    </resultMap>
+    <insert id="addOrg">
+		INSERT INTO organization (
+			id,
+			customer_id,
+			code,
+			name,
+			parent_id,
+			is_independent,
+			org_type,
+			path,
+			remark,
+			order_no,
+			update_date,
+			is_delete,
+			attr1,
+			attr2,
+			attr3,
+			attr4,
+			attr5)
+		VALUES
+			(
+				#{org.id},
+				#{customerId},
+				#{org.code},
+				#{org.name},
+				#{org.parentId},
+				#{org.independent},
+				#{org.orgType},
+				#{org.path},
+				#{org.remark},
+				#{org.orderNo},
+				SYSDATETIME(),
+				0,
+				#{org.extendAttribute1},
+				#{org.extendAttribute2},
+				#{org.extendAttribute3},
+				#{org.extendAttribute4},
+				#{org.extendAttribute5});
+	</insert>
+    <insert id="setOrgAuth">
+        INSERT INTO organization_auth (org_id, resource_id) VALUES
+        <foreach collection="authIds" item="authId" index="index" separator=",">
+            (#{id}, #{authId})
+        </foreach>
+    </insert>
+    <update id="deleteOrg">
+		UPDATE organization
+		SET is_delete = 1
+		WHERE id = #{id};
+	</update>
+    <update id="updateOrg">
+		UPDATE organization
+		SET
+		<if test="org.name != null">
+			name           = #{org.name},
+		</if>
+		<if test="org.independent != null">
+			is_independent = #{org.independent},
+		</if>
+		<if test="org.orgType != null">
+			org_type       = #{org.orgType},
+		</if>
+		<if test="org.remark != null">
+			remark         = #{org.remark},
+		</if>
+		<if test="org.parentId != null">
+			parent_id	  =#{org.parentId},
+		</if>
+		<if test="org.path != null">
+			path  =#{org.path},
+		</if>
+			update_date    = SYSDATETIME(),
+		<if test="org.extendAttribute1 != null">
+			attr1		   = #{org.extendAttribute1},
+		</if>
+		<if test="org.extendAttribute2 != null">
+			attr2		   = #{org.extendAttribute2},
+		</if>
+		<if test="org.extendAttribute3 != null">
+			attr3		   = #{org.extendAttribute3},
+		</if>
+		<if test="org.extendAttribute4 != null">
+			attr4		   = #{org.extendAttribute4},
+		</if>
+		<if test="org.extendAttribute5 != null">
+			attr5		   = #{org.extendAttribute5}
+		</if>
+		WHERE id = #{id}
+	</update>
+    <delete id="deleteOrgAuth">
+		DELETE FROM organization_auth
+		WHERE org_id = #{id};
+	</delete>
+	<delete id="deleteOrgUser">
+		UPDATE "user" SET org_id = ''
+		WHERE org_id = #{id}
+	</delete>
+    <select id="getOrgByCustomer" resultMap="orgaizationMap">
+		SELECT *
+		FROM organization
+		WHERE customer_id = #{customerId} AND is_delete = 0
+		ORDER BY order_no, update_date;
+	</select>
+    <select id="getOrg" resultMap="orgaizationMap">
+		SELECT *
+		FROM organization
+		WHERE id = #{id} AND is_delete = 0;
+	</select>
+    <select id="getMaxOrder" resultType="java.lang.Integer">
+		SELECT MAX(order_no)
+		FROM organization
+		WHERE customer_id = #{customerId} AND parent_id = #{parentId};
+	</select>
+    <select id="getOrgAuth" resultType="java.lang.String">
+		SELECT resource_id
+		FROM organization_auth
+		WHERE org_id = #{id};
+	</select>
+    <select id="getIndependentOrgByAccount" resultMap="orgaizationMap">
+		SELECT TOP 1 *
+		FROM (
+				 SELECT
+					 org.*,
+					 u.org_id
+				 FROM "user" u
+					 INNER JOIN organization org
+						 ON u.customer_id = org.customer_id
+				 WHERE u.user_account = #{userAccount}
+			 ) a
+		WHERE is_delete = 0 AND is_independent = 1 AND (SELECT path
+														FROM organization
+														WHERE id = a.org_id) LIKE path + '%'
+		ORDER BY len(path) DESC
+	</select>
+    <select id="getIndependentOrgByUserId" resultMap="orgaizationMap">
+		SELECT TOP 1 *
+		FROM (
+				 SELECT
+					 org.*,
+					 u.org_id
+				 FROM "user" u
+					 INNER JOIN organization org
+						 ON u.customer_id = org.customer_id
+				 WHERE u.id = #{userId}
+			 ) a
+		WHERE is_delete = 0 AND is_independent = 1 AND (SELECT path
+														FROM organization
+														WHERE id = a.org_id) LIKE path + '%'
+		ORDER BY len(path) DESC
+	</select>
+    <select id="getOrgByIndependentOrg" resultMap="orgaizationMap">
+		SELECT *
+		FROM organization
+		WHERE is_delete = 0
+			  AND customer_id = #{customerId}
+			  AND path LIKE ((SELECT path
+									FROM organization
+									WHERE id = #{independentOrgId})+'%')
+		ORDER BY order_no, update_date;
+	</select>
+    <select id="getOrganization" resultMap="orgaizationMap">
+		SELECT *
+		FROM organization
+		WHERE is_delete = 0
+		AND org_type = #{orgType}
+			AND customer_id = #{customerId}
+			AND path LIKE ((SELECT path
+									FROM organization
+									WHERE id = #{independentOrgId}) + '%')
+		ORDER BY order_no, update_date;
+	</select>
+	<select id="getDirectlyOrganization" resultMap="orgaizationMap">
+		SELECT *
+		FROM organization
+		WHERE is_delete = FALSE
+		AND org_type = #{orgType}
+		AND customer_id = #{customerId}
+		AND parent_id = (SELECT id
+		FROM organization
+		WHERE id = #{orgId})
+		ORDER BY order_no, update_date;
+	</select>
+    <select id="getOrgCount" resultType="java.lang.Integer">
+		SELECT COUNT(1)
+		FROM organization
+		WHERE code = #{code}
+			  AND customer_id = #{customerId}
+			  AND is_delete = 0;
+	</select>
+	<select id="getOrgType" resultType="com.xinhai.organization.api.OrganizationType">
+		SELECT * FROM org_type;
+	</select>
+	<select id="getDirectlyIndependentOrgByOrgId" resultMap="orgaizationMap">
+		SELECT TOP 1 *
+		FROM organization
+		WHERE is_delete = 0 AND is_independent = 1 AND customer_id=#{customerId} AND (SELECT path
+		FROM organization
+		WHERE id = #{orgId}) LIKE path + '|&amp;%'
+		ORDER BY len(path) DESC
+	</select>
+</mapper>

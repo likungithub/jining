@@ -1,0 +1,704 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xinhai.caiyun.customermanage.dao.TLZypglFcMapper">
+    <select id="findWt" resultType="map">
+        select a.ID,a.YPBM,a.YPMC,a.YPSL,a.YPDW,a.JSZT,a.IF_CY,a.BZQ,a.SB,a.BZXX,b.WTDW AS DWMC,a.LQRQ,c.NAME,
+        a.IF_SGR AS IFSGR,b.TYPE,b.id as wtid,DATE_FORMAT(a.YP_FPRQ,'%Y-%m-%d') as YP_FPRQ
+        from t_ypgl_jbxx a
+       left join t_wt_jbxx b
+        on a.wtid=b.wtid
+        LEFT  JOIN user c
+        on a.LQRY = c.zydm
+        WHERE a.IF_SC = '0' and b.IF_SL = '1' AND IFNULL(b.zfbs,'0') != '1' and FuncAuthorityYP(a.id,#{map.zydm},4)=1
+        <if test="map.ypmc !='' ">
+            and a.YPMC like concat('%',#{map.ypmc}, '%')
+        </if>
+       <if test="map.dwmc != '' ">
+            and b.WTDW like concat('%',#{map.dwmc}, '%')
+        </if>
+        <if test="map.ypbm != '' ">
+            and a.YPBM like concat('%',#{map.ypbm}, '%')
+        </if>
+        <if test="map.cyzt != '' and map.cyzt != null ">
+            and a.IF_CY = #{map.cyzt}
+        </if>
+        <if test="map.cplb !='' and map.cplb != null">
+            and ifnull(a.JSZT,'001') = #{map.cplb}
+        </if>
+        order by a.YPBM desc
+        limit #{map.start},#{map.length}
+    </select>
+    <select id="findCount" resultType="Integer">
+        select count(1)
+        from t_ypgl_jbxx a
+        left join t_wt_jbxx b
+      on a.wtid=b.wtid
+        LEFT  JOIN user c
+        on a.LQRY = c.zydm
+        WHERE a.IF_SC = '0' and b.IF_SL = '1' AND IFNULL(b.zfbs,'0') != '1' and FuncAuthorityYP(a.id,#{map.zydm},4)=1
+        <if test="map.ypmc !='' ">
+            and a.YPMC like concat('%',#{map.ypmc}, '%')
+        </if>
+       <if test="map.dwmc !='' ">
+           and b.WTDW like concat('%',#{map.dwmc}, '%')
+       </if>
+        <if test="map.ypbm !='' ">
+            and a.YPBM like concat('%',#{map.ypbm}, '%')
+        </if>
+        <if test="map.cyzt != '' and map.cyzt != null ">
+            and a.IF_CY = #{map.cyzt}
+        </if>
+        <if test="map.cplb !='' and map.cplb != null">
+            and ifnull(a.JSZT,'001') = #{map.cplb}
+        </if>
+    </select>
+
+    <!--肥城样品领取  更新接收状态-->
+    <update id="updatJszt">
+        update t_ypgl_jbxx
+        set JSZT = '002',
+        YPZBZT = '001',
+        LQRY = #{map.zydm},
+        LQRQ = #{map.jssj},
+        LQRYBMDM = #{map.bmdm},
+        YPLQSL = #{map.lqsl},
+        YPLQDW = #{map.lqdw}
+        WHERE ID IN
+        <foreach collection="map.ypid" item="item" index="index" open="(" close=");" separator=",">
+            #{item}
+        </foreach>
+        <foreach collection="map.ypid" item="item" index="index"  separator=";">
+            INSERT INTO  T_YPGL_RYDM
+            (ZXRY_DM,SCBZ,YPID,LX,LQRQ)
+            VALUES (#{map.zydm},'0',#{item},'1',now())
+        </foreach>
+    </update>
+
+
+    <!--获取样品制备的信息-->
+    <select id="findYpzb" resultType="map">
+        select a.ID,a.YPBM,a.YPMC,b.WTDW AS DWMC,a.YPSL,a.YPDW,a.YPZBZT,a.IF_CY,a.BZQ,a.SB,a.BZXX,
+          a.IF_SSG,a.IF_SGR,b.JYLB,a.ZBRQ,ifnull(c.zbzl,'0') jy1zl,ifnull(d.zbzl,'0') jy2zl,ifnull(e.zbzl,'0') jy3zl,
+        ifnull(c.zbzs,'0') zzl
+        from t_ypgl_jbxx a
+        left join t_wt_jbxx b
+        on a.wtid=b.wtid
+        left join (select * from t_yp_zbwc) c
+        on concat(a.ypbm,'-检样1') = c.zbypbm
+        left join (select * from t_yp_zbwc) d
+        on concat(a.ypbm,'-检样2') = d.zbypbm
+        left join (select * from t_yp_zbwc) e
+        on concat(a.ypbm,'-检样3') = e.zbypbm
+        WHERE a.IF_SC = '0'
+        and a.JSZT = '002'
+        AND IFNULL(b.zfbs,'0') != '1'
+        and FuncAuthorityYP(a.id,#{map.zydm},4)=1   <!--肥城  获取 制备信息 必须是  分配的检测人  只有他才制备-->
+        <if test="map.ypmc !='' ">
+            and a.YPMC like concat('%',#{map.ypmc}, '%')
+        </if>
+        <if test="map.dwmc !='' ">
+           and b.WTDW like concat('%',#{map.dwmc}, '%')
+       </if>
+        <if test="map.ypbm !='' ">
+            and a.YPBM like concat('%',#{map.ypbm}, '%')
+        </if>
+        <if test="map.ypzbzt != ''">
+            and a.YPZBZT =#{map.ypzbzt}
+        </if>
+        <if test="map.ifcy != '' and map.ifcy != null ">
+            and a.IF_CY = #{map.ifcy}
+        </if>
+        <if test="map.etime !=null and map.btime !=null and map.etime !='' and map.btime !='' ">
+            AND a.ZBRQ BETWEEN #{map.btime} and #{map.etime}
+        </if>
+        GROUP BY a.YPBM
+        order by b.slrq desc
+        limit #{map.start},#{map.length}
+    </select>
+    <!--获取样品制备COUNT-->
+    <select id="findYpzbCount" resultType="Integer">
+        select count(1)
+        from (
+        select a.id
+        from t_ypgl_jbxx a
+        left join t_wt_jbxx b
+        on a.wtid=b.wtid
+        WHERE a.IF_SC = '0'
+        and a.JSZT = '002'
+        AND IFNULL(b.zfbs,'0') != '1'
+        and FuncAuthorityYP(a.id,#{map.zydm},4)=1   <!--肥城  获取 制备信息 必须是  分配的检测人  只有他才制备-->
+        <if test="map.ypmc != ''">
+            and a.YPMC like concat('%',#{map.ypmc}, '%')
+        </if>
+        <if test="map.ypbm != ''">
+            and a.YPBM like concat('%',#{map.ypbm}, '%')
+        </if>
+        <if test="map.ypzbzt != ''">
+            and a.YPZBZT =#{map.ypzbzt}
+        </if>
+        <if test="map.ifcy != '' and map.ifcy != null ">
+            and a.IF_CY = #{map.ifcy}
+        </if>
+        <if test="map.etime !=null and map.btime !=null and map.etime !='' and map.btime !='' ">
+            AND a.ZBRQ BETWEEN #{map.btime} and #{map.etime}
+        </if>
+
+        GROUP BY a.YPBM) t
+    </select>
+
+    <!--肥城  制备页面 点击 制备  新增样品制备信息-->
+    <insert id="addYpzb">
+        delete from T_YP_ZBWC where zbypbm = #{map.zbybm};
+        INSERT into T_YP_ZBWC
+        (zbypbm,ypbm,ypmc,zbfs,zbdate,zbzl,dw,zbrydm,ccwz,ypid,lx,zbzs)
+        values (#{map.zbybm},#{map.ypbm},#{map.ypmc},#{map.zbfs},#{map.zbdate},#{map.zbzl},#{map.dw},#{map.rydm},#{map.ccwz},#{map.ypid},#{map.lx},#{map.zbzs});
+    </insert>
+    <!--肥城  制备页面 点击 制备    更新制备状态-->
+    <update id="updateIFZB">
+       update t_ypgl_jbxx
+       set YPZBZT = '002',
+       ZBRQ = NOW()
+       where ID = #{ID}
+    </update>
+
+    <!--肥城制备  后 提交 的  更新制备状态-->
+    <update id="updateYpzbzt">
+        update t_ypgl_jbxx
+        set YPZBZT = '003'
+        WHERE ID
+        IN
+        <foreach collection="map.ypid" open="(" close=");" separator="," index="index" item="item">
+            #{item}
+        </foreach>
+        <foreach collection="map.ypid" item="item" index="index"  separator=";">
+            INSERT INTO  T_YPGL_RYDM
+            (ZXRY_DM,SCBZ,YPID,LX,LQRQ)
+            VALUES (#{map.zydm},'0',#{item},'2',now())
+        </foreach>;
+        update t_yp_zbwc
+        set jszt='1',tjrydm=#{map.zydm},tjryname=#{map.zyname},tjsj=now()
+        where YPID in
+        <foreach collection="map.ypid" open="(" close=");" separator="," index="index" item="item">
+            #{item}
+        </foreach>
+    </update>
+
+
+
+
+
+
+    <!--获取制备样的检测项目信息，制备提交前判断使用-->
+    <select id="getYpzbJcxminfo" resultType="map">
+        select * from t_yp_jcxm where ypid = #{map.ypid}
+    </select>
+    <!--获取制备样信息-->
+    <select id="getYpzbinfo" resultType="map">
+        select
+        c.YPMC as YPMC2 ,a.*,b.*
+        FROM t_yp_zbwc a
+        LEFT JOIN t_zbfs b
+        ON a.zbfs = b.ID
+        LEFT JOIN t_ypgl_jbxx c ON a.YPBM = c.YPBM
+        where a.ypid=#{ypid} and a.zbypbm != (select ypbm from t_ypgl_jbxx where id = #{ypid})
+    </select>
+    <!--回显数据-->
+    <select id="findZbyInfo" resultType="map">
+        select  *
+        from T_YP_ZBWC
+        where id = #{id}
+    </select>
+    <update id="updateYpzb">
+        update t_yp_zbwc
+        set dw=#{dw},zbDate=#{zbDate},zbfs = #{zbfs},zbzl=#{zbzl}
+        where id = #{id}
+    </update>
+    <!--查询导出数据-->
+    <select id="importExcel" resultType="map">
+        select a.id,a.ypbm,a.ypmc,d.ZBFSNAME as zbfs,b.zbrydm as zbrydm,a.zbDate,group_concat(`zbzl`) as zbzl
+        from t_yp_zbwc a
+        left join t_ypgl_jbxx b
+        on a.ypbm = b.ypbm
+        left join user c
+        on a.zbrydm = c.zydm
+        LEFT JOIN t_zbfs d
+        ON a.zbfs = d.ID
+        LEFT JOIN t_wt_jbxx e
+        on b.wtid = e.wtid
+        where b.IF_SGR = '1'
+        <if test="map.ypbm != ''">
+            and b.YPBM like concat('%',#{map.ypbm}, '%')
+        </if>
+        <if test="map.ypzbzt != '' and map.ypzbzt != null">
+            and b.YPZBZT =#{map.ypzbzt}
+        </if>
+        <if test="map.ifcy != '' and map.ifcy != null ">
+            and b.IF_CY = #{map.ifcy}
+        </if>
+        <if test="map.cplb !='' and map.cplb != null">
+            and e.cplb = #{map.cplb}
+        </if>
+        <if test="map.jylb !='' and map.jylb !=null">
+            and e.jylb = #{map.jylb}
+        </if>
+        <if test="map.etime !=null and map.btime !=null and map.etime !='' and map.btime !='' ">
+            AND b.ZBRQ BETWEEN #{map.btime} and #{map.etime}
+        </if>
+         GROUP BY a.ypbm
+
+    </select>
+    <!--还样信息-->
+    <select id="findHuanYang" resultType="map">
+        SELECT a.ID,a.zbypbm as YPBM,a.LX,a.ZBZL,a.TYSJ,a.TYZT,a.TYZL,c.name as TYRYDM,a.tyjszt,a.YPMC,a.tyjsryname,a.tyjssj
+        FROM t_yp_zbwc a
+        LEFT JOIN t_ypgl_jbxx b
+        ON a.ypid = b.ID
+        LEFT JOIN user c
+        on
+        a.tyrydm = c.zydm
+        WHERE a.lqzt = '002' and b.SJSCZT = '002' <!--AND a.lqry = #{zydm}-->
+        <if test="ypmc!=''" >
+            and a.YPMC like concat('%',#{ypmc}, '%')
+        </if>
+        <if test="ypbm!=''">
+            and a.YPMC like concat('%',#{ypbm}, '%')
+        </if>
+        limit #{start},#{length}
+    </select>
+    <!--获取还样信息总数-->
+    <select id="fingHuangYangCount" resultType="Integer">
+            SELECT count(1)
+        FROM t_yp_zbwc a
+        LEFT JOIN t_ypgl_jbxx b
+        ON a.ypid = b.ID
+        WHERE a.lqzt = '002' and b.SJSCZT = '002' <!--AND a.lqry = #{zydm}-->
+        <if test="ypmc!=''" >
+            and a.YPMC like concat('%',#{ypmc}, '%')
+        </if>
+        <if test="ypbm!=''">
+            and a.YPMC like concat('%',#{ypbm}, '%')
+        </if>
+    </select>
+    <!--退样信息-->
+    <update id="updateTyInfo">
+        update t_yp_zbwc
+        set tyzl = #{map.tyzl},tysj=now(),tyzt='001',tyrydm=#{map.tyrydm},tyjszt ='001'
+        where id in
+        <foreach collection="map.yptyid" close=");" separator="," index="index" item="item" open="(">
+            #{item}
+        </foreach>
+    </update>
+    <!--通过样品编码查询样品id-->
+    <select id="findYpzbid" resultType="String">
+        select id from t_yp_zbwc where ypbm = #{ypbm} LIMIT 1
+    </select>
+    <!--获取接收信息-->
+    <select id="findJiesou" resultType="map">
+        SELECT a.ID,a.zbypbm as YPBM,a.YPMC,a.LX,a.ZBZL,a.TYSJ,a.TYZT,c.name as TYRYDM,a.TYZL,a.tyjszt,a.tyjsryname,a.tyjssj,a.tyjszl
+        FROM t_yp_zbwc a
+        LEFT JOIN t_ypgl_jbxx b
+        ON a.ypid = b.ID
+        LEFT JOIN user c
+        on
+        a.tyrydm = c.zydm
+        WHERE a.lqzt = '002' and b.SJSCZT = '002' <!--and a.tyzt <![CDATA[ <> ]]> '000'-->
+        <if test="ypmc!=''" >
+            and a.YPMC like concat('%',#{ypmc}, '%')
+        </if>
+        <if test="ypbm!=''">
+            and a.YPBM like concat('%',#{ypbm}, '%')
+        </if>
+        limit #{start},#{length}
+    </select>
+    <!--接收信息总数-->
+    <select id="findJiesouCount" resultType="integer">
+         SELECT count(1)
+        FROM t_yp_zbwc a
+        LEFT JOIN t_ypgl_jbxx b
+        ON a.ypid = b.ID
+        LEFT JOIN user c
+        on
+        a.tyrydm = c.zydm
+        WHERE a.lqzt = '002' and b.SJSCZT = '002' <!--and a.tyzt <![CDATA[ <> ]]> '000'-->
+        <if test="ypmc!=''" >
+            and a.YPMC like concat('%',#{ypmc}, '%')
+        </if>
+        <if test="ypbm!=''">
+            and a.YPMC like concat('%',#{ypbm}, '%')
+        </if>
+    </select>
+    <!--接收还样确认-->
+    <update id="jsqr">
+        update t_yp_zbwc
+        set tyjszt = '002',tyjssj = now(),tyzt = '002',tyjsryname = #{map.tyjsryname},tyjsrydm= #{map.tyjsrydm}
+        where id in
+        <foreach collection="map.list" open="(" item="item" index="index" separator="," close=");">
+            #{item}
+        </foreach>
+    </update>
+    <!--退回信息-->
+    <update id="tuiHuiInfo">
+        update t_yp_zbwc
+        set thyy = #{map.thyy},tysj=now(),tyzt='003',tyrydm=#{map.tyrydm},tyjszt ='003'
+        where id in
+        <foreach collection="map.yptyid" close=");" separator="," index="index" item="item" open="(">
+            #{item}
+        </foreach>
+    </update>
+    <!--出入库记录-->
+    <select id="findCykjl" resultType="map">
+        select a.id,a.ypbm,a.ypmc,a.zbfs,c.name as zbrydm,a.zbDate,group_concat(zbzl ORDER BY a.id) as zbzl,GROUP_CONCAT(ccwz ORDER BY a.id) as ccwz,group_concat(lyzl ORDER BY a.id) as lyl,
+        group_concat(tyzl ORDER BY a.id) as tyzl
+        from t_yp_zbwc a
+        left join t_ypgl_jbxx b
+        on a.ypbm = b.ypbm
+        left join user c
+        on a.zbrydm = c.zydm
+        where b.IF_SGR = '1'
+		GROUP BY a.ypbm
+    </select>
+    <!--余样处理信息-->
+    <select id="findYycl" resultType="map">
+        SELECT a.ID,a.WTID,a.YPBM,a.YPMC,a.SCDW,a.SCDWLXDH,a.IF_TH,a.BZQ,a.CLFS,a.CLRYNAME,a.CLSJ,a.CLL,a.THSJ,a.THRYNAME,a.THL,a.ZXRYNAME,IF(DATEDIFF(NOW(),a.SCRQ)&lt;a.BZQ,'未过期','已过期') as IF_GQ,a.YYCLZT
+        FROM t_ypgl_jbxx a
+        WHERE a.SJSCZT = '002'
+        <if test="map.ypmc!=''" >
+            and a.YPMC like concat('%',#{map.ypmc}, '%')
+        </if>
+        <if test="map.ypbm!=''">
+            and a.YPMC like concat('%',#{map.ypbm}, '%')
+        </if>
+        limit #{map.start},#{map.length}
+    </select>
+    <!--获取余样处理信息count-->
+    <select id="findYyclCount" resultType="Integer">
+         SELECT COUNT(1)
+        FROM t_ypgl_jbxx a
+        WHERE a.SJSCZT = '002'
+        <if test="map.ypmc!=''" >
+            and a.YPMC like concat('%',#{map.ypmc}, '%')
+        </if>
+        <if test="map.ypbm!=''">
+            and a.YPMC like concat('%',#{map.ypbm}, '%')
+        </if>
+    </select>
+    <!--更新余样退回信息-->
+    <update id="updateyyth">
+        update t_ypgl_jbxx
+        set THSJ = #{map.thsj},THL = #{map.thl},THRYNAME = #{map.thr},ZXRYDM= #{map.zxrydm},ZXRYNAME=#{map.zxryname},YYCLZT='1'
+        where id in
+        <foreach collection="map.list" open="(" item="item" index="index" separator="," close=");">
+            #{item}
+        </foreach>
+    </update>
+    <!--更新余样处理信息-->
+    <update id="updateyycl">
+        update t_ypgl_jbxx
+        set CLSJ = #{map.clsj},CLL = #{map.cll},CLRYNAME = #{map.clryname},CLFS=#{map.clfs},CLRYDM= #{map.clrydm},YYCLZT='2',CLYY = #{map.clyy}
+        where id in
+        <foreach collection="map.list" open="(" item="item" index="index" separator="," close=");">
+            #{item}
+        </foreach>
+    </update>
+    <!--获取制备记录表-->
+    <select id="findLZD" resultType="map">
+      SELECT IFNULL(a.YPMC,'') AS YPMC,IFNULL(a.GGXH,'') AS GGXH,IFNULL(b.DWMC,'') AS DWMC,IFNULL(a.YPZT,'') as JSZT,IFNULL(a.SCDW,'') as SCDW,IFNULL(a.YPBM,'') as YPBM ,IFNULL(b.JYLB,'') AS JYXZ,IFNULL(b.JYYJBZ,'') AS JYYJ,IFNULL(CONCAT(a.YPSL,A.YPDW),'') as YPSL,
+      IFNULL(a.YPDDRQ,'')as DJRQ,
+      IFNULL(CONCAT(a.YPSL,A.YPDW),'') as LQSL,
+      IFNULL((SELECT MAX(LQRQ) FROM t_ypgl_rydm WHERE a.ID=YPID AND LX='1'),'') as LQRQ,
+      IFNULL(MIN(d.LRRQ),'') as KSSJ,IFNULL(MAX(d.lrrq),'') as JSSJ,IFNULL((SELECT MAX(LQRQ) FROM t_ypgl_rydm WHERE a.ID=YPID AND LX='2'),'') as ZYRQ,IFNULL(a.THSJ,'') as TYRQ,
+      IFNULL((SELECT MAX(zxsj) FROM t_bggl_rydm WHERE YPID=a.ID AND TH='0' AND LX='0'),'') as BZRQ,IFNULL((SELECT MAX(zxsj) FROM t_bggl_rydm WHERE YPID=a.ID AND TH='0' AND LX='1'),'') as SHRQ,IFNULL((SELECT MAX(zxsj) FROM t_bggl_rydm WHERE YPID=a.ID AND TH='0' AND LX='4'),'') as DYRQ ,IFNULL((SELECT MAX(zxsj) FROM t_bggl_rydm WHERE YPID=a.ID AND TH='0' AND LX='3'),'') as PZRQ
+      FROM t_ypgl_jbxx a
+      LEFT JOIN t_wt_jbxx b
+      ON a.WTID=b.WTID
+      LEFT JOIN t_ypgl_rydm c
+      ON a.ID=c.YPID
+      LEFT JOIN t_yp_jcxm d
+      ON a.ID = d.YPID
+      LEFT JOIN t_yp_zbwc e
+      ON a.ID = e.YPID
+      LEFT JOIN t_bggl_rydm f
+      ON a.ID = f.YPID
+      WHERE a.id=#{ID}
+    </select>
+    <!--获取流转单职员代码-->
+    <select id="findLzdZydm" resultType="map">
+    SELECT IFNULL(WTSLR,'') as DJRY,
+        IFNULL((SELECT ZXRY_DM FROM t_ypgl_rydm WHERE YPID=b.ID AND LX='1'),'') AS LQRY,
+        IFNULL((SELECT ZXRY_DM FROM t_ypgl_rydm WHERE YPID=b.ID AND LX='2'),'') AS ZBRY,
+        IFNULL(b.THRYDM,'') as TYRY,
+        IFNULL((SELECT ZXRY_DM FROM t_bggl_rydm WHERE YPID =b.ID AND LX='0' AND TH='0' AND zxsj <![CDATA[<>]]> '' ),'') AS BZRY,
+        IFNULL((SELECT ZXRY_DM FROM t_bggl_rydm WHERE YPID =b.ID AND LX='1' AND TH='0' AND zxsj <![CDATA[<>]]> ''),'') AS SHRY,
+        IFNULL((SELECT ZXRY_DM FROM t_bggl_rydm WHERE YPID =b.ID AND LX='2' AND TH='0' AND zxsj <![CDATA[<>]]> ''),'') AS PZRY,
+        IFNULL((SELECT DISTINCT ZXRY_DM FROM t_bggl_rydm WHERE YPID =b.ID AND LX='3' AND TH='0' AND zxsj <![CDATA[<>]]> ''),'') AS DYRY
+        FROM t_wt_jbxx a
+        LEFT JOIN t_ypgl_jbxx b
+        ON a.WTID = b.WTID
+        WHERE b.ID = #{ID}
+    </select>
+    <!--更新流转单路径-->
+    <update id="updateLzd">
+        update t_ypgl_jbxx
+        set LZDLJ=#{LZDLJ}
+        where id=#{ID}
+    </update>
+    <!--获取流转单路径-->
+    <select id="findLzd" resultType="string">
+        select LZDLJ
+        from  t_ypgl_jbxx
+        where id=#{ID}
+    </select>
+    <!--样品登记簿导出-->
+    <select id="importYPDJB" resultType="map">
+        SELECT IFNULL(a.YPBM,'/') AS YPBM,IFNULL(a.YPMC,'/') AS YPMC,IFNULL(a.SCDW,'/') as SCDW,IFNULL(b.DWMC,'/') as WTDW,IFNULL(b.JYLB,'/')
+        as JYXZ,IFNULL(b.CYRQ,b.SYRQ) as CSYRQ,IFNULL(a.BZQ,'/') AS BZQ,IFNULL(b.CYRY,b.SYRY) as CSYRY,IFNULL(a.YPSL,'/') AS YPSL
+        FROM t_ypgl_jbxx a
+        LEFT JOIN t_wt_jbxx b
+        ON a.WTID = b.WTID
+         WHERE a.IF_SC = '0' and b.IF_SL = '1'
+        <if test="map.ifcy != '' and map.ifcy != null ">
+            and a.IF_CY = #{map.ifcy}
+        </if>
+        <if test="map.cplb !='' and map.cplb != null">
+            and b.cplb = #{map.cplb}
+        </if>
+    </select>
+    <!--产品质量检验样品台账-->
+    <select id="importCPZLJYTX" resultType="map">
+                SELECT IFNULL(a.YPBM,'/') AS YPBM,IFNULL(a.YPMC,'/') AS YPMC,IFNULL(a.GGXH,'/') AS GGXH,IFNULL(a.SB,'/') as SB,IFNULL(a.YPDJ,'/') AS DJ,IFNULL(B.SJDW,'/') AS SJDW,IFNULL(a.YPZT,'/') AS ZT,IFNULL(a.YPSL,'/') AS YPSL,IFNULL(b.JYLB,'/') as JYXZ,IFNULL(DATE_FORMAT(b.CYRQ,'%c'),'/') AS CYRQY,IFNULL(DATE_FORMAT(b.CYRQ,'%e'),'/') AS CYRQT,IFNULL(DATE_FORMAT(b.SLRQ,'%c'),'/') AS DJRQY,IFNULL(DATE_FORMAT(b.SLRQ,'%e'),'/') AS DJRQT,IFNULL(if(a.IF_CY='1',b.WTID,'/'),'/') as CYDH,
+IFNULL(DATE_FORMAT(a.LQRQ,'%c'),'/') AS LQSJY,IFNULL(DATE_FORMAT(a.LQRQ,'%e'),'/') AS LQSJT,IFNULL(c.zbzl,'/') AS LQZL,IFNULL(a.LQRY,'/') as LQRY,IFNULL(a.THSJ,'/') as THSJ,IFNULL(a.THL,'/') AS THL,IFNULL(c.zbzl,'/') AS BFZL,
+IFNULL(DATE_FORMAT(a.CLSJ,'%c'),'/') AS CLSJY,IFNULL(DATE_FORMAT(a.CLSJ,'%e'),'/') AS CLSJT
+FROM t_ypgl_jbxx a
+LEFT JOIN t_wt_jbxx b
+ON a.WTID = b.WTID
+LEFT JOIN t_yp_zbwc c
+ON a.ID = c.ypid
+WHERE c.lqzt='002' and c.lx='4'
+    </select>
+    <!--制备样品退还-->
+    <select id="findZBfhInfo" resultType="map">
+        SELECT a.ID,a.YPMC,a.ZBZL,a.zbDate,a.LX,a.ZBTYZT,a.zbthsj,a.zbfhryname,a.zbypbm
+        FROM t_yp_zbwc a
+        LEFT JOIN t_ypgl_jbxx y on y.ypbm = a.ypbm 
+        LEFT JOIN t_yp_jcxm yj on yj.ypid = y.id 
+        LEFT JOIN t_jcxm_jbxx jcxm on jcxm.id = yj.jcxmid
+        WHERE a.lqzt = '002'
+        <if test="map.ypmc != ''">
+          and a.ypmc = #{map.ypmc}
+        </if>
+        <if test="map.ypbm != ''">
+            and  a.ypbm = #{map.ypbm}
+        </if>
+        <if test ="map.jcbldm != ''">
+            and jcxm.jclbdm = #{map.jclbdm}
+        </if>
+        limit #{map.start},#{map.length}
+    </select>
+    <!--制备返还数量-->
+    <select id="findZBfhInfoCount" resultType="integer">
+        select count(1)
+        FROM t_yp_zbwc a
+         LEFT JOIN t_ypgl_jbxx y on y.ypbm = a.ypbm 
+        LEFT JOIN t_yp_jcxm yj on yj.ypid = y.id 
+        LEFT JOIN t_jcxm_jbxx jcxm on jcxm.id = yj.jcxmid
+        WHERE a.lqzt = '002'
+        <if test="map.ypmc != ''">
+            and a.ypmc = #{map.ypmc}
+        </if>
+        <if test="map.ypbm != ''">
+            and  a.ypbm = #{map.ypbm}
+        </if>
+         <if test ="map.jcbldm != ''">
+            and jcxm.jclbdm = #{map.jclbdm}
+        </if>
+    </select>
+    <!--更新返还数据-->
+    <update id="updateZBINFO">
+        update t_yp_zbwc
+        set tyzl=#{map.zl},zbtyzt='001',zbthsj=now(),zbfhryname=#{map.zyname},zbfhrydm=#{map.zydm}
+        where id
+        in
+          <foreach collection="map.list" open="(" close=")" item="item" separator=",">
+            #{item}
+          </foreach>
+    </update>
+    <!--判断样品登记簿是否含有数据-->
+    <select id="canExport" resultType="Integer">
+      SELECT count(C.ID) from (select a.ID
+        FROM t_ypgl_jbxx a
+        LEFT JOIN t_wt_jbxx b
+        ON a.WTID = b.WTID
+        WHERE a.IF_SC = '0' and b.IF_SL = '1'
+        <if test="map.ifcy != '' and map.ifcy != null ">
+            and a.IF_CY = #{map.ifcy}
+        </if>
+        <if test="map.cplb !='' and map.cplb != null">
+            and b.cplb = #{map.cplb}
+        </if>) C
+    </select>
+    <!--通过样品ID查找委托录入时录入的样品数量以及单位-->
+    <select id="findYpslAndDwByYpid" resultType="map">
+        select YPSL,YPDW
+        FROM t_ypgl_jbxx
+        where ID = #{ID}
+    </select>
+    <!--样品处理记录表-->
+    <select id="exportYPCLInfo" resultType="map">
+        SELECT a.YPBM,a.YPMC,a.GGXH,b.JYLB,a.CLL,a.CLYY,a.CLFS,a.CLSJ,a.CLRYDM
+        FROM t_ypgl_jbxx a
+        LEFT JOIN t_wt_jbxx b
+        ON a.WTID = b.WTID
+        WHERE a.YYCLZT = '2'
+    </select>
+    <!--将食水公插入制备记录表-->
+    <insert id="insertSSG" >
+        <if test="list !=null">
+            <foreach collection="list" item="list" separator=";" index="index">
+                INSERT INTO t_yp_zbwc
+                (zbypbm,ypbm,lqzt,ypmc,lx,zbzl,ypid) values (
+                #{list.ypbm},#{list.ypbm},'002',#{list.ypmc},'4',#{list.lqsl},#{list.id}
+                )
+            </foreach>
+        </if>
+
+    </insert>
+
+    <delete id="deleteSampleAll">
+        delete from t_ypgl_jbxx where id=#{id};
+    </delete>
+    <!--关联委托单分页查询-->
+    <select id="wtPaging" resultType="map">
+        select ID,WTID,DWMC,SYRY,SYRQ
+        from t_wt_jbxx
+        WHERE 1=1
+        <if test="map.wtid !='' and map.wtid != null">
+            and wtid like concat('%',#{map.wtid}, '%')
+        </if>
+        order by ID desc
+        limit #{map.start},#{map.length}
+    </select>
+    <select id="wtPagingSum" resultType="Integer">
+        select count(1)
+        from t_wt_jbxx
+        WHERE 1=1
+        <if test="map.wtid !='' and map.wtid != null ">
+            and wtid like concat('%',#{map.wtid}, '%')
+        </if>
+    </select>
+
+    <!--回显数据 委托单-->
+    <select id="wtRepeatDisplay" resultType="map" parameterType="java.lang.String">
+        select id,wtid,dwmc,lxdh,yzbm,sfmc,csmc,xjmc,xxdz,wtdw,jylb,cplb,jyfb,bz,bgjffs,syry,syrq
+        from t_wt_jbxx
+        where id = #{id}
+    </select>
+
+    <!--回显数据 委托单+样品表-->
+    <select id="getWTModifyQuery" resultType="map" parameterType="java.lang.String">
+        SELECT tw.wtid,tw.dwmc,tw.lxdh,tw.yzbm,tw.sfmc,tw.csmc,tw.xjmc,tw.xxdz,tw.wtdw,tw.jylb,tw.cplb,
+		tw.jyfb,tw.bz,tw.bgjffs,tw.syry,tw.syrq,
+		ty.id,ty.ypbm,ty.ypmc,ty.sb,ty.ggxh,ty.ypdj,ty.ypsl,ty.ypdw,ty.scrq,ty.ypphhbh,ty.ypzt,ty.ypbctj,
+        ty.scdw,ty.scdwlxdh,ty.fyry,ty.fyzt,ty.ypddrq,ty.if_sgr,ty.if_ssg,ty.ybjs,ty.bzq,ty.ypwt,ty.if_cy,
+        ty.jszt, ty.if_th, ty.if_by, ty.bysl,ty.yplaiyuan,ty.ypshuxing,ty.ypleixin,ty.ypleixin,ty.scxkbh,
+        ty.ypdanjia,ty.if_ck,ty.ypbgfl,ty.cyypbz,ty.cyfangshi,ty.scdz,ty.bzxx,ty.ypzxbz,ty.cydd,ty.ftbh,ty.ccyqqt,ty.qyyply,
+        ty.yplaiyuanqt,ty.ypleixinqt,ty.ypxt,ty.cyypbzqt,ty.rqlxxz
+		FROM t_wt_jbxx tw, t_ypgl_jbxx ty
+        where tw.WTID = ty.WTID AND ty.id = #{id}
+
+    </select>
+
+    <!--根据ID 更新样品数据-->
+    <update id="getUPYPUpdateM" parameterType="map">
+        update t_ypgl_jbxx ty
+        set
+        ty.ypmc = #{ypmc},ty.sb = #{sb},ty.ggxh = #{ggxh},ty.ypdj = #{ypdj},ty.ypsl = #{ypsl},
+        ty.ypdw = #{ypdw},ty.scrq = #{scrq},ty.ypphhbh = #{ypphhbh},ty.ypzt = #{ypzt},ty.ypbctj = #{ypbctj},
+        ty.scdw = #{scdw},ty.scdwlxdh = #{scdwlxdh},ty.fyry = #{fyry},ty.fyzt = #{fyzt},ty.ypddrq = #{ypddrq},
+        ty.if_sgr = #{if_sgr},ty.if_ssg = #{if_ssg},ty.ybjs = #{ybjs},ty.bzq = #{bzq},ty.ypwt = #{ypwt},
+        ty.if_cy = #{if_cy},ty.jszt = #{jszt}, ty.if_th = #{if_th},ty.if_by = #{if_by}, ty.bysl = #{bysl},
+        ty.yplaiyuan = #{yplaiyuan},ty.ypshuxing = #{ypshuxing},ty.ypleixin = #{ypleixin},ty.ypzxbz = #{ypzxbz},
+        ty.scxkbh = #{scxkbh},ty.ypdanjia = #{ypdanjia},ty.if_ck = #{if_ck},ty.ypbgfl = #{ypbgfl},
+        ty.cyypbz = #{cyypbz},ty.cyfangshi = #{cyfangshi},ty.scdz = #{scdz},ty.lrry = #{lrry},
+        ty.bzxx = #{bzxx},ty.lrry = #{lrry},ty.ftbh = #{ftbh},ty.cydd = #{cydd}, ty.ccyqqt = #{ccyqqt}, ty.qyyply = #{qyyply}
+        ,ty.cyypbzqt = #{cyypbzqt},ty.ccyqqt = #{ccyqqt},ty.ypleixinqt = #{ypleixinqt}, ty.yplaiyuanqt = #{yplaiyuanqt}, ty.ypxt = #{ypxt}, ty.rqlxxz = #{rqlxxz}
+        where ty.id = #{id}
+    </update>
+
+    <select id="findYplqdy" resultType="java.util.Map">
+        SELECT
+        date_format(a.lrrq, '%Y-%m-%d') lrrq, ypmc, scdw, b.syry, a.wtid, ypbm, ypsl, IFNULL(bysl ,0) as bysl, IFNULL(us.name ,'/') jsr
+        FROM
+        t_ypgl_jbxx a
+        LEFT JOIN
+        t_wt_jbxx b ON a.wtid = b.wtid
+        LEFT JOIN
+        user us ON us.zydm = a.lqry
+        WHERE
+        a.lrrq &gt;= STR_TO_DATE(#{map.ksrq}, '%Y-%m-%d %H')
+        AND a.lrrq &lt;= STR_TO_DATE(#{map.jsrq}, '%Y-%m-%d %H')
+
+        limit #{map.start},#{map.length}
+
+    </select>
+
+    <select id="findYplqdycount" resultType="Integer">
+        SELECT
+        count(1)
+        FROM
+        t_ypgl_jbxx a
+        LEFT JOIN
+        t_wt_jbxx b ON a.wtid = b.wtid
+        LEFT JOIN
+        user us ON us.zydm = a.lqry
+        WHERE
+        a.lrrq &gt;= STR_TO_DATE(#{map.ksrq}, '%Y-%m-%d %H')
+        AND a.lrrq &lt;= STR_TO_DATE(#{map.jsrq}, '%Y-%m-%d %H')
+    </select>
+
+    <select id="findYplq" resultType="java.util.Map">
+        SELECT
+        date_format(lrrq, '%Y-%m-%d') lrrq, ypmc, scdw, b.syry, a.wtid, ypbm, ypsl, IFNULL(bysl ,0) as bysl, IFNULL(us.name ,'/') jsr
+        FROM
+        t_ypgl_jbxx a
+        LEFT JOIN
+        t_wt_jbxx b ON a.wtid = b.wtid
+        LEFT JOIN
+        user us ON us.zydm = a.lqry
+        WHERE
+        lrrq &gt;= STR_TO_DATE(#{map.ksrq}, '%Y-%m-%d %H')
+        AND lrrq &lt;= STR_TO_DATE(#{map.jsrq}, '%Y-%m-%d %H')
+    </select>
+    <!--打印交接登记表-->
+    <select id="finddjb" resultType="java.util.Map">
+        SELECT
+            a.ypbm,
+            a.ypmc,
+            ifnull(a.ypsl,0) ypsl,
+            ifnull(c.name,'/') AS jyname,
+            ifnull(date_format(a.lqrq, '%Y-%m-%d'),'/') as lqrq,
+            ifnull(a.bysl,0) bysl,
+            ifnull(d.name,'/') byname
+        FROM
+            t_ypgl_jbxx a
+                LEFT JOIN
+            t_wt_jbxx b ON a.wtid = b.wtid
+                LEFT JOIN
+            user c ON a.LQRY = c.zydm
+                LEFT JOIN
+            user d ON a.byglry = d.zydm
+        WHERE
+            a.IF_SC = '0' AND b.IF_SL = '1' and a.ypbm in
+        <foreach collection="ypbms1" item="id" index="index" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </select>
+    <!--删除委托的时候查看制备表中是否存在，如果存在不能删除委托-->
+    <select id="findZbByWtid" resultType="Integer">
+        SELECT count(1)
+        FROM t_yp_zbwc a
+        LEFT JOIN t_ypgl_jbxx b ON a.ypid = b.ID
+        LEFT JOIN t_wt_jbxx c ON c.wtid = b.ypbm
+        WHERE c.id = #{id}
+    </select>
+</mapper>

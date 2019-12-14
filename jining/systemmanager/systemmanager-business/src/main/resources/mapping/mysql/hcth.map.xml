@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xinhai.caiyun.systemmanager.dao.HcthMapper">
+    <!--得到领用申请的信息 陈-->
+    <select id="queryHcthAll" resultType="map">
+        select rk.hcmc,rk.id as kcid,rk.gg,rk.jb,rk.sl,th.id as id,
+        (select name from user where zydm=th.thr) as thr,
+        th.thrq,th.thsl
+        from t_hcth_jbxx th
+        left join t_cgrk_jbxx rk
+        on th.kcid=rk.id
+        where thr=#{map.thr}
+        <if test="map.hclx==null or map.hclx==''">
+            and rk.hclx != '5'
+        </if>
+        <if test="map.hclx!=null and map.hclx!=''">
+            and rk.hclx=#{map.hclx}
+        </if>
+        order by th.id desc
+        limit #{map.start},#{map.length};
+    </select>
+    <!--得到领用申请的信息的数量 陈-->
+    <select id="queryHcthAllNum" resultType="java.lang.Integer">
+        select count(th.id)
+        from t_hcth_jbxx th
+        left join t_cgrk_jbxx rk
+        on th.kcid=rk.id
+        where thr=#{map.thr}
+        <if test="map.hclx==null or map.hclx==''">
+            and rk.hclx != '5'
+        </if>
+        <if test="map.hclx!=null and map.hclx!=''">
+            and rk.hclx=#{map.hclx}
+        </if>
+        order by th.id desc
+    </select>
+    <!--通过hcbm  在采购申请表中查找信息 陈-->
+    <select id="queryCgrkByHcbm" resultType="map">
+        select id as kcid,hcmc,gg,jb,cgsx,sl
+        from t_cgrk_jbxx
+        where hcbm=#{hcbm};
+    </select>
+    <!-- 将申请表中的信息 放入入库表中 陈-->
+    <insert id="addHcthFromCgrk">
+        insert into t_hcth_jbxx (kcid,thr,thrq,thsl)
+        values
+        (#{map.kcid},#{map.thr},now(),#{map.thsl});
+        update t_cgrk_jbxx set sl=#{map.kcsl} where hcbm=#{map.hcbm};
+    </insert>
+    <!-- 删除耗材退回的信息 陈-->
+    <delete id="delHcth">
+        delete from t_hcth_jbxx where id=#{id};
+    </delete>
+</mapper>

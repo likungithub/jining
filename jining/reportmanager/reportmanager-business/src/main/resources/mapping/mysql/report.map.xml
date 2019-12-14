@@ -1,0 +1,188 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- namespace必须和接口名称一一对应 -->
+<mapper namespace="com.xinhai.reportmanager.dao.QuantitationReportMapper">
+    <resultMap id="reportMap" type="com.xinhai.reportmanager.api.QuantitationReport">
+        <id property="id" column="id"/>
+        <result property="sampleId" column="ypid"/>
+        <result property="itemId" column="jcxmid"/>
+        <result property="sampleName" column="YPMC"/>
+        <result property="itemName" column="ZWMC_BM"/>
+        <result property="fileName" column="file_name"/>
+        <result property="labName" column="lab_name"/>
+        <result property="instrument" column="instrument"/>
+        <result property="user" column="user"/>
+        <result property="batch" column="batch"/>
+        <result property="sampleType" column="sample_type"/>
+        <result property="vialPosition" column="vial_position"/>
+        <result property="injectionVolume" column="injection_volume"/>
+        <result property="acquisitionDate" column="acquisition_date"/>
+        <result property="compoundName" column="compound_name"/>
+        <result property="totalArea" column="total_area"/>
+        <result property="retentionTime" column="retention_time"/>
+        <result property="calculatedAmount" column="calculated_amount"/>
+        <result property="units" column="units"/>
+        <result property="uploadedBy" column="uploaded_by"/>
+        <result property="uploadedAt" column="uploaded_at"/>
+    </resultMap>
+    <resultMap id="sampleMap" type="com.xinhai.reportmanager.api.Sample">
+        <id property="id" column="ID"/>
+        <result property="ypbm" column="YPBM"/>
+        <result property="ypmc" column="YPMC"/>
+        <result property="wtid" column="WTID"/>
+        <result property="dwmc" column="DWMC"/>
+        <result property="lxdh" column="LXDH"/>
+        <result property="sfmc" column="SFMC"/>
+        <result property="csmc" column="CSMC"/>
+        <result property="xjmc" column="XJMC"/>
+
+    </resultMap>
+    <resultMap id="sampleItemMap" type="com.xinhai.reportmanager.api.SampleItem">
+        <id property="id" column="jcxmid"/>
+        <result property="sampleId" column="ypid"/>
+        <result property="sampleName" column="YPMC"/>
+        <result property="name" column="ZWMC_BM"/>
+        <result property="fileName" column="file_name"/>
+        <result property="updatedBy" column="updated_by"/>
+        <result property="updatedAt" column="updated_at"/>
+    </resultMap>
+    <!-- 插入report记录 -->
+    <insert id="createReport" parameterType="com.xinhai.reportmanager.api.QuantitationReport"
+            keyProperty="id" useGeneratedKeys="true">
+		INSERT INTO quantitation_report (ypid,jcxmid,file_name, lab_name,instrument,`user`,batch,uploaded_by,uploaded_at,sample_type, vial_position, injection_volume, acquisition_date, compound_name, total_area, retention_time, calculated_amount, units)
+			VALUES (#{sampleId},#{itemId},#{fileName},#{labName},#{instrument},#{user},#{batch},#{uploadedBy},#{uploadedAt},#{sampleType},#{vialPosition},#{injectionVolume},#{acquisitionDate},#{ compoundName},#{totalArea},#{retentionTime},#{calculatedAmount},#{units});
+	</insert>
+    <!--通过id,更新一条report数据 -->
+    <update id="updateReport" parameterType="com.xinhai.reportmanager.api.QuantitationReport">
+        UPDATE quantitation_report
+        <set>
+            file_name = #{report.fileName}
+            <if test="report.labName != null">
+                ,lab_name = #{report.labName,jdbcType=VARCHAR}
+            </if>
+            <if test="report.instrument != null">
+                ,instrument = #{report.instrument,jdbcType=VARCHAR}
+            </if>
+            <if test="report.user != null">
+                ,`user` = #{report.user,jdbcType=VARCHAR}
+            </if>
+            <if test="report.batch != null">
+                ,batch = #{report.batch,jdbcType=VARCHAR}
+            </if>
+            <if test="report.sampleType != null">
+                ,sample_type = #{report.sampleType,jdbcType=VARCHAR}
+            </if>
+            <if test="report.vialPosition != null">
+                ,vial_position = #{report.vialPosition,jdbcType=VARCHAR}
+            </if>
+            <if test="report.injectionVolume != null">
+                ,injection_volume = #{report.injectionVolume,jdbcType=NUMERIC}
+            </if>
+            <if test="report.acquisitionDate != null">
+                ,acquisition_date = #{report.acquisitionDate,jdbcType=TIMESTAMP}
+            </if>
+            <if test="report.compoundName != null">
+                ,compound_name = #{report.compoundName,jdbcType=VARCHAR}
+            </if>
+            <if test="report.totalArea != null">
+                ,total_area = #{report.totalArea,jdbcType=VARCHAR}
+            </if>
+            <if test="report.retentionTime != null">
+                ,retention_time = #{report.retentionTime,jdbcType=VARCHAR}
+            </if>
+            <if test="report.calculatedAmount != null">
+                ,calculated_amount = #{report.calculatedAmount,jdbcType=VARCHAR}
+            </if>
+            <if test="report.units != null">
+                ,units = #{report.units,jdbcType=VARCHAR}
+            </if>
+            <if test="report.uploadedBy != null">
+                ,uploaded_by = #{report.uploadedBy,jdbcType=VARCHAR}
+            </if>
+            <if test="report.uploadedAt != null">
+                ,uploaded_at = #{report.uploadedAt,jdbcType=TIMESTAMP}
+            </if>
+        </set>
+        WHERE ypid = #{report.sampleId} and jcxmid=#{report.itemId};
+    </update>
+    <!--同时删除多条额report数据  -->
+    <delete id="deleteReports" parameterType="List">
+        DELETE FROM quantitation_report
+        WHERE id in
+        <foreach item="id" collection="list" open="(" separator=","
+                 close=")">
+            #{id}
+        </foreach>
+    </delete>
+    <!--通过id删除一条report数据  -->
+    <delete id="deleteReport" parameterType="String">
+		DELETE FROM quantitation_report
+			WHERE id = #{id}
+	</delete>
+    <!--获取一个report数据  -->
+    <select id="findReport"  resultMap="reportMap">
+		SELECT rt.*,jcxm.ZWMC_BM,yp.YPMC
+		FROM quantitation_report rt
+		left join t_ypjc_report ypf on rt.ypid=ypf.ypid and rt.jcxmid=ypf.jcxmid
+		left join t_jcxm_jbxx jcxm on rt.jcxmid=jcxm.ID
+		left join t_ypgl_jbxx yp on rt.ypid=yp.ID
+		WHERE rt.ypid = #{sampleId} and rt.jcxmid = #{itemId}
+	</select>
+    <!--获取某样品的所有质检报告数据  -->
+    <select id="findSampleReports"  resultMap="reportMap">
+        SELECT rt.*,jcxm.ZWMC_BM,yp.YPMC
+        FROM quantitation_report rt
+        left join t_ypjc_report ypf on rt.ypid=ypf.ypid and rt.jcxmid=ypf.jcxmid
+        left join t_jcxm_jbxx jcxm on rt.jcxmid=jcxm.ID
+        left join t_ypgl_jbxx yp on rt.ypid=yp.ID
+        WHERE rt.ypid = #{sampleId}
+    </select>
+    <!--获取所有report数据  -->
+    <select id="findAll"  resultMap="reportMap">
+		SELECT rt.*,jcxm.ZWMC_BM,yp.YPMC
+		FROM quantitation_report rt
+		left join t_ypjc_report ypf on rt.ypid=ypf.ypid and rt.jcxmid=ypf.jcxmid
+		left join t_jcxm_jbxx jcxm on rt.jcxmid=jcxm.ID
+		left join t_ypgl_jbxx yp on rt.ypid=yp.ID
+	</select>
+    <!--模糊查询  -->
+    <select id="findReports" resultMap="reportMap"  parameterType="String">
+        SELECT * FROM quantitation_report
+        <if test="keyword != null and keyword != ''">
+            WHERE CONCAT(file_name, sample_type, vial_position, injection_volume, acquisition_date, compound_name) LIKE
+            CONCAT('%',#{keyword},'%')
+        </if>
+    </select>
+    <!--获取所有samples数据  -->
+    <select id="getSamples"  resultMap="sampleMap">
+        SELECT yp.ID,yp.YPBM,yp.YPMC,yp.WTID,wt.DWMC,wt.LXDH,wt.SFMC,wt.CSMC,wt.XJMC
+        FROM t_ypgl_jbxx yp
+        inner join t_wt_jbxx wt
+        on yp.wtid=wt.wtid ;
+    </select>
+    <!--获取样品检测项  -->
+    <select id="getSampleItems"  resultMap="sampleItemMap">
+        SELECT
+          ypxm.jcxmid,ypxm.ypid,yp.YPMC,jcxm.ZWMC_BM,ypf.file_name,ypf.updated_by,ypf.updated_at
+        FROM (select * from  t_yp_jcxm where ypid=#{sampleId} )ypxm
+        inner join t_ypgl_jbxx yp on ypxm.ypid=yp.ID
+        inner join t_jcxm_jbxx jcxm on ypxm.jcxmid=jcxm.ID
+        left join t_ypjc_report ypf on ypxm.ypid=ypf.ypid and ypxm.jcxmid=ypf.jcxmid
+    </select>
+    <!--获取样品某个检测项  -->
+    <select id="getSampleItem"  resultMap="sampleItemMap">
+        SELECT
+        ypxm.jcxmid,ypxm.ypid,yp.YPMC,jcxm.ZWMC_BM,ypf.file_name,ypf.updated_by,ypf.updated_at
+        FROM (select * from  t_yp_jcxm where ypid=#{sampleId} and jcxmid=#{itemId} )ypxm
+        inner join t_ypgl_jbxx yp on ypxm.ypid=yp.ID
+        inner join t_jcxm_jbxx jcxm on ypxm.jcxmid=jcxm.ID
+        left join t_ypjc_report ypf on ypxm.ypid=ypf.ypid and ypxm.jcxmid=ypf.jcxmid
+    </select>
+    <!-- 设置样品检测项关联的报告 -->
+    <insert id="setItemReport" parameterType="com.xinhai.reportmanager.api.SampleItem">
+        insert into t_ypjc_report values(#{sampleId},#{id},#{fileName},#{updatedBy},#{updatedAt})
+        ON DUPLICATE KEY
+        update file_name = #{fileName},updated_by = #{updatedBy},updated_at=#{updatedAt}
+</insert>
+</mapper>

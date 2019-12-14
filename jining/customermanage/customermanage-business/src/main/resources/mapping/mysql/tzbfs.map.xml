@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xinhai.caiyun.customermanage.dao.TzbfsMapper">
+    <!--查询所有制备方式-->
+    <select id="findAll" resultType="map">
+        SELECT  * FROM t_zbfs
+        where zbfslx = #{lx}
+     </select>
+</mapper>

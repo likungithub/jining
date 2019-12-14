@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xinhai.caiyun.systemmanager.dao.YqsbcgMapper">
+    <select id="selectDY" resultType="Map">
+        select id,cgmc,pp,sl,bj,zl,xh,(select name from user where zydm = sqr)as sqr,(select name from organization where code = sqbm) as sqbm,sqrq,yt,bzxx,tjbz from yqcgsq
+        where id>0
+        <if test="map.id!=null and map.id!= ''">
+            and id = #{map.id}
+        </if>
+    </select>
+    <select id="selectYqsbcg" resultType="Map">
+        select id,cgmc,pp,sl,bj,zl,xh,(select name from user where zydm = sqr)as sqr,(select name from organization where code = sqbm) as sqbm,sqrq,yt,bzxx,tjbz from yqcgsq
+        where id>0
+        <if test="map.cgmc!=null and map.cgmc!= ''">
+           and cgmc = #{map.cgmc}
+        </if>
+        order by id desc
+      limit #{map.start},#{map.length};
+    </select>
+    <select id="selectYqCount" resultType="java.lang.Integer">
+        select count(id) from yqcgsq
+        where id>0
+        <if test="map.cgmc!=null and map.cgmc!= ''">
+           and cgmc = #{map.cgmc}
+        </if>
+    </select>
+    <!--提交采购申请-->
+    <update id="submitCgsq">
+        update yqcgsq set tjbz = '1' where id = #{map.id}
+    </update>
+    <!--查询申请人所在部门-->
+    <select id="selectBmdm" resultType="Map">
+        select bmdm from user where zydm = #{map.sqr}
+    </select>
+    <!--新增采购申请-->
+    <insert id="insertYqsbcg">
+        insert into yqcgsq(cgmc,pp,sl,bj,zl,xh,sqr,sqbm,sqrq,yt,bzxx)values(#{map.cgmc},#{map.pp},#{map.sl},#{map.bj},#{map.zl},#{map.xh},#{map.sqr},#{map.sqbm},now(),#{map.yt},#{map.bzxx})
+    </insert>
+    <!--删除采购申请-->
+    <delete id="deleteYqsbcgsq">
+        delete from yqcgsq where id = #{map.id}
+    </delete>
+    <!--修改采购申请-->
+    <update id="updateYqsbcgsq">
+        update yqcgsq
+        <set>
+            <if test="map.cgmc!=null and map.cgmc!=''">
+                cgmc = #{map.cgmc},
+            </if>
+            <if test="map.pp!=null and map.pp!=''">
+                pp = #{map.pp},
+            </if>
+            <if test="map.xh!=null and map.xh!=''">
+                xh = #{map.xh},
+            </if>
+            <if test="map.zl!=null and map.zl!=''">
+                zl = #{map.zl},
+            </if>
+            <if test="map.sqr!=null and map.sqr!=''">
+                sqr = #{map.sqr},
+            </if>
+            <if test="map.bzxx!=null and map.bzxx!=''">
+                bzxx = #{map.bzxx},
+            </if>
+            <if test="map.bj!=null and map.bj!=''">
+                bj = #{map.bj},
+            </if>
+            <if test="map.sl!=null and map.sl!=''">
+                sl = #{map.sl},
+            </if>
+            <if test="map.yt!=null and map.yt!=''">
+                yt = #{map.yt},
+            </if>
+            <if test="map.sqbm!=null and map.sqbm!=''">
+                sqbm = #{map.sqbm},
+            </if>
+        </set>
+        where id = #{map.id}
+    </update>
+    <!--查询当前人员身份-->
+    <select id="findInd" resultType="Map">
+        select name from role where id =
+          (select role_id from user_role where user_id =
+            (select u.id from user u where u.zydm = #{map.dqry}))
+    </select>
+    <!--实验室主管界面显示-->
+    <select id="findYqcgsqsys" resultType="Map">
+        select id,cgmc,pp,sl,bj,zl,xh,(select name from user where zydm = sqr)as sqr,(select name from organization where code = sqbm) as sqbm,sqrq,sqzt,yt,bzxx from yqcgsq
+        where sqzt = '0'
+        <if test="map.cgmc!=null and map.cgmc!=''">
+            and cgmc = #{map.cgmc}
+        </if>
+        limit #{map.start},#{map.length}
+    </select>
+    <select id="findCountsys" resultType="java.lang.Integer">
+        select count(id) from yqcgsq
+        where sqzt = '0'
+        <if test="map.cgmc!=null and map.cgmc!=''">
+            and cgmc = #{map.cgmc}
+        </if>
+    </select>
+    <!--分管主任界面显示-->
+    <select id="findYqcgsqfg" resultType="Map">
+        select id,cgmc,pp,sl,bj,zl,xh,(select name from user where zydm = sqr)as sqr,(select name from organization where code = sqbm) as sqbm,sqrq,sqzt,yt,bzxx from yqcgsq
+        where sqzt = '1'
+        <if test="map.cgmc!=null and map.cgmc!=''">
+            and cgmc = #{map.cgmc}
+        </if>
+        limit #{map.start},#{map.length}
+    </select>
+    <select id="findCountfg" resultType="java.lang.Integer">
+        select count(id) from yqcgsq
+        where sqzt = '1'
+        <if test="map.cgmc!=null and map.cgmc!=''">
+            and cgmc = #{map.cgmc}
+        </if>
+    </select>
+    <!--单位负责人界面显示-->
+    <select id="findYqcgsqdw" resultType="Map">
+        select id,cgmc,pp,sl,bj,zl,xh,(select name from user where zydm = sqr)as sqr,(select name from organization where code = sqbm) as sqbm,sqrq,sqzt,yt,bzxx from yqcgsq
+        where sqzt = '3'
+        <if test="map.cgmc!=null and map.cgmc!=''">
+            and cgmc = #{map.cgmc}
+        </if>
+        limit #{map.start},#{map.length}
+    </select>
+    <select id="findCountdw" resultType="java.lang.Integer">
+        select count(id) from yqcgsq
+        where sqzt = '3'
+        <if test="map.cgmc!=null and map.cgmc!=''">
+            and cgmc = #{map.cgmc}
+        </if>
+    </select>
+    <!--实验室主管审批-->
+    <update id="syszgSP">
+        update yqcgsq set sqzt = '1',sspsj=#{map.sspsj},syszgsp= #{map.dqry} where id = #{map.id}
+    </update>
+    <!--分管主任审批-->
+    <update id="fggrSP">
+        update yqcgsq set sqzt = '3',fspsj=#{map.fspsj},fgzrsp= #{map.dqry} where id = #{map.id}
+    </update>
+    <!--单位负责人审批-->
+    <update id="dwfzrSP">
+        update yqcgsq set sqzt = '5',dspsj=#{map.dspsj},dwfzrsp= #{map.dqry} where id = #{map.id}
+    </update>
+    <!--实验室主管审批退回-->
+    <update id="syszgTH">
+        update yqcgsq set sqzt = '2',sspsj=#{map.sspsj},syszgsp= #{map.dqry} where id = #{map.id}
+    </update>
+    <!--分管主任审批退回-->
+    <update id="fggrTH">
+        update yqcgsq set sqzt = '4',fspsj=#{map.fspsj},fgzrsp= #{map.dqry} where id = #{map.id}
+    </update>
+    <!--单位负责人审批退回-->
+    <update id="dwfzrTH">
+        update yqcgsq set sqzt = '6',dspsj=#{map.dspsj},dwfzrsp= #{map.dqry} where id = #{map.id}
+    </update>
+    <!-- 插入Excel表格数据-->
+    <insert id="importCgsqExcel">
+        insert into yqcgsq(cgmc,pp,sl,bj,zl,xh,sqrq,sqr,sqbm,yt,bzxx)
+        values
+          (#{map.cgmc},#{map.pp},#{map.sl},#{map.bj},#{map.zl},#{map.xh},now(),#{map.sqr},#{map.sqbm},#{map.yt},#{map.bzxx})
+    </insert>
+</mapper>

@@ -1,0 +1,33 @@
+@CHARSET "UTF-8";
+.appiconmanager-dialog-m  .modal-dialog{
+    width: 652px;
+}
+
+#appiconForm input[type='file'],
+#addappicon input[type='file']
+{
+    padding-top: 5px;
+    text-indent: 400px;
+}
+
+#appiconForm .wrapIconClass,
+#addappicon .wrapIconClass,
+#eidtappiconForm .wrapIconClass
+{
+    float: left;
+    border: 1px solid rgb(229,229,229);
+    width: 500px;
+    height: 33px;
+    line-height: 33px;
+    padding-left: 15px;
+    border-radius: 0 4px 4px 0!important;
+}
+#lastRowStartpicture
+{
+    border: 1px solid rgb(229,229,229);
+    height: 33px;
+    width: 500px;
+    border-radius: 0 4px 4px 0!important;
+    line-height: 33px;
+    text-align: center;
+}

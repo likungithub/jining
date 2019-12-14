@@ -1,0 +1,443 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+																																																																																																																																																												<!-- namespace必须和接口名称一一对应 -->
+<mapper namespace="com.xinhai.caiyun.customermanage.dao.CustomerManageMapper">
+	<resultMap id="companyInfoImageMap" type="com.xinhai.caiyun.customermanage.api.CompanyInfoImage">
+		<id property="id" column="id"/>
+        <result property="jfzt" column="jfzt"/>
+		<result property="nsrsbh" column="nsrsbh"/>
+		<result property="dljg_bm" column="dljg_bm"/>
+		<result property="fjmc" column="fjmc"/>
+		<result property="fjlx" column="fjlx"/>
+		<result property="fjcclj" column="fjcclj"/>
+		<result property="wjlx" column="wjlx"/>
+		<result property="wjdx" column="wjdx"/>
+		<result property="xzcs" column="xzcs"/>
+		<result property="scbz" column="scbz"/>
+		<result property="lrry" column="lrry"/>
+		<result property="gxry" column="gxry"/>
+		<result property="scry" column="scry"/>
+		<result property="scsj" column="scsj"/>
+		<result property="gxrq" column="gxrq"/>
+		<result property="scrq" column="scrq"/>
+	</resultMap>
+	<!-- 插入CustomerManage记录 -->
+	<insert id="createCustomer" parameterType="com.xinhai.caiyun.customermanage.api.CustomerManage"
+		keyProperty="yhid" useGeneratedKeys="true">
+		INSERT INTO Customer (id,code,name,qylx_dm,sjhm,nsrsbh,zydm,szsf,szcs,email,bzxx,yhzt_dm,logo,state,scbz,lrry,create_date,fwksrq,fwjsrq,jfzt)
+			VALUES (#{id},#{code},#{name},#{qylx_dm},#{sjhm},#{nsrsbh},#{zydm},#{szsf},#{szcs},#{email},#{bzxx},#{yhzt_dm},#{logo},#{state},0,#{lrry},now(),#{fwksrq},#{fwjsrq},0);
+	</insert>
+	<!--同时删除多条额Customer数据  -->
+	<update id="deleteCustomerList" parameterType="List">
+        UPDATE Customer
+        SET scbz = TRUE
+		WHERE yhid in
+            <foreach item="id" collection="list" open="(" separator=","
+                close=")">
+                #{yhid}
+            </foreach>
+	</update>
+	<!--通过id删除一条Customer数据  -->
+	<update id="deleteCustomer" parameterType="java.lang.Long">
+		UPDATE Customer
+		SET scbz = TRUE
+		WHERE yhid = #{yhid}
+	</update>
+	<!--通过yhid获取一个Customer数据  -->
+	<select id="getCustomer" resultType="com.xinhai.caiyun.customermanage.api.CustomerManage"
+		parameterType="java.lang.Long">
+		SELECT yhid,id,code,name,qylx_dm,sjhm,nsrsbh,zydm,szsf,szcs,email,
+            bzxx,yhzt_dm,logo,yyzz,gsjj,qyzz,qyyj,state,scbz,lrry,gxry,scry,
+            create_date,gxrq,scrq,fwksrq,fwjsrq,sh_date,jfsj,jfzt,shyj
+        FROM Customer WHERE yhid = #{yhid};
+	</select>
+	
+	<!--获取一个Customer数据  -->
+    <select id="getCustomerById" resultType="com.xinhai.caiyun.customermanage.api.CustomerManage"
+        parameterType="string">
+        SELECT yhid,id,code,name,qylx_dm,sjhm,nsrsbh,zydm,szsf,szcs,email,
+            bzxx,yhzt_dm,logo,yyzz,gsjj,qyzz,qyyj,state,scbz,lrry,gxry,scry,
+            create_date,gxrq,scrq,fwksrq,fwjsrq,sh_date,jfsj,jfzt,shyj,zszt
+        FROM Customer 
+        WHERE id = #{id} and scbz=false;
+    </select>
+    
+	<!--获取所有Customer数据  -->
+	<select id="getCustomerList" resultType="com.xinhai.caiyun.customermanage.api.CustomerManage">
+		SELECT code,name,create_date FROM Customer;
+	</select>
+	
+	<!--获取所有Customer数据  -->
+    <select id="getSearchCustomerList" resultType="com.xinhai.caiyun.customermanage.api.CustomerManage">
+        SELECT a.sh_date, a.code, a.yhid, a.name, a.nsrsbh, a.sjhm, a.create_date, a.zszt, a.zssj, a.state, a.fwksrq, a.fwjsrq, b.ygid as id,a.id as customerId, b.user_account as yhzh
+        FROM Customer as a
+        left join user as b on a.code = b.dljg_bm
+        where a.scbz=false and b.if_manager=true and code &lt;&gt; 'DL0000000001'
+        <if test="starDate!=null">
+            and a.create_date >= #{starDate}
+        </if>
+        <if test="endDate!=null">
+            and #{endDate} >= a.create_date
+        </if>
+        <if test="jd != 2">
+            and a.state = #{jd}
+        </if>
+        order by a.yhid desc;
+    </select>
+	
+	<!--获取所有Customer数据(除了初始记录后全部未删除的代理机构)  -->
+    <select id="getCustomerAll" resultType="com.xinhai.caiyun.customermanage.api.CustomerManage">
+        SELECT code FROM Customer where scbz = 0 and yhid &lt;&gt; 1;
+    </select>
+    
+    <update id="updateCustomerByYhid" parameterType="com.xinhai.customer.api.Customer">
+        UPDATE customer SET name=#{name},sjhm=#{sjhm},szsf=#{szsf},szcs=#{szcs},email=#{email},gxry=#{gxry},gxrq=now(),xxdz=#{xxdz},yyzz=#{yyzz},gsjj=#{gsjj},qyzz=#{qyzz},qyyj=#{qyyj}
+        where yhid=#{yhid}
+    </update>
+    
+    <!-- 更新user信息 -->
+    <update id="updateUserByYhid" parameterType="string">
+        UPDATE user SET yddh=#{sjhm},email=#{email} WHERE  id=#{userId}
+    </update>
+    
+    <update id="addLogo">
+        update Customer set logo = #{logo} where code = #{code};
+    </update>
+    
+    <update id="deleteSHCustomer">
+        UPDATE Customer
+        SET scbz = TRUE
+        where id = #{id};
+    </update>
+    
+    <update id="deleteSHUser">
+        UPDATE user
+        SET is_delete = TRUE
+        WHERE ygid = #{ygid};
+    </update>
+    
+    <update id="updateSh">
+        UPDATE Customer 
+        <set>
+            <if test="customer.is_enabled == true">
+                state=1, sh_date=now(), fwksrq=#{customer.fwksrq}, fwjsrq=#{customer.fwjsrq}, shyj=#{customer.shyj}
+            </if>
+            <if test="customer.is_enabled == false">
+                state=0, sh_date=now(), shyj=#{customer.shyj}
+            </if>
+        </set>
+        WHERE yhid in
+        <foreach index="index" item="id" collection="ids" open="(" separator=","
+                 close=")">
+            #{id}
+        </foreach>
+    </update>
+    
+    <!-- 审核界面详情页中的修改 -->
+    <update id="updateBzxx">
+        UPDATE Customer 
+        set state=1, fwksrq=#{customer.fwksrq}, fwjsrq=#{customer.fwjsrq}, shyj=#{customer.shyj}, zsry_bz=#{customer.zsry_bz}
+        WHERE yhid in
+        <foreach index="index" item="id" collection="ids" open="(" separator=","
+                 close=")">
+            #{id}
+        </foreach>
+    </update>
+    
+    <update id="updateUsers">
+        UPDATE user 
+        <set>
+            <if test="user.enabled == true">
+                is_enabled=#{user.enabled}, sh_date=now(), fwksrq=#{user.fwksrq}, fwjsrq=#{user.fwjsrq}, shyj=#{user.shyj}
+            </if>
+            <if test="user.enabled == false">
+                is_enabled=#{user.enabled}, sh_date=now(), shyj=#{user.shyj}
+            </if>
+        </set>
+        WHERE ygid in
+        <foreach index="index" item="id" collection="yhids" open="(" separator=","
+                 close=")">
+            #{id}
+        </foreach>
+    </update>
+    
+    <insert id="insertCompanyInfoImage" parameterType="com.xinhai.caiyun.customermanage.api.CompanyInfoImage">
+        INSERT INTO pt_yhxx_fjxx (dljg_bm,fjmc,fjcclj,wjlx,wjdx,fjlx,xzcs,lrry,gxry,scry,scsj,gxrq,scrq)
+        VALUES (#{companyInfoImage.dljg_bm},#{companyInfoImage.fjmc},#{companyInfoImage.fjcclj},
+        #{companyInfoImage.wjlx},#{companyInfoImage.wjdx},#{companyInfoImage.fjlx},#{companyInfoImage.xzcs},
+        #{companyInfoImage.lrry},#{companyInfoImage.gxry},#{companyInfoImage.scry},
+        #{companyInfoImage.scsj},#{companyInfoImage.gxrq},#{companyInfoImage.scrq});
+    </insert>
+    <select id="findCompanyImageList" resultMap="companyInfoImageMap">
+        SELECT ifnull((SELECT CASE WHEN date_format(fwjsrq,'%Y:%m:%d')>date_format(now(),'%Y:%m:%d') THEN '正常' ELSE '欠费' END  FROM customer where jfzt = 1 AND code=#{dljg_bm}) ,'试用') as jfzt,id,dljg_bm,fjmc,fjcclj,wjlx,wjdx,fjlx,xzcs,scbz,lrry,gxry,scry,scsj,gxrq,scrq
+        FROM pt_yhxx_fjxx
+        WHERE scbz=0 AND dljg_bm=#{dljg_bm} AND fjlx=#{fjlx};
+    </select>
+	<select id="findCompanyInfoImageById" resultMap="companyInfoImageMap">
+		SELECT id,dljg_bm,fjmc,fjcclj,wjlx,wjdx,fjlx,xzcs,scbz,lrry,gxry,scry,scsj,gxrq,scrq
+		FROM pt_yhxx_fjxx
+		WHERE scbz=0 AND id=#{id}
+	</select>
+
+    <update id="zssh">
+        update customer set  zszt= #{tj.zszt},
+        zssj=now(),zsry_dm=#{tj.zsry_dm}, zsry_mc=#{tj.zsry_mc},zsry_bz=#{tj.zsry_bz}
+        where code = #{tj.code};
+    </update>
+    <update id="deleteCompanyImage">
+        update pt_yhxx_fjxx
+        set scbz=1, scrq=#{companyInfoImage.scrq},scry=#{companyInfoImage.scry}
+        where id = #{id};
+    </update>
+    <update id="updateFileDownload">
+        update pt_yhxx_fjxx set xzcs = xzcs+1 where id = #{id};
+    </update>
+	<select id="countImageSize" resultType="java.lang.Integer">
+		SELECT COUNT(ID)
+		FROM pt_yhxx_fjxx
+		WHERE scbz=0 AND dljg_bm=#{dljg_bm} AND fjlx=#{fjlx};
+	</select>
+	
+	<!--根据一个id获取一个Customer数据  -->
+    <select id="selectCustomerById" resultType="com.xinhai.caiyun.customermanage.api.CustomerManage"
+        parameterType="string">
+        SELECT a.name,a.sjhm,a.nsrsbh,a.email,b.XZQH_MC as szsf,b.xzqh_dm as szsfmc,c.xzqh_dm as szcsmc,c.XZQH_MC as szcs,
+        a.xxdz,a.logo,a.yyzz,a.gsjj,a.qyzz,a.qyyj,d.fwksrq,d.fwjsrq,d.shyj,d.is_enabled,a.is_qfz
+        FROM Customer as a 
+        left join dm_xzqh as b on a.szsf = b.XZQH_DM
+        left join dm_xzqh as c on a.szcs = c.XZQH_DM 
+        left join user as d on a.code = d.dljg_bm and d.if_manager = 1
+        WHERE 
+        a.id = #{id} and a.scbz=false;
+    </select>
+    
+    <!--根据一个id获取一个Customer数据  -->
+    <select id="selectCustomerByYhid" resultType="com.xinhai.caiyun.customermanage.api.CustomerManage"
+        parameterType="string">
+        SELECT  a.name,a.sjhm,a.nsrsbh,a.code,a.email,b.XZQH_MC as szsf,c.XZQH_MC as szcs,a.zsry_bz,
+        a.xxdz,a.logo,a.yyzz,a.gsjj,a.qyzz,a.qyyj,a.fwksrq,a.fwjsrq,a.shyj,d.is_enabled
+        FROM Customer as a 
+        left join dm_xzqh as b on a.szsf = b.XZQH_DM
+        left join dm_xzqh as c on a.szcs = c.XZQH_DM 
+        left join user as d on a.code = d.dljg_bm and d.if_manager = 1
+        WHERE 
+        a.yhid = #{id} and a.scbz=false;
+    </select>
+    
+    <!-- 通过代理机构编码获取代理机构信息 -->
+    <select id="getCustomerByUser" resultType="com.xinhai.caiyun.customermanage.api.CustomerManage" parameterType="string">
+        SELECT yhid,id,code,name,qylx_dm,sjhm,nsrsbh,zydm,szsf,szcs,email,xxdz,
+        bzxx,yhzt_dm,logo,yyzz,gsjj,qyzz,qyyj,state,scbz,lrry,gxry,scry,
+        create_date,gxrq,scrq,fwksrq,fwjsrq,sh_date,jfsj,jfzt,shyj
+        FROM Customer  
+        where code= #{dljgbm} and scbz=false;
+    </select>
+    
+    <!-- 根据纳税人识别号和附件类型查询附件数目 -->
+    <select id="getFJNum" resultType="integer"
+        parameterType="string">
+        SELECT count(1)
+        FROM pt_yhxx_fjxx 
+        WHERE dljg_bm=#{dljg_bm} and fjlx = #{fjlx} and scbz=false;
+    </select>
+    
+    <!-- 查看公司名数量-->
+    <select id="getNameExist" resultType="integer"
+        parameterType="string">
+        SELECT count(1)
+        FROM Customer 
+        WHERE name=#{gsmc};
+    </select>
+    
+    <!-- 判断账号是否存在 -->
+    <select id="hasExistByZh" resultType="integer" parameterType="string">
+        SELECT COUNT(1)   
+        FROM user  
+        WHERE user_account=#{zh}
+    </select>
+    
+    
+    <!-- _________________________________________________________________________________________________________________________________________________________________________________________ -->
+    <!-- ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////// -->
+    <!-- ////警戒线////警戒线////警戒线////警戒线////警戒线////警戒线////警戒线////警戒线////警戒线////警戒线////警戒线////警戒线////警戒线////警戒线////警戒线////警戒线////警戒线////警戒线////警戒线////警戒线////警戒线////警戒线////警戒线//// -->
+    <!-- ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////// -->
+    <!-- ￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣   -->
+    <!-- 按条件查询出所有客户数量 -->   
+    <select id="findAllSize" resultType="long">
+        SELECT count(a.id) 
+        from Customer as a left join user as b on a.code = b.dljg_bm where a.scbz=0 and concat(a.name) like concat('%',#{khbm},'%') and b.if_manager=true
+        <if test="ssDate!=null">
+            and b.sh_date > #{ssDate}
+        </if>
+        <if test="seDate!=null">
+            and #{seDate} > b.sh_date
+        </if>
+        <if test="zsDate!=null">
+            and a.create_date > #{zsDate}
+        </if>
+        <if test="zeDate!=null">
+            and #{zeDate} > a.create_date
+        </if>
+    </select>
+    
+    <!-- 按条件查询出所有客户信息 --> 
+    <select id="getAgentByPage" resultType="com.xinhai.caiyun.customermanage.api.CustomerManage">
+        SELECT a.yhid, a.code, a.name, a.sjhm, a.create_date, a.nsrsbh, b.is_enabled, b.sh_date, b.ygid as id,a.id as customerId, b.user_account as yhzh,
+        b.sh_date as shsj, count(c.id) as shyj,(SELECT COUNT(id) FROM log_dlxx WHERE dljg_bm = a.code) AS bzxx, a.create_date as create_date
+        FROM Customer as a 
+        left join user as b on a.code = b.dljg_bm and b.if_manager=true
+        left join pt_khxx as c on a.code = c.DLJG_BM and c.scbz = false
+        where a.scbz=false and concat(a.name) like concat('%',#{khbm},'%')
+        <if test="ssDate!=null">
+            and b.sh_date > #{ssDate}
+        </if>
+        <if test="seDate!=null">
+            and #{seDate} > b.sh_date
+        </if>
+        <if test="zsDate!=null">
+            and a.create_date > #{zsDate}
+        </if>
+        <if test="zeDate!=null">
+            and #{zeDate} > a.create_date
+        </if>
+        GROUP BY a.code order by is_enabled ,id desc limit #{start},#{length}
+    </select>
+    
+    <!-- 查询出所有客户数量 --> 
+    <select id="findAllCustomerSize" resultType="long">
+        SELECT count(a.id)
+        FROM Customer as a 
+        left join user as b on a.code = b.dljg_bm 
+        where a.scbz=false and b.if_manager=true and b.is_enabled = true
+    </select>
+    
+    <!-- 查询出今天通过审核的所有用户数量 -->
+    <select id="findTodayCustomerSize" resultType="long">
+        SELECT count(a.id)
+        FROM Customer as a 
+        left join user as b on a.code = b.dljg_bm 
+        where a.scbz=false and b.if_manager=true and b.is_enabled = true and b.sh_date > #{sDate} and #{eDate} >b.sh_date
+    </select>
+    
+    <!-- 按条件查询出所有欠费客户数量（正式客户） -->
+    <select id="findAllArrears" resultType="long">
+        select count(a.id) from Customer as a 
+        left join user as b on a.code = b.dljg_bm and b.if_manager=true
+        where a.scbz = false and b.is_enabled = true and CONCAT(a.name) like CONCAT('%',#{khbm},'%') and DATE(now())>DATE(a.fwjsrq) and a.jfzt = TRUE
+        <if test="ssDate!=null">
+            and a.fwjsrq > #{ssDate}
+        </if>
+        <if test="seDate!=null">
+            and #{seDate} > a.fwjsrq
+        </if>
+    </select>
+    
+    <!-- 按条件查询出所有欠费客户信息（正式客户） -->
+    <select id="getArrearsByPage" resultType="com.xinhai.caiyun.customermanage.api.CustomerManage">
+        SELECT a.code, a.name, a.sjhm, a.create_date,a.fwksrq, a.fwjsrq, a.nsrsbh, b.is_enabled, b.sh_date, b.ygid as id,a.id as customerId, b.user_account as yhzh, b.sh_date as shsj, count(c.id) as shyj
+        FROM Customer as a 
+        left join user as b on a.code = b.dljg_bm and b.if_manager=true
+        left join pt_khxx as c on a.code = c.DLJG_BM and c.scbz = false
+        where a.scbz = false and b.is_enabled = true and CONCAT(a.name) like CONCAT('%',#{khbm},'%') and DATE(now())> DATE(a.fwjsrq) and a.jfzt = TRUE
+        <if test="ssDate!=null">
+            and a.fwjsrq > #{ssDate}
+        </if>
+        <if test="seDate!=null">
+            and #{seDate} > a.fwjsrq
+        </if>
+        GROUP BY NAME order by id desc limit #{start},#{length}
+    </select>
+    
+    <!-- 查询出所有试用客户数量 -->
+    <select id="findTryoutSize" resultType="long">
+        select count(a.id)
+        FROM Customer as a 
+        left join user as b on a.code = b.dljg_bm and b.if_manager=true
+        where a.scbz = false and b.is_enabled = true and a.jfzt = false
+    </select>
+    
+    <!-- 按条件查询出所有试用客户数量 -->
+    <select id="findAllTryoutSize" resultType="long">
+        select count(a.id)
+        FROM Customer as a 
+        left join user as b on a.code = b.dljg_bm and b.if_manager=true
+        where a.scbz = false and b.is_enabled = true and CONCAT(a.name) like CONCAT('%',#{khbm},'%') and a.jfzt = false
+        <if test="ssDate!=null">
+            and b.sh_date > #{ssDate}
+        </if>
+        <if test="seDate!=null">
+            and #{seDate} > b.sh_date
+        </if>
+        <if test="zsDate!=null">
+            and a.create_date > #{zsDate}
+        </if>
+        <if test="zeDate!=null">
+            and #{zeDate} > a.create_date
+        </if>
+    </select>
+    
+    <select id="getTryoutByPage" resultType="com.xinhai.caiyun.customermanage.api.CustomerManage">
+        SELECT a.code, a.name, a.yhid, a.sjhm, a.create_date,a.fwksrq, a.fwjsrq, a.nsrsbh, b.is_enabled, b.sh_date, b.ygid as id,a.id as customerId, b.user_account as yhzh, b.sh_date as shsj, count(c.id) as shyj
+        FROM Customer as a 
+        left join user as b on a.code = b.dljg_bm and b.if_manager=true
+        left join pt_khxx as c on a.code = c.DLJG_BM and c.scbz = false
+        <!-- where a.scbz=false and b.if_manager=true and concat(b.is_enabled) like concat('%',#{txtorgName},'%') -->
+        where a.scbz = false and b.is_enabled = true and concat(a.name) like concat('%',#{khbm},'%') and a.jfzt = false
+        <if test="ssDate!=null">
+            and b.sh_date > #{ssDate}
+        </if>
+        <if test="seDate!=null">
+            and #{seDate} > b.sh_date
+        </if>
+        <if test="zsDate!=null">
+            and a.create_date > #{zsDate}
+        </if>
+        <if test="zeDate!=null">
+            and #{zeDate} > a.create_date
+        </if>
+        GROUP BY NAME order by is_enabled ,id desc limit #{start},#{length}
+    </select>
+    
+    
+    <select id="findPayCustomerSize" resultType="long">
+        select count(a.id)
+        FROM Customer as a 
+        left join user as b on a.code = b.dljg_bm and b.if_manager=true
+        where a.scbz = false and b.is_enabled = true and a.jfzt = true
+    </select>
+    
+    <select id="findWshSize" resultType="long">
+        select count(a.id)
+        FROM Customer as a 
+        left join user as b on a.code = b.dljg_bm and b.if_manager=true
+        where a.scbz = false and b.is_enabled = false
+    </select>
+
+
+    <!-- 查询信息 -->
+    <select id="query" resultType="java.util.Map" parameterType="java.util.Map">
+       ${str.sql}
+    </select>
+
+    <!-- 更新信息 -->
+    <update id="update" parameterType="java.util.Map">
+        ${str.sql}
+    </update>
+
+    <update id="zscx"> <!-- 终审撤销 -->
+        update customer set  zszt= #{tj.zszt},
+        zssj=now(),zsry_dm=#{tj.zsry_dm}, zsry_mc=#{tj.zsry_mc}
+        where yhid = #{tj.yhid};
+    </update>
+
+    <!-- 批量删除代理 -->
+    <select id="delDL" statementType="CALLABLE" parameterType="java.lang.String">
+        <![CDATA[
+            call P_delCustomerInfo(
+                #{customer_id,mode=IN}
+            )
+        ]]>
+    </select>
+
+</mapper>

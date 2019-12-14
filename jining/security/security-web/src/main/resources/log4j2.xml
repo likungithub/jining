@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration status="error">
+    <appenders>
+        <Console name="Console" target="SYSTEM_OUT">
+            <ThresholdFilter level="trace" onMatch="ACCEPT" onMismatch="DENY"/>
+            <PatternLayout pattern="[%level] [%d] [%M] [%class{36}] - %msg%xEx%n"/>
+        </Console>
+        <RollingFile name="RollingFile" fileName="logs/log.log"
+                     filePattern="logs/$${date:yyyy-MM}/computing-%d{yyyy-MM-dd}-%i.log.gz">
+            <PatternLayout pattern="[%level] [%d] [%M] [%class{36}] - %msg%xEx%n"/>
+            <SizeBasedTriggeringPolicy size="10MB" />
+        </RollingFile>
+    </appenders>
+    <loggers>
+        <!--debug/info/warn/error/fatal-->
+        <root level="debug">
+            <appender-ref ref="RollingFile"/>
+            <appender-ref ref="Console"/>
+        </root>
+		<logger name="org.springframework.beans">
+			<appender-ref ref="Console" />
+		</logger>
+    </loggers>
+</configuration>

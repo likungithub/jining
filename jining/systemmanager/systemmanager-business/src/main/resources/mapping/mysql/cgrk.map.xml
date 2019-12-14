@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xinhai.caiyun.systemmanager.dao.CgrkMapper">
+    <!-- 得到采购入库的信息 陈-->
+    <select id="selectCgrk" resultType="Map">
+         select id,hcmc,gg,jb,sl,sccj,cgmd,
+        (select name from user where zydm = c.sqr)as sqr,
+        (select name from user where zydm = c.spr)as spr,
+        (select name from user where zydm = c.rkr)as rkr,
+         sqrq,dj,zj,bz,hclx,sprq,hcbm,rkrq
+        from t_cgrk_jbxx c
+        <where>
+            <if test="map.hclx!=null and map.hclx!=''">
+                hclx=#{map.hclx}
+            </if>
+            <if test="map.hclx==null or map.hclx==''">
+                and hclx != '5'
+            </if>
+        </where>
+        order by id desc
+        limit #{map.start},#{map.length};
+    </select>
+<!-- 得到采购入库的信息数量  陈-->
+    <select id="selectCount" resultType="java.lang.Integer">
+        select count(id)
+        from t_cgrk_jbxx
+        <where>
+            <if test="map.hclx!=null and map.hclx!=''">
+                hclx=#{map.hclx}
+            </if>
+            <if test="map.hclx==null or map.hclx==''">
+                and hclx != '5'
+            </if>
+        </where>
+        order by id desc
+    </select>
+    <!--通过hcbm  在采购申请表中查找信息 陈-->
+    <select id="queryCgsqByHcbm" resultType="map">
+        select id,hcmc,gg,jb,sccj,cgmd,sqr,shr,bzr,spr,sqrq,shrq,bzrq,sprq,sl,
+        dj,zj,bz,hclx,hcbm
+        from t_cgsq_jbxx
+        where hcbm=#{hcbm};
+    </select>
+    <!-- 将申请表中的信息 放入入库表中 陈-->
+    <insert id="addCgrkFromCgsq">
+        insert into t_cgrk_jbxx (hcmc,gg,jb,sccj,cgmd,sqr,shr,bzr,spr,sqrq,shrq,bzrq,sprq,sl,
+        dj,zj,bz,hclx,hcbm,rkr,rkrq)
+        values
+       (#{map.hcmc},#{map.gg},#{map.jb},#{map.sccj},#{map.cgmd},#{map.sqr},#{map.shr},#{map.bzr},#{map.spr},
+        #{map.sqrq},#{map.shrq},#{map.bzrq},#{map.sprq},#{map.sl},#{map.dj},#{map.zj},#{map.bz},#{map.hclx},
+        #{map.hcbm},#{map.rkr},now());
+    </insert>
+    <!--  根据耗材编码查找id 陈-->
+     <select id="queryIdByHcbm"  resultType="string">
+        select id from t_cgrk_jbxx where hcbm=#{hcbm};
+     </select>
+</mapper>

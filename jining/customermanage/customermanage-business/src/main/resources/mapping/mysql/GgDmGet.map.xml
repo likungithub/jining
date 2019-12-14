@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xinhai.caiyun.customermanage.dao.GgDmGetMapper">
+
+    <select id="getZbfsList" resultType="map">
+        select ZBFS_DM,ZBFS_MC from dm_zbfs where yxbz='Y'
+  </select>
+
+    <select id="getJylbList" resultType="map">
+        select distinct JYLB_DM,JYLB_MC from dm_jylb where yxbz='Y'
+        <if test="map.fl!=null and map.fl!=''">
+            and fl=#{map.fl}
+        </if>
+  </select>
+</mapper>

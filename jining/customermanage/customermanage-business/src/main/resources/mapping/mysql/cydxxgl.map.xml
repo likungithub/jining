@@ -1,0 +1,176 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xinhai.caiyun.customermanage.dao.CydxxglMapper">
+    <select id="selectCydLong"  parameterType="Map" resultType="Map">
+        select id,wtid,filename,lrry,Date_Format(lrrq,'%Y-%m-%d %T') lrrq from t_cydgl_log where 1 = 1
+        <if test="map.wtid!=null and map.wtid!=''">
+            and wtid = #{map.wtid}
+        </if>
+        limit #{map.start},#{map.length};
+    </select>
+    <select id="selectCydLogCount" resultType="java.lang.Integer">
+        select count(*) from t_cydgl_log where 1 = 1
+        <if test="map.wtid!=null and map.wtid!=''">
+            and wtid = #{map.wtid}
+        </if>
+    </select>
+    <!-- 插入Excel表格数据-->
+    <insert id="importcydExcel">
+        insert into t_cydgl_jbxx(logid,wtid,cydbh,rwly,rwlx,cyrq,cydd,ypmc,cpzl,yply,cyfs,ypsx,yplx,sb,ypph,scrq,bzq,zxbz,ggxh,zldj,scxkzbh,dj,sfck,cyjs,cysl,cysldw,bysl,bzfl,ypxt,cysypdcctj,cyypbz,jsydz,jsypjzrq,bcydwmc,qylx,bcydwdz,bcydwfrdb,bcydwnxse,bcydwyyzz,bcydwlxr,bcydwdh,bcydwcz,bcydwyb,bssczmc,bssczdz,bssczlxr,bssczlxdh,cydwmc,cydwdz,cydwlxr,cydwlxdh,cydwcz,cydwyb,cyr,bz,cyhj,bcydwqygm,bcydwssqy,cyfw,spflid,jybgzt,scdrsj,sfby,cyrlxdh,sfztc,ytlx,xkzlx,rqxz,xkzh,jhl,kcl,cctjqt,cctjwd,cctjsd,ypbzqt,cygj,txm,cydwjb,cydwlxrdh,cydwlxremail)
+         values (#{map.logid},#{map.wtid},#{map.cydbh},#{map.rwly},#{map.rwlx},STR_TO_DATE(#{map.cyrq},"%Y-%m-%d"),#{map.cydd},#{map.ypmc},#{map.cpzl},#{map.yply},#{map.cyfs},#{map.ypsx},#{map.yplx},#{map.sb},#{map.ypph},#{map.scrq},#{map.bzq},#{map.zxbz},#{map.ggxh},#{map.zldj},#{map.scxkzbh},#{map.dj},#{map.sfck},#{map.cyjs},#{map.cysl},#{map.cysldw},#{map.bysl},#{map.bzfl},#{map.ypxt},#{map.cysypdcctj},#{map.cyypbz},#{map.jsydz},#{map.jsypjzrq},#{map.bcydwmc},#{map.qylx},#{map.bcydwdz},#{map.bcydwfrdb},#{map.bcydwnxse},#{map.bcydwyyzz},#{map.bcydwlxr},#{map.bcydwdh},#{map.bcydwcz},#{map.bcydwyb},#{map.bssczmc},#{map.bssczdz},#{map.bssczlxr},#{map.bssczlxdh},#{map.cydwmc},#{map.cydwdz},#{map.cydwlxr},#{map.cydwlxdh},#{map.cydwcz},#{map.cydwyb},#{map.cyr},#{map.bz},#{map.cyhj},#{map.bcydwqygm},#{map.bcydwssqy},#{map.cyfw},#{map.spflid},#{map.jybgzt},#{map.scdrsj},#{map.sfby},#{map.cyrlxdh},#{map.sfztc},#{map.ytlx},#{map.xkzlx},#{map.rqxz},#{map.xkzh},#{map.jhl},#{map.kcl},#{map.cctjqt},#{map.cctjwd},#{map.cctjsd},#{map.ypbzqt},#{map.cygj},#{map.txm},#{map.cydwjb},#{map.cydwlxrdh},#{map.cydwlxremail})
+    </insert>
+    <!--委托列表-->
+    <select id="findWtAll" resultType="com.xinhai.caiyun.customermanage.api.Tqywt">
+        SELECT a.ID, a.WTID, a.DWMC, a.LXDH, a.YZBM, b.YPMC, b.YPSL, a.if_sl
+        FROM t_ypgl_jbxx b right JOIN t_wt_jbxx a ON a.WTID=b.WTID
+        order by a.id desc
+        LIMIT #{start},#{len};
+    </select>
+    <select id="findWtAllNums" resultType="java.lang.Integer">
+        SELECT COUNT(a.id)
+        FROM t_ypgl_jbxx b LEFT JOIN t_wt_jbxx a ON a.WTID=b.WTID
+    </select>
+    <!--存储导入日志-->
+    <insert id="insertWtLog">
+        insert into t_cydgl_log(wtid,filename,lrry,lrrq) values(#{map.wtid},#{map.filename},#{map.lrry},now())
+    </insert>
+    <!--查询导入日志表主键-->
+    <select id="selectLogid" parameterType="Map" resultType="String">
+        select max(id) from t_cydgl_log
+    </select>
+    <!--查询导入Excel详情-->
+    <select id="selectExcel"  parameterType="Map" resultType="Map">
+        select b.id,a.cydbh,a.rwly,a.rwlx,a.cyrq,a.cydd,a.ypmc,a.cpzl,a.yply,a.cyfs,a.ypsx,a.yplx,a.sb,a.ypph,a.scrq,a.bzq,a.zxbz,a.ggxh,a.zldj,a.scxkzbh,a.dj,a.sfck,a.cyjs,a.cysl,a.cysldw,a.bysl,a.bzfl,a.ypxt,a.cysypdcctj,a.cyypbz,a.jsydz,a.jsypjzrq,a.bcydwmc,a.qylx,a.bcydwdz,a.bcydwfrdb,a.bcydwnxse,a.bcydwyyzz,a.bcydwlxr,a.bcydwdh,a.bcydwcz,a.bcydwyb,a.bssczmc,a.bssczdz,a.bssczlxr,a.bssczlxdh,a.cydwmc,a.cydwdz,a.cydwlxr,a.cydwlxdh,a.cydwcz,a.cydwyb,a.cyr,a.bz,a.cyhj,a.bcydwqygm,a.bcydwssqy,a.cyfw,a.spflid
+        from t_cydgl_jbxx a left join t_wt_jbxx b on a.wtid = b.wtid where 1=1
+        <if test="map.logid!=null and map.logid!=''">
+            and logid =#{map.logid}
+        </if>
+        limit #{map.start},#{map.length};
+    </select>
+    <select id="selectExcelCount"  parameterType="Map" resultType="java.lang.Integer">
+        select count(*) from t_cydgl_jbxx where 1=1
+        <if test="map.logid!=null and map.logid!=''">
+            and logid =#{map.logid}
+        </if>
+    </select>
+    <!--查询委托单是否存在-->
+    <select id="selectWtd" parameterType="String" resultType="java.lang.Integer">
+        select count(*) from t_ypgl_jbxx where 1=1
+        <if test="wtid != '' and wtid !=null">
+            and wtid = #{wtid}
+        </if>
+    </select>
+    <!--查询委托单是否存在-->
+    <select id="selectWtInfo" parameterType="String" resultType="map">
+        select * from t_wt_jbxx where 1=1
+        <if test="wtid != '' and wtid !=null">
+            and wtid = #{wtid}
+        </if>
+    </select>
+    <!--删除已存在的委托样品-->
+    <delete id="deleteWtYp">
+        delete from t_ypgl_jbxx where 1 = 1
+        <if test="wtid != '' and wtid !=null">
+            and wtid = #{wtid}
+        </if>
+    </delete>
+    <insert id="importYpglExcel">
+        insert into t_ypgl_jbxx (wtid,jszt,ypzbzt,ypbm,ypmc,sb,ggxh,ypdj,ypsl,ypdw,scrq,ypphhbh,ypzt,ypbctj,scdw,scdwlxdh,ypjczt,sjjyzt,sjsczt,ybjs,bzq,if_cy,bgbzzt,bgzbzt,bgzjsp,bgshzt,bgpzzt,bgdyzt,lrrq,bzxx,if_sc,cydd,if_th,zbfpzt,if_sgr)
+        values (#{map.wtid},#{map.jszt},#{map.ypzbzt},#{map.ypbm},#{map.ypmc},#{map.sb},#{map.ggxh},#{map.ypdj},#{map.ypsl},#{map.ypdw},#{map.scrq},#{map.ypphhbh},#{map.ypzt},#{map.ypbctj},#{map.scdw},#{map.scdwlxdh},#{map.ypjczt},#{map.sjjyzt},#{map.sjsczt},#{map.ybjs},#{map.bzq},#{map.if_cy},#{map.bgbzzt},#{map.bgzbzt},#{map.bgzjsp},#{map.bgshzt},#{map.bgpzzt},#{map.bgdyzt},now(),#{map.bzxx},#{map.if_sc},#{map.cydd},#{map.if_th},#{map.zbfpzt},#{map.ifsgr})
+    </insert>
+    <!--查询导出Sheet页1-->
+    <select id="daochuSheet1" resultType="com.xinhai.caiyun.customermanage.api.Bgzxx">
+        SELECT
+            a.cydbh,
+            c.bgfl1,
+            b.ypbm,
+            c.bgfl,
+            c.wtdw,
+            DATE_FORMAT(d.LRRQ, '%Y-%m-%d') AS lrrq,
+            b.bgzjspr,
+            b.bgpzr,
+            c.yzjl,
+            c.jysm,
+            cus.lxr,
+            cus.sjhm,
+            cus.email,
+            cus.szcs,
+            cus.yb,
+            cus.cz,
+            t.name as tbr,
+            t.tbrq,
+            t.tel as tbdh,
+            t.email as tbyx
+        FROM
+            t_scxtdj_jbxx a
+                LEFT JOIN
+            t_ypgl_jbxx b ON a.ypmc = b.ypmc AND a.wtid = b.wtid
+                LEFT JOIN
+            t_wt_jbxx c ON a.wtid = c.wtid
+                LEFT JOIN
+            t_scxtdj_log d ON d.wtid = a.wtid
+                LEFT JOIN
+            customer cus ON 1 = 1
+                LEFT JOIN
+            (SELECT
+                name,
+                    DATE_FORMAT(NOW(), '%Y-%m-%d') AS tbrq,
+                    tel,
+                    email,
+                    zydm
+            FROM
+                user where zydm = #{map.zydm}) t ON 1 = 1
+        WHERE
+            a.wtid = (SELECT
+                    wtid
+                FROM
+                    t_scxtdj_log
+                WHERE
+                    id = #{map.logid});
+    </select>
+    <!--查询导出Sheet页2-->
+    <select id="daochuSheet2" resultType="com.xinhai.caiyun.customermanage.api.Bgjcxm">
+        SELECT
+            a.cydbh,
+            t.bgfl1,
+            d.id,
+            d.zwmc_bm,
+            '检验结果' AS jyjg,
+            '检验单位' AS jydw,
+            d.xlz,
+            '结果单位' as jgdw,
+            '结果判定' AS jgpd,
+            d.bz,
+            d.jcyj,
+            d.pdyj,
+            d.jcx,
+            '方法检出限单位' as jcxdw,
+            '标准方法检出限' as bzffjcx,
+            d.bzffjcxdw,
+            d.bzzxyxx,
+            d.bzzxyxxdw,
+            d.bzzdyxx,
+            d.bzzdyxxdw,
+            '最小允许限' as zxyxx,
+            '最小允许限单位' as zxyxxdw,
+            '最大允许限' as zdyxx,
+            '最大允许限单位' as zdyxxdw
+        FROM
+            t_scxtdj_jbxx a
+                LEFT JOIN
+            t_ypgl_jbxx b ON a.wtid = b.wtid AND a.ypmc = b.ypmc
+                LEFT JOIN
+            t_yp_jcxm c ON b.id = c.ypid
+                LEFT JOIN
+            t_jcxm_jbxx d ON c.jcxmid = d.id
+                LEFT JOIN
+            t_wt_jbxx t ON t.wtid = a.wtid
+        WHERE
+            a.wtid = (SELECT
+                    wtid
+                FROM
+                    t_scxtdj_log
+                WHERE
+                    id = #{map.logid});
+    </select>
+</mapper>

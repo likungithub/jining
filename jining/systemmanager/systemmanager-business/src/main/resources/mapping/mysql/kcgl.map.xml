@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xinhai.caiyun.systemmanager.dao.KcglMapper">
+    <!-- 显示库存的信息 陈-->
+    <select id="selectKcgl" resultType="Map">
+         select id,hcmc,gg,jb,sl,cgmd,sccj,cfwz,
+         dj,zj,bz,hclx,hcbm,cykcsl,rkrq
+          from t_cgrk_jbxx c
+        <where>
+            <if test="map.hclx!=null and map.hclx!=''">
+                 hclx =#{map.hclx}
+            </if>
+            <if test="map.hclx==null or map.hclx==''">
+                and  hclx != '5'
+            </if>
+            <if test="map.hcmc!=null and map.hcmc!=''">
+                and hcmc like concat('%',#{map.hcmc},'%')
+            </if>
+            <if test="map.startDate!=null">
+                and rkrq >=  #{map.startDate}
+            </if>
+            <if test="map.endDate!=null">
+                and  #{map.endDate} >= rkrq
+            </if>
+        </where>
+        order by id desc
+        limit #{map.start},#{map.length};
+    </select>
+    <!-- 显示库存的信息的数量  陈-->
+    <select id="selectKcglNum" resultType="java.lang.Integer">
+         select count(id)
+        from t_cgrk_jbxx
+        <where>
+            <if test="map.hclx!=null and map.hclx!=''">
+                hclx =#{map.hclx}
+            </if>
+            <if test="map.hclx==null or map.hclx==''">
+                and  hclx != '5'
+            </if>
+            <if test="map.hcmc!=null and map.hcmc!=''">
+                and hcmc like concat('%',#{map.hcmc},'%')
+            </if>
+            <if test="map.startDate!=null">
+                and rkrq >=  #{map.startDate}
+            </if>
+            <if test="map.endDate!=null">
+                and  #{map.endDate} >= rkrq
+            </if>
+        </where>
+        order by id desc
+    </select>
+    <!-- 删除库存信息 陈-->
+    <delete id="delKcgl">
+        delete from t_cgrk_jbxx where id=#{id};
+    </delete>
+    <!--通过id 查找对应的耗材申信息  陈-->
+    <select id="findById" resultType="map">
+		select hcmc,gg,jb,sl,sccj,cfwz,dj,zj,bz,hclx
+		from t_cgrk_jbxx
+		where id=#{id};
+	</select>
+    <!-- 更新采够申请的信息 陈-->
+    <update id="updateKcgl">
+        update t_cgrk_jbxx
+        <set>
+            <if test="map.hcmc!=null">
+                hcmc= #{map.hcmc},
+            </if>
+            <if test="map.gg!=null">
+                gg=#{map.gg},
+            </if>
+            <if test="map.jb!=null">
+                jb=#{map.jb},
+            </if>
+            <if test="map.sl!=null">
+                sl=#{map.sl},
+            </if>
+            <if test="map.sccj!=null">
+                sccj=#{map.sccj},
+            </if>
+            <if test="map.cfwz!=null">
+                cfwz=#{map.cfwz},
+            </if>
+            <if test="map.dj!=null">
+                dj=#{map.dj},
+            </if>
+            <if test="map.zj!=null">
+                zj=#{map.zj},
+            </if>
+            <if test="map.bz!=null">
+                bz=#{map.bz},
+            </if>
+            <if test="map.hclx!=null">
+                hclx=#{map.hclx}
+            </if>
+        </set>
+        where
+        id=#{map.id};
+    </update>
+    <!-- 设置常用库存数量 陈-->
+    <update id="setCyKcsl">
+        update t_cgrk_jbxx set cykcsl=#{map.cykcsl} where id in
+        <foreach collection="map.ids" index="index" item="id" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </update>
+    <!--获得所有的库存信息  陈-->
+    <select id="queryAllKcglByCheck" resultType="map">
+         select id,hcmc,gg,jb,sl,cykcsl
+         from t_cgrk_jbxx
+    </select>
+    <!-- 获得职员代码的信息 陈-->
+    <select id="queryZydm" resultType="string">
+        select zydm from user
+        <where>
+            <if test="bmmc!=null and bmmc!=''">
+                bmdm=(select code from organization where name=#{bmmc})
+            </if>
+        </where>
+    </select>
+    <!-- 将excel解析的数据放入数据库中 陈-->
+    <insert id="saveExcelData">
+        <foreach collection="list" item="map" index="index" separator=";">
+            insert into t_cgrk_jbxx(hcmc,gg,jb,sl,sccj,cfwz,hclx,hcbm)
+            values (#{map.hcmc},#{map.gg},#{map.jb},#{map.sl},#{map.sccj},#{map.cfwz},#{map.hclx},#{map.hcbm})
+        </foreach>
+    </insert>
+</mapper>

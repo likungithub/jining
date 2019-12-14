@@ -1,0 +1,11 @@
+@CHARSET "UTF-8";
+#announcementtype_data thead>tr>th:nth-last-child(-n+2){
+    width: 200px!important;
+}
+#announcementtype_data tbody>tr>td:nth-last-child(-n+2){
+    text-align: center;
+}
+#announcementtype_data thead>tr>th:nth-child(1),
+#announcementtype_data tbody>tr>td:nth-child(1){
+    text-align: left;
+}

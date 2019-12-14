@@ -1,0 +1,30 @@
+@CHARSET "UTF-8";
+#user-manager-container .dataTables_wrapper table tbody tr > td {
+    color: #666 !important;
+}
+#user-manager-container table > thead > tr > th:nth-last-child(1) ,
+#user-manager-container table > thead > tr > th:nth-last-child(2)
+{
+    width: 140px;
+}
+#user-manager-container table > tbody > tr > td:nth-last-child(2){
+    text-align: center;
+}
+#page-container #users_data_info{
+	height:30px !important;
+	line-height:20px !important;
+}
+/* #user-manager-container{
+	position:relative !important;
+} */
+/* #user-manager-container .loading-message{
+	width:auto;
+	position:absolute !important;
+	left:80% !important;
+	top:50% !important;
+	margin-left:-62px !important;
+	margin-top:-50px !important;
+	
+} */
+
+

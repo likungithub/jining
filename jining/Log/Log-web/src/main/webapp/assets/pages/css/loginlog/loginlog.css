@@ -1,0 +1,24 @@
+@CHARSET "UTF-8";
+.loginLogWrap-m .label-line-h{
+    line-height: 20px;
+}
+#log_data tbody>tr>td:nth-last-child(1){
+    text-align: center!important;
+}
+.loginlog-m table thead>tr>th:nth-last-child(1){
+    width:100px ;
+}
+.loginLogWrap-m .input-log-style
+{
+    height: 33px;
+    width: 85px!important;
+}
+.loginLogWrap-m .calendar-btn
+{
+    height: 33px;
+    border-radius: 0 4px 4px 0!important;
+}
+.loginLogWrap-m .table>tbody>tr>td
+{
+vertical-align:inherit ;
+}

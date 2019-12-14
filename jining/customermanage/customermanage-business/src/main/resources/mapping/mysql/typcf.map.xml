@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xinhai.caiyun.customermanage.dao.TypcfMapper">
+    <select id="selectAll" resultType="map">
+        select ypjc.id id,wt.wtid htbm,wt.htmc htmc,yp.ypmc ypmc,jc.jclbdm jclbdm,jc.id jcxmid,jc.zwmc_bm zwmc_bm,
+        jc.cpdlmc cpdlmc,jc.yl yl,jc.cyl cyl,jc.xl xl,jc.jcfa jcfa,ypjc.azt azt,ypjc.if_fb if_fb,ypjc.apsr
+        apsr,ypjc.apssj apssj,ypjc.ks1 ks1,ypjc.ks2 ks2,
+        ypjc.ajcjg jcjg,ypjc.abglx abglx,ypjc.alxr alxr,ypjc.atel atel,ypjc.aema aema,ypjc.if_wc if_wc,ypjc.ajsr ajsr,
+        ypjc.ajssj ajssj,ypjc.abz abz,yp.ypsl ypsl,yp.ypdw ypdw,yp.jcks jcks
+        from t_jcxm_jbxx jc,t_ypgl_jbxx yp,t_yp_jcxm ypjc,t_wt_jbxx wt
+        where jc.id = ypjc.jcxmid and yp.id = ypjc.ypid and yp.wtid = wt.wtid and wt.jyfb =1 and ypjc.cfzt =0
+        <if test="map.htmc!=null and map.htmc!=''">
+            and htmc=#{map.htmc}
+        </if>
+        <if test="map.ypmc!=null and map.ypmc!=''">
+            and ypmc=#{map.ypmc}
+        </if>
+        <if test="map.jcjg!=null and map.jcjg!=''">
+            and jcjg=#{map.jcjg}
+        </if>
+        order by yp.id desc
+        limit #{map.start},#{map.length}
+    </select>
+
+    <select id="selectpsAll" resultType="map">
+        select ypjc.id id,wt.wtid htbm,wt.htmc htmc,yp.ypmc ypmc,jc.jclbdm jclbdm,jc.id jcxmid,jc.zwmc_bm zwmc_bm,
+        jc.cpdlmc cpdlmc,jc.yl yl,jc.cyl cyl,jc.xl xl,jc.jcfa jcfa,ypjc.azt azt,ypjc.if_fb if_fb,ypjc.apsr
+        apsr,ypjc.apssj apssj,
+        ypjc.ajcjg jcjg,ypjc.abglx abglx,ypjc.alxr alxr,ypjc.atel atel,ypjc.aema aema,ypjc.if_wc if_wc,ypjc.ajsr ajsr,
+        ypjc.ajssj ajssj,ypjc.abz abz,yp.ypsl ypsl,yp.ypdw ypdw,yp.jcksjb jcksjb,yp.jcks jcks
+        from t_jcxm_jbxx jc,t_ypgl_jbxx yp,t_yp_jcxm ypjc,t_wt_jbxx wt
+        where jc.id = ypjc.jcxmid and yp.id = ypjc.ypid and yp.wtid = wt.wtid and wt.jyfb = '1' and wt.cfzt = '1'
+        <if test="map.htmc!=null and map.htmc!=''">
+            and htmc=#{map.htmc}
+        </if>
+        <if test="map.ypmc!=null and map.ypmc!=''">
+            and ypmc=#{map.ypmc}
+        </if>
+        <if test="map.jcjg!=null and map.jcjg!=''">
+            and jcjg=#{map.jcjg}
+        </if>
+        order by yp.id desc
+        limit #{map.start},#{map.length}
+    </select>
+
+    <select id="selectCount" resultType="java.lang.Integer">
+        select count(*)
+        from t_jcxm_jbxx jc,t_ypgl_jbxx yp,t_yp_jcxm ypjc,t_wt_jbxx wt
+        where jc.id = ypjc.jcxmid and yp.id = ypjc.ypid and yp.wtid = wt.wtid and wt.jyfb = '1'
+        <if test="map.htmc!=null and map.htmc!=''">
+            and htmc=#{map.htmc}
+        </if>
+        <if test="map.ypmc!=null and map.ypmc!=''">
+            and ypmc=#{map.ypmc}
+        </if>
+        <if test="map.jcjg!=null and map.jcjg!=''">
+            and jcks=#{map.jcks}
+        </if>
+    </select>
+
+    <update id="updateById" parameterType="com.xinhai.caiyun.customermanage.api.Typcb">
+        update t_yp_jcxm
+        set if_fb=#{if_fb},
+        apsr=#{apsr},
+        apssj=#{apssj},
+        ajcjg=#{ajcjg},
+        abglx=#{abglx},
+        alxr=#{alxr},
+        atel=#{atel},
+        aema=#{aema},
+        abz=#{abz},
+        azt=#{azt}
+        where id=#{ids}
+    </update>
+
+    <update id="updatepsById" parameterType="com.xinhai.caiyun.customermanage.api.Typcb">
+        update t_yp_jcxm
+        set if_fb=#{if_fb},
+        apsr=#{apsr},
+        apssj=#{apssj},
+        ajcjg=#{ajcjg},
+        abglx=#{abglx},
+        alxr=#{alxr},
+        atel=#{atel},
+        aema=#{aema},
+        abz=#{abz},
+        azt=#{azt}
+        where id=#{ids}
+    </update>
+
+    <update id="updateJSR" parameterType="com.xinhai.caiyun.customermanage.api.Typcb">
+        update t_yp_jcxm
+        set ajsr=#{ajsr},ajssj=#{ajssj},azt = "005"
+        where id=#{ids}
+    </update>
+
+    <update id="updateAzt">
+        update t_yp_jcxm
+        set azt = "002"
+        where id = #{id}
+    </update>
+
+    <update id="cbsptg">
+        update t_yp_jcxm
+        set azt = "003"
+        where id = #{id}
+    </update>
+
+    <update id="cbspth">
+        update t_yp_jcxm
+        set azt = "004"
+        where id = #{id}
+    </update>
+
+    <!--录入拆分各个科室数量表-->
+    <!--<update id="updatecf">-->
+        <!--update t_yp_jcxm-->
+        <!--set ks1 =3,ks2 =4-->
+        <!--where id = #{id}-->
+    <!--</update>-->
+
+</mapper>

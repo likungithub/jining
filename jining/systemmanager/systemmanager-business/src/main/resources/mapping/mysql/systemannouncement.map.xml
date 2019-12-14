@@ -1,0 +1,382 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!-- namespace必须和接口名称一一对应 -->
+<mapper namespace="com.xinhai.caiyun.systemmanager.dao.SystemAnnouncementMapper">
+    <resultMap id="systemAnnouncementMap" type="com.xinhai.caiyun.systemmanager.api.SystemAnnouncement">
+        <id property="id" column="ID"/>
+        <result property="systemAnnouncementId" column="TZTGID"/>
+        <result property="announcementName" column="TZTGBT"/>
+        <result property="announcementContent" column="TZTGNR"/>
+        <result property="announcementTypeCode" column="TZTGLX_DM"/>
+        <result property="announcementDescription" column="TZTGMS"/>
+        <result property="keyword" column="GJC"/>
+        <result property="isTop" column="ZDZT_DM"/>
+        <result property="announcementSource" column="TZTGLY"/>
+        <result property="areaNumber" column="XZQH_DM"/>
+        <!-- <result property="taxpayerIdentificationNumber" column="NSRSBH"/> -->
+        <result property="agencyCode" column="DLJG_BM"/>
+        <result property="isDelete" column="SCBZ"/>
+        <result property="enterStaff" column="LRRY"/>
+        <result property="updateStaff" column="GXRY"/>
+        <result property="deleteStaff" column="SCRY"/>
+        <result property="enterDate" column="LRRQ"/>
+        <result property="updateDate" column="GXRQ"/>
+        <result property="deleteDate" column="SCRQ"/>
+        <result property="jsflx" column="JSFFL"/>
+        <result property="khfldm" column="KHFLDM"/>
+        <result property="khflmc" column="KHFLMC"/>
+
+    </resultMap>
+    <resultMap id="systemAnnouncementReadMap" type="com.xinhai.caiyun.systemmanager.api.SystemAnnouncementRead">
+        <id property="id" column="ID"/>
+        <result property="systemAnnouncementId" column="TZTGID"/>
+        <result property="announcementName" column="TZTGBT"/>
+        <result property="announcementTypeCode" column="TZTGLX_DM"/>
+        <result property="announcementTypeName" column="TZTGLX_MC"/>
+        <result property="agencyCode" column="DLJG_BM"/>
+        <result property="staffNumber" column="ZYDM"/>
+        <result property="isTop" column="ZDZT_DM"/>
+        <result property="isRead" column="YDZT_DM"/>
+        <result property="isDelete" column="SCBZ"/>
+        <result property="publishDate" column="FBRQ"/>
+        <result property="readDate" column="YDRQ"/>
+        <result property="deleteDate" column="SCRQ"/>
+        <result property="jsflx" column="JSFFL"/>
+    </resultMap>
+    <resultMap id="announcementTypeMap" type="com.xinhai.caiyun.systemmanager.api.AnnouncementType">
+        <id property="id" column="TZTGLX_DM"/>
+        <result property="announcementTypeName" column="TZTGLZ_MC"/>
+        <result property="agencyCode" column="DLJG_BM"/>
+        <result property="isDelete" column="SCBZ"/>
+        <result property="enterStaff" column="LRRY"/>
+        <result property="updateStaff" column="GXRY"/>
+        <result property="deleteStaff" column="SCRY"/>
+        <result property="enterDate" column="LRRQ"/>
+        <result property="updateDate" column="GXRQ"/>
+        <result property="deleteDate" column="SCRQ"/>
+    </resultMap>
+    <!-- 获取所有systemannouncement  -->
+    <select id="getAllSystemAnnouncement" resultMap="systemAnnouncementMap">
+        <if test="tzNumber== null">
+        SELECT ID,TZTGID,TZTGBT,TZTGNR,TZTGLX_DM,TZTGMS,GJC,ZDZT_DM,TZTGLY,XZQH_DM,DLJG_BM,SCBZ,LRRY,GXRY,SCRY,LRRQ,GXRQ,SCRQ
+        FROM pt_xtgg WHERE SCBZ=0;
+        </if>
+        <if test="tzNumber != null and tzNumber != ''">
+        SELECT ID,TZTGID,TZTGBT,TZTGNR,TZTGLX_DM,TZTGMS,GJC,ZDZT_DM,TZTGLY,XZQH_DM,DLJG_BM,SCBZ,LRRY,GXRY,SCRY,LRRQ,GXRQ,SCRQ
+        FROM pt_xtgg WHERE SCBZ=0  ORDER BY ID DESC limit 0,10;
+        </if>
+
+    </select>
+    <!-- 获取所有systemannouncementRead  -->
+    <select id="getAllSystemAnnouncementRead" resultMap="systemAnnouncementReadMap">
+        SELECT ID,TZTGID,TZTGBT,TZTGLX_DM,TZTGLX_MC,DLJG_BM,ZYDM,ZDZT_DM,YDZT_DM,SCBZ,FBRQ,YDRQ,SCRQ
+        FROM pt_ggydqk WHERE SCBZ=0 AND DLJG_BM=#{agencyCode} AND ZYDM=#{staffNumber}
+        ORDER BY ZDZT_DM DESC,FBRQ DESC;
+    </select>
+    <!-- 获取所有未读systemannouncementRead  -->
+    <select id="getAllSystemAnnouncementUnread" resultMap="systemAnnouncementReadMap">
+        SELECT ID,TZTGID,TZTGBT,TZTGLX_DM,TZTGLX_MC,DLJG_BM,ZYDM,ZDZT_DM,YDZT_DM,SCBZ,FBRQ,YDRQ,SCRQ
+        FROM pt_ggydqk WHERE SCBZ=0 AND YDZT_DM=0 AND DLJG_BM=#{agencyCode} AND ZYDM=#{staffNumber}
+        ORDER BY ZDZT_DM DESC,FBRQ DESC;
+    </select>
+    <!-- 根据id获取systemannouncementread  -->
+    <select id="getSystemAnnouncementReadById" resultMap="systemAnnouncementReadMap">
+        SELECT ID,TZTGID,TZTGBT,TZTGLX_DM,TZTGLX_MC,DLJG_BM,ZYDM,ZDZT_DM,YDZT_DM,SCBZ,FBRQ,YDRQ,SCRQ
+        FROM pt_ggydqk WHERE SCBZ=0 AND ID=#{id};
+    </select>
+
+
+    <select id="getAnnouncementTypeByName" resultType="java.lang.Integer">
+        SELECT count(1) FROM dm_tztglx WHERE SCBZ=0  AND TZTGLX_DM!= #{dm} AND TZTGLZ_MC=#{name} AND DLJG_BM=#{dljgbm};
+    </select>
+
+    <!-- 根据text获取systemannouncementread  -->
+    <select id="searchSystemAnnouncementReadByText" resultMap="systemAnnouncementReadMap">
+        SELECT ID,TZTGID,TZTGBT,TZTGLX_DM,TZTGLX_MC,DLJG_BM,ZYDM,ZDZT_DM,YDZT_DM,SCBZ,FBRQ,YDRQ,SCRQ
+        FROM pt_ggydqk WHERE SCBZ=0 AND TZTGBT LIKE #{searchText} AND DLJG_BM=#{agencyCode} AND ZYDM=#{staffNumber}
+        ORDER BY ZDZT_DM DESC,FBRQ DESC;
+    </select>
+    <!-- 根据id获取systemannouncement  -->
+    <select id="getSystemAnnouncementById" resultMap="systemAnnouncementMap">
+        SELECT ID,TZTGID,TZTGBT,TZTGNR,TZTGLX_DM,TZTGMS,GJC,ZDZT_DM,TZTGLY,XZQH_DM,DLJG_BM,SCBZ,LRRY,GXRY,SCRY,LRRQ,GXRQ,SCRQ
+        FROM pt_xtgg WHERE SCBZ=0 AND ID=#{id};
+    </select>
+    <!-- 根据通知通告id获取systemannouncement  -->
+    <select id="getSystemAnnouncementBySystemAnnouncementId" resultMap="systemAnnouncementMap">
+
+       SELECT JSFFL,KHFLDM,KHFLMC, a.ID,TZTGID,TZTGBT,TZTGNR,TZTGLX_DM,TZTGMS,GJC,ZDZT_DM,a.TZTGLY as TZTGLY,XZQH_DM,a.DLJG_BM,SCBZ,a.LRRY,a.GXRY,a.SCRY,a.LRRQ,a.GXRQ,a.SCRQ FROM pt_xtgg a  WHERE SCBZ=0 AND TZTGID=#{id};
+
+    </select>
+    <!-- 根据systemannouncementid获取systemannouncementread  -->
+    <select id="getReadBySystemAnnouncementId" resultMap="systemAnnouncementReadMap">
+        SELECT ID,TZTGID,TZTGBT,TZTGLX_DM,TZTGLX_MC,DLJG_BM,ZYDM,ZDZT_DM,YDZT_DM,SCBZ,FBRQ,YDRQ,SCRQ
+        FROM pt_ggydqk WHERE SCBZ=0 AND TZTGID=#{id};
+    </select>
+    <!-- 新增systemannouncement  -->
+    <insert id="addSystemAnnouncement" parameterType="com.xinhai.caiyun.systemmanager.api.SystemAnnouncement">
+        INSERT INTO pt_xtgg (TZTGID,TZTGBT,TZTGNR,TZTGLX_DM,TZTGMS,GJC,ZDZT_DM,TZTGLY,XZQH_DM,DLJG_BM,LRRY,LRRQ,jsffl,khfldm,khflmc) VALUES
+        (#{systemAnnouncement.systemAnnouncementId},#{systemAnnouncement.announcementName},#{systemAnnouncement.announcementContent},
+        #{systemAnnouncement.announcementTypeCode},#{systemAnnouncement.announcementDescription},#{systemAnnouncement.keyword},#{systemAnnouncement.isTop},
+        #{systemAnnouncement.announcementSource},#{systemAnnouncement.areaNumber},
+        #{systemAnnouncement.agencyCode},#{systemAnnouncement.enterStaff},#{systemAnnouncement.enterDate},#{systemAnnouncement.jsflx},#{systemAnnouncement.khfldm},#{systemAnnouncement.khflmc});
+    </insert>
+    <!-- 新增systemAnnouncementRead -->
+    <insert id="addSystemAnnouncementRead" parameterType="com.xinhai.caiyun.systemmanager.api.SystemAnnouncementRead">
+        INSERT INTO pt_ggydqk (TZTGID,TZTGBT,TZTGLX_DM,TZTGLX_MC,DLJG_BM,ZDZT_DM,ZYDM,FBRQ,jsffl,khfldm,khflmc) VALUES
+        (#{systemAnnouncementRead.systemAnnouncementId},#{systemAnnouncementRead.announcementName},#{systemAnnouncementRead.announcementTypeCode},
+        #{systemAnnouncementRead.announcementTypeName},#{systemAnnouncementRead.agencyCode},#{systemAnnouncementRead.isTop},
+        #{systemAnnouncementRead.staffNumber},#{systemAnnouncementRead.publishDate},#{systemAnnouncementRead.jsflx},#{systemAnnouncementRead.khfldm},#{systemAnnouncementRead.khflmc});
+    </insert>
+    <!-- 通过systemannouncementid修改systemannouncement -->
+    <update id="updateSystemAnnouncement" parameterType="com.xinhai.caiyun.systemmanager.api.SystemAnnouncement">
+        UPDATE pt_xtgg
+        <set>
+            <if test="systemAnnouncement.announcementName != null">
+                TZTGBT = #{systemAnnouncement.announcementName},
+            </if>
+            <if test="systemAnnouncement.announcementContent != null">
+                TZTGNR = #{systemAnnouncement.announcementContent},
+            </if>
+            <if test="systemAnnouncement.announcementTypeCode != null">
+                TZTGLX_DM = #{systemAnnouncement.announcementTypeCode},
+            </if>
+            <if test="systemAnnouncement.announcementDescription != null">
+                TZTGMS = #{systemAnnouncement.announcementDescription},
+            </if>
+            <if test="systemAnnouncement.keyword != null">
+                GJC = #{systemAnnouncement.keyword},
+            </if>
+            <if test="systemAnnouncement.announcementSource != null">
+                TZTGLY = #{systemAnnouncement.announcementSource},
+            </if>
+            <if test="systemAnnouncement.areaNumber != null">
+                XZQH_DM = #{systemAnnouncement.areaNumber},
+            </if>
+            <if test="systemAnnouncement.agencyCode != null">
+                DLJG_BM = #{systemAnnouncement.agencyCode},
+            </if>
+            <if test="systemAnnouncement.isTop != null">
+                ZDZT_DM = #{systemAnnouncement.isTop},
+            </if>
+            <if test="systemAnnouncement.isDelete != null">
+                SCBZ = #{systemAnnouncement.isDelete},
+            </if>
+            <if test="systemAnnouncement.enterStaff != null">
+                LRRY = #{systemAnnouncement.enterStaff},
+            </if>
+            <if test="systemAnnouncement.updateStaff != null">
+                GXRY = #{systemAnnouncement.updateStaff},
+            </if>
+            <if test="systemAnnouncement.deleteStaff != null">
+                SCRY = #{systemAnnouncement.deleteStaff},
+            </if>
+            <if test="systemAnnouncement.enterDate != null">
+                LRRQ = #{systemAnnouncement.enterDate},
+            </if>
+            <if test="systemAnnouncement.updateDate != null">
+                GXRQ = #{systemAnnouncement.updateDate},
+            </if>
+            <if test="systemAnnouncement.deleteDate != null">
+                SCRQ = #{systemAnnouncement.deleteDate},
+            </if>
+            <if test="systemAnnouncement.jsflx != null">
+                jsffl = #{systemAnnouncement.jsflx},
+            </if>
+            <if test="systemAnnouncement.khflmc != null">
+                khflmc = #{systemAnnouncement.khflmc},
+            </if>
+            <if test="systemAnnouncement.khfldm != null">
+                khfldm = #{systemAnnouncement.khfldm},
+            </if>
+        </set>
+        WHERE TZTGID = #{systemAnnouncement.systemAnnouncementId};
+    </update>
+    <!-- 通过systemannouncementreadid修改systemannouncementread -->
+    <update id="updateSystemAnnouncementRead" parameterType="com.xinhai.caiyun.systemmanager.api.SystemAnnouncementRead">
+        UPDATE pt_ggydqk
+        <set>
+            <if test="systemAnnouncementRead.announcementName != null">
+                TZTGBT = #{systemAnnouncementRead.announcementName},
+            </if>
+            <if test="systemAnnouncementRead.announcementTypeCode != null">
+                TZTGLX_DM = #{systemAnnouncementRead.announcementTypeCode},
+            </if>
+            <if test="systemAnnouncementRead.announcementTypeName != null">
+                TZTGLX_MC = #{systemAnnouncementRead.announcementTypeName},
+            </if>
+            <if test="systemAnnouncementRead.agencyCode != null">
+                DLJG_BM = #{systemAnnouncementRead.agencyCode},
+            </if>
+            <if test="systemAnnouncementRead.staffNumber != null">
+                ZYDM = #{systemAnnouncementRead.staffNumber},
+            </if>
+            <if test="systemAnnouncementRead.isTop != null">
+                ZDZT_DM = #{systemAnnouncementRead.isTop},
+            </if>
+            <if test="systemAnnouncementRead.isRead != null">
+                YDZT_DM = #{systemAnnouncementRead.isRead},
+            </if>
+            <if test="systemAnnouncementRead.isDelete != null">
+                SCBZ = #{systemAnnouncementRead.isDelete},
+            </if>
+            <if test="systemAnnouncementRead.publishDate != null">
+                FBRQ = #{systemAnnouncementRead.publishDate},
+            </if>
+            <if test="systemAnnouncementRead.readDate != null">
+                YDRQ = #{systemAnnouncementRead.readDate},
+            </if>
+            <if test="systemAnnouncementRead.deleteDate != null">
+                SCRQ = #{systemAnnouncementRead.deleteDate},
+            </if>
+            <if test="systemAnnouncementRead.jsflx != null">
+                jsffl = #{systemAnnouncementRead.jsflx},
+            </if>
+            <if test="systemAnnouncementRead.khflmc != null">
+                khflmc = #{systemAnnouncementRead.khflmc},
+            </if>
+            <if test="systemAnnouncementRead.khfldm != null">
+                khfldm = #{systemAnnouncementRead.khfldm},
+            </if>
+        </set>
+        WHERE TZTGID = #{systemAnnouncementRead.systemAnnouncementId};
+    </update>
+    <!-- 已读公告 -->
+    <update id="readSystemAnnouncement" parameterType="com.xinhai.caiyun.systemmanager.api.SystemAnnouncementRead">
+
+        <if test="systemAnnouncementRead.id==0">
+            UPDATE pt_ggydqk
+            <set>
+                <if test="systemAnnouncementRead.isRead != null">
+                    YDZT_DM = #{systemAnnouncementRead.isRead},
+                </if>
+                <if test="systemAnnouncementRead.readDate != null">
+                    YDRQ = #{systemAnnouncementRead.readDate}
+                </if>
+            </set>
+            WHERE ZYDM = #{systemAnnouncementRead.staffNumber} and TZTGID=#{systemAnnouncementRead.systemAnnouncementId};
+        </if>
+
+
+        <if test="systemAnnouncementRead.id!=0">
+            UPDATE pt_ggydqk
+            <set>
+                <if test="systemAnnouncementRead.isRead != null">
+                    YDZT_DM = #{systemAnnouncementRead.isRead},
+                </if>
+                <if test="systemAnnouncementRead.readDate != null">
+                    YDRQ = #{systemAnnouncementRead.readDate}
+                </if>
+            </set>
+            WHERE ID = #{systemAnnouncementRead.id};
+        </if>
+
+
+    </update>
+    <!-- 获取所有announcementtype  -->
+    <select id="getAllAnnouncementType" resultMap="announcementTypeMap">
+        SELECT TZTGLX_DM,TZTGLZ_MC,DLJG_BM,SCBZ,LRRY,GXRY,SCRY,LRRQ,GXRQ,SCRQ
+        FROM dm_tztglx WHERE SCBZ=0 AND DLJG_BM=#{agencyCode};
+    </select>
+    <!-- 根据ID查找announcementtype -->
+    <select id="getAnnouncementTypeById" resultMap="announcementTypeMap">
+        SELECT TZTGLX_DM,TZTGLZ_MC,DLJG_BM,SCBZ,LRRY,GXRY,SCRY,LRRQ,GXRQ,SCRQ
+        FROM dm_tztglx WHERE TZTGLX_DM=#{id} AND SCBZ=0;
+    </select>
+
+
+    <select id="getKhxxByAgencyCode" resultType="java.util.Map">
+        select p.khbm,p.yhmc from pt_khxx p where p.SCBZ=false and dljg_bm=#{agencyCode}
+        <if test="khfldm!=null">
+          and KHFL_DM = #{khfldm}
+        </if>
+    </select>
+
+
+    <!-- 根据职员代码获取职员 -->
+    <select id="getUserByAgencyCode" resultType="com.xinhai.usermanager.entity.User">
+        SELECT id, user_account,
+        name, password, is_enabled, if_manager, tel, email,
+        customer_id, org_id, bmdm, last_login_date, create_date, sh_date,
+        remark, ygid, ygtx, is_delete, zydm, xbdm, csrq, ygxl, sfzhm, cyzz, cyrq,
+        yddh, qq, bzxx, lxdz, jsdm, nsrsbh, dljg_bm, lrry, fwksrq, fwjsrq, shyj, jfsj, jfzt FROM user WHERE dljg_bm=#{agencyCode}
+    </select>
+
+    <sql id="commonquery">
+        <if test="cxtj.zydm==null">
+            AND a.DLJG_BM=#{cxtj.dljgbm}
+            <if test="cxtj.searchText != null and cxtj.searchText != ''">
+                AND a.TZTGBT LIKE  CONCAT('%',#{cxtj.searchText},'%')
+            </if>
+
+            <if test='cxtj.jsflx!="000"'>
+                AND a.JSFFL = #{cxtj.jsflx}
+            </if>
+
+            <if test="cxtj.beginTime != null and cxtj.beginTime != ''">
+                AND a.LRRQ >= #{cxtj.beginTime}
+            </if>
+            <if test="cxtj.endTime != null and cxtj.endTime != ''">
+                AND #{cxtj.endTime} >= a.LRRQ
+            </if>
+        </if>
+        <if test="cxtj.zydm!=null">
+            AND a.DLJG_BM=#{cxtj.dljgbm}
+            <if test="cxtj.searchText != null and cxtj.searchText != ''">
+                AND a.TZTGBT LIKE  CONCAT('%',#{cxtj.searchText},'%')
+            </if>
+
+            <if test='cxtj.jsflx!="000"'>
+                AND a.JSFFL = #{cxtj.jsflx}
+            </if>
+
+            <if test="cxtj.beginTime != null and cxtj.beginTime != ''">
+                AND b.LRRQ >= #{cxtj.beginTime}
+            </if>
+            <if test="cxtj.endTime != null and cxtj.endTime != ''">
+                AND #{cxtj.endTime} >= b.LRRQ
+            </if>
+            AND a.ZYDM=#{cxtj.zydm}
+        </if>
+
+    </sql>
+
+    <update id="updateydzt">
+        UPDATE pt_ggydqk pg SET pg.YDZT_DM=1 WHERE JSFFL=1
+    </update>
+    <!-- 获取系统公告类型数量 -->
+    <select id="getSystemAnnouncementTotalCount" resultType="java.lang.Long">
+        <if test="cxtj.zydm==null">
+            SELECT COUNT(1) FROM pt_xtgg a LEFT JOIN dm_tztglx b ON a.TZTGLX_DM=b.TZTGLX_DM WHERE a.SCBZ=FALSE
+            <include refid="commonquery"/>
+        </if>
+
+
+        <if test="cxtj.zydm!=null">
+            SELECT COUNT(1) FROM pt_ggydqk a WHERE a.SCBZ=FALSE
+            <include refid="commonquery"/>
+
+        </if>
+
+    </select>
+    <!-- 根据分页获取systemannouncementread  AND ZYDM=#{staffNumber}-->
+    <select id="getSystemAnnouncementByPaging" resultType="java.util.Map">
+        <if test="cxtj.zydm==null">
+            SELECT a.TZTGLY,a.id,a.TZTGID,CASE (SELECT bb.YDZT_DM from pt_ggydqk bb WHERE bb.TZTGID=a.TZTGID AND ZYDM=#{cxtj.zzydm} ) WHEN '1' THEN '1' WHEN '0' THEN '0' ELSE '1' END as isRead ,ifnull(b.TZTGLZ_MC,'')  as TZTGLX_MC,case(a.JSFFL) WHEN 0 then '员工' WHEN 1 THEN '客户' END AS JSFFL,a.TZTGBT,a.LRRQ,a.DLJG_BM, cc.id as ggid
+            FROM pt_xtgg a LEFT JOIN dm_tztglx b ON a.TZTGLX_DM=b.TZTGLX_DM
+            LEFT JOIN pt_ggydqk cc on cc.ZYDM=#{cxtj.zzydm} and cc.TZTGID = a.TZTGID
+            WHERE a.SCBZ=FALSE
+            <include refid="commonquery"/>
+            ORDER BY a.ZDZT_DM DESC, a.lrrq desc
+            LIMIT ${cxtj.start},${cxtj.length}
+        </if>
+        <if test="cxtj.zydm!=null">
+            SELECT b.TZTGLY, a.ZYDM, a.YDZT_DM as isRead, a.id as ggid,a.TZTGID, ifnull(a.TZTGLX_MC,'') as TZTGLX_MC,case(a.JSFFL) WHEN 0 then '员工' WHEN 1 THEN '客户' END AS JSFFL,a.TZTGBT,a.FBRQ AS LRRQ,a.DLJG_BM  FROM pt_ggydqk a LEFT JOIN pt_xtgg b on a.TZTGID=b.TZTGID  WHERE a.SCBZ=FALSE
+            <include refid="commonquery"/>
+            ORDER BY a.ZDZT_DM DESC,a.YDRQ desc
+            LIMIT ${cxtj.start},${cxtj.length}
+        </if>
+
+    </select>
+</mapper>

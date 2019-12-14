@@ -1,0 +1,1177 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.xinhai.caiyun.customermanage.dao.TypglMapper">
+    <resultMap id="BaseResultMap" type="com.xinhai.caiyun.customermanage.api.Typgl">
+        <id column="ID" jdbcType="BIGINT" property="id" />
+        <result column="GL_TYPE" jdbcType="VARCHAR" property="gltype" />
+        <result column="WTID" jdbcType="VARCHAR" property="wtid" />
+        <result column="YPBM" jdbcType="VARCHAR" property="ypbm" />
+        <result column="YPMC" jdbcType="VARCHAR" property="ypmc" />
+        <result column="HTMC" jdbcType="VARCHAR" property="htmc" />
+        <result column="HT_TYPE" jdbcType="VARCHAR" property="ht_type" />
+        <result column="HTBM" jdbcType="VARCHAR" property="htbm" />
+        <result column="CPDLDM" jdbcType="VARCHAR" property="cpdldm" />
+        <result column="CPDLMC" jdbcType="VARCHAR" property="cpdlmc" />
+        <result column="JCLBDM" jdbcType="VARCHAR" property="jclbdm" />
+        <result column="YCBGRQ" jdbcType="TIMESTAMP" property="ycbgrq" />
+        <result column="YPXTDM" jdbcType="VARCHAR" property="ypxtdm" />
+        <result column="YPSL" jdbcType="INTEGER" property="ypsl" />
+        <result column="BYSL" jdbcType="INTEGER" property="bysl" />
+        <result column="YPDW" jdbcType="VARCHAR" property="ypdw" />
+        <result column="GGXH" jdbcType="VARCHAR" property="ggxh" />
+        <result column="GGXHDW" jdbcType="VARCHAR" property="ggxhdw" />
+        <result column="YPPH" jdbcType="VARCHAR" property="ypph" />
+        <result column="BZQ" jdbcType="VARCHAR" property="bzq" />
+        <result column="ZXBZ" jdbcType="VARCHAR" property="zxbz" />
+        <result column="ZLDJ" jdbcType="VARCHAR" property="zldj" />
+        <result column="SB" jdbcType="VARCHAR" property="sb" />
+        <result column="RQLXDM" jdbcType="VARCHAR" property="rqlxdm" />
+        <result column="RQ" jdbcType="TIMESTAMP" property="rq" />
+        <result column="SCZMC" jdbcType="VARCHAR" property="sczmc" />
+        <result column="SCZDZ" jdbcType="VARCHAR" property="sczdz" />
+        <result column="YPBCTJ" jdbcType="VARCHAR" property="ypbctj" />
+        <result column="JYF" jdbcType="DECIMAL" property="jyf" />
+        <result column="FBF" jdbcType="DECIMAL" property="fbf" />
+        <result column="SYR" jdbcType="VARCHAR" property="syr" />
+        <result column="SJCJRQ" jdbcType="TIMESTAMP" property="sjcjrq" />
+        <result column="DYSJ" jdbcType="TIMESTAMP" property="dysj" />
+        <result column="IF_FB" jdbcType="BIT" property="if_Fb" />
+        <result column="FBXM" jdbcType="VARCHAR" property="fbxm" />
+        <result column="IF_BLFY" jdbcType="BIT" property="if_Blfy" />
+        <result column="IF_FHCL" jdbcType="BIT" property="if_Fhcl" />
+        <result column="BGFS" jdbcType="INTEGER" property="bgfs" />
+        <result column="JCXM" jdbcType="VARCHAR" property="jcxm" />
+        <result column="JYDD" jdbcType="VARCHAR" property="jydd" />
+        <result column="IF_JJ" jdbcType="BIT" property="if_Jj" />
+        <result column="SCBZ" jdbcType="BIT" property="scbz" />
+        <result column="BZXX" jdbcType="VARCHAR" property="bzxx" />
+        <result column="LRRY" jdbcType="VARCHAR" property="lrry" />
+        <result column="BMDM" jdbcType="VARCHAR" property="bmdm" />
+        <result column="GXRY" jdbcType="VARCHAR" property="gxry" />
+        <result column="SCRY" jdbcType="VARCHAR" property="scry" />
+        <result column="LRRQ" jdbcType="TIMESTAMP" property="lrrq" />
+        <result column="GXRQ" jdbcType="TIMESTAMP" property="gxrq" />
+        <result column="SCRQ" jdbcType="TIMESTAMP" property="scrq" />
+        <result column="JSZT" jdbcType="VARCHAR" property="jszt" />
+        <result column="IF_CY" jdbcType="BIT" property="if_cy" />
+        <result column="CYSL" jdbcType="INTEGER" property="cysl" />
+        <!--
+             <result column="YPJCZT" jdbcType="VARCHAR" property="ypjczt" />
+            <result column="SJJYZT" jdbcType="VARCHAR" property="sjjyzt" />
+            <result column="SJSCZT" jdbcType="VARCHAR" property="sjsczt" />
+            <result column="SJXGZT" jdbcType="VARCHAR" property="sjxgzt" /> -->
+        <result column="RWLY" jdbcType="VARCHAR" property="rwly" />
+        <result column="RWLB" jdbcType="VARCHAR" property="rwlb" />
+        <result column="QYLX" jdbcType="VARCHAR" property="qylx" />
+        <result column="CYJS" jdbcType="VARCHAR" property="cyjs" />
+        <result column="BZLX" jdbcType="VARCHAR" property="bzlx" />
+        <result column="YPLY" jdbcType="VARCHAR" property="yply" />
+        <result column="YPSX" jdbcType="VARCHAR" property="ypsx" />
+        <result column="YPLX" jdbcType="VARCHAR" property="yplx" />
+        <result column="DJ" jdbcType="DECIMAL" property="dj" />
+        <result column="IF_CK" jdbcType="VARCHAR" property="if_ck" />
+        <result column="ZZLY" jdbcType="VARCHAR" property="zzly" />
+        <result column="JHL" jdbcType="INTEGER" property="jhl" />
+        <result column="CCL" jdbcType="INTEGER" property="ccl" />
+        <result column="SCXKZBH" jdbcType="VARCHAR" property="scxkzbh" />
+        <result column="SFDM" jdbcType="INTEGER" property="sfdm" />
+        <result column="SFMC" jdbcType="VARCHAR" property="sfmc" />
+        <result column="CSDM" jdbcType="INTEGER" property="csdm" />
+        <result column="CSMC" jdbcType="VARCHAR" property="csmc" />
+        <result column="XJDM" jdbcType="INTEGER" property="xjdm" />
+        <result column="XJMC" jdbcType="VARCHAR" property="xjmc" />
+        <result column="JDMC" jdbcType="VARCHAR" property="jdmc" />
+        <result column="LXR" jdbcType="VARCHAR" property="lxr" />
+        <result column="DH" jdbcType="VARCHAR" property="dh" />
+        <result column="JSYPJZRQ" jdbcType="TIMESTAMP" property="jsypjzrq" />
+        <result column="JSYPDZ" jdbcType="VARCHAR" property="jsypdz" />
+        <result column="CCWD" jdbcType="VARCHAR" property="ccwd" />
+        <result column="JCFCRY" jdbcType="VARCHAR" property="jcfcry" />
+        <result column="FYZT" jdbcType="VARCHAR" property="fyzt" />
+        <result column="BZ" jdbcType="VARCHAR" property="bz" />
+        <result column="GYF" jdbcType="DECIMAL" property="gyf" />
+        <result column="GZRQ" jdbcType="TIMESTAMP" property="gzrq" />
+        <result column="YTLX" jdbcType="VARCHAR" property="ytlx" />
+        <result column="XKZLX" jdbcType="VARCHAR" property="xkzlx" />
+        <result column="XKZH" jdbcType="VARCHAR" property="xkzh" />
+        <result column="SYRDZ" jdbcType="VARCHAR" property="syrdz" />
+        <result column="SYRYB" jdbcType="VARCHAR" property="syryb" />
+        <result column="SYRDH" jdbcType="VARCHAR" property="syrdh" />
+        <result column="IF_JD" jdbcType="VARCHAR" property="if_jd" />
+        <result column="IF_ZY" jdbcType="VARCHAR" property="if_zy" />
+
+        <result column="if_by" jdbcType="VARCHAR" property="if_by" />
+        <result column="bysl" jdbcType="VARCHAR" property="bysl" />
+        <result column="byglry" jdbcType="VARCHAR" property="byglry" />
+    </resultMap>
+    <sql id="Base_Column_List">
+        <!--  ID, GL_TYPE, WTID, HTMC, HT_TYPE, HTBM, YPBM, YPMC, CPDLDM, CPDLMC, JCLBDM, YCBGRQ, YPXTDM, YPSL, BYSL, YPDW, GGXH, GGXHDW,
+         YPPH, BZQ, ZXBZ, ZLDJ, SB, RQLXDM, RQ, SCZMC, SCZDZ, YPBCTJ, JYF, FBF, SYR, SJCJRQ,
+         DYSJ, IF_FB, FBXM, IF_BLFY, IF_FHCL, BGFS, JCXM, JYDD, IF_JJ, SCBZ, BZXX, LRRY, BMDM,
+         GXRY, SCRY, LRRQ, GXRQ, SCRQ, if_cy, cysl,JSZT -->
+        ID, YPBM, GL_TYPE, WTID, YPMC, HTMC, HT_TYPE, HTBM, CPDLDM, CPDLMC, JCLBDM, YCBGRQ,
+        YPXTDM, YPSL, BYSL, YPDW, GGXH, GGXHDW, YPPH, BZQ, ZXBZ, ZLDJ, SB, RQLXDM, RQ, SCZMC,
+        SCZDZ, YPBCTJ, JYF, FBF, SYR, SJCJRQ, DYSJ, IF_FB, FBXM, IF_BLFY, IF_FHCL, BGFS,
+        JCXM, JYDD, IF_JJ, SCBZ, JSZT, BZXX, LRRY, BMDM, GXRY, SCRY, LRRQ, GXRQ, SCRQ, YPJCZT,
+        SJJYZT, SJSCZT, SJXGZT, RWLY, RWLB, QYLX, CYJS, BZLX, YPLY, YPSX, YPLX, DJ, IF_CK,
+        ZZLY, JHL, CCL, SCXKZBH, SFDM, SFMC, CSDM, CSMC, XJDM, XJMC, JDMC, LXR, DH, JSYPJZRQ,
+        JSYPDZ, CCWD, JCFCRY, FYZT, BZ, GYF, GZRQ, YTLX, XKZLX, XKZH, SYRDZ, SYRYB, SYRDH,
+        IF_CY, CYSL
+    </sql>
+
+    <insert id="createTypgl" parameterType="com.xinhai.caiyun.customermanage.api.Typgl" keyProperty="id" useGeneratedKeys="true">
+      insert into t_ypgl_jbxx
+      (wtid,          ypbm,    ypmc,    sb,    ggxh,    ypdj,   ypsl,    ypdw,     scrq,    ypphhbh,    ypzt,   ypbctj,    scdw,    scdwlxdh,    fyry,    fyzt,
+      ypddrq,       if_sgr,    if_ssg,    ybjs,     bzq,   ypwt,    if_cy, jszt, if_th,cydd,
+      if_by,bysl,byglry,yplaiyuan,ypshuxing,ypleixin,ypzxbz,scxkbh,ypdanjia,if_ck,ypbgfl,cyypbz,cyfangshi,scdz,bzxx,
+      qyyply,ccyqqt,wtcyfs,yplaiyuanqt,cyypbzqt,ypleixinqt,ypxt,ftbh,rqlxxz,rkrq)
+      values
+      (#{wtid},  #{ypbm}, #{ypmc}, #{sb}, #{ggxh}, #{ypdj}, #{ypsl}, #{ypdw}, #{scrq}, #{ypphhbh}, #{ypzt}, #{ypbctj}, #{scdw}, #{scdwlxdh}, #{fyry}, #{fyzt},
+       #{ypddrq}, #{if_sgr}, #{if_ssg}, #{ybjs}, #{bzq}, #{ypwt}, #{if_cy}, #{jszt}, #{if_th},#{cydd}
+       , #{if_by}, #{bysl},#{byglry} , #{yplaiyuan}, #{ypshuxing}, #{ypleixin}, #{ypzxbz}, #{scxkbh}, #{ypdanjia}, #{if_ck}, #{ypbgfl},#{cyypbz}
+       , #{cyfangshi}, #{scdz},#{bzxx},#{qyyply},#{ccyqqt},#{wtcyfs},#{yplaiyuanqt},#{cyypbzqt},#{ypleixinqt},#{ypxt},#{ftbh},#{rqlxxz},#{rkrq});
+    </insert>
+
+    <!--导入样品信息 刘-->
+    <insert id="createTypglliu" >
+        <foreach collection="list" item="map" index="index" separator=";">
+      insert into t_ypgl_jbxx
+      (wtid,          ypbm,    ypmc,    sb,    ggxh,    ypdj,   ypsl,    ypdw,     scrq,    ypphhbh,    ypzt,   ypbctj,    scdw,    scdwlxdh,    fyry,    fyzt,
+      ypddrq,       if_sgr,    if_ssg,    ybjs,     bzq,   ypwt,  jszt)
+      values
+      (#{map.wtid},  #{map.wtid}, #{map.ypmc}, #{map.sb}, #{map.ggxh}, #{map.ypdj}, #{map.ypsl}, #{map.ypdw}, #{map.scrq}, #{map.ypphhbh}, #{map.ypzt}, #{map.ypbctj}, #{map.scdw}, #{map.scdwlxdh}, #{map.fyry}, #{map.fyzt},
+       #{map.ypddrq}, #{map.if_sgr}, #{map.if_ssg}, #{map.ybjs}, #{map.bzq}, #{map.ypwt}, '001')
+        </foreach>
+    </insert>
+
+    <select id="findTypjs" resultMap="BaseResultMap" parameterType="java.lang.String">
+        select
+        <include refid="Base_Column_List" />
+        from t_ypgl_jbxx
+        where ID = #{id}
+    </select>
+    <!-- 修改样品接收中 样品管理基本信息的数据-->
+    <update id="alterYpJS_jszt">
+    update t_ypgl_jbxx  set jszt=#{jszt} where ypbm=#{ypbm};
+</update>
+    <!-- 删除样品接收响相应的数据  在样品管理人员表中-->
+    <delete id="deleteYpJS_rydm">
+        delete from t_ypgl_rydm where ypbm=#{ypbm} and lx=#{lx};
+    </delete>
+    <!-- 样品管理列表_样品接收 -->
+    <select id="getTypjsAll" resultType="com.xinhai.caiyun.customermanage.api.TwtJbxx">
+        SELECT  distinct t.id,t.wtid,t.htmc,t.htbm, t.htlxsx, t.dwbm, t.dwmc, t.ywmc, t.sfdm, t.sfmc, t.csdm, t.csmc, t.xjdm, t.xjmc, t.jdmc, t.htlydm, t.qbgdm, t.qbgdw, t.qbgdz, t.qbgyb, t.sjr,
+        t.yslbh, t.fkdw, t.email, t.lxrmc, t.bgdh, t.sjhm, t.cz, t.fplxdm, t.cslxdm, t.if_pd, t.pdyj, t.cykssj, t.cyjssj, t.bglbdm, t.zzlxdm, t.fwlxdm, t.yxrq, t.zxqx,
+        t.zwbgsj, t.ywyxm, t.qdrq, t.myfklxdm, t.myf, t.jcfy, t.htje, t.zwfkrq, t.fkfsdm, t.ypbcdm, t.if_cy, t.if_htps, t.if_wjdj, t.if_zk, t.if_jj, t.bzxx, t.scbz,
+        t.lrry, t.bmdm, t.gxry, t.scry, t.lrrq, t.gxrq, t.scrq,t2.if_jd,t1.ypbm,t.if_zy
+        FROM t_wt_jbxx  t left join t_ypgl_jbxx t1 on t.wtid = t1.WTID
+        left join t_rwgl_jbxx t2 on  t2.wtid = t1.wtid
+        where t.SCBZ = FALSE and t1.jszt=#{jszt}
+        <if test="htmc != null and htmc != '' ">
+            and t.htmc like CONCAT('%',#{htmc},'%')
+        </if>
+        <if test="htbh != null and htbh != '' ">
+            and t.htbm like CONCAT('%',#{htbh},'%')
+        </if>
+        <if test="wtdwmc != null and wtdwmc != '' ">
+            and t.dwmc like CONCAT('%',#{wtdwmc},'%')
+        </if>
+        <if test="htlx != null and htlx != '' ">
+            and t.htlxsx = #{htlx}
+        </if>
+        <if test="ywry != null and ywry != '' ">
+            and t.ywyxm = #{ywry}
+        </if>
+        <if test='HtstartDate != null'>
+            and t.lrrq >= #{HtstartDate}
+        </if>
+        <if test='HtendDate != null'>
+            and #{HtendDate} >= t.lrrq
+        </if>
+        <if test='BgstartDate != null'>
+            and t.zwbgsj >= #{BgstartDate}
+        </if>
+        <if test='BgendDate != null'>
+            and #{BgendDate} >= t.zwbgsj
+        </if>
+        <if test='jszt != 200'>
+            and
+            t1.YPBM in (select YPBM from t_ypgl_rydm where ZXRY_DM=#{zydm})
+        </if>
+        LIMIT #{start},#{len};
+    </select>
+    <!-- 样品管理列表_样品接收 -->
+    <select id="getTypjsAllNums"  resultType="java.lang.Integer">
+        select count(1) from (
+        SELECT  distinct t.id, t.wtid
+        FROM t_wt_jbxx  t left join t_ypgl_jbxx t1 on t.wtid = t1.WTID
+        where t.SCBZ = FALSE and t1.jszt=#{jszt}
+        <if test="htmc != null and htmc != '' ">
+            and t.htmc like CONCAT('%',#{htmc},'%')
+        </if>
+        <if test="htbh != null and htbh != '' ">
+            and t.htbm like CONCAT('%',#{htbh},'%')
+        </if>
+        <if test="wtdwmc != null and wtdwmc != '' ">
+            and t.dwmc like CONCAT('%',#{wtdwmc},'%')
+        </if>
+        <if test="htlx != null and htlx != '' ">
+            and t.htlxsx = #{htlx}
+        </if>
+        <if test="ywry != null and ywry != '' ">
+            and t.ywyxm = #{ywry}
+        </if>
+        <if test='HtstartDate != null'>
+            and t.lrrq >= #{HtstartDate}
+        </if>
+        <if test='HtendDate != null'>
+            and #{HtendDate} >= t.lrrq
+        </if>
+        <if test='BgstartDate != null'>
+            and t.zwbgsj >= #{BgstartDate}
+        </if>
+        <if test='BgendDate != null'>
+            and #{BgendDate} >= t.zwbgsj
+        </if>
+        <if test='jszt != 200'>
+            and
+            t1.YPBM in (select YPBM from t_ypgl_rydm where ZXRY_DM=#{zydm})
+        </if>
+        AND FuncAuthorityWt(#{zydm},t.wtid) = 1
+        ) t2
+    </select>
+    <!-- 样品管理列表_样品接收_样品详情 -->
+    <select id="getTypjsAlYpxq" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List" />
+        from t_ypgl_jbxx
+        where SCBZ = FALSE
+        and jszt=#{jszt}
+        and wtid = #{wtid}
+        <if test="map.zxbz != null and map.zxbz != '' ">
+            and zxbz = #{map.zxbz}
+        </if>
+        <if test="map.jcxm != null and map.jcxm != '' ">
+            and jcxm = #{map.jcxm}
+        </if>
+        <if test="map.cpdlmc != null and map.cpdlmc != '' ">
+            and cpdlmc = #{map.cpdlmc}
+        </if>
+        <if test='map.bgstartDate != null'>
+            and YCBGRQ >= #{map.bgstartDate}
+        </if>
+        <if test='map.bgendDate != null'>
+            and #{map.bgendDate} >= YCBGRQ
+        </if>
+
+        <if test="map.ypbm != null and map.ypbm != '' ">
+            and ypbm = #{map.ypbm}
+        </if>
+        <if test="map.ypmc != null and map.ypmc != '' ">
+            and ypmc = #{map.ypmc}
+        </if>
+
+
+        LIMIT #{start},#{len};
+    </select>
+
+    <!-- 样品管理列表_样品接收_样品详情 -->
+    <select id="getTypjsAlYpxqNums"  resultType="java.lang.Integer">
+        select
+        COUNT(id)
+        from t_ypgl_jbxx
+        where SCBZ = FALSE
+        and jszt=#{jszt}
+        and wtid = #{wtid}
+        <if test="map.zxbz != null and map.zxbz != '' ">
+            and zxbz = #{map.zxbz}
+        </if>
+        <if test="map.jcxm != null and map.jcxm != '' ">
+            and jcxm = #{map.jcxm}
+        </if>
+        <if test="map.cpdlmc != null and map.cpdlmc != '' ">
+            and cpdlmc = #{map.cpdlmc}
+        </if>
+        <if test='map.bgstartDate != null'>
+            and YCBGRQ >= #{map.bgstartDate}
+        </if>
+        <if test='map.bgendDate != null'>
+            and #{map.bgendDate} >= YCBGRQ
+        </if>
+
+    </select>
+
+
+    <resultMap id="BaseResultMapJcxm" type="com.xinhai.caiyun.customermanage.api.TjcxmJbxx" >
+        <id column="ID" property="id" jdbcType="BIGINT" />
+        <result column="YPBM" property="ypbm" jdbcType="VARCHAR" />
+        <result column="ZWMC_BM" property="zwmcBm" jdbcType="VARCHAR" />
+        <result column="XL" property="xl" jdbcType="VARCHAR" />
+        <result column="CYL" property="cyl" jdbcType="VARCHAR" />
+        <result column="YL" property="yl" jdbcType="VARCHAR" />
+        <result column="CPDLDM" property="cpdldm" jdbcType="VARCHAR" />
+        <result column="CPDLMC" property="cpdlmc" jdbcType="VARCHAR" />
+        <result column="JCLBDM" property="jclbdm" jdbcType="VARCHAR" />
+        <result column="JCFA" property="jcfa" jdbcType="VARCHAR" />
+        <result column="PDYJ" property="pdyj" jdbcType="VARCHAR" />
+        <result column="PDYJMC" property="pdyjmc" jdbcType="VARCHAR" />
+        <result column="ZM" property="zm" jdbcType="VARCHAR" />
+        <result column="BL" property="bl" jdbcType="VARCHAR" />
+        <result column="IF_PD" property="ifPd" jdbcType="VARCHAR" />
+        <result column="BJF" property="bjf" jdbcType="VARCHAR" />
+        <result column="PDNH" property="pdnh" jdbcType="VARCHAR" />
+        <result column="XLZMRZ" property="xlzmrz" jdbcType="VARCHAR" />
+        <result column="JCYJ" property="jcyj" jdbcType="VARCHAR" />
+        <result column="JCYJMC" property="jcyjmc" jdbcType="VARCHAR" />
+        <result column="IF_CMA" property="ifCma" jdbcType="TINYINT" />
+        <result column="IF_CMAF" property="ifCmaf" jdbcType="TINYINT" />
+        <result column="IF_CNAS" property="ifCnas" jdbcType="TINYINT" />
+        <result column="IF_CATL" property="ifCatl" jdbcType="TINYINT" />
+        <result column="JCX" property="jcx" jdbcType="VARCHAR" />
+        <result column="XLZ" property="xlz" jdbcType="VARCHAR" />
+        <result column="JLDW" property="jldw" jdbcType="VARCHAR" />
+        <result column="YWMC" property="ywmc" jdbcType="VARCHAR" />
+        <result column="SCBZ" property="scbz" jdbcType="TINYINT" />
+        <result column="BZXX" property="bzxx" jdbcType="VARCHAR" />
+        <result column="LRRY" property="lrry" jdbcType="VARCHAR" />
+        <result column="BMDM" property="bmdm" jdbcType="VARCHAR" />
+        <result column="GXRY" property="gxry" jdbcType="VARCHAR" />
+        <result column="SCRY" property="scry" jdbcType="VARCHAR" />
+        <result column="LRRQ" property="lrrq" jdbcType="TIMESTAMP" />
+        <result column="GXRQ" property="gxrq" jdbcType="TIMESTAMP" />
+        <result column="SCRQ" property="scrq" jdbcType="TIMESTAMP" />
+    </resultMap>
+
+
+    <!-- 样品管理列表_样品接收_样品详情_检测项目 -->
+    <select id="getTypjsAlYpxqJcxm" resultMap="BaseResultMapJcxm" parameterType="java.lang.String">
+        SELECT
+        t1.id, t.ypbm, t1.zwmc_bm, t1.xl, t1.cyl, t1.yl, t1.cpdldm, t1.cpdlmc, t1.jclbdm, t1.jcfa, t1.pdyj, t1.pdyjmc, t1.zm, t1.bl,
+        t1.if_pd, t1.bjf, t1.pdnh, t1.xlzmrz, t1.jcyj, t1.jcyjmc, t1.if_cma, t1.if_cmaf, t1.if_cnas, t1.if_catl, t1.jcx, t1.xlz,
+        t1.jldw, t1.ywmc, t1.scbz, t1.bzxx, t1.lrry, t1.bmdm, t1.gxry, t1.scry, t1.lrrq, t1.gxrq, t1.scrq
+        FROM t_ypgl_jbxx t
+        LEFT JOIN t_yp_jcxm t2 ON t.id =t2.ypid
+        LEFT JOIN t_jcxm_jbxx t1 ON t1.id = t2.jcxmid
+        WHERE t.SCBZ = FALSE AND t.jszt=#{jszt}
+        and t.ypbm = #{ypbm}
+        <if test="zwmcBm != null and zwmcBm!='' ">
+            and t1.zwmc_bm = #{zwmcBm}
+        </if>
+        <if test="jcfa != null and jcfa != '' ">
+            and t1.jcfa = #{jcfa}
+        </if>
+
+    </select>
+
+    <!-- 样品管理列表_样品接收_样品详情_检测项目 -->
+    <select id="getTypjsAlYpxqJcxmNums" resultType="java.lang.Integer">
+        SELECT
+        count(1)
+        FROM t_ypgl_jbxx t
+        LEFT JOIN t_yp_jcxm t2 ON t.id =t2.ypid
+        LEFT JOIN t_jcxm_jbxx t1 ON t1.id = t2.jcxmid
+        WHERE t.SCBZ = FALSE AND t.jszt=#{jszt}
+        and t.ypbm = #{ypbm}
+        <if test="zwmcBm != null and zwmcBm!='' ">
+            and t1.zwmc_bm = #{zwmcBm}
+        </if>
+        <if test="jcfa != null and jcfa !='' ">
+            and t1.jcfa = #{jcfa}
+        </if>
+    </select>
+
+    <!-- 样品管理列表_领样管理 -->
+    <select id="getTypjslygl" resultType="com.xinhai.caiyun.customermanage.api.Tlygl" parameterType="java.util.Map">
+        SELECT
+        distinct t.id, w.wtid,w.if_jj,t1.zm, w.htbm,w.htmc,t.ypbm,t.ypmc,t1.zwmc_bm,t1.jcfa,t.ycbgrq,t.sjcjrq,t1.jcx,t1.jldw,t1.jcyj,t1.cpdlmc,t1.yl,t1.cyl,t1.xl,t.jszt,t1.jcx,t.bzxx,t.if_zb
+        FROM t_wt_jbxx  w left join t_ypgl_jbxx t on w.wtid = t.WTID
+        LEFT JOIN t_yp_jcxm t2 ON t.YPBM =t2.ypid
+        LEFT JOIN t_jcxm_jbxx t1 ON t1.id = t2.jcxmid
+        WHERE t.SCBZ = FALSE AND t.jszt=#{map.jszt}
+        and
+        t.YPBM in (select YPBM from t_ypgl_rydm where ZXRY_DM=#{map.zydm})
+        <if test="map.htbm != null and map.htbm !='' ">
+            and w.htbm = #{map.htbm}
+        </if>
+        <if test="map.zwmc_bm != null and map.zwmc_bm !='' ">
+            and t1.ZWMC_BM = #{map.zwmc_bm}
+        </if>
+        <if test="map.jcfa != null and map.jcfa !='' ">
+            and t1.jcfa = #{map.jcfa}
+        </if>
+        <if test="map.ypbm != null and map.ypbm !='' ">
+            and t.ypbm = #{map.ypbm}
+        </if>
+
+        <if test="map.htmc != null and map.htmc !='' ">
+            and w.htmc = #{map.htmc}
+        </if>
+
+        <if test="map.zm != null and map.zm !='' ">
+            and t1.zm = #{map.zm}
+        </if>
+
+        <if test="map.jcfa != null and map.jcfa !='' ">
+            and t1.jcfa = #{map.jcfa}
+        </if>
+
+        <if test="map.sjcjrqstart != null and map.sjcjrqstart !='' ">
+            and t.sjcjrq >= #{map.sjcjrqstart}
+        </if>
+        <if test="map.sjcjrqend != null and map.sjcjrqend !='' ">
+            and #{map.sjcjrqend} >= t.sjcjrq
+        </if>
+    </select>
+
+    <!-- 样品管理列表_领样管理 -->
+    <select id="getTypjslyglNums" resultType="java.lang.Integer">
+        select count(1) from( SELECT
+        distinct w.wtid,w.if_jj,t1.zm, w.HTBM,w.htmc,t.ypbm,t.ypmc,t1.ZWMC_BM,t1.jcfa,t.ycbgrq,t.SJCJRQ,t1.jcx,t1.jldw,t1.jcyj,t1.CPDLMC,t1.yl,t1.cyl,t1.xl,t.jszt
+
+        FROM t_wt_jbxx  w left join t_ypgl_jbxx t on w.wtid = t.WTID
+        LEFT JOIN t_yp_jcxm t2 ON t.YPBM =t2.ypid
+        LEFT JOIN t_jcxm_jbxx t1 ON t1.id = t2.jcxmid
+        WHERE t.SCBZ = FALSE AND t.jszt=#{map.jszt}
+        and
+        t.YPBM in (select YPBM from t_ypgl_rydm where ZXRY_DM=#{map.zydm})
+
+        <if test="map.htbm != null and map.htbm !='' ">
+            and w.htbm = #{map.htbm}
+        </if>
+        <if test="map.zwmc_bm != null and map.zwmc_bm !='' ">
+            and t1.ZWMC_BM = #{map.zwmc_bm}
+        </if>
+        <if test="map.jcfa != null and map.jcfa !='' ">
+            and t1.jcfa = #{map.jcfa}
+        </if>
+
+        <if test="map.ypbm != null and map.ypbm !='' ">
+            and t.ypbm = #{map.ypbm}
+        </if>
+
+        <if test="map.htmc != null and map.htmc !='' ">
+            and w.htmc = #{map.htmc}
+        </if>
+
+        <if test="map.zm != null and map.zm !='' ">
+            and t1.zm = #{map.zm}
+        </if>
+
+        <if test="map.jcfa != null and map.jcfa !='' ">
+            and t1.jcfa = #{map.jcfa}
+        </if>
+        <if test="map.sjcjrqstart != null and map.sjcjrqstart !='' ">
+            and t.sjcjrq >= #{map.sjcjrqstart}
+        </if>
+        <if test="map.sjcjrqend != null and map.sjcjrqend !='' ">
+            and #{map.sjcjrqend} >= t.sjcjrq
+        </if>
+        AND FuncAuthorityWt(#{map.zydm},w.wtid) = 1
+        ) s
+
+    </select>
+
+
+
+    <!-- 更新样品接收状态 -->
+    <update id="updateTypglJszt" parameterType="com.xinhai.caiyun.customermanage.api.Typgl">
+        update t_ypgl_jbxx
+        JSZT = #{jszt},
+        GXRY = #{gxry},
+        GXRQ = now()
+        where ID = #{id};
+    </update>
+
+    <select id="findTypjsAll" resultMap="BaseResultMap">
+        select
+        a.ID, a.YPBM, a.GL_TYPE, a.WTID, a.YPMC, a.HTMC, a.HT_TYPE, a.HTBM, a.CPDLDM, a.CPDLMC, a.JCLBDM, a.YCBGRQ,
+        a.YPXTDM, a.YPSL, a.BYSL, a.YPDW, a.GGXH, a.GGXHDW, a.YPPH, a.BZQ, a.ZXBZ, a.ZLDJ, a.SB, a.RQLXDM, a.RQ, a.SCZMC,
+        a.SCZDZ, a.YPBCTJ, a.JYF, a.FBF, a.SYR, a.SJCJRQ, a.DYSJ, a.IF_FB, a.FBXM, a.IF_BLFY, a.IF_FHCL, a.BGFS,
+        a.JCXM, a.JYDD, a.IF_JJ, a.SCBZ, a.JSZT, a.BZXX, a.LRRY, a.BMDM, a.GXRY, a.SCRY, a.LRRQ, a.GXRQ, a.SCRQ, a.YPJCZT,
+        a.SJJYZT, a.SJSCZT, a.SJXGZT, a.RWLY, a.RWLB, a.QYLX, a.CYJS, a.BZLX, a.YPLY, a.YPSX, a.YPLX, a.DJ, a.IF_CK,
+        a.ZZLY, a.JHL, a.CCL, a.SCXKZBH, a.SFDM, a.SFMC, a.CSDM, a.CSMC, a.XJDM, a.XJMC, a.JDMC, a.LXR, a.DH, a.JSYPJZRQ,
+        a.JSYPDZ, a.CCWD, a.JCFCRY, a.FYZT, a.BZ, a.GYF, a.GZRQ, a.YTLX, a.XKZLX, a.XKZH, a.SYRDZ, a.SYRYB, a.SYRDH,
+        a.IF_CY, a.CYSL,b.IF_JD
+        from t_ypgl_jbxx a
+        left join t_rwgl_jbxx b
+        on a.wtid = b.wtid
+        where a.SCBZ = FALSE
+        <if test='type == "001" '>
+            and a.CPDLMC like CONCAT('%',#{text},'%')
+        </if>
+        <!--<if test='type == "002" '>-->
+        <!--and  like CONCAT('%',#{wtmc},'%')-->
+        <!--</if>-->
+        <if test='type == "003" '>
+            and a.YPMC like CONCAT('%',#{text},'%')
+        </if>
+        LIMIT #{start},#{len};
+    </select>
+
+    <select id="findTypjsAllNums" resultType="java.lang.Integer">
+        SELECT  COUNT(id)
+        FROM t_ypgl_jbxx
+        where SCBZ = FALSE
+        <if test='type == "001" '>
+            and CPDLMC like CONCAT('%',#{text},'%')
+        </if>
+        <!--<if test='type == "002" '>-->
+        <!--and  like CONCAT('%',#{wtmc},'%')-->
+        <!--</if>-->
+        <if test='type == "003" '>
+            and YPMC like CONCAT('%',#{text},'%')
+        </if>
+    </select>
+
+    <update id="updateTypgl" parameterType="com.xinhai.caiyun.customermanage.api.Typgl">
+        update t_ypgl_jbxx
+        <set>
+            <if test="ypbm != null">
+                ypbm = #{ypbm},
+            </if>
+            <if test="ypmc != null">
+                ypmc = #{ypmc},
+            </if>
+            <if test="sb != null">
+                sb = #{sb},
+            </if>
+            <if test="ggxh != null">
+                ggxh = #{ggxh},
+            </if>
+            <if test="ypdj != null">
+                ypdj = #{ypdj},
+            </if>
+            <if test="ypsl != null">
+                ypsl = #{ypsl},
+            </if>
+            <if test="ypdw != null">
+                ypdw = #{ypdw},
+            </if>
+            <if test="scrq != null">
+                scrq = #{scrq},
+            </if>
+            <if test="ypphhbh != null">
+                ypphhbh = #{ypphhbh},
+            </if>
+            <if test="ypzt != null">
+                ypzt = #{ypzt},
+            </if>
+            <if test="ypbctj != null">
+                ypbctj = #{ypbctj},
+            </if>
+            <if test="scdw != null">
+                scdw = #{scdw},
+            </if>
+            <if test="scdwlxdh != null">
+                scdwlxdh = #{scdwlxdh},
+            </if>
+            <if test="fyry != null">
+                fyry = #{fyry},
+            </if>
+            <if test="fyzt != null">
+                fyzt = #{fyzt},
+            </if>
+            <if test="ypddrq != null">
+                ypddrq = #{ypddrq},
+            </if>
+            <if test="if_sgr != null">
+                if_sgr = #{if_sgr},
+            </if>
+            <if test="if_ssg != null">
+                if_ssg = #{if_ssg},
+            </if>
+            <if test="ybjs != null">
+                ybjs = #{ybjs},
+            </if>
+            <if test="bzq != null">
+                bzq = #{bzq},
+            </if>
+            <if test="ypwt != null">
+                ypwt = #{ypwt},
+            </if>
+            <if test="if_th != null">
+                if_th = #{if_th},
+            </if>
+            <if test="if_cy != null">
+                if_cy = #{if_cy},
+            </if>
+            <if test="if_by != null">
+                if_by = #{if_by},
+            </if>
+            <if test="bysl != null">
+                bysl = #{bysl},
+            </if>
+            <if test="jszt != null">
+                jszt = #{jszt},
+            </if>
+            <if test="cydd != null">
+                cydd = #{cydd},
+            </if>
+            <if test="byglry != null">
+                byglry = #{byglry},
+            </if>
+            <if test="yplaiyuan != null">
+                yplaiyuan = #{yplaiyuan},
+            </if>
+            <if test="ypshuxing != null">
+                ypshuxing = #{ypshuxing},
+            </if>
+            <if test="ypleixin != null">
+                ypleixin = #{ypleixin},
+            </if>
+            <if test="ypzxbz != null">
+                ypzxbz = #{ypzxbz},
+            </if>
+            <if test="scxkbh != null">
+                scxkbh = #{scxkbh},
+            </if>
+            <if test="ypdanjia != null">
+                ypdanjia = #{ypdanjia},
+            </if>
+            <if test="if_ck != null">
+                if_ck = #{if_ck},
+            </if>
+            <if test="ypbgfl != null">
+                ypbgfl = #{ypbgfl},
+            </if>
+            <if test="cyypbz != null">
+                cyypbz = #{cyypbz},
+            </if>
+            <if test="cyfangshi != null">
+                cyfangshi = #{cyfangshi},
+            </if>
+            <if test="scdz != null">
+                scdz = #{scdz},
+            </if>
+            <if test="bzxx != null">
+                bzxx = #{bzxx},
+            </if>
+            <if test="qyyply != null">
+                qyyply = #{qyyply},
+            </if>
+            <if test="ccyqqt != null">
+                ccyqqt = #{ccyqqt},
+            </if>
+            <if test="wtcyfs != null">
+                wtcyfs = #{wtcyfs},
+            </if>
+            <if test="yplaiyuanqt != null">
+                yplaiyuanqt = #{yplaiyuanqt},
+            </if>
+            <if test="cyypbzqt != null">
+                cyypbzqt = #{cyypbzqt},
+            </if>
+            <if test="ypleixinqt != null">
+                ypleixinqt = #{ypleixinqt},
+            </if>
+            <if test="ypxt != null">
+                ypxt = #{ypxt},
+            </if>
+            <if test="ftbh != null">
+                ftbh = #{ftbh},
+            </if>
+            <if test="rkrq != null">
+                rkrq = #{rkrq},
+            </if>
+            <if test="rqlxxz != null">
+                rqlxxz = #{rqlxxz},
+            </if>
+            wtid = #{ypbm}
+        </set>
+        WHERE wtid = #{wtid}
+    </update>
+
+    <update id="updateYddcyypxx" parameterType="com.xinhai.caiyun.customermanage.api.Typgl">
+        update t_ypgl_jbxx
+        <set>
+            <if test="wtid != null">
+                wtid = #{wtid},
+            </if>
+            <if test="ypbm != null">
+                ypbm = #{ypbm},
+            </if>
+            <if test="ypmc != null">
+                ypmc = #{ypmc},
+            </if>
+            <if test="sb != null">
+                sb = #{sb},
+            </if>
+            <if test="ggxh != null">
+                ggxh = #{ggxh},
+            </if>
+            <if test="ypdj != null">
+                ypdj = #{ypdj},
+            </if>
+            <if test="ypsl != null">
+                ypsl = #{ypsl},
+            </if>
+            <if test="ypdw != null">
+                ypdw = #{ypdw},
+            </if>
+            <if test="scrq != null">
+                scrq = #{scrq},
+            </if>
+            <if test="ypphhbh != null">
+                ypphhbh = #{ypphhbh},
+            </if>
+            <if test="ypzt != null">
+                ypzt = #{ypzt},
+            </if>
+            <if test="ypbctj != null">
+                ypbctj = #{ypbctj},
+            </if>
+            <if test="scdw != null">
+                scdw = #{scdw},
+            </if>
+            <if test="scdwlxdh != null">
+                scdwlxdh = #{scdwlxdh},
+            </if>
+            <if test="fyry != null">
+                fyry = #{fyry},
+            </if>
+            <if test="fyzt != null">
+                fyzt = #{fyzt},
+            </if>
+            <if test="ypddrq != null">
+                ypddrq = #{ypddrq},
+            </if>
+            <if test="if_sgr != null">
+                if_sgr = #{if_sgr},
+            </if>
+            <if test="if_ssg != null">
+                if_ssg = #{if_ssg},
+            </if>
+            <if test="ybjs != null">
+                ybjs = #{ybjs},
+            </if>
+            <if test="bzq != null">
+                bzq = #{bzq},
+            </if>
+            <if test="ypwt != null">
+                ypwt = #{ypwt},
+            </if>
+            <if test="if_th != null">
+                if_th = #{if_th},
+            </if>
+            <if test="cydd != null">
+                cydd = #{cydd},
+            </if>
+        </set>
+        WHERE id = #{id}
+    </update>
+
+    <update id="deleteTypglbyId" parameterType="java.lang.String">
+        update t_ypgl_jbxx
+        set scbz = TRUE
+        WHERE id = #{id};
+    </update>
+
+    <delete id="deleteYddcyypxx" parameterType="java.lang.String">
+        delete from t_ypgl_jbxx WHERE id = #{id};
+        delete from t_yp_jcxm where ypid=#{id};
+    </delete>
+
+    <update id="deleteTypgl" parameterType="java.util.List">
+        update t_ypgl_jbxx
+        set scbz = TRUE
+        WHERE id in
+        <foreach item="id" collection="ids" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </update>
+
+    <update id="deleteTypglByWtid" parameterType="java.util.List">
+        update t_ypgl_jbxx
+        set scbz = TRUE
+        WHERE WTID in
+        <foreach item="wtid" collection="ids" open="(" separator="," close=")">
+            #{wtid}
+        </foreach>
+    </update>
+
+    <update id="deleteWtxxByWtid" parameterType="java.util.List">
+        update t_wt_jbxx
+        set scbz = TRUE
+        WHERE wtid in
+        <foreach item="wtid" collection="ids" open="(" separator="," close=")">
+            #{wtid}
+        </foreach>
+    </update>
+
+    <delete id="delYpJcxm" parameterType="java.util.List">
+        DELETE FROM t_yp_jcxm
+        WHERE ypid in
+        <foreach item="id" collection="ids" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+    <delete id="deleteJcxm">
+        DELETE FROM t_yp_jcxm
+        WHERE ypid = #{ypid} AND jcxmid in
+        <foreach item="id" collection="ids" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+    <select id="findTypxxlist" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List" />
+        from t_ypgl_jbxx
+        where
+        SCBZ = FALSE
+        <if test=' searchText != null'>
+            <if test='type == "002" '>
+                AND CONCAT(HTMC) LIKE CONCAT('%',#{searchText},'%')
+            </if>
+            <if test='type == "003" '>
+                AND CONCAT(YPMC) LIKE CONCAT('%',#{searchText},'%')
+            </if>
+        </if>
+        AND FuncAuthorityWt(#{zydm},wtid) = 1
+        order by id desc
+        LIMIT #{start},#{len};
+    </select>
+    <!-- <if test='type == "001" '>
+            CONCAT(CPDLMC) LIKE CONCAT('%',#{searchText},'%')
+        </if> -->
+
+    <select id="findTypxxlistNums" resultType="java.lang.Integer">
+        select COUNT(ID)
+        from t_ypgl_jbxx
+        where
+        SCBZ = FALSE
+        <if test=' searchText != null'>
+            <if test='type == "002" '>
+                AND CONCAT(HTMC) LIKE CONCAT('%',#{searchText},'%')
+            </if>
+            <if test='type == "003" '>
+                AND CONCAT(YPMC) LIKE CONCAT('%',#{searchText},'%')
+            </if>
+        </if>
+        AND FuncAuthorityWt(#{zydm},wtid) = 1
+    </select>
+
+    <select id="findTypxx" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List" />
+        from t_ypgl_jbxx
+        where
+        ID = #{id};
+    </select>
+
+    <update id="updateYpJcxmList" parameterType="java.lang.String">
+        UPDATE t_yp_jcxm
+        SET ypid = #{ypid}
+         WHERE ypid = #{uuid};
+    </update>
+
+
+    <insert id="insert">
+        <foreach collection="data" item="item" index="index" >
+            insert into t_ypgl_rydm(ypbm,zxry_dm,lrry,lrrq,lx)
+            VALUES
+            (#{item.ypbm},#{item.zydm},#{item.lrry},now(),#{item.lx});
+        </foreach>
+        <foreach collection="data" item="item" index="index" separator=";">
+            update t_ypgl_jbxx set JSZT=#{item.jszt} where ypbm =#{item.ypbm}
+        </foreach>
+    </insert>
+    <!--插入样品执行人员-->
+    <insert id="insertYpzxry">
+        insert into t_ypgl_rydm(ypbm,zxry_dm,lrry,lrrq,lx)
+        VALUES
+        <foreach collection="data" item="item" index="index" >
+            (#{item.ypbm},#{item.zydm},#{item.lrry},now(),#{item.lx});
+        </foreach>
+    </insert>
+    <!-- 查询样品列表中某委托的样品信息 -->
+    <select id="findYpByWt" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List" />
+        from t_ypgl_jbxx
+        where WTID = #{wtid} AND IF_CY = #{if_cy}
+    </select>
+
+    <select id="findYpByWtNum" resultType="java.lang.Integer">
+        select COUNT(id)
+        from t_ypgl_jbxx
+        where WTID = #{wtid} AND IF_CY = #{if_cy}
+    </select>
+
+    <!--根据id删除客户 -->
+    <update id="delCyyp" parameterType="java.util.List">
+        UPDATE t_ypgl_jbxx
+        <set>
+            if_cy = FALSE, cysl=0
+        </set>
+        WHERE id in
+        <foreach item="id" collection="ids" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </update>
+
+    <update id="updateCyyp" parameterType="java.util.List">
+        UPDATE t_ypgl_jbxx
+        <set>
+            if_cy = TRUE
+        </set>
+        WHERE id in
+        <foreach item="id" collection="ids" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </update>
+    <!--查询样品流转单-->
+    <select id="findYplzd" resultType="com.xinhai.caiyun.customermanage.api.Yplzd">
+        select t.ypmc,t.ypbm,t.ypxtdm,t.ypsl,t.dysj,t.sjcjrq,t.jclbdm,t.bzq,t.zxbz,t.if_fb,t1.jcxmid,
+        t1.jcz,t1.wd,t1.sd
+        from t_ypgl_jbxx t,t_yp_jcxm t1
+        where t.id = t1.ypid
+    </select>
+    <select id="findjcxm" parameterType="string" resultType="string">
+        select ZWMC_BM
+        from t_jcxm_jbxx
+        where id=#{jcxmid}
+    </select>
+
+    <select id="ypzbgetRw" parameterType="string" resultType="com.xinhai.caiyun.customermanage.api.Ypzblist">
+        select *
+        from t_yp_zbwc
+        where ypbm = #{ypbm}
+    </select>
+    <select id="getYpzbCount" parameterType="string" resultType="integer">
+        select count(*)
+        from t_yp_zbwc
+        where ypbm = #{ypbm}
+    </select>
+    <insert id="addYpzb" parameterType="com.xinhai.caiyun.customermanage.api.Ypzblist">
+        insert into t_yp_zbwc
+        (zbypbm,ypbm,ypzt,zbDate,zbfs,ypmc,zbzl)
+        values(#{zbypbm},#{ypbm},#{ypzt},#{zbDate},#{zbfs},#{ypmc},#{zbzl})
+    </insert>
+    <delete id="deleteYpzb" parameterType="string">
+        delete from t_yp_zbwc
+        where zbypbm=#{zbypbm}
+    </delete>
+    <update id="updateIFZB">
+        update
+        t_ypgl_jbxx
+        set if_zb = '201'
+        where ypbm=#{ypbm}
+    </update>
+
+    <!--检测项目和检测方法-->
+    <select id="findJcx" resultType="map">
+      SELECT
+			 distinct t.id, w.wtid,w.if_jj,t1.zm, w.htbm,w.htmc,t.ypbm,t.ypmc,t1.zwmc_bm,t1.jcfa,t.ycbgrq,t.sjcjrq,t1.jcx,t1.jldw,t1.jcyj,t1.cpdlmc,t1.yl,t1.cyl,t1.xl,t.jszt,t1.jcx,t.bzxx
+
+			FROM t_wt_jbxx  w left join t_ypgl_jbxx t on w.wtid = t.WTID
+			LEFT JOIN t_yp_jcxm t2 ON t.id	=t2.ypid
+			LEFT JOIN t_jcxm_jbxx t1 ON t1.id = t2.jcxmid
+				WHERE t.SCBZ = FALSE AND t.jszt=#{jszt}
+			 and
+         t.YPBM in (select YPBM from t_ypgl_rydm where ZXRY_DM=#{zydm})
+    </select>
+    <select id="findCountypbm" resultType="map">
+      select count(ypbm) as ypbm
+      FROM t_yp_zbwc
+      GROUP BY ypbm
+    </select>
+
+    <update id="deleteYpglById" parameterType="java.lang.String">
+        delete from t_ypgl_jbxx where id = #{findypid}
+    </update>
+    <!--不制备 提交样品更新状态-->
+    <update id="updateJszt">
+        update t_ypgl_jbxx
+        set jszt = '204'
+        where ypbm = #{id}
+    </update>
+    <!--获取样品id-->
+    <select id="findypid" resultType="String">
+        select id
+        from t_ypgl_jbxx
+        where ypbm =#{ypbm}
+    </select>
+    <insert id="insertYpqr">
+        insert into t_ypk_jbxx(ypid,zxr) values (#{map.ypid},#{map.zxr})
+    </insert>
+    <!--获取领样时间数量-->
+    <select id="getLyInfo" resultType="map">
+        select zbzl,lqry,lqsj
+        from t_yp_zbwc
+        where ypbm = #{ypbm}
+    </select>
+    <!--插入rwinfo-->
+    <select id="insertIntoRwinfo">
+        insert into t_ypgl_rydm (ypbm,lrry,lrrq,lx) values (#{ypbm},#{lrry},now(),1);
+    </select>
+    <!--制备编码打印-->
+    <select id="ypzbdy" resultType="map">
+        select b.zbypbm ,a.SYRQ
+        from t_yp_zbwc b , t_wt_jbxx a
+        where b.ypbm in <foreach collection="dy" item="zdy" index="index" open="(" separator="," close=")"> #{zdy} </foreach>
+        and a.wtid in (select wtid
+                      from t_ypgl_jbxx
+                      where ypbm in <foreach collection="dy" item="zdy" index="index" open="(" separator="," close=")"> #{zdy} </foreach>
+                      )
+    </select>
+
+    <!--样品编码打印-->
+    <select id="ypbmdy" resultType="map">
+        select b.ypbm,a.SYRQ
+        from t_wt_jbxx a
+        left join  t_ypgl_jbxx b
+        on a.wtid = b.wtid
+        where b.ypbm in  <foreach collection="ids" item="zdy" index="index" open="(" separator="," close=")"> #{zdy} </foreach>
+    </select>
+
+    <!--录入拆分各个科室数量表-->
+    <update id="updatecf">
+    update t_ypgl_jbxx
+    set ks1=#{typgl.ks1},ks2=#{typgl.ks2},wbjg=#{typgl.wbjg},wbjgsl=#{typgl.wbjgsl}
+    where  id=#{typgl.id}
+    </update>
+
+    <!--录入分包各个科室检测项数量-->
+    <update id="updatejcypfb">
+    update t_yp_jcxm
+    set jcks=#{typgl.jcks}
+    where id =#{typgl.id}
+    </update>
+
+    <!--20190906添加导出任务单-->
+    <select  id="getRwdList" resultType="map">
+        SELECT DISTINCT
+            y.YPBM,
+            y.ypmc,
+            yz.zbypbm AS jcybm,
+            y.scdw,
+            y.ggxh,
+            y.scrq,
+            y.ypzt,
+            y.ypsl,
+            y.bzxx,
+            GROUP_CONCAT( jcxm.ZWMC_BM )  jcxm,
+            GROUP_CONCAT(DISTINCT jcxm.jcyj )  jcyj,
+            ( SELECT zbks_mc FROM dm_zbks WHERE yz.lx = zbks_dm ) AS lx,
+            yz.zbdate,
+            yz.zbzl,
+            y.bysl
+        FROM
+            t_yp_zbwc yz
+            LEFT JOIN t_ypgl_jbxx y ON y.ypbm = yz.ypbm
+            LEFT JOIN t_yp_jcxm yj ON yj.ypid = y.id
+            LEFT JOIN t_jcxm_jbxx jcxm ON jcxm.id = yj.jcxmid
+            LEFT JOIN dm_zbks ks ON ks.ZBKS_DM = yz.lx
+        WHERE
+            ks.ZBKS_DM != '999'
+            AND ifnull( yz.zbzl, '0' ) != '0'
+            AND y.ID IN (${map.ids})
+            <if test="map.lx != null and map.lx !=''">
+             and ks.ZBKS_DM = #{map.lx}
+            </if>
+            group by y.wtid
+        ORDER BY
+            y.WTID asc
+    </select>
+
+    <select id="getKsByDmList" resultType="map">
+        SELECT
+        ZBKS_DM,
+        ZBKS_MC
+        FROM
+        dm_zbks
+        WHERE
+        ZBKS_DM != 999
+        AND YXBZ = 'Y'
+        ORDER BY
+        ZBKS_DM
+    </select>
+    <!--20191028添加备样信息-->
+    <insert id="addByxx">
+        <foreach collection="data" item="item" index="index">
+        insert into t_bygl_jbxx (YPMC,YPBM,ypid,BYSL,BYSLDW,RKSJ,BZXX,RKRY) values
+        (#{item.ypmc},#{item.ypbm},#{item.id},#{item.bysl},#{item.bysldw},now(),#{item.bzxx},#{item.zydm});
+        </foreach>
+    </insert>
+    <!--20191029添加备样信息-->
+    <select id="getByList" resultType="map">
+        select
+        a.id,a.YPMC,a.YPBM,a.ypid,a.BYSL,a.BYSLDW,
+        DATE_FORMAT(a.RKSJ,'%Y-%m-%d') as RKSJ,a.BZXX,a.RKRY,a.YPHGBZ,
+        a.BCSJ
+        from
+        t_bygl_jbxx a
+        where
+        IFNULL(a.SCBZ,'0') != '1'
+        <if test="map.ypmc != null and map.ypmc != '' ">
+            AND a.YPMC LIKE CONCAT('%',#{map.ypmc},'%')
+        </if>
+        <if test="map.ypbm != null and map.ypbm != '' ">
+            AND a.YPBM LIKE CONCAT('%',#{map.ypbm},'%')
+        </if>
+        order by
+        a.RKSJ DESC
+    </select>
+    <select id="getByListNum"  resultType="java.lang.Integer">
+        select
+        count(1)
+        from
+        t_bygl_jbxx a
+        where
+        IFNULL(a.SCBZ,'0') != '1'
+        <if test="map.ypmc != null and map.ypmc != '' ">
+            AND a.YPMC LIKE CONCAT('%',#{map.ypmc},'%')
+        </if>
+        <if test="map.ypbm != null and map.ypbm != '' ">
+            AND a.YPBM LIKE CONCAT('%',#{map.ypbm},'%')
+        </if>
+        order by
+        a.RKSJ DESC
+    </select>
+    <select id="checkByCount"  resultType="java.lang.Integer">
+        select
+        count(1)
+        from
+        t_bygl_jbxx a
+        where
+        IFNULL(a.SCBZ,'0') != '1'
+        <if test="map.ypid != null and map.ypid != '' ">
+            AND a.ypid = #{map.ypid}
+        </if>
+    </select>
+    <!--20191029添加删除备样-->
+    <update id="deleteByxx">
+        <foreach collection="data" item="item" index="index">
+            UPDATE t_bygl_jbxx set SCBZ = 1,SCRY = #{item.zydm},SCSJ = now()
+            WHERE id = #{item.id}
+        </foreach>
+    </update>
+    <select id="getOneByxx" resultType="map">
+        <foreach collection="data" item="item" index="index">
+            select
+            a.id,a.YPMC,a.YPBM,a.ypid,a.BYSL,a.BYSLDW,a.RKSJ,a.BZXX,a.RKRY,a.YPHGBZ,a.BCSJ
+            from
+            t_bygl_jbxx a
+            where
+            IFNULL(a.SCBZ,'0') != '1'
+            <if test="item.id != null and item.id != '' ">
+                AND a.ypid = #{item.id}
+            </if>
+        </foreach>
+    </select>
+    <select id="updateByxx" resultType="map">
+        <foreach collection="data" item="item" index="index">
+            UPDATE t_bygl_jbxx set BYSL = #{item.bysl},BCSJ = #{item.bcsj},YPHGBZ = #{item.ifhg},
+            BZXX = #{item.bzxx},XGRY = #{item.zydm},XGSJ = now()
+            WHERE
+            1 = 1
+            <if test="item.id != null and item.id != '' ">
+                AND ypid = #{item.id}
+            </if>
+        </foreach>
+    </select>
+</mapper>

@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	   xmlns:context="http://www.springframework.org/schema/context"
+	   xsi:schemaLocation="http://www.springframework.org/schema/beans
+    http://www.springframework.org/schema/beans/spring-beans-3.2.xsd http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
+
+	<context:component-scan base-package="com.xinhai.Log">
+    </context:component-scan>
+	<!--
+		数据库连接配置
+		${db.driver}、${db.url}、${db.userName}和${db.password}使用properties/db.properties文件中的配置
+	-->
+    <!--    
+        <bean id="dataSource" class="org.apache.commons.dbcp2.BasicDataSource"
+          destroy-method="close">
+        <property name="driverClassName" value="${db.driver}"/>
+        <property name="url" value="${db.url}"/>
+        <property name="username" value="${db.userName}"/>
+        <property name="password" value="${db.password}"/>
+    </bean> 
+    -->
+    
+    <bean id="dataSource" class="com.xinhai.caiyun.encrypt.EncryptBasicDataSource"
+          destroy-method="close">
+        <property name="url" value="${db.url}"/>
+    </bean>
+	
+	<!--配置spring mybatis数据访问接口扫描包-->
+	 <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+        <property name="basePackage" value="com.xinhai.Log.dao"/>
+        <property name="sqlSessionFactoryBeanName" value="sqlSessionFactory"/>
+    </bean>
+    <bean id="sqlSessionFactory"
+          class="com.xinhai.mybatis.SqlSessionFactoryBeanExtention">
+        <property name="dataSource" ref="dataSource"/>
+        <property name="mapperLocations" value="classpath*:mapping/${db.type}/*.map.xml"/>
+    </bean>
+
+	
+</beans>

@@ -1,0 +1,337 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.xinhai.caiyun.customermanage.dao.TzfwtMapper">
+
+    <select id="findTzfwt" resultType="map" parameterType="java.lang.String">
+        SELECT a.ID, a.wtid, a.sjdw, a.sjdwlxdh, a.rwly,a.rwlx,a.cydbm, b.fyry, date_format(a.cyrq,'%Y-%m-%d') cyrq, a.cyry, a.cyjs, b.ypmc, b.ypbm, b.ggxh, b.scdw, b.scdwlxdh, b.scrq, b.ypdj, b.sb, b.ypddrq, b.ypsl,
+         b.ypdw, b.fyzt, b.if_sgr, b.if_ssg, a.cxzt, a.jylb,a.cydwxxdz,a.cydw,
+         a.textField1,a.textField2,a.textField3,a.textField4,a.textField5,a.textField6,a.textField7,a.textField8,a.textField9,a.textField10,
+        a.dateField1,a.dateField2,a.dateField3,a.dateField4,a.dateField5,a.dateField6,a.dateField7,a.dateField8,a.dateField9,a.dateField10,
+        a.selectField1,a.selectField2,a.selectField3,a.selectField4,a.selectField5,a.selectField6,a.selectField7,a.selectField8,a.selectField9,a.selectField10,
+        b.yplaiyuan,b.ypshuxing,b.ypleixin,b.ypzxbz,b.scxkbh,b.ypdanjia,b.if_ck,b.ypbgfl,b.cyypbz,b.cyfangshi,b.scdz,b.bzxx,b.ypphhbh,b.bzq,b.ybjs,b.bysl,b.if_by
+        ,b.ypwt,b.ypbctj,b.yplaiyuanqt,b.ccyqqt,b.cyypbzqt,b.ypleixinqt,b.ypxt,b.rqlxxz,
+        a.qylx,a.bcjdwdz,a.frdb,a.nxse,a.yyzzh,a.bcjdwlxr,a.spxkzbh,a.bcjdwyddh,
+        a.bcjdwyb,a.cyddLevel1,a.cyddLevel2,a.cyddLevel3,a.cyddqt,a.cydwdh,a.cydwyb,a.readonly,
+        a.bgfl1,a.bgfl,a.syrq,a.shouyry,a.zfbs,a.zfyy
+        FROM t_wt_jbxx a left join t_ypgl_jbxx b on a.wtid = b.wtid
+        where a.ID = #{id} ;
+    </select>
+    <select id="findTzfwtByCydbm" resultType="map" parameterType="java.lang.String">
+        SELECT a.ID, a.wtid, a.sjdw, a.sjdwlxdh, a.rwly,a.rwlx,a.cydbm, b.fyry, a.cyrq, a.cyry, a.cyjs, b.ypmc, b.ypbm, b.ggxh, b.scdw, b.scdwlxdh, b.scrq, b.ypdj, b.sb, b.ypddrq, b.ypsl,
+         b.ypdw, b.fyzt, b.if_sgr, b.if_ssg, a.cxzt, a.jylb,a.cydwxxdz,a.cydw,a.cydd,a.syry,
+         a.textField1,a.textField2,a.textField3,a.textField4,a.textField5,a.textField6,a.textField7,a.textField8,a.textField9,a.textField10,
+        a.dateField1,a.dateField2,a.dateField3,a.dateField4,a.dateField5,a.dateField6,a.dateField7,a.dateField8,a.dateField9,a.dateField10,
+        a.selectField1,a.selectField2,a.selectField3,a.selectField4,a.selectField5,a.selectField6,a.selectField7,a.selectField8,a.selectField9,a.selectField10,
+        b.yplaiyuan,b.ypshuxing,b.ypleixin,b.ypzxbz,b.scxkbh,b.ypdanjia,b.if_ck,b.ypbgfl,b.cyypbz,b.cyfangshi,b.scdz,b.bzxx,b.ypphhbh,b.bzq,b.ybjs,b.bysl,b.if_by
+        ,b.ypwt,b.ypbctj,b.yplaiyuanqt,b.ccyqqt,b.cyypbzqt,b.ypleixinqt,b.ypxt,b.rqlxxz,
+        a.qylx,a.bcjdwdz,a.frdb,a.nxse,a.yyzzh,a.bcjdwlxr,a.spxkzbh,a.bcjdwyddh,
+        a.bcjdwyb,a.cyddLevel1,a.cyddLevel2,a.cyddLevel3,a.cyddqt,a.cydwdh,a.cydwyb,a.readonly,
+        a.bgfl1,a.bgfl,a.syrq,a.shouyry,a.zfbs,a.zfyy
+        FROM t_wt_jbxx a left join t_ypgl_jbxx b on a.wtid = b.wtid
+        where a.cydbm like CONCAT('%',#{id},'%') or a.wtid like CONCAT('%',#{id},'%');
+    </select>
+    <select id="findYddcy" resultType="com.xinhai.caiyun.customermanage.api.Tqywt" parameterType="java.lang.String">
+        SELECT *
+        FROM t_wt_jbxx
+        where ID = #{id} ;
+    </select>
+
+    <select id="findTzfwtAll" resultType="com.xinhai.caiyun.customermanage.api.Tqywt">
+        SELECT  a.ID, a.wtid,a.wtdw, a.cydbm, a.sjdw, a.sjdwlxdh, b.scdw, b.scdwlxdh, b.ypmc, b.ypsl, a.cxzt,b.ypbm,a.if_sl
+        FROM t_wt_jbxx a left join t_ypgl_jbxx b on a.wtid = b.wtid
+        <where>
+            <if test="wtid != null">
+                 a.wtid like CONCAT('%',#{wtid},'%') and
+            </if>
+            <if test="cydh != null">
+                a.CYDBM like CONCAT('%',#{cydh},'%') and
+            </if>
+            <if test="ypmc != null">
+                 b.ypmc like CONCAT('%',#{ypmc},'%') and
+            </if>
+            <if test="bcjdwmc != null">
+                a.sjdw like CONCAT('%',#{bcjdwmc},'%') and
+            </if>
+            <if test="ny != null">
+                date_format(a.LRRQ,'%Y-%m') = #{ny} and
+            </if>
+            (a.cxzt = '002' or a.cxzt = '005' or a.cxzt = '004') and a.type = '003'
+        </where>
+        order by a.readonly,a.id desc
+        LIMIT #{start},#{len};
+    </select>
+
+    <select id="findTzfwtAllNums" resultType="java.lang.Integer">
+        SELECT  COUNT(a.id)
+        FROM t_wt_jbxx a left join t_ypgl_jbxx b on a.wtid = b.wtid
+        <where>
+            <if test="wtid != null">
+                 a.wtid like CONCAT('%',#{wtid},'%') and
+            </if>
+            <if test="cydh != null">
+                a.CYDBM like CONCAT('%',#{cydh},'%') and
+            </if>
+            <if test="ypmc != null">
+                 b.ypmc like CONCAT('%',#{ypmc},'%') and
+            </if>
+            <if test="bcjdwmc != null">
+                a.sjdw like CONCAT('%',#{bcjdwmc},'%') and
+            </if>
+            <if test="ny != null">
+                date_format(a.LRRQ,'%Y-%m') = #{ny} and
+            </if>
+            (a.cxzt = '002' or a.cxzt = '005' or a.cxzt = '004') and a.type = '003'
+        </where>
+    </select>
+
+    <select id="findYddcyypAll" resultType="com.xinhai.caiyun.customermanage.api.Typgl">
+        SELECT  id, ypbm, ypmc, ypdj, ypsl, ypdw, scrq, ypphhbh
+        FROM t_ypgl_jbxx
+        <where>
+            <if test="ypmc != null">
+                ypmc like CONCAT('%',#{ypmc},'%') and
+            </if>
+            wtid in (${wtid})
+        </where>
+        order by id desc
+        LIMIT #{start},#{len};
+    </select>
+
+    <select id="findYddcyypAllNums" resultType="java.lang.Integer">
+        SELECT  COUNT(id)
+        FROM t_ypgl_jbxx
+        <where>
+            <if test="ypmc != null">
+                ypmc like CONCAT('%',#{ypmc},'%') and
+            </if>
+            wtid in (${wtid})
+        </where>
+    </select>
+
+    <!--插入-->
+    <insert id="createTzfwt" parameterType="com.xinhai.caiyun.customermanage.api.Tqywt" keyProperty="id" useGeneratedKeys="true">
+        INSERT INTO t_wt_jbxx(wtid,CYDBM,type, sjdw, sjdwlxr, sjdwlxdh, sjdwxxdz, wtdw,cydw, cydwlxr, cydwlxdh, cydwxxdz, rwly,rwlx, cyrq, cyry, cyjs, cydd, cylb, cyfs, cyddsshj, zxbz, cxzt, if_sl, jylb,bz,
+          qylx,bcjdwdz,frdb,nxse,yyzzh,bcjdwlxr,spxkzbh,bcjdwyddh,bcjdwyb,cyddLevel1,cyddLevel2,cyddLevel3,cyddqt,cydwdh,cydwyb,slrq,bgfl1,bgfl,lrry,lrrq,wtslr,syrq,shouyry,zfbs,zfyy,syry
+        )
+        VALUES
+        (#{wtid},#{cydbm},#{type}, #{sjdw}, #{sjdwlxr}, #{sjdwlxdh}, #{sjdwxxdz}, #{cydw}, #{cydw}, #{cydwlxr}, #{cydwlxdh}, #{cydwxxdz}, #{rwly},#{rwlx}, #{cyrq}, #{cyry}, #{cyjs}, #{cydd}, #{cylb}, #{cyfs},
+         #{cyddsshj}, #{zxbz}, #{cxzt}, #{if_sl}, #{jylb}, #{bz},
+        #{qylx},#{bcjdwdz},#{frdb},#{nxse},#{yyzzh},#{bcjdwlxr},#{spxkzbh},#{bcjdwyddh},#{bcjdwyb},#{cyddLevel1},#{cyddLevel2},#{cyddLevel3},#{cyddqt},#{cydwdh},#{cydwyb},now(),#{bgfl1},#{bgfl},
+        #{lrry},now(),#{wtslr},#{syrq},#{shouyry},#{zfbs},#{zfyy},#{syry}
+        );
+    </insert>
+
+    <!--导入委托信息 刘-->
+    <insert id="createTzfwtliu">
+        <foreach collection="list" item="map" index="index" separator=";">
+    <!--INSERT INTO t_wt_jbxx(wtid, sjdw, sjdwlxr, sjdwlxdh, sjdwxxdz, cydw, cydwlxr, cydwlxdh, cydwxxdz, rwly, cyrq, cyry, cyjs, cydd, cylb, cyfs, cyddsshj, zxbz, cxzt, if_sl,syry,syrq,bz)
+    VALUES
+    (#{map.wtid}, #{map.sjdw}, #{map.sjdwlxr}, #{map.sjdwlxdh}, #{map.sjdwxxdz}, #{map.cydw}, #{map.cydwlxr}, #{map.cydwlxdh}, #{map.cydwxxdz}, #{map.rwly}, #{map.cyrq}, #{map.cyry}, #{map.cyjs}, #{map.cydd}, #{map.cylb}, #{map.cyfs},
+    #{map.cyddsshj}, #{map.zxbz}, #{map.cxzt}, #{map.if_sl}, #{map.syry},#{map.syrq},#{map.bzxx});
+     -->
+
+      INSERT INTO t_wt_jbxx(wtid, sjdw,  sjdwlxdh,  rwly, cyrq, cyry,cydd,syry,syrq,bz,cydbm,cxzt,TYPE)
+      VALUES
+      (#{map.wtid}, #{map.sjdw},  #{map.sjdwlxdh}, #{map.rwly}, #{map.cyrq}, #{map.cyry}, #{map.cydd},
+      #{map.syry},#{map.syrq},#{map.bzxx},#{map.wtid},'002','003')
+</foreach>
+</insert>
+
+    <!-- 通过样品编码查找数据 ch-->
+    <select id="checkYpbm" resultType="java.lang.String">
+        select id  from t_wt_jbxx where wtid=#{wtid}
+    </select>
+
+<update id="updateTzfwt" parameterType="com.xinhai.caiyun.customermanage.api.Tqywt">
+UPDATE t_wt_jbxx
+<set>
+    <if test="tqywt.wtid != null">
+        wtid = #{tqywt.wtid},
+    </if>
+    <if test="tqywt.cydbm != null">
+        cydbm = #{tqywt.cydbm},
+    </if>
+    <if test="tqywt.sjdw != null">
+        sjdw = #{tqywt.sjdw},
+    </if>
+    <if test="tqywt.sjdwlxr != null">
+        sjdwlxr = #{tqywt.sjdwlxr},
+    </if>
+    <if test="tqywt.sjdwlxdh != null">
+        sjdwlxdh = #{tqywt.sjdwlxdh},
+    </if>
+    <if test="tqywt.sjdwxxdz != null">
+        sjdwxxdz = #{tqywt.sjdwxxdz},
+    </if>
+    <if test="tqywt.cydw != null">
+        cydw = #{tqywt.cydw},wtdw = #{tqywt.cydw},
+    </if>
+    <if test="tqywt.cydwlxr != null">
+        cydwlxr = #{tqywt.cydwlxr},
+    </if>
+    <if test="tqywt.cydwlxdh != null">
+        cydwlxdh = #{tqywt.cydwlxdh},
+    </if>
+    <if test="tqywt.cydwxxdz != null">
+        cydwxxdz = #{tqywt.cydwxxdz},
+    </if>
+    <if test="tqywt.rwly != null">
+        rwly = #{tqywt.rwly},
+    </if>
+    <if test="tqywt.rwlx != null">
+        rwlx = #{tqywt.rwlx},
+    </if>
+    <if test="tqywt.cyrq != null">
+        cyrq = #{tqywt.cyrq},
+    </if>
+    <if test="tqywt.cyry != null">
+        cyry = #{tqywt.cyry},
+    </if>
+    <if test="tqywt.cydd != null">
+        cydd = #{tqywt.cydd},
+    </if>
+    <if test="tqywt.cylb != null">
+        cylb = #{tqywt.cylb},
+    </if>
+    <if test="tqywt.cyfs != null">
+        cyfs = #{tqywt.cyfs},
+    </if>
+    <if test="tqywt.cyddsshj != null">
+        cyddsshj = #{tqywt.cyddsshj},
+    </if>
+    <if test="tqywt.zxbz != null">
+        zxbz = #{tqywt.zxbz},
+    </if>
+    <if test="tqywt.cyjs != null">
+        cyjs = #{tqywt.cyjs},
+    </if>
+    <if test="tqywt.cxzt != null">
+        cxzt = #{tqywt.cxzt},
+    </if>
+    <if test="tqywt.jylb != null">
+        jylb = #{tqywt.jylb},
+    </if>
+    <if test="tqywt.bz != null">
+        bz = #{tqywt.bz},
+    </if>
+    <if test="tqywt.qylx != null">
+      qylx = #{tqywt.qylx},
+    </if>
+    <if test="tqywt.bcjdwdz != null">
+      bcjdwdz = #{tqywt.bcjdwdz},
+    </if>
+    <if test="tqywt.frdb != null">
+      frdb = #{tqywt.frdb},
+    </if>
+    <if test="tqywt.nxse != null">
+      nxse = #{tqywt.nxse},
+    </if>
+    <if test="tqywt.syrq != null">
+        syrq = #{tqywt.syrq},
+    </if>
+    <if test="tqywt.yyzzh != null">
+      yyzzh = #{tqywt.yyzzh},
+    </if>
+    <if test="tqywt.bcjdwlxr != null">
+      bcjdwlxr = #{tqywt.bcjdwlxr},
+    </if>
+    <if test="tqywt.spxkzbh != null">
+      spxkzbh = #{tqywt.spxkzbh},
+    </if>
+    <if test="tqywt.bcjdwyddh != null">
+      bcjdwyddh = #{tqywt.bcjdwyddh},
+    </if>
+    <if test="tqywt.bcjdwyb != null">
+      bcjdwyb = #{tqywt.bcjdwyb},
+    </if>
+    <if test="tqywt.cyddLevel1 != null">
+      cyddLevel1 = #{tqywt.cyddLevel1},
+    </if>
+    <if test="tqywt.cyddLevel2 != null">
+      cyddLevel2 = #{tqywt.cyddLevel2},
+    </if>
+    <if test="tqywt.cyddLevel3 != null">
+      cyddLevel3 = #{tqywt.cyddLevel3},
+    </if>
+    <if test="tqywt.cyddqt != null">
+      cyddqt = #{tqywt.cyddqt},
+    </if>
+    <if test="tqywt.cydwdh != null">
+      cydwdh = #{tqywt.cydwdh},
+    </if>
+    <if test="tqywt.cydwyb != null">
+      cydwyb = #{tqywt.cydwyb},
+    </if>
+    <if test="tqywt.bgfl1 != null">
+        bgfl1 = #{tqywt.bgfl1},
+    </if>
+    <if test="tqywt.bgfl != null">
+        bgfl = #{tqywt.bgfl},
+    </if>
+    <if test="tqywt.shouyry != null">
+        shouyry = #{tqywt.shouyry},
+    </if>
+    <if test="tqywt.zfbs != null">
+        zfbs = #{tqywt.zfbs},
+    </if>
+    <if test="tqywt.zfyy != null">
+        zfyy = #{tqywt.zfyy},
+    </if>
+    <if test="tqywt.lrry != null">
+        lrry = #{tqywt.lrry}
+    </if>
+    WHERE ID = #{tqywt.id}
+</set>
+</update>
+
+
+<delete id="deleteTzfwtbyId" parameterType="java.lang.String">
+delete from t_wt_jbxx where id = #{id}
+</delete>
+
+<select id="findAllWt" resultType="com.xinhai.caiyun.customermanage.api.Tzfwt">
+SELECT  id, htmc, WTID, HTBM,TYPE
+FROM t_wt_jbxx
+where SCBZ = FALSE
+ORDER BY TYPE,ID
+</select>
+
+<select id="selectCydbh" resultType="String">
+SELECT  wtid
+FROM t_wt_jbxx
+where id = #{id}
+</select>
+
+<!--通过id查询样品信息-->
+    <select id="getyddcyyp" resultType="com.xinhai.caiyun.customermanage.api.Typgl" parameterType="java.lang.String">
+    SELECT  *
+    FROM t_ypgl_jbxx
+    where id = #{id}
+    </select>
+
+    <!--企业委托登记模块，查询全部客户信息-->
+    <select id="getQueryAllCustomerInformationM" resultType="com.xinhai.caiyun.customermanage.api.Khxxgl" >
+        SELECT ID, khmc, lxdh, SFDM, SFMC, CSDM, CSMC, XJDM, XJMC, xxdz, YZBM, yx, lxr, bz
+        FROM t_wtkh_jbxx
+        order by ID desc
+        LIMIT #{start},#{len};
+    </select>
+
+    <!--企业委托登记模块，查询客户信息总数-->
+    <select id="getQuerySumCustomerInformationM" resultType="java.lang.Integer">
+        select count(id) from t_wtkh_jbxx
+    </select>
+
+    <!--通过id 查询客户信息-->
+    <select id="queryCustomerInformationM" resultType="map" parameterType="java.lang.String">
+    SELECT ID,KHMC,LXDH,SFDM,CSDM,XJDM,XXDZ,YZBM,BZ
+    FROM t_wtkh_jbxx
+    where id = #{id}
+    </select>
+    <!-- 通过样品id 批量删除 样品 下所有检测项目信息 -->
+    <delete id="delAllYpJcxm">
+            delete from t_yp_jcxm where ypid in (${ypid})
+    </delete>
+</mapper>

@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xinhai.caiyun.systemmanager.dao.DzbglMapper">
+    <select id="selectDzbgl" resultType="Map">
+        select id,name,sex,csrq,mz,gzsj,rdsj,dnzw,dnzw1,jg,whcd,bzxx from dzbgl
+        where id>0
+        <if test="map.name!=null and map.name!= ''">
+            and name = #{map.name}
+        </if>
+        limit ${map.start},${map.length};
+    </select>
+    <select id="selectDzbglCount" resultType="java.lang.Integer">
+        select count(id) from dzbgl
+        where id>0
+        <if test="map.name!=null and map.name!= ''">
+            and name = #{map.name}
+        </if>
+    </select>
+    <!--新增党员信息-->
+    <insert id="addDyxx">
+        insert into dzbgl(name,sex,csrq,mz,gzsj,rdsj,dnzw,dnzw1,jg,whcd,bzxx)
+        values(#{map.name},#{map.sex},#{map.csrq},#{map.mz},#{map.gzsj},#{map.rdsj},#{map.dnzw},#{map.dnzw1},#{map.jg},#{map.whcd},#{map.bzxx})
+    </insert>
+    <!--删除党员信息-->
+    <delete id="deleteDyxx">
+        delete from dzbgl where id = #{map.id}
+    </delete>
+    <!--修改党员信息-->
+    <update id="updateDyxx">
+        update dzbgl set name = #{map.name},sex = #{map.sex},csrq = #{map.csrq},mz = #{map.mz},gzsj = #{map.gzsj},rdsj = #{map.rdsj},dnzw = #{map.dnzw},dnzw1 = #{map.dnzw1},jg = #{map.jg},whcd = #{map.whcd},bzxx = #{map.bzxx} where id = #{map.id}
+    </update>
+    <!--查询文件详细信息-->
+    <select id="selectWjsc" resultType="Map">
+        select id,name,lx from fczzwj
+        where id>0
+        <if test="map.name!=null and map.name!= ''">
+            and name = #{map.name}
+        </if>
+        <if test="map.lx!=null and map.lx!=''">
+            and lx = #{map.lx}
+        </if>
+        limit ${map.start},${map.length};
+    </select>
+    <select id="selectWjscCount" resultType="java.lang.Integer">
+        select count(id) from fczzwj
+        where id>0
+        <if test="map.name!=null and map.name!= ''">
+            and name = #{map.name}
+        </if>
+        <if test="map.lx!=null and map.lx!=''">
+            and lx = #{map.lx}
+        </if>
+    </select>
+    <!--查询身份-->
+    <select id="selectscry" resultType="Map">
+        select name from role where id =
+          (select role_id from user_role where user_id =
+            (select u.id from user u where u.zydm = #{map.dqry}))
+    </select>
+    <!--学习园地文件指定人员查看-->
+    <insert id="insertRyqx">
+        insert into fxxydryqx (wjid,zydm)values(#{map.wjid},#{map.zydm})
+    </insert>
+    <!--下载前的查看-->
+    <select id="selectwjry" resultType="java.lang.Integer">
+        select count(id) from fxxydryqx where wjid = #{map.wjid} and zydm = #{map.zydm}
+    </select>
+    <!--新增文件地址-->
+    <insert id="addwjdz">
+        insert into fczzwj(name,wjlj,lx,scry)values(#{wjname},#{path},#{lx},#{scry})
+    </insert>
+    <!--查询文件了路径-->
+    <select id="selectFcwjlj" resultType="Map">
+        select name,wjlj from fczzwj where id = #{id}
+    </select>
+    <select id="findFCwj" resultType="Map">
+        select id,name,wjlj from fczzwj where id =#{id}
+    </select>
+    <!--增加下载记录-->
+    <insert id="insertFcwjxzjl">
+        insert into fczzwjxzjl(zydm,wjid,xzsj)values(#{map.zydm},#{map.wjid},now())
+    </insert>
+    <!--查询下载记录-->
+    <select id="selectXZJL" resultType="Map">
+        select f.id,(select name from user where zydm = f.zydm) as ryname,(select name from fczzwj where id = f.wjid) as wjname,f.xzsj from fczzwjxzjl f
+        order by f.xzsj desc
+        limit ${map.start},${map.length}
+    </select>
+    <select id="selectXZJLCount" resultType="java.lang.Integer">
+        select count(id) from fczzwjxzjl
+    </select>
+</mapper>

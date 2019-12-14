@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- namespace必须和接口名称一一对应 -->
+<mapper namespace="com.xinhai.caiyun.statisticalanalysis.dao.NdhtMapper">
+<select id="findAllNndht" resultType="map">
+    select w.lrrq, w.wtid,w.htmc, w.dwmc, w.lxdh,w.yzbm,y.ypmc,w.id
+    from (select id,lrrq, wtid,htmc,dwmc,lxdh,yzbm from t_wt_jbxx
+    <where>
+        <choose>
+            <when test="map.startDate!=null and map.endDate!=null">
+               lrrq between #{map.startDate} and #{map.endDate}
+            </when>
+            <otherwise>
+                <choose>
+                    <when test="map.startDate!=null and map.endDate==null">
+                        lrrq  &gt;= #{map.startDate}
+                    </when>
+                    <otherwise>
+                        <choose>
+                            <when test="map.startDate==null and map.endDate!=null">
+                                lrrq &lt;= #{map.endDate}
+                            </when>
+                        </choose>
+                    </otherwise>
+                </choose>
+            </otherwise>
+        </choose>
+    </where>
+    ) w LEFT JOIN t_ypgl_jbxx y
+    on w.WTID=y.WTID
+    order by w.id desc
+    limit #{map.start},#{map.length};
+</select>
+
+    <select id="findAllNdhtNum" resultType="java.lang.Integer">
+    select count(*)
+    from (select id,lrrq, wtid,htmc,dwmc,lxdh,yzbm from t_wt_jbxx
+        <where>
+            <choose>
+                <when test="map.startDate!=null and map.endDate!=null">
+                    lrrq between #{map.startDate} and #{map.endDate}
+                </when>
+                <otherwise>
+                    <choose>
+                        <when test="map.startDate!=null and map.endDate==null">
+                            lrrq  &gt;= #{map.startDate}
+                        </when>
+                        <otherwise>
+                            <choose>
+                                <when test="map.startDate==null and map.endDate!=null">
+                                    lrrq &lt;= #{map.endDate}
+                                </when>
+                            </choose>
+                        </otherwise>
+                    </choose>
+                </otherwise>
+            </choose>
+        </where>
+    ) w LEFT JOIN t_ypgl_jbxx y
+    on w.WTID=y.WTID
+    order by w.id desc;
+</select>
+
+    <select id="findOneNdhtByid"  resultType="com.xinhai.caiyun.statisticalanalysis.api.Ndht">
+        select w.lrrq as lrrq, w.wtid as wtid,w.htmc as htmc, w.dwmc as dwmc, w.lxdh as lxdh,w.yzbm as yzbm,y.ypmc as ypmc
+        from (select * from t_wt_jbxx where id=#{id}) w left join t_ypgl_jbxx y
+        on w.wtid=y.wtid;
+    </select>
+</mapper>

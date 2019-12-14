@@ -1,0 +1,22 @@
+.d-toolbar{    
+	left:10%!important;
+    width: 80%!important;}
+.d-panel-showcaptionbar{
+	left:10%!important;
+    width: 80%!important;
+}
+.d-dock-layout{
+	background:#fff;
+}
+.d-grid .header-table .header{
+	color: #555;
+    background-color: #efeff7;
+    border:none;
+	
+}
+.d-grid .header-table .hover-header, .d-grid .header-table .menu-open-header{
+	background-color: #efeff7;
+}
+.d-grid .header-table .header-option-button{
+	border-left:none;
+}

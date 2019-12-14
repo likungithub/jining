@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:dubbo="http://code.alibabatech.com/schema/dubbo"
+	   xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
+	http://code.alibabatech.com/schema/dubbo http://code.alibabatech.com/schema/dubbo/dubbo.xsd">
+	<!--
+		name 当前应用名称，该名称不能与其他的provider重复
+		owner 当前应用负责人，用于服务治理，一般为公司的名称，可以重复
+		organization 组织名称，此配置项建议直接写死在配置中
+	-->
+	<dubbo:application name="customermanage-provider" owner="com.xinhai.caiyun"
+					   organization="com.xinhai.caiyun"/>
+	<dubbo:protocol name="dubbo" serialization="kryo"/>
+	<!--
+		注册中心服务器地址
+		同一集群内的多个地址用逗号分隔，如：ip:port, ip:port
+		不同集群的注册中心，请配置多个<dubbo:registry>标签
+		${dubbo.registry.address} 值为properties/dubbo.properties配置文件中的属性值
+	-->
+	<dubbo:registry address="${dubbo.registry.address}"/>
+
+	<!--配置扫描包-->
+	<dubbo:annotation package="com.xinhai.caiyun.customermanage.business"/>
+
+	<!--
+		配置provider提供的服务
+		interface 服务接口
+		ref 服务对象实现引用，与bean的id对应
+	-->
+	<dubbo:service interface="com.xinhai.caiyun.customermanage.api.EmployeeService"
+				   ref="employeeServiceImpl" protocol="dubbo"/>
+	<bean id="employeeServiceImpl" class="com.xinhai.caiyun.customermanage.business.EmployeeServiceImpl"/>
+
+</beans>

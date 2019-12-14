@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!-- namespace必须和接口名称一一对应 -->
+<mapper namespace="com.xinhai.Log.dao.LogMapper">
+	<resultMap id="_log" type="com.xinhai.Log.api.Log">
+		<id property="id" column="ID" />
+		<result property="operatetime" column="CZSJ" />
+		<result property="companyname" column="GSMC" />
+		<result property="userid" column="YHBM" />
+		<result property="username" column="YHXM" />
+		<result property="ip" column="YHIP" />
+		<!-- <result property="taxpayersign" column="NSRSBH" /> -->
+		<result property="institutionid" column="DLJG_BM" />
+<!-- 		<result property="staffmember" column="ZYDM" />
+		<result property="staffmembername" column="YGXM" /> -->
+		<result property="module" column="CZMK" />
+		<result property="content" column="RZNR" />
+	</resultMap>
+	<!-- 插入log记录 -->
+	<insert id="createLog" parameterType="com.xinhai.Log.api.Log"
+		keyProperty="id" useGeneratedKeys="true">
+		INSERT INTO LOG_CZRZ (CZSJ,GSMC,YHBM,YHXM,YHIP,DLJG_BM,CZMK,RZNR)
+		VALUES (#{operatetime},#{companyname},#{userid}, #{username}, #{ip}, #{institutionid},#{module},#{content});
+	</insert>
+	<!--获取一个log数据 -->
+    <select id="findLog" resultMap="_log" parameterType="string">
+        select ID,CZSJ,GSMC,YHBM,YHXM,YHIP,DLJG_BM,CZMK,RZNR from LOG_CZRZ where id = #{id}; 
+    </select>
+    <!--查询 -->
+    <select id="searchLog" resultMap="_log">
+        select ID,CZSJ,GSMC,YHBM,YHXM,YHIP,DLJG_BM,CZMK,RZNR from LOG_CZRZ where 1=1
+        <if test="starDate !=null">
+            AND CZSJ >= #{starDate}
+        </if>
+        <if test="endDate !=null">
+            AND #{endDate} >=CZSJ
+        </if>
+    </select>
+    <select id="findAllLoginLogSize" resultType="long">
+        select count(id) from LOG_CZRZ where 1=1 
+        <if test="starDate!=null">
+            and CZSJ >= #{starDate}
+        </if>
+        <if test="endDate!=null">
+            and #{endDate} > CZSJ
+        </if>
+    </select>
+    <select id="getLoginLogByPage" resultMap="_log">
+       SELECT ID,CZSJ,GSMC,YHBM,YHXM,YHIP,DLJG_BM,CZMK,RZNR from LOG_CZRZ WHERE 1=1
+        <if test="starDate!=null">
+            and CZSJ >= #{starDate}
+        </if>
+        <if test="endDate!=null">
+            and #{endDate} > CZSJ
+        </if>
+        LIMIT #{start},#{length};
+    </select>
+	<!--通过id,更新一条log数据 -->
+	<!-- <update id="updateLog" parameterType="com.xinhai.Log.api.Log">
+		UPDATE LOG_CZRZ
+		<set>
+			<if test="log.logDate != null">
+				logdate = #{log.logDate},
+			</if>
+			<if test="log.menuName != null">
+				menuID = #{log.menuID},
+			</if>
+			<if test="log.logValue != null">
+				logValue = #{log.logValue},
+			</if>
+			<if test="log.userID != null">
+				userID = #{log.userID},
+			</if>
+		</set>
+		WHERE id = #{id};
+	</update> -->
+	<!--同时删除多条额log数据 -->
+	<!-- <delete id="deleteLogList" parameterType="list">
+		DELETE FROM Log
+		WHERE id in
+		<foreach item="id" collection="list" open="(" separator=","
+			close=")">
+			#{id}
+		</foreach>
+	</delete> -->
+	<!--通过id删除一条log数据 -->
+	<!-- <delete id="deleteLog" parameterType="string">
+		DELETE FROM Log
+		WHERE id =
+		#{id}
+	</delete> -->
+</mapper>

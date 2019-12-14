@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+		"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.xinhai.resourcemanager.dao.ResourceMapper">
+	<resultMap id="resourceMap" type="com.xinhai.resourcemanager.entity.Resource">
+		<id property="id" column="id"/>
+		<result property="funcId" column="func_id"/>
+		<result property="customerId" column="customer_id"/>
+		<result property="name" column="name"/>
+		<result property="description" column="description"/>
+		<result property="identifier" column="identifier"/>
+		<result property="menuIcon" column="menu_icon"/>
+		<result property="url" column="url"/>
+		<result property="category" column="category"/>
+		<result property="parentId" column="parent_id"/>
+		<result property="orderNo" column="order_no"/>
+		<result property="enabled" column="enabled"/>
+	</resultMap>
+	<insert id="addResource">
+		INSERT INTO resource (
+			id,
+			func_id,
+			customer_id,
+			name,
+			description,
+			identifier,
+			menu_icon,
+			url,
+			category,
+			parent_id,
+			order_no,
+			enabled,
+			update_date)
+		VALUES (
+			#{resource.id},
+			#{resource.funcId},
+			#{resource.customerId},
+			#{resource.name},
+			#{resource.description},
+			#{resource.identifier},
+			#{resource.menuIcon},
+			#{resource.url},
+			#{resource.category},
+			#{resource.parentId},
+			#{resource.orderNo},
+			#{resource.enabled},
+			now()
+		);
+	</insert>
+
+	<update id="updateResource">
+		UPDATE resource
+		SET
+			name = #{resource.name},
+			enabled = #{resource.enabled},
+			category = #{resource.category},
+			identifier = #{resource.identifier},
+			url = #{resource.url},
+			menu_icon = #{resource.menuIcon},
+			description = #{resource.description},
+			update_date = now()
+		WHERE id = #{id};
+	</update>
+	<update id="moveResource">
+		UPDATE resource
+		SET
+			parent_id = #{parentId},
+			order_no = #{order},
+			update_date = now()
+		WHERE id = #{id};
+	</update>
+	<delete id="deleteResource">
+		DELETE FROM resource
+		WHERE id = #{id};
+	</delete>
+	<delete id="deleteResources">
+		DELETE FROM resource WHERE customer_id = #{customerId} AND func_id IN
+		<foreach item="id" collection="authIds" open="(" separator=","
+				 close=")">
+			#{id}
+		</foreach>
+	</delete>
+    
+    <!-- 获得全部资源节点 -->
+	<select id="getResources" resultMap="resourceMap">
+		SELECT id, func_id, customer_id, name, description, identifier,
+            menu_icon, url, category, parent_id, order_no, enabled
+		FROM resource
+		WHERE customer_id = #{customerId} order by order_no, update_date desc;
+	</select>
+	
+	<!-- 获得当前员工的资源节点 -->
+	<select id="getResourcesByUserId" resultMap="resourceMap">
+        SELECT id, func_id, customer_id, name, description, identifier,
+            menu_icon, url, category, parent_id, order_no, enabled
+        FROM resource
+        WHERE id in(
+	            SELECT resource_id
+	            FROM role_auth
+	            WHERE role_id in (
+	            select role_id from user_role where user_id = #{id})
+	            )
+        order by order_no, update_date desc;
+    </select>
+    
+    <!-- 根据资源id查找资源信息 -->
+	<select id="getResource" resultMap="resourceMap">
+		SELECT id, func_id, customer_id, name, description, identifier,
+            menu_icon, url, category, parent_id, order_no, enabled
+		FROM resource
+		WHERE id = #{id};
+	</select>
+	
+	<!-- 获取某部门下的最大序号 -->
+	<select id="getMaxOrder" resultType="java.lang.Integer">
+		SELECT MAX(order_no)
+		FROM resource
+		WHERE customer_id = #{customerId} AND parent_id = #{parentId};
+	</select>
+	
+	<!-- 查询资源节点是否存在 -->
+	<select id="isExist" resultType="java.lang.Integer">
+		SELECT count(1)
+		FROM resource
+		WHERE customer_id = #{customerId} AND name = #{name}
+		<if test="id != ''">
+			AND id &lt;&gt; #{id}
+		</if>
+	</select>
+</mapper>

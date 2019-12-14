@@ -1,0 +1,2267 @@
+.search-container input {
+	height: 18px;
+}
+
+.search-container {
+	font-family: "Microsoft YaHei", Arial, sans-serif;
+	font-size: 12px;
+	color: #1e2c54;
+	background-color: #efeff7;
+	height: auto;
+	padding: 20px 0px 0px 0px;
+	border: 1px solid #bcd4ec;
+}
+
+.tools-bar-container {
+	height: 333px;
+	margin-bottom: 20px;
+	overflow: auto;
+	overflow-x: hidden;
+}
+
+.clear {
+	clear: both;
+}
+
+.search-container .tools-bar {
+	margin-bottom: 15px;
+
+}
+
+.search-container .common {
+
+}
+
+.search-container .content select {
+	width: 173px;
+	height: 26px;
+}
+
+.search-container .title {
+	float: left;
+	width: 110px;
+	text-align: center;
+	margin-right: 36px;
+	padding: 3px 0px;
+}
+
+.search-container .content {
+	float: left;
+	position: relative;
+	width: calc(100% - 160px);
+}
+
+.search-container .content .option {
+	float: left;
+	padding: 3px 10px;
+	margin-right: 10px;
+	cursor: pointer;
+}
+
+.search-container .option.selected {
+	background-color: #008dde;
+	color: #fff;
+}
+
+.search-container .searchinput {
+
+}
+
+.search-container .search-bar {
+	margin-bottom: 15px;
+}
+
+.search-container .select-box {
+	background-color: #fff;
+	border: 1px solid #ccc;
+	position: absolute;
+	display: none;
+	width: 180px;
+	max-height: 107px;
+	min-height: 30px;
+	overflow-x: hidden;
+	overflow-y: auto;
+	z-index: 30000;
+	margin-top: -5px;
+}
+
+.search-container .select-bar input {
+	margin-bottom: 5px;
+}
+
+.search-container .select-box label {
+	display: block;
+	width: 173px;
+	cursor: pointer;
+}
+
+.search-container .select-box label:hover {
+	background-color: #efeff7;
+}
+
+.search-container .select-box label input {
+	margin-right: 10px;
+}
+
+.search-container .nodes-bar {
+	margin-top: 5px;
+}
+
+.search-container .nodes-bar .nodes {
+	float: left;
+	background-color: #cae2fc;
+	border: 1px solid #bcd4ec;
+	margin-right: 5px;
+}
+
+.search-container .nodes-bar .nodes .delete-node {
+	float: left;
+	padding: 0px 5px;
+	cursor: pointer;
+}
+
+.search-container .nodes-bar .nodes span {
+	display: block;
+	float: left;
+	padding: 0px 5px;
+	width: 85px;
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+}
+
+.search-container .date-bar span {
+	float: left;
+	margin-right: 10px;
+	font-size: 16px;
+}
+
+.search-container .button-bar {
+	margin-left: 150px;
+}
+
+.search-container .button {
+	padding: 8px 20px;
+	float: left;
+	text-align: center;
+	cursor: pointer;
+	background-color: #008dde;
+	color: #fff;
+	margin-right: 20px;
+	border-radius: 5px;
+}
+
+.search-container .button:hover {
+	background-color: #02254b;
+}
+
+.search-container .more-box {
+	background-color: #fff;
+	position: absolute;
+	width: 180px;
+	margin-left: 190px;
+	margin-top: 40px;
+	border: 1px solid #ccc;
+	display: none;
+	max-height: 200px;
+	overflow-x: hidden;
+	overflow-y: auto;
+}
+
+.search-container .more-box label {
+	padding: 5px 0;
+	display: block;
+	width: 100%;
+	cursor: pointer;
+}
+
+.search-container .more-box label input {
+	margin-right: 10px;
+}
+
+.search-container .more-box label:hover {
+	background-color: #efeff7;
+}
+
+.search-container .more-box .clear-all {
+	color: #008dde;
+	height: 20px;
+	background-color: #efeff7;
+	padding: 12px 0px 12px 10px;
+	cursor: pointer;
+}
+
+.search-container .buttons {
+
+}
+
+.pickup {
+	width: 70px;
+	height: 20px;
+	background: #bcd2ec;
+	text-align: center;
+	cursor: pointer;
+	margin: 0 auto;
+}
+
+.pickup div {
+	float: right;
+	margin-right: 5px;
+	font-size: 18px;
+}
+
+.search-container input[type="text"] {
+	height: 25px;
+	width: 180px;
+	color: #555;
+	border: 1px solid #ccc;
+	border-radius: 3px;
+	box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
+	transition: border linear .2s, box-shadow linear .2s;
+	text-indent: 6px;
+}
+
+.search-container .select-bar .icon {
+	position: absolute;
+	margin-left: 160px;
+	margin-top: 5px;
+	height: 20px;
+	cursor: pointer;
+}
+
+.search-container .select-bar .arrow {
+	position: absolute;
+	margin-left: 160px;
+	margin-top: -28px;
+	cursor: pointer;
+}
+
+.search-container .select-bar .icon:hover {
+	opacity: 0.8;
+}
+
+#d_toolBar2,#d_toolBar1,
+#d_toolBarBtn,#d_searchDialog,#d_toolBar3,
+#d_toolBar4,#d_toolBarDetail,#d_toolBar5,#d_toolBar6,#d_toolBar7,
+#d_operationToolBar {
+	font-family: "Microsoft YaHei", Arial, ����, ����, sans-serif;
+}
+
+#d_toolBar1.d-toolbar {
+	background-color: #fff;
+	height: 60px;
+}
+
+#d_toolBar1.d-toolbar .toolbar-left-wrap {
+	height: 60px;
+}
+
+#d_toolBar1.d-toolbar .d-text-box {
+	width: 220px !important;
+	height: 25px;
+	padding-top: 3px;
+	margin-left: 26px;
+	margin-top: 16px;
+	border-radius: 4px;
+}
+
+#d_toolBar1 .d-text-box>.editor-wrapper input {
+	color: #777;
+}
+
+#d_toolBar1 #d_simpleSearchButton,#d_toolBar1 #d_newButton,#d_toolBar1 #d_deleteButton,#d_toolBar1 #d_viewButton,#d_toolBar1 #d_exportAllType,#d_toolBar1 #d_resetButton{
+	width: 70px;
+	height: 28px;
+	background: #008dde;
+	color: #fff;
+	margin: 16px 0 0 10px;
+	border-radius: 3px;
+}
+#d_toolBar1 .d-icon{
+display:none;
+}
+#d_toolBar1 #d_simpleSearchButton:hover,#d_toolBar1 #d_newButton:hover,#d_toolBar1 #d_deleteButton:hover,#d_toolBar1 #d_viewButton:hover ,#d_toolBar1 #d_exportAllType,#d_toolBar1 #d_resetButton:hover{
+	background: #1e2c54;
+}
+
+#d_toolBar1 #d_advancedSearchButton {
+	width: 70px;
+	height: 28px;
+	background: #008dde;
+	color: #fff;
+	margin: 16px 0 0 10px;
+	border-radius: 3px;
+}
+
+#d_toolBar1 #d_advancedSearchButton:hover {
+	background: #1e2c54;
+}
+
+#d_toolBar2 {
+	background-color: #fff;
+	height: 40px;
+}
+
+#d_toolBar1 #d_exportButton  {
+	width: 100px;
+	height: 28px;
+	background: #008dde;
+	color: #fff;
+	margin: 16px 0 0 10px;
+	border-radius: 3px;
+}
+
+#d_toolBar1 #d_exportButton:hover {
+	background: #1e2c54;
+}
+
+#d_toolBar2 #d_newButton {
+	background: #efeff7;
+	height: 27px;
+	margin-top: 9px;
+	margin-right: 3px;
+	color: #008dde;
+	width: 60px;
+	border-radius: 0px;
+}
+
+#d_toolBar2 #d_newButton .d-icon {
+	background: url("view/cmdb/assets/img/newButton.png") no-repeat
+		!important;
+}
+
+#d_toolBar2 #d_newButton:hover {
+	color: #fff;
+	background: #008dde;
+}
+
+#d_toolBar2 #d_newButton:hover .d-icon {
+	background: url("view/cmdb/assets/img/newButtonhover.png") no-repeat
+		!important;
+}
+
+#d_toolBar2 #d_deleteButton {
+	background: #efeff7;
+	height: 27px;
+	margin-top: 9px;
+	margin-right: 3px;
+	color: #008dde;
+	width: 60px;
+	border-radius: 0px;
+}
+
+#d_toolBar2 #d_deleteButton .d-icon {
+	background: url("view/cmdb/assets/img/deleteButton.png") no-repeat
+		!important;
+}
+
+#d_toolBar2 #d_deleteButton:hover {
+	color: #fff;
+	background: #008dde;
+}
+
+#d_toolBar2 #d_deleteButton:hover .d-icon {
+	background: url("view/cmdb/assets/img/deleteButtonhover.png") no-repeat
+		!important;
+}
+
+#d_toolBar2 #d_importButton {
+	background: #efeff7;
+	height: 27px;
+	margin-top: 9px;
+	margin-right: 3px;
+	color: #008dde;
+	width: 60px;
+	border-radius: 0px;
+}
+
+#d_toolBar2 #d_importButton .d-icon {
+	background: url("view/cmdb/assets/img/importButton.png") no-repeat
+		!important;
+}
+
+#d_toolBar2 #d_importButton:hover {
+	color: #fff;
+	background: #008dde;
+}
+
+#d_toolBar2 #d_importButton:hover .d-icon {
+	background: url("view/cmdb/assets/img/importButtonhover.png") no-repeat
+		!important;
+}
+
+#d_toolBar2 #d_exportButton #d_exportCodeButton {
+	background: #efeff7;
+	height: 27px;
+	margin-top: 9px;
+	margin-right: 3px;
+	color: #008dde;
+	width: 60px;
+	border-radius: 0px;
+}
+
+#d_toolBar2 #d_exportButton #d_exportCodeButton .d-icon {
+	background: url("view/cmdb/assets/img/exportButton.png") no-repeat
+		!important;
+}
+
+#d_toolBar2 #d_exportButton:hover #d_exportCodeButton:hover{
+	color: #fff;
+	background: #008dde;
+}
+
+#d_toolBar2 #d_exportButton:hover #d_exportCodeButton:hover .d-icon {
+	background: url("view/cmdb/assets/img/exportButtonhover.png") no-repeat
+		!important;
+}
+
+#d_toolBar2 #d_viewButton {
+	background: #efeff7;
+	height: 27px;
+	margin-top: 9px;
+	margin-right: 3px;
+	color: #008dde;
+	width: 60px;
+	border-radius: 0px;
+}
+
+#d_toolBar2 #d_viewButton .d-icon {
+	background: url("view/cmdb/assets/img/viewButton.png") no-repeat
+		!important;
+}
+
+#d_toolBar2 #d_viewButton:hover {
+	color: #fff;
+	background: #008dde;
+}
+
+#d_toolBar2 #d_viewButton:hover .d-icon {
+	background: url("view/cmdb/assets/img/viewButtonhover.png") no-repeat
+		!important;
+}
+
+.d-trigger-icon-date {
+	background: url("dorado/client/skins/modern/common/icons.gif") -100px
+		-40px;
+}
+
+.d-trigger-icon-date:before {
+	content: "";
+}
+
+.tools-bar .select-bar input[readonly] {
+	cursor: pointer;
+}
+
+.d-text-box .blank-text {
+	font-style: normal;
+	padding-left: 5px !important;
+}
+
+.search-container .all-select {
+    float: left;
+    position: absolute;
+    width: 100px;
+    top: 0;
+    left: 187px;
+}
+
+.search-container .all-select label{
+	float: left;
+}
+
+.search-container .checkbox-title {
+	float: left;
+	padding: 3px 0px;
+}
+.d-tabbar.d-tabbar-top .tab-selected{
+box-shadow:none;
+}
+
+#d_dataGridContainer .d-accordion{
+	border-radius:none;
+	border-radius:0px;
+}
+#d_dataGridContainer .d-accordion .d-section .d-section-caption-bar{
+	height: 32px;
+    font-size: 14px;
+}
+#d_dataGridContainer .d-grid .data-table .odd-row{
+background:#fff;
+}
+#d_dataGridContainer .d-grid .data-table .current-row{
+	color:#008dde;
+background:#fff;
+}
+#d_dataGridContainer .d-grid .data-table .row td{
+    height: 32px;
+    font-size: 12px;
+    border-right: 1px transparent  solid;
+    border-bottom: 1px transparent  solid;
+}
+.d-grid .header-table .header{
+    height: 34px;
+    font-size: 14px;
+}
+.d-grid .data-table .row td{
+	height: 34px;
+    font-size: 14px;
+}
+#d_dataGridContainer .d-grid .data-table .row td .cell{
+	height:100%;
+
+}
+#d_dataGridContainer  .cell{
+	/*padding-left: 14px!important;*/
+}
+#d_dataGridContainer .d-grid .d-tree-node{
+	height:100%;
+
+}
+#d_dataGridContainer .d-grid .d-tree-node:before{
+	content:'';
+	position:absolute;
+	width:2px;
+	height:100%;
+	top:0;
+	margin-left: 18px;
+	border-left:2px dashed #008dde;
+}
+#d_dataGridContainer .d-grid .node-button{
+	visibility: visible;
+    margin-right: 16px;
+    margin-left: 16px;
+}
+#d_dataGridContainer .d-grid .data-table .selected-row .node-button:hover,#d_dataGridContainer .d-grid .data-table .current-row .node-button:hover,#d_dataGridContainer .d-tree-node .node-button:active,#d_dataGridContainer .d-tree-node .node-button:hover{
+	    border-color: transparent;
+}
+#d_dataGridContainer .d-tree-node .node-button.collapse-button{
+	transform:none;
+}
+#d_dataGridContainer .d-grid .node-button:before{
+    content: '';
+    position: absolute;
+    background: url(view/common/img/line-point.png) no-repeat;
+    width: 20px;
+    height: 12px;
+    margin-left: -3px;
+    top: 1px;
+    background-position-x: -6px;
+}
+#d_dataGridContainer .d-grid .node-button.collapse-button:before{
+	content:'';
+	position:absolute;
+	background:url(view/common/img/scroll.png) no-repeat;
+	width:13px;
+	height:13px;
+	margin-left: -11px;
+    top: 3px;
+}
+#d_dataGridContainer .d-grid .node-button.expand-button:before{
+    content: '';
+    position: absolute;
+    background: url(view/common/img/expand.png) no-repeat;
+    width: 13px;
+    height: 13px;
+    margin-left: -11px;
+    top: 3px;
+}
+#d_dataGridContainer .d-caption-bar:after{
+    content: '';
+    position: absolute;
+    top: 6px;
+    left: 6px;
+    width: 20px;
+    height: 20px;
+    background: url(view/common/img/box-icon.png) no-repeat;
+}
+#d_dataGridContainer .d-caption-bar .caption{
+    padding-left: 30px;
+}
+.d-tabbar{
+    color: #1e2c54;
+    background-color: #efeff7;
+}
+.d-tabbar .tab{
+    color: #1e2c54;
+    background-color: #efeff7;
+}
+#d_tabControl1 .d-tabbar .tab.tab-selected,.d-tabbar .tab.tab-selected{
+    color: #fff;
+    background-color: #1e2c54;
+}
+#d_toolbar1 .d-button{
+    background: #008dde;
+    color: #fff;
+    margin-right: 5px;
+
+}
+#d_toolbar1 .d-button .d-icon{
+	background-image: url(icontool/icons-w.png)!important;
+}
+#d_autoformCondition .d-text-box{
+    height: 28px;
+}
+#d_autoformCondition .d-text-box > .editor-wrapper{
+	height: 28px;
+}
+#d_htmlContainer1 .d-text-box{
+	height: 25px;
+}
+#d_htmlContainer1 .d-text-box .d-trigger{
+	top:4px;
+}
+#d_autoformCondition .d-text-box > .editor-wrapper > .editor{
+	text-indent: 10px;
+}
+#d_autoformCondition .d-text-box .d-trigger{
+	height: 28px;
+}
+#d_autoformCondition .d-text-box .d-trigger .d-icon{
+    height: 20px;
+    margin-top: 5px;
+}
+#d_splitPanel1 {
+	width: 98%!important;
+    margin-left: 1%;
+    margin-top:10px!important;
+    border:1px solid #cae2fc;
+    box-shadow:1px 1px 1px 1px #cae2fc;
+}
+ .d-icon-button-hover .d-icon, .d-button-hover .d-icon{
+	background-image: url(icontool/icons-w.png)!important;
+}
+#d_toolBar1 .toolbar-right{
+	right: 8px!important;
+    top: 30px!important;
+}
+#d_pager .toolbar-left-wrap{
+	height:100%!important;
+}
+#d_pager .toolbar-left-wrap .toolbar-left{
+	height:100%!important;
+}
+#d_mainContainer .d-dock-layout{
+	/*overflow:auto;*/
+}
+
+#d_toolBarBtn.d-toolbar {
+	background-color: #fff;
+	height: 48px;
+}
+
+#d_toolBarBtn.d-toolbar .toolbar-left-wrap {
+	height: 60px;
+}
+
+#d_toolBarBtn.d-toolbar .d-text-box {
+	width: 220px !important;
+	height: 25px;
+	padding-top: 3px;
+	margin-left: 26px;
+	margin-top: 16px;
+	border-radius: 4px;
+}
+
+#d_toolBarBtn .d-text-box>.editor-wrapper input {
+	color: #777;
+}
+
+#d_toolBarBtn #d_reportIncidentBtn,#d_toolBarBtn #d_delayDetectBtn{
+	width: 150px;
+	height: 28px;
+	background: #008dde;
+	color: #fff;
+	margin: 16px 0 0 10px;
+	border-radius: 3px;
+}
+#d_toolBarBtn #d_btn_monthExportfornow{
+	width: 120px;
+	height: 28px;
+	background: #008dde;
+	color: #fff;
+	margin: 16px 0 0 10px;
+	border-radius: 3px;
+}
+#d_toolBarBtn #d_sendMessage,
+#d_toolBarBtn #d_btn_addIncident,
+#d_toolBarBtn #d_btn_mergeIncident,
+#d_toolBarBtn #d_btn_batchDispatch,
+#d_toolBarBtn #d_btn_reDispatching,
+#d_toolBarBtn #d_btn_batchRepair,
+#d_toolBarBtn #d_btn_view,
+#d_toolBarBtn #d_btn_doIncident,
+#d_toolBarBtn #d_btn_flowChart,
+#d_toolBarBtn #d_btn_completed,
+#d_toolBarBtn #d_btn_batchExport,
+#d_toolBarBtn #d_btn_distroyIncident,
+#d_toolBarBtn #d_btn_repairRoad,
+#d_toolBarBtn #d_btn_viewMap,
+#d_toolBarBtn #d_btn_apply,
+#d_toolBarBtn #d_btn_setThird,
+#d_toolBarBtn #d_btn_check,
+#d_toolBarBtn #d_incidentConfigBtn,
+#d_toolBarBtn #d_btn_batchAssign,
+#d_toolBarBtn #d_btn_batchRepair,
+#d_toolBarBtn #d_btn_repairMap,
+#d_toolBarBtn #d_btn_refush{
+	width: 78px;
+	height: 28px;
+	background: #008dde;
+	color: #fff;
+	margin: 16px 0 0 10px;
+	border-radius: 3px;
+}
+#d_toolbar1 .d-button.d-button-hover{
+	background: #1e2c54;
+}
+#d_toolBarBtn #d_btn_monthExport,
+#d_toolBarBtn #d_btn_unitIncident{
+	width: 88px;
+	height: 28px;
+	background: #008dde;
+	color: #fff;
+	margin: 16px 0 0 10px;
+	border-radius: 3px;
+}
+#d_toolBarBtn #d_changeMenuBtn{
+	width: 90px;
+	height: 28px;
+	background: #008dde;
+	color: #fff;
+	margin: 16px 0 0 10px;
+	border-radius: 3px;
+}
+#d_toolBarBtn #d_conditionContainer{
+	margin: 16px 0 0 10px;
+}
+#d_toolBarBtn .d-icon{
+display:none;
+}
+#d_toolBarBtn #d_reportIncidentBtn:hover,#d_toolBarBtn #d_delayDetectBtn:hover{
+	background: #1e2c54;
+}
+#d_toolBarBtn #d_sendMessage:hover,
+#d_toolBarBtn #d_btn_addIncident:hover,
+#d_toolBarBtn #d_btn_mergeIncident:hover,
+#d_toolBarBtn #d_btn_batchDispatch:hover,
+#d_toolBarBtn #d_btn_reDispatching:hover,
+#d_toolBarBtn #d_btn_batchRepair:hover,
+#d_toolBarBtn #d_btn_view:hover,
+#d_toolBarBtn #d_btn_doIncident:hover,
+#d_toolBarBtn #d_btn_flowChart:hover,
+#d_toolBarBtn #d_btn_completed:hover,
+#d_toolBarBtn #d_btn_batchExport:hover,
+#d_toolBarBtn #d_btn_distroyIncident:hover,
+#d_toolBarBtn #d_btn_repairRoad:hover,
+#d_toolBarBtn #d_btn_monthExport:hover,
+#d_toolBarBtn #d_btn_viewMap:hover,
+#d_toolBarBtn #d_btn_refush:hover,
+#d_toolBarBtn #d_btn_apply:hover,
+#d_toolBarBtn #d_btn_setThird:hover,
+#d_toolBarBtn #d_btn_check:hover,
+#d_toolBarBtn #d_incidentConfigBtn:hover,
+#d_toolBarBtn #d_btn_batchAssign:hover,
+#d_toolBarBtn #d_btn_batchRepair:hover,
+#d_toolBarBtn #d_btn_repairMap:hover,
+#d_toolBarBtn #d_btn_unitIncident:hover,
+#d_toolBarBtn #d_btn_monthExportfornow:hover{
+	background: #1e2c54;
+}
+#d_toolBarBtn #d_changeMenuBtn:hover{
+	background: #1e2c54;
+}
+
+#d_toolBarBtn .d-button{
+    background: #008dde;
+    color: #fff;
+    margin-right: 5px;
+
+}
+#d_toolBarBtn .d-button .d-icon{
+	background-image: url(icontool/icons-w.png)!important;
+}
+
+#d_toolBarBtn .toolbar-right{
+	right: 8px!important;
+    top: 30px!important;
+}
+
+
+#d_searchDialog #d_btnSearch,
+#d_searchDialog #d_btnRefush{
+	width: 78px;
+	height: 28px;
+	background: #008dde;
+	color: #fff;
+	margin: 0 0 0 10px;
+	border-radius: 3px;
+}
+
+#d_searchDialog #d_btnRefush:hover,#d_searchDialog #d_btnSearch:hover{
+	background: #1e2c54;
+}
+
+#d_searchDialog .d-button .d-icon{
+	background-image: url(icontool/icons-w.png)!important;
+}
+
+#d_toolBar3.d-toolbar {
+	background-color: #fff;
+	height: 60px;
+}
+
+#d_toolBar3.d-toolbar .toolbar-left-wrap {
+	height: 60px;
+}
+
+#d_toolBar3.d-toolbar .d-text-box {
+	width: 220px !important;
+	height: 21px;
+	padding-top: 3px;
+	margin-left: 26px;
+	margin-top: 16px;
+	border-radius: 4px;
+}
+
+#d_toolBar3 .d-form-element .form-label {
+
+	margin-top: 16px;
+	margin-left: 16px;
+}
+
+#d_toolBar3 .d-text-box>.editor-wrapper input {
+	color: #777;
+}
+
+#d_toolBar3 #d_newButton,#d_toolBar3 #d_deleteButton{
+	width: 70px;
+	height: 28px;
+	background: #008dde;
+	color: #fff;
+	margin: 16px 0 0 10px;
+	border-radius: 3px;
+}
+
+#d_toolBar3 #d_cancellBtn,#d_toolBar3 #d_submitBtn,
+#d_toolBar3 #d_addBtn,#d_toolBar3 #d_cancelBtn,#d_toolBar3 #d_editBtn, #d_toolBar3 #d_deleteBut{
+	width: 70px;
+	height: 28px;
+	background: #008dde;
+	color: #fff;
+	margin: 10px 0 0 10px;
+	border-radius: 3px;
+}
+
+#d_toolBar3 #d_toDel{
+	width: 70px;
+	height: 28px;
+	background: #008dde;
+	color: #fff;
+	margin: 14px 0 0 10px;
+	border-radius: 3px;
+}
+
+#d_toolBar3 #d_addMenuBtn{
+	width: 80px;
+	height: 28px;
+	background: #008dde;
+	color: #fff;
+	margin: 14px 0 0 10px;
+	border-radius: 3px;
+}
+#d_toolBar3 #d_advancedSearchButton {
+	width: 70px;
+	height: 28px;
+	background: #008dde;
+	color: #fff;
+	margin: 16px 0 0 10px;
+	border-radius: 3px;
+}
+
+#d_toolBar3 #d_advancedSearchButton:hover,#d_toolBar3 #d_newButton:hover,#d_toolBar3 #d_deleteButton:hover,
+#d_toolBar3 #d_submitBtn:hover,
+#d_toolBar3 #d_cancelBtn:hover,
+#d_toolBar3 #d_editBtn:hover,
+#d_toolBar3 #d_cancellBtn:hover,
+#d_toolBar3 #d_addBtn:hover,
+#d_toolBar3 #d_deleteBut:hover  {
+	background: #1e2c54;
+}
+
+#d_toolBar3 #d_exportButton  {
+	height: 28px;
+	background: #008dde;
+	color: #fff;
+	margin: 16px 0 0 10px;
+	border-radius: 3px;
+}
+
+#d_toolBar3 #d_exportButton:hover {
+	background: #1e2c54;
+}
+
+#d_toolBar3.d-button{
+    background: #008dde;
+    color: #fff;
+    margin-right: 5px;
+
+}
+#d_toolBar3.d-button .d-icon{
+	background-image: url(icontool/icons-w.png)!important;
+}
+
+#d_toolBar3 .toolbar-right{
+	right: 8px!important;
+    top: 30px!important;
+}
+
+#d_toolBar3 .d-button.d-button-hover{
+	background: #1e2c54;
+}
+
+#d_toolBar4.d-toolbar {
+	background-color: #fff;
+	height: 60px;
+}
+
+#d_toolBar4.d-toolbar .toolbar-left-wrap {
+	height: 60px;
+}
+
+#d_toolBar4.d-toolbar .d-text-box {
+	width: 220px !important;
+	height: 26px;
+	padding-top: 3px;
+	margin-left: 26px;
+	margin-top: 16px;
+	border-radius: 4px;
+}
+
+#d_toolBar4 .d-text-box>.editor-wrapper input {
+	color: #777;
+}
+
+#d_toolBar4 #d_searchBtn,#d_toolBar4 #d_resetBtn,#d_toolBar4 #d_authAddBtn{
+	width: 70px;
+	height: 28px;
+	background: #008dde;
+	color: #fff;
+	margin: 16px 0 0 10px;
+	border-radius: 3px;
+}
+#d_toolBar4 #d_authAddBtn,
+#d_toolBar4 #d_authDelBtn,
+#d_toolBar4 #d_attrAddBtn,
+#d_toolBar4 #d_attrDelBtn,
+#d_toolBar4 #d_fieldAddBtn,
+#d_toolBar4 #d_fieldDelBtn
+{
+	width: 70px;
+	height: 30px;
+	background: #008dde;
+	color: #fff;
+	margin: 0 0 0 0;
+	border-radius: 3px;
+}
+
+#d_toolBar4 #d_addBtn,#d_toolBar4 #d_deleteBtn{
+	width: 90px;
+	height: 28px;
+	background: #008dde;
+	color: #fff;
+	margin: 24px 0 0 10px;
+	border-radius: 3px;
+}
+
+#d_toolBar4.d-button{
+    background: #008dde;
+    color: #fff;
+    margin-right: 5px;
+
+}
+#d_toolBar4.d-button .d-icon{
+	background-image: url(icontool/icons-w.png)!important;
+}
+
+#d_toolBar4 .toolbar-right{
+	right: 8px!important;
+    top: 30px!important;
+}
+
+#d_toolBar4 .d-button.d-button-hover{
+	background: #1e2c54;
+}
+
+#d_toolBar4 #d_searchBtn:hover,
+#d_toolBar4 #d_resetBtn:hover,
+#d_toolBar4 #d_addBtn:hover,
+#d_toolBar4 #d_deleteBtn:hover,
+#d_toolBar4 #d_authAddBtn:hover,
+#d_toolBar4 #d_authDelBtn:hover,
+#d_toolBar4 #d_attrAddBtn:hover,
+#d_toolBar4 #d_attrDelBtn:hover,
+#d_toolBar4 #d_fieldAddBtn:hover,
+#d_toolBar4 #d_fieldDelBtn:hover
+{
+	background: #1e2c54;
+}
+
+#d_autoformCondition1 .d-text-box{
+    height: 24px;
+}
+#d_autoformCondition1 .d-text-box > .editor-wrapper{
+	height: 24px;
+}
+#d_autoformCondition1 .d-text-box > .editor-wrapper > .editor{
+	text-indent: 10px;
+}
+#d_autoformCondition1 .d-text-box .d-trigger{
+	height: 24px;
+}
+#d_autoformCondition1 .d-text-box .d-trigger .d-icon{
+    height: 20px;
+    margin-top: 5px;
+}
+
+#d_toolBar5.d-toolbar,#d_toolBar6.d-toolbar,#d_toolBar7.d-toolbar {
+	background-color: #fff;
+	height: 30px;
+	margin-top: 3px;
+}
+
+#d_toolBar5 #d_authAddBtn,
+#d_toolBar5 #d_authDelBtn,
+#d_toolBar6 #d_attrAddBtn,
+#d_toolBar6 #d_attrDelBtn,
+#d_toolBar7 #d_fieldAddBtn,
+#d_toolBar7 #d_fieldDelBtn,
+#d_toolBar5 #d_saveButton,
+#d_toolBar5 #d_closeButton,
+#d_toolBar5 #d_editButton,
+#d_toolBar5 #d_backButton,
+#d_toolBar5 #d_qrCodeButton,
+#d_toolBar5 #d_sendMessageButton
+{
+	width: 70px;
+	height: 30px;
+	background: #008dde;
+	color: #fff;
+	margin: 0 0 0 0;
+	border-radius: 3px;
+}
+
+#d_toolBar5 #d_authAddBtn:hover,
+#d_toolBar5 #d_authDelBtn:hover,
+#d_toolBar6 #d_attrAddBtn:hover,
+#d_toolBar6 #d_attrDelBtn:hover,
+#d_toolBar7 #d_fieldAddBtn:hover,
+#d_toolBar7 #d_fieldDelBtn:hover,
+#d_toolBar5 #d_saveButton:hover,
+#d_toolBar5 #d_closeButton:hover,
+#d_toolBar5 #d_editButton:hover,
+#d_toolBar5 #d_backButton:hover,
+#d_toolBar5 #d_qrCodeButton:hover,
+#d_toolBar5 #d_sendMessageButton:hover
+{
+	background: #1e2c54;
+}
+#d_toolBarDetail.d-toolbar {
+	background-color: #fff;
+	height: 40px;
+}
+
+#d_toolBarDetail.d-toolbar .toolbar-left-wrap {
+	height: 60px;
+}
+
+#d_toolBarDetail.d-toolbar .d-text-box {
+	width: 220px !important;
+	height: 21px;
+	padding-top: 3px;
+	margin-left: 26px;
+	margin-top: 16px;
+	border-radius: 4px;
+}
+
+#d_toolBarDetail .d-text-box>.editor-wrapper input {
+	color: #777;
+}
+
+#d_toolBarDetail #d_cancellBtn,
+#d_toolBarDetail #d_submitBtn,
+#d_toolBarDetail #d_addBtn,
+#d_toolBarDetail #d_cancelBtn,
+#d_toolBarDetail #d_editBtn,
+#d_toolBarDetail #d_btnSave,
+#d_toolBarDetail #d_btnCancel,
+#d_toolBarDetail #d_btnEdit,
+#d_toolBarDetail #d_btnEditCross,
+#d_toolBarDetail #d_btnSaveCross,
+#d_toolBarDetail #d_btnCancelCross,
+#d_toolBarDetail #d_toolBarSave,
+#d_toolBarDetail #d_toolBarCancel,
+#d_toolBarDetail #d_btnFlowChart1{
+	width: 70px;
+	height: 28px;
+	background: #008dde;
+	color: #fff;
+	margin: 10px 0 0 10px;
+	border-radius: 3px;
+}
+
+#d_toolBarDetail #d_submitBtn:hover,
+#d_toolBarDetail #d_cancelBtn:hover,
+#d_toolBarDetail #d_editBtn:hover,
+#d_toolBarDetail #d_cancellBtn:hover,
+#d_toolBarDetail #d_addBtn:hover,
+#d_toolBarDetail #d_btnSave:hover,
+#d_toolBarDetail #d_btnCancel:hover,
+#d_toolBarDetail #d_btnEdit:hover,
+#d_toolBarDetail #d_btnEditCross:hover,
+#d_toolBarDetail #d_btnSaveCross:hover,
+#d_toolBarDetail #d_btnCancelCross:hover,
+#d_toolBarDetail #d_toolBarSave:hover,
+#d_toolBarDetail #d_toolBarCancel:hover,
+#d_toolBarDetail #d_btnFlowChart1:hover {
+	background: #1e2c54;
+}
+
+#d_toolBarDetail.d-button{
+    background: #008dde;
+    color: #fff;
+    margin-right: 5px;
+
+}
+#d_toolBarDetail.d-button .d-icon{
+	background-image: url(icontool/icons-w.png)!important;
+}
+
+#d_toolBarDetail .toolbar-right{
+	right: 8px!important;
+    top: 30px!important;
+}
+
+#d_toolBarDetail .d-button.d-button-hover{
+	background: #1e2c54;
+}
+#d_dialogAdvancedSearch #d_btnSearch,
+#d_dialogAdvancedSearch #d_btnReset,
+#d_dialogAdvancedSearch #d_btnSearchRoad,
+#d_dialogAdvancedSearch #d_btnResetRoad{
+	width: 78px;
+	height: 28px;
+	background: #008dde;
+	color: #fff;
+	margin: 0 0 0 10px;
+	border-radius: 3px;
+}
+
+#d_dialogAdvancedSearch #d_btnReset:hover,#d_dialogAdvancedSearch #d_btnSearch:hover,
+#d_dialogAdvancedSearch #d_btnSearchRoad:hover,
+#d_dialogAdvancedSearch #d_btnResetRoad:hover {
+	background: #1e2c54;
+}
+
+#d_dialogAdvancedSearch .d-button .d-icon{
+	background-image: url(icontool/icons-w.png)!important;
+}
+
+#d_operationToolBar #d_btnAdd,
+#d_operationToolBar #d_btnDelete,
+#d_operationToolBar #d_btnDelete1,
+#d_operationToolBar #d_addBtn,
+#d_operationToolBar .toolbar-left .d-button{
+	width: 65px;
+	height: 28px;
+	background: #008dde;
+	color: #fff;
+	margin: 0 0 0 10px;
+	border-radius: 3px;
+}
+#d_operationToolBar #d_btnVersions{
+	width: 81px;
+	height: 28px;
+	background: #008dde;
+	color: #fff;
+	margin: 0 0 0 10px;
+	border-radius: 3px;
+}
+
+#d_operationToolBar #d_btnAdd:hover,
+#d_operationToolBar #d_btnDelete:hover,
+#d_operationToolBar #d_btnVersions:hover,
+#d_operationToolBar #d_btnDelete1:hover
+#d_operationToolBar #d_addBtn:hover,
+#d_operationToolBar #d_uploadBtn:hover{
+	background: #1e2c54;
+}
+
+#d_operationToolBar .d-button .d-icon{
+	background-image: url(icontool/icons-w.png)!important;
+}
+
+#d_operationToolBar01 #d_btnAdd01,
+#d_operationToolBar01 #d_btnDelete01{
+	width: 65px;
+	height: 28px;
+	background: #008dde;
+	color: #fff;
+	margin: 0 0 0 10px;
+	border-radius: 3px;
+}
+#d_operationToolBar01 #d_btnVersions01{
+	width: 81px;
+	height: 28px;
+	background: #008dde;
+	color: #fff;
+	margin: 0 0 0 10px;
+	border-radius: 3px;
+}
+
+#d_operationToolBar01 #d_btnAdd01:hover,
+#d_operationToolBar01 #d_btnDelete01:hover,
+#d_operationToolBar01 #d_btnVersions01:hover{
+	background: #1e2c54;
+}
+
+#d_operationToolBar01 .d-button .d-icon{
+	background-image: url(icontool/icons-w.png)!important;
+}
+
+#d_operation.d-toolbar {
+	background-color: #fff;
+	height: 40px;
+	margin-top: 14px;
+}
+
+#d_operation .toolbar-left .d-button{
+	width: 65px;
+	height:28px;
+	background: #008dde;
+	color: #fff;
+	margin: 0 0 0 10px;
+	border-radius: 3px;
+}
+
+#d_operation #d_missionBtn,
+#d_operation #d_processBtn{
+	width: 85px;
+	height:28px;
+	background: #008dde;
+	color: #fff;
+	margin: 0 0 0 10px;
+	border-radius: 3px;
+}
+
+#d_operation .toolbar-left .d-button:hover,
+#d_operation #d_missionBtn:hover,
+#d_operation #d_processBtn:hover{
+	background: #1e2c54;
+}
+
+#d_operation .d-text-box > .editor-wrapper > .editor{
+	text-indent: 10px;
+}
+
+#d_formEdit .d-text-box{
+    height: 28px;
+}
+#d_formEdit .d-text-box > .editor-wrapper{
+	height: 28px;
+}
+#d_formEdit .d-text-box > .editor-wrapper > .editor{
+	text-indent: 10px;
+}
+#d_formEdit .d-text-box .d-trigger{
+	height: 28px;
+}
+#d_formEdit .d-text-box .d-trigger .d-icon{
+    height: 20px;
+    margin-top: 5px;
+}
+#d_formCross .d-text-box{
+    height: 28px;
+}
+#d_formCross .d-text-box > .editor-wrapper{
+	height: 28px;
+}
+#d_formCross .d-text-box > .editor-wrapper > .editor{
+	text-indent: 10px;
+}
+#d_formCross .d-text-box .d-trigger{
+	height: 28px;
+}
+#d_formCross .d-text-box .d-trigger .d-icon{
+    height: 20px;
+    margin-top: 5px;
+}
+#d_formSection .d-text-box{
+    height: 28px;
+}
+#d_formSection .d-text-box > .editor-wrapper{
+	height: 28px;
+}
+#d_formSection .d-text-box > .editor-wrapper > .editor{
+	text-indent: 10px;
+}
+#d_formSection .d-text-box .d-trigger{
+	height: 28px;
+}
+#d_formSection .d-text-box .d-trigger .d-icon{
+    height: 20px;
+    margin-top: 5px;
+}
+
+#d_editForm .d-text-box{
+    height: 28px;
+}
+#d_editForm .d-text-box > .editor-wrapper{
+	height: 28px;
+}
+#d_editForm .d-text-box > .editor-wrapper > .editor{
+	text-indent: 10px;
+}
+#d_editForm .d-text-box .d-trigger{
+	height: 28px;
+}
+#d_editForm .d-text-box .d-trigger .d-icon{
+    height: 20px;
+    margin-top: 5px;
+}
+
+#d_formProcess .d-text-box{
+    height: 28px;
+}
+#d_formProcess .d-text-box > .editor-wrapper{
+	height: 28px;
+}
+#d_formProcess .d-text-box > .editor-wrapper > .editor{
+	text-indent: 10px;
+}
+#d_formProcess .d-text-box .d-trigger{
+	height: 28px;
+}
+#d_formProcess .d-text-box .d-trigger .d-icon{
+    height: 20px;
+    margin-top: 5px;
+}
+
+#d_formSla .d-text-box{
+    height: 28px;
+}
+#d_formSla .d-text-box > .editor-wrapper{
+	height: 28px;
+}
+#d_formSla .d-text-box > .editor-wrapper > .editor{
+	text-indent: 10px;
+}
+#d_formSla .d-text-box .d-trigger{
+	height: 28px;
+}
+#d_formSla .d-text-box .d-trigger .d-icon{
+    height: 20px;
+    margin-top: 5px;
+}
+
+#d_formUser .d-text-box{
+    height: 28px;
+}
+#d_formUser .d-text-box > .editor-wrapper{
+	height: 28px;
+}
+#d_formUser .d-text-box > .editor-wrapper > .editor{
+	text-indent: 10px;
+}
+#d_formUser .d-text-box .d-trigger{
+	height: 28px;
+}
+#d_formUser .d-text-box .d-trigger .d-icon{
+    height: 20px;
+    margin-top: 5px;
+}
+
+#d_toolBarRoad.d-toolbar {
+	background-color: #fff;
+	height: 60px;
+}
+
+#d_toolBarRoad.d-toolbar .toolbar-left-wrap {
+	height: 55px;
+}
+
+#d_toolBarRoad.d-toolbar .d-text-box {
+	width: 220px !important;
+	height: 21px;
+	padding-top: 3px;
+	margin-left: 26px;
+	margin-top: 16px;
+	border-radius: 4px;
+}
+
+#d_toolBarRoad .d-text-box>.editor-wrapper input {
+	color: #777;
+}
+
+#d_toolBarRoad #d_btnNew,#d_toolBarRoad #d_btnDelete,#d_toolBarRoad #d_btnExport,
+#d_toolBarRoad #d_btnQRCode,#d_toolBarRoad #d_btnQRCodeExport,
+#d_toolBarRoad #d_btnNewRoad,#d_toolBarRoad #d_btnDeleteRoad{
+	width: 70px;
+	height: 28px;
+	background: #008dde;
+	color: #fff;
+	margin: 14px 0 0 10px;
+	border-radius: 3px;
+}
+
+#d_toolBarRoad #d_btnQRCodeExport{
+	width: 100px;
+	height: 28px;
+	background: #008dde;
+	color: #fff;
+	margin: 14px 0 0 10px;
+	border-radius: 3px;
+}
+
+#d_toolBarRoad #d_labelAdvancedSearch{
+	width: 50px;
+	height: 28px;
+	background: #008dde;
+	color: #fff;
+	margin: 14px 0 0 10px;
+	border-radius: 3px;
+}
+
+
+#d_toolBarRoad #d_labelAdvancedSearch:hover,
+#d_toolBarRoad #d_btnNew:hover,
+#d_toolBarRoad #d_btnDelete:hover,
+#d_toolBarRoad #d_btnNewRoad:hover,
+#d_toolBarRoad #d_btnExport:hover,
+#d_toolBarRoad #d_btnQRCode:hover,
+#d_toolBarRoad #d_btnQRCodeExport:hover,
+#d_toolBarRoad #d_btnNewRoad:hover,
+#d_toolBarRoad #d_btnDeleteRoad:hover {
+	background: #1e2c54;
+}
+
+#d_toolBarRoad.d-button{
+    background: #008dde;
+    color: #fff;
+    margin-right: 5px;
+
+}
+#d_toolBarRoad.d-button .d-icon{
+	background-image: url(icontool/icons-w.png)!important;
+}
+
+#d_toolBarRoad .toolbar-right{
+	right: 8px!important;
+    top: 30px!important;
+}
+
+#d_toolBarRoad .d-button.d-button-hover{
+	background: #1e2c54;
+}
+
+#d_toolBarRoadCro.d-toolbar {
+	background-color: #fff;
+	height: 60px;
+}
+
+#d_toolBarRoadCro.d-toolbar .toolbar-left-wrap {
+	height: 55px;
+}
+
+#d_toolBarRoadCro.d-toolbar .d-text-box {
+	width: 220px !important;
+	height: 21px;
+	padding-top: 3px;
+	margin-left: 26px;
+	margin-top: 16px;
+	border-radius: 4px;
+}
+
+#d_toolBarRoadCro .d-text-box>.editor-wrapper input {
+	color: #777;
+}
+
+#d_toolBarRoadCro #d_btnNewCro,#d_toolBarRoadCro #d_btnDeleteCro{
+	width: 70px;
+	height: 28px;
+	background: #008dde;
+	color: #fff;
+	margin: 14px 0 0 10px;
+	border-radius: 3px;
+}
+
+#d_toolBarRoadCro #d_btnNewCro:hover,
+#d_toolBarRoadCro #d_btnDeleteCro:hover {
+	background: #1e2c54;
+}
+
+#d_toolBarRoadCro.d-button{
+    background: #008dde;
+    color: #fff;
+    margin-right: 5px;
+
+}
+#d_toolBarRoadCro.d-button .d-icon{
+	background-image: url(icontool/icons-w.png)!important;
+}
+
+#d_toolBarRoadCro .toolbar-right{
+	right: 8px!important;
+    top: 30px!important;
+}
+
+#d_toolBarRoadCro .d-button.d-button-hover{
+	background: #1e2c54;
+}
+
+#d_dialogSection #d_btnSaveSection,
+#d_dialogSection #d_btnCancelSection,
+#d_dialogSection #d_btnEditSection{
+	width: 78px;
+	height: 28px;
+	background: #008dde;
+	color: #fff;
+	margin: 0 0 0 10px;
+	border-radius: 3px;
+}
+
+#d_dialogSection #d_btnEditSection:hover,
+#d_dialogSection #d_btnSaveSection:hover,
+#d_dialogSection #d_btnCancelSection:hover {
+	background: #1e2c54;
+}
+
+#d_dialogSection .d-button .d-icon{
+	background-image: url(icontool/icons-w.png)!important;
+}
+
+#d_dialogdeal #d_btnSave,
+#d_dialogdeal #d_closeBut,
+#d_dialogdeal #d_editDialog,
+#d_dialogdeal #d_closeInfo,
+#d_dialogdeal #d_peButton,
+#d_dialogdeal #d_saveprivateButton,
+#d_dialogdeal #d_confirmDialog,
+#d_dialogdeal #d_cancelDialog,
+#d_dialogdeal #d_commit{
+	width: 78px;
+	height: 28px;
+	background: #008dde;
+	color: #fff;
+	margin: 0 0 0 10px;
+	border-radius: 3px;
+}
+
+#d_dialogdeal #d_editDialog:hover,
+#d_dialogdeal #d_btnSave:hover,
+#d_dialogdeal #d_closeBut:hover,
+#d_dialogdeal #d_closeInfo:hover,
+#d_dialogdeal #d_peButton:hover,
+#d_dialogdeal #d_saveprivateButton:hover,
+#d_dialogdeal #d_confirmDialog:hover,
+#d_dialogdeal #d_cancelDialog:hover ,
+#d_dialogdeal #d_commit:hover {
+	background: #1e2c54;
+}
+
+#d_dialogdeal .d-button .d-icon{
+	background-image: url(icontool/icons-w.png)!important;
+}
+
+#d_toolBarUnit.d-toolbar {
+	background-color: #fff;
+	height: 60px;
+}
+
+#d_toolBarUnit.d-toolbar .toolbar-left-wrap {
+	height: 55px;
+}
+
+#d_toolBarUnit.d-toolbar .d-text-box {
+	width: 250px !important;
+	height: 21px;
+	padding-top: 3px;
+	margin-left: 26px;
+	margin-top: 16px;
+	border-radius: 4px;
+}
+
+#d_toolBarUnit .d-checkbox{
+
+	margin-top: 16px;
+	margin-left: 10px;
+}
+#d_toolBarUnit .d-toolbar-label{
+
+	margin-top: 16px;
+	margin-left: 5px;
+}
+
+#d_toolBarUnit .d-form-element .form-label{
+
+	margin-top: 16px;
+	margin-left: 16px;
+}
+
+#d_toolBarUnit .d-toolbar-sep{
+
+	margin-top: 16px;
+	margin-left: 16px;
+}
+
+#d_toolBarUnit .d-text-box>.editor-wrapper input {
+	color: #777;
+}
+
+#d_toolBarUnit #d_btnNew,#d_toolBarUnit #d_btnDelete,
+#d_toolBarUnit #d_btnExport,#d_toolBarUnit #d_advancedSearch,
+#d_toolBarUnit #d_btnDel,
+#d_toolBarUnit #d_dButton,
+#d_toolBarUnit #d_btnRefresh,
+#d_toolBarUnit #d_editBtn,
+#d_toolBarUnit #d_deleteBut,
+#d_toolBarUnit #d_toolBarAdd,
+#d_toolBarUnit #d_btnBarIm,
+#d_toolBarUnit #d_toolBarDel,
+#d_toolBarUnit #d_btnQRCode,
+#d_toolBarUnit #d_detailSearchBtn,
+#d_toolBarUnit #d_btnEdit,
+#d_toolBarUnit #d_copyBtn,
+#d_toolBarUnit #d_deleteBtn,
+#d_toolBarUnit #d_btnQuery,
+#d_toolBarUnit #d_btnReset,
+#d_toolBarUnit #d_report,
+#d_toolBarUnit #d_btnNewBill,
+#d_toolBarUnit #d_btnShowQueryForm,
+#d_toolBarUnit #d_btnFlowChart,
+#d_toolBarUnit #d_searchBtn,
+#d_toolBarUnit #d_clearBtn
+{
+	width: 70px;
+	height: 28px;
+	background: #008dde;
+	color: #fff;
+	margin: 16px 0 0 10px;
+	border-radius: 3px;
+}
+
+#d_toolBarUnit #d_ad,#d_toolBarUnit #d_selectButton,
+#d_toolBarUnit #d_addMenuBtn,
+#d_toolBarUnit #d_btnResetPwd,
+#d_toolBarUnit #d_btnSetAuthority{
+	width: 80px;
+	height: 28px;
+	background: #008dde;
+	color: #fff;
+	margin: 16px 0 0 10px;
+	border-radius: 3px;
+}
+
+#d_toolBarUnit #d_btnMissionProcess{
+	width: 90px;
+	height: 28px;
+	background: #008dde;
+	color: #fff;
+	margin: 16px 0 0 10px;
+	border-radius: 3px;
+}
+
+#d_toolBarUnit #d_selectButton,
+#d_toolBarUnit #d_btnIncidentSwitch,
+#d_toolBarUnit #d_btnSetAnalysis,
+#d_toolBarUnit #d_btnCount,
+#d_toolBarUnit #d_btnLoginDefault,
+#d_toolBarUnit #d_btnIncidentSend{
+	width: 120px;
+	height: 28px;
+	background: #008dde;
+	color: #fff;
+	margin: 16px 0 0 10px;
+	border-radius: 3px;
+}
+
+
+#d_toolBarUnit #d_advancedSearch:hover,
+#d_toolBarUnit #d_btnNew:hover,
+#d_toolBarUnit #d_btnDelete:hover,
+#d_toolBarUnit #d_btnExport:hover,
+#d_toolBarUnit #d_ad:hover,
+#d_toolBarUnit #d_dButton:hover,
+#d_toolBarUnit #d_selectButton:hover,
+#d_toolBarUnit #d_btnRefresh:hover,
+#d_toolBarUnit #d_addMenuBtn:hover,
+#d_toolBarUnit #d_btnIncidentSwitch:hover,
+#d_toolBarUnit #d_btnDel:hover,
+#d_toolBarUnit #d_editBtn:hover,
+#d_toolBarUnit #d_deleteBut:hover,
+#d_toolBarUnit #d_toolBarAdd:hover,
+#d_toolBarUnit #d_btnBarIm:hover,
+#d_toolBarUnit #d_toolBarDel:hover,
+#d_toolBarUnit #d_btnQRCode:hover,
+#d_toolBarUnit #d_detailSearchBtn:hover,
+#d_toolBarUnit #d_btnEdit:hover,
+#d_toolBarUnit #d_btnSetAnalysis:hover,
+#d_toolBarUnit #d_btnCount:hover,
+#d_toolBarUnit #d_copyBtn:hover,
+#d_toolBarUnit #d_deleteBtn:hover,
+#d_toolBarUnit #d_btnResetPwd:hover,
+#d_toolBarUnit #d_btnSetAuthority:hover,
+#d_toolBarUnit #d_btnLoginDefault:hover,
+#d_toolBarUnit #d_btnIncidentSend:hover,
+#d_toolBarUnit #d_btnQuery:hover,
+#d_toolBarUnit #d_btnReset:hover,
+#d_toolBarUnit #d_report:hover,
+#d_toolBarUnit #d_btnMissionProcess:hover,
+#d_toolBarUnit #d_btnNewBill:hover,
+#d_toolBarUnit #d_btnShowQueryForm:hover,
+#d_toolBarUnit #d_btnFlowChart:hover,
+#d_toolBarUnit #d_searchBtn:hover,
+#d_toolBarUnit #d_clearBtn:hover
+{
+	background: #1e2c54;
+}
+
+#d_toolBarUnit.d-button{
+    background: #008dde;
+    color: #fff;
+    margin-right: 5px;
+
+}
+#d_toolBarUnit.d-button .d-icon{
+	background-image: url(icontool/icons-w.png)!important;
+}
+
+#d_toolBarUnit .toolbar-right{
+	right: 8px!important;
+    top: 30px!important;
+}
+
+#d_toolBarUnit .d-button.d-button-hover{
+	background: #1e2c54;
+}
+#d_subWindowDialog #d_btnSearch,
+#d_subWindowDialog #d_btnReset{
+	width: 78px;
+	height: 28px;
+	background: #008dde;
+	color: #fff;
+	margin: 0 0 0 10px;
+	border-radius: 3px;
+}
+
+#d_subWindowDialog #d_btnSearch:hover,
+#d_subWindowDialog #d_btnReset:hover{
+	background: #1e2c54;
+}
+
+#d_subWindowDialog .d-button .d-icon{
+	background-image: url(icontool/icons-w.png)!important;
+}
+
+#d_addMainAutoForm .d-text-box{
+    height: 28px;
+}
+#d_addMainAutoForm .d-text-box > .editor-wrapper{
+	height: 28px;
+}
+#d_addMainAutoForm .d-text-box > .editor-wrapper > .editor{
+	text-indent: 10px;
+}
+#d_addMainAutoForm .d-text-box .d-trigger{
+	height: 28px;
+}
+#d_addMainAutoForm .d-text-box .d-trigger .d-icon{
+    height: 20px;
+    margin-top: 5px;
+}
+
+#d_addBtnDialog #d_saveButton,
+#d_addBtnDialog #d_editorButton,
+#d_addBtnDialog #d_closeButton {
+	width: 78px;
+	height: 28px;
+	background: #008dde;
+	color: #fff;
+	margin: 0 0 0 10px;
+	border-radius: 3px;
+}
+
+#d_addBtnDialog #d_saveButton:hover,
+#d_addBtnDialog #d_editorButton:hover,
+#d_addBtnDialog #d_closeButton:hover  {
+	background: #1e2c54;
+}
+#d_expertAutoForm .d-text-box{
+    height: 28px;
+}
+#d_expertAutoForm .d-text-box > .editor-wrapper{
+	height: 28px;
+}
+#d_expertAutoForm .d-text-box > .editor-wrapper > .editor{
+	text-indent: 10px;
+}
+#d_expertAutoForm .d-text-box .d-trigger{
+	height: 28px;
+}
+#d_expertAutoForm .d-text-box .d-trigger .d-icon{
+    height: 20px;
+    margin-top: 5px;
+}
+
+
+
+#d_expertDialog #d_btnSearch,
+#d_expertDialog #d_btnReset {
+	width: 78px;
+	height: 28px;
+	background: #008dde;
+	color: #fff;
+	margin: 0 0 0 10px;
+	border-radius: 3px;
+}
+
+#d_expertDialog #d_btnSearch:hover,
+#d_expertDialog #d_btnReset:hover {
+	background: #1e2c54;
+}
+
+#d_switchForm .d-text-box{
+    height: 28px;
+}
+#d_switchForm .d-text-box > .editor-wrapper{
+	height: 28px;
+}
+#d_switchForm .d-text-box > .editor-wrapper > .editor{
+	text-indent: 10px;
+}
+#d_switchForm .d-text-box .d-trigger{
+	height: 28px;
+}
+#d_switchForm .d-text-box .d-trigger .d-icon{
+    height: 20px;
+    margin-top: 5px;
+}
+
+#d_switchDialog #d_btnSubmit,
+#d_switchDialog #d_btnCancel {
+	width: 78px;
+	height: 28px;
+	background: #008dde;
+	color: #fff;
+	margin: 0 0 0 10px;
+	border-radius: 3px;
+}
+
+#d_switchDialog #d_btnSubmit:hover,
+#d_switchDialog #d_btnCancel:hover {
+	background: #1e2c54;
+}
+
+#d_dialogSearch #d_searchBtn,
+#d_dialogSearch #d_resetBtn{
+	width: 78px;
+	height: 28px;
+	background: #008dde;
+	color: #fff;
+	margin: 0 0 0 10px;
+	border-radius: 3px;
+}
+
+#d_dialogSearch #d_resetBtn:hover,
+#d_dialogSearch #d_searchBtn:hover{
+	background: #1e2c54;
+}
+
+#d_dialogSearch .d-button .d-icon{
+	background-image: url(icontool/icons-w.png)!important;
+}
+#d_deviceDialog #d_btnSure,
+#d_deviceDialog #d_btnCancel,
+#d_deviceDialog #d_btnSearch,
+#d_deviceDialog #d_resetting{
+	width: 78px;
+	height: 28px;
+	background: #008dde;
+	color: #fff;
+	margin: 0 0 0 10px;
+	border-radius: 3px;
+}
+
+#d_deviceDialog #d_btnSure:hover,
+#d_deviceDialog #d_btnCancel:hover,
+#d_deviceDialog #d_btnSearch:hover,
+#d_deviceDialog #d_resetting:hover{
+	background: #1e2c54;
+}
+
+#d_deviceDialog .d-button .d-icon{
+	background-image: url(icontool/icons-w.png)!important;
+}
+
+#d_dialogRole #d_btnSave,
+#d_dialogRole #d_btnCancel {
+	width: 78px;
+	height: 28px;
+	background: #008dde;
+	color: #fff;
+	margin: 0 0 0 10px;
+	border-radius: 3px;
+}
+
+#d_dialogRole #d_btnSave:hover,
+#d_dialogRole #d_btnCancel:hover{
+	background: #1e2c54;
+}
+
+#d_dialogRole .d-button .d-icon{
+	background-image: url(icontool/icons-w.png)!important;
+}
+
+#d_dialogDetail #d_itemSaveBtn,
+#d_dialogDetail #d_itemResetBtn{
+	width: 78px;
+	height: 28px;
+	background: #008dde;
+	color: #fff;
+	margin: 0 0 0 10px;
+	border-radius: 3px;
+}
+
+#d_dialogDetail #d_itemAddBtn,
+#d_dialogDetail #d_itemDelBtn{
+	width: 78px;
+	height: 28px;
+	background: #008dde;
+	color: #fff;
+	margin: -2px 0 0 0;
+	border-radius: 3px;
+}
+
+#d_dialogDetail #d_itemSaveBtn:hover,
+#d_dialogDetail #d_itemResetBtn:hover,
+#d_dialogDetail #d_itemAddBtn:hover,
+#d_dialogDetail #d_itemDelBtn:hover{
+	background: #1e2c54;
+}
+
+#d_dialogDetail .d-button .d-icon{
+	background-image: url(icontool/icons-w.png)!important;
+}
+
+#d_toolBarSearch.d-toolbar {
+	background-color: #fff;
+	height: 60px;
+}
+
+#d_toolBarSearch.d-toolbar .toolbar-left-wrap {
+	height: 55px;
+}
+
+#d_toolBarSearch.d-toolbar .d-text-box {
+	width: 180px !important;
+	height: 21px;
+	padding-top: 3px;
+	margin-left: 6px;
+	margin-top: 16px;
+	border-radius: 4px;
+}
+
+#d_toolBarSearch #d_tooBarSimpleSearch {
+	width: 300px !important;
+}
+
+#d_toolBarSearch .d-toolbar-label{
+
+	display: inline-block;
+	margin-top: 16px;
+	margin-left: 10px;
+	text��align:right;
+}
+
+#d_toolBarSearch #d_btnSearch,
+#d_toolBarSearch #d_btnRet,
+#d_toolBarSearch #d_deleteBut,
+#d_toolBarSearch #d_toolBarAdd,
+#d_toolBarSearch #d_toolBarDel,
+#d_toolBarSearch #d_advancedSearchButton,
+#d_toolBarSearch #d_searchBtn,
+#d_toolBarSearch #d_resetBtn,
+#d_toolBarSearch #d_export,
+#d_toolBarSearch #d_btnFlowChart
+{
+	width: 70px;
+	height: 28px;
+	background: #008dde;
+	color: #fff;
+	margin: 16px 0 0 10px;
+	border-radius: 3px;
+}
+
+#d_toolBarSearch #d_toolBarAdminEdit,
+#d_toolBarSearch #d_btnMissionProcess
+{
+	width: 100px;
+	height: 28px;
+	background: #008dde;
+	color: #fff;
+	margin: 16px 0 0 10px;
+	border-radius: 3px;
+}
+
+#d_toolBarSearch #d_btnSearchLog,
+#d_toolBarSearch #d_btnExport,
+#d_toolBarSearch #d_btnRefush,
+#d_toolBarSearch #d_btnSearchPlatform,
+#d_toolBarSearch #d_btnSearchReport
+{
+	width: 70px;
+	height: 28px;
+	background: #008dde;
+	color: #fff;
+	margin: 8px 0 0 10px;
+	border-radius: 3px;
+}
+
+#d_toolBarSearch #d_offLineQRCodeExport,
+#d_toolBarSearch #d_deviceQRCodeExport,
+#d_toolBarSearch #d_incidentCheck,
+#d_toolBarSearch #d_countExport
+{
+	width: 120px;
+	height: 28px;
+	background: #008dde;
+	color: #fff;
+	margin: 16px 0 0 10px;
+	border-radius: 3px;
+}
+
+#d_toolBarSearch #d_serviceInfoExport
+{
+	width: 135px;
+	height: 28px;
+	background: #008dde;
+	color: #fff;
+	margin: 16px 0 0 10px;
+	border-radius: 3px;
+}
+
+#d_toolBarSearch #d_btnSearch:hover,
+#d_toolBarSearch #d_btnRet:hover,
+#d_toolBarSearch #d_toolBarAdd:hover,
+#d_toolBarSearch #d_toolBarDel:hover,
+#d_toolBarSearch #d_advancedSearchButton:hover,
+#d_toolBarSearch #d_searchBtn:hover,
+#d_toolBarSearch #d_resetBtn:hover,
+#d_toolBarSearch #d_export:hover,
+#d_toolBarSearch #d_offLineQRCodeExport:hover,
+#d_toolBarSearch #d_deviceQRCodeExport:hover,
+#d_toolBarSearch #d_serviceInfoExport:hover,
+#d_toolBarSearch #d_incidentCheck:hover,
+#d_toolBarSearch #d_btnSearchLog:hover,
+#d_toolBarSearch #d_btnExport:hover,
+#d_toolBarSearch #d_btnRefush:hover,
+#d_toolBarSearch #d_btnSearchPlatform:hover,
+#d_toolBarSearch #d_btnFlowChart:hover,
+#d_toolBarSearch #d_btnSearchPlatform:hover,
+#d_toolBarSearch #d_btnMissionProcess:hover,
+#d_toolBarSearch #d_countExport:hover {
+	background: #1e2c54;
+}
+
+#d_toolBarSearch.d-button{
+    background: #008dde;
+    color: #fff;
+    margin-right: 5px;
+
+}
+#d_toolBarSearch.d-button .d-icon{
+	background-image: url(icontool/icons-w.png)!important;
+}
+
+#d_toolBarSearch .toolbar-right{
+	right: 8px!important;
+    top: 30px!important;
+}
+
+#d_toolBarSearch .d-button.d-button-hover{
+	background: #1e2c54;
+}
+
+#d_formSla1 #d_submitBtn,
+#d_formSla1 #d_editBtn,
+#d_formSla1 #d_cancelBtn{
+	width: 78px;
+	height: 28px;
+	background: #008dde;
+	color: #fff;
+	margin: 0 0 0 10px;
+	border-radius: 3px;
+}
+
+#d_formSla1 #d_submitBtn:hover,
+#d_formSla1 #d_editBtn:hover,
+#d_formSla1 #d_cancelBtn:hover{
+	background: #1e2c54;
+}
+
+#d_formSla1 .d-button .d-icon{
+	background-image: url(icontool/icons-w.png)!important;
+}
+
+#d_switchDialog #d_btnSure,
+#d_switchDialog #d_btnCancel{
+	width: 78px;
+	height: 28px;
+	background: #008dde;
+	color: #fff;
+	margin: 0 0 0 10px;
+	border-radius: 3px;
+}
+
+#d_switchDialog #d_btnCancel:hover,#d_switchDialog #d_btnSure:hover{
+	background: #1e2c54;
+}
+
+#d_switchDialog .d-button .d-icon{
+	background-image: url(icontool/icons-w.png)!important;
+}
+
+#d_dialogUser #d_editBtn,
+#d_dialogUser #d_saveBtn,
+#d_dialogUser #d_cancelBtn{
+	width: 78px;
+	height: 28px;
+	background: #008dde;
+	color: #fff;
+	margin: 0 0 0 10px;
+	border-radius: 3px;
+}
+
+#d_dialogUser #d_editBtn:hover,#d_dialogUser #d_saveBtn:hover,#d_dialogUser #d_cancelBtn:hover{
+	background: #1e2c54;
+}
+
+#d_dialogUser .d-button .d-icon{
+	background-image: url(icontool/icons-w.png)!important;
+}
+
+#d_attendance #d_btnSearch,
+#d_attendance #d_reset,
+#d_attendance #d_btnExport{
+	width: 78px;
+	height: 28px;
+	background: #008dde;
+	color: #fff;
+	margin: 15px 0 0 5px;
+	border-radius: 3px;
+}
+
+#d_attendance #d_btnExportAttendance{
+	width: 100px;
+	height: 28px;
+	background: #008dde;
+	color: #fff;
+	margin: 15px 0 0 5px;
+	border-radius: 3px;
+}
+
+#d_attendance #d_btnSearch:hover,
+#d_attendance #d_reset:hover,
+#d_attendance #d_btnExport:hover,
+#d_attendance #d_btnExportAttendance:hover{
+	background: #1e2c54;
+}
+
+#d_attendance .d-button .d-icon{
+	background-image: url(icontool/icons-w.png)!important;
+}
+
+#d_formCondition1 .d-text-box{
+    height: 28px;
+}
+#d_formCondition1 .d-text-box > .editor-wrapper{
+	height: 28px;
+}
+#d_formCondition1 .d-text-box > .editor-wrapper > .editor{
+	text-indent: 10px;
+}
+#d_formCondition1 .d-text-box .d-trigger{
+	height: 28px;
+}
+#d_formCondition1 .d-text-box .d-trigger .d-icon{
+    height: 20px;
+    margin-top: 5px;
+}
+#d_formCondition1 .d-button{
+    width: 78px;
+	height: 28px;
+	background: #008dde;
+	color: #fff;
+	margin: 0 0 0 10px;
+	border-radius: 3px;
+}
+
+#d_formCondition1 .d-button:hover{
+	background: #1e2c54;
+}
+
+#d_dlg #d_btnQuery,
+#d_dlg #d_btnCancel,
+#d_dlg #d_btnRet{
+	width: 78px;
+	height: 28px;
+	background: #008dde;
+	color: #fff;
+	margin: 0 0 0 10px;
+	border-radius: 3px;
+}
+
+#d_dlg #d_btnCancel:hover,
+#d_dlg #d_btnQuery:hover,
+#d_dlg #d_btnRet:hover{
+	background: #1e2c54;
+}
+
+#d_dlg .d-button .d-icon{
+	background-image: url(icontool/icons-w.png)!important;
+}
+
+#d_toolBarReport.d-toolbar {
+	background-color: #fff;
+	height: 30px;
+}
+
+#d_toolBarReport .toolbar-left .d-button{
+	width: 65px;
+	height:28px;
+	background: #008dde;
+	color: #fff;
+	margin: 0 0 0 10px;
+	border-radius: 3px;
+}
+
+#d_toolBarReport .toolbar-left .d-button:hover{
+	background: #1e2c54;
+}
+
+#d_formSave .d-text-box{
+    height: 28px;
+}
+#d_formSave .d-text-box > .editor-wrapper{
+	height: 28px;
+}
+#d_formSave .d-text-box > .editor-wrapper > .editor{
+	text-indent: 10px;
+}
+#d_formSave .d-text-box .d-trigger{
+	height: 28px;
+}
+#d_formSave .d-text-box .d-trigger .d-icon{
+    height: 20px;
+    margin-top: 5px;
+}

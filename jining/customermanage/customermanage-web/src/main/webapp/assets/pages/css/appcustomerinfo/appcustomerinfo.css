@@ -1,0 +1,21 @@
+@CHARSET "UTF-8";
+
+.appcustomerinfo-input-m {
+    height: 33px;
+    width: 85px !important;
+    position: relative;
+    top: 1px;
+}
+
+.appcustomerinfo-label-m {
+    width: 70px;
+}
+
+.appcustomerinfo-btn-m {
+    height: 33px;
+    position: relative;
+    top: 1px;
+    border-radius: 0 4px 4px 0 !important;
+}
+
+

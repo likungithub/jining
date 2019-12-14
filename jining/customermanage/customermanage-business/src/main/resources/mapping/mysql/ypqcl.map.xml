@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xinhai.caiyun.customermanage.dao.YpqclMapper">
+    <!--样品前处理首页信息查看-->
+    <select id="queryYPqclAllM"  parameterType="Map" resultType="Map">
+        SELECT
+        ty.wtid,
+        ty.ypbm,
+        ty.ypmc,
+        tq.zbff,
+        tq.id,
+        tq.zl,
+        tq.sl,
+        tq.lqzl,
+        tq.lqsl,
+        tq.fhzl,
+        tq.fhsl,
+        tq.zt,
+        ( SELECT NAME FROM USER WHERE id = tq.lrry ) AS lrry,
+        ( SELECT NAME FROM USER WHERE id = tq.lqry ) AS lqry,
+        ( SELECT NAME FROM USER WHERE id = tq.fhry ) AS fhry,
+        tq.bz
+        FROM
+        t_yp_qcl tq
+        LEFT JOIN t_ypgl_jbxx ty ON tq.ypid = ty.id
+        WHERE
+        1=1
+        <if test="map.wtid!=null and map.wtid!=''">
+            and ty.wtid like concat('%',#{map.wtid}, '%')
+        </if>
+        <if test="map.ypmc!=null and map.ypmc!=''">
+            and ty.ypmc like concat('%',#{map.ypmc}, '%')
+        </if>
+        order by tq.id desc
+        limit #{map.start},#{map.length};
+    </select>
+    <select id="queryYPqclCountM" resultType="java.lang.Integer">
+        SELECT
+        count(*)
+        FROM
+        t_yp_qcl tq
+        LEFT JOIN t_ypgl_jbxx ty ON tq.ypid = ty.id
+        WHERE
+        1=1
+        <if test="map.wtid!=null and map.wtid!=''">
+            and ty.wtid like concat('%',#{map.wtid}, '%')
+        </if>
+        <if test="map.ypmc!=null and map.ypmc!=''">
+            and ty.ypmc like concat('%',#{map.ypmc}, '%')
+        </if>
+    </select>
+
+    <!--查询 样品类型为蔬果肉的 样品处理信息-->
+    <select id="queryYPqclSGRM"  parameterType="Map" resultType="Map">
+        SELECT
+        id ,wtid,ypbm,ypmc,sb,ypsl
+        FROM
+        t_ypgl_jbxx WHERE IF_SGR = 1
+        limit #{start},#{length};
+    </select>
+    <select id="queryYPqclSGRCountM" resultType="java.lang.Integer">
+        SELECT
+        count(*)
+        FROM
+        t_ypgl_jbxx WHERE IF_SGR = 1
+    </select>
+
+    <!--样品信息 回显-->
+    <select id="queryYPqclSGRAloneChoiceM" resultType="map" parameterType="java.lang.String">
+        SELECT id as ypid,ypmc,ypbm,wtid,ypsl from t_ypgl_jbxx where id = #{id}
+    </select>
+
+    <!--新增 样品前处理 的样品-->
+    <insert id="addCreateYpqclM" parameterType="com.xinhai.caiyun.customermanage.api.Ypqcl">
+         INSERT INTO t_yp_qcl (ypid,zbff,zl,bz,zysl,fysl,bysl,lrrq,lrry,lqrq,lqry,fhrq,fhry,zt,sl)
+        VALUES (#{ypid},#{zbff},#{zl},#{bz},#{zysl},#{fysl},#{bysl},#{lrrq},#{lrry},#{lqrq},
+        #{lqry},#{fhrq},#{fhry},#{zt},#{sl});
+    </insert>
+
+    <!--删除已存在的样品-->
+    <delete id="deleteYpqclM">
+        delete from t_yp_qcl where 1 = 1
+        <if test="id != '' and id !=null">
+            and id = #{id}
+        </if>
+    </delete>
+
+    <!--样品领取-->
+    <update id="updateYpqcllingquM">
+        update t_yp_qcl
+        set zbff =#{map.zbff},zl =#{map.zl},sl =#{map.sl},bz =#{map.bz},lrrq =#{map.lrrq},lrry =#{map.lrry}
+        where id = #{map.id}
+    </update>
+
+    <!--样品处理-->
+    <update id="updateYpqclchuliM">
+        update t_yp_qcl
+        set lqzl =#{map.lqzl},lqsl =#{map.lqsl},lqrq =#{map.lqrq},lqry =#{map.lqry},zt =#{map.zt}
+        where id = #{map.id}
+    </update>
+
+    <!--样品退还-->
+    <update id="updateYpqcltuihuanM">
+        update t_yp_qcl
+        set fhzl =#{map.fhzl},fhsl =#{map.fhsl},fhrq =#{map.fhrq},fhry =#{map.fhry},zt =#{map.zt}
+        where id = #{map.id}
+    </update>
+
+</mapper>

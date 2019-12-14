@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+																																																												<!-- namespace必须和接口名称一一对应 -->
+<mapper namespace="com.xinhai.caiyun.commonmanager.dao.ServiceNotificationCodeMapper">
+
+    <resultMap id="ServiceNotification" type="com.xinhai.caiyun.commonmanager.api.ServiceNotificationCode">
+        <result property="id" column="ID"/>
+        <result property="notificationName" column="FWTZLX_MC"/>
+        <result property="notificationCode" column="FWTZLX_DM"/>
+        <result property="notificationContent" column="FWTZLX_MS"/>
+    </resultMap>
+    <select id="searchByCode" resultMap="ServiceNotification">
+    	select ID,FWTZLX_MC,FWTZLX_DM,FWTZLX_MS FROM DM_FWTZ WHERE FWTZLX_DM=#{code}
+    </select>
+</mapper>

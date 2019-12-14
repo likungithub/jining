@@ -1,0 +1,35 @@
+@CHARSET "UTF-8";
+/*操作日志查询统计开始*/
+.table>tbody>tr>td, .table>tbody>tr>th, .table>tfoot>tr>td, .table>tfoot>tr>th, .table>thead>tr>td, .table>thead>tr>th{
+    vertical-align: middle;
+}
+.operate-log-search-count table td {
+    color: #666;
+}
+.operate-log-search-count table tbody td:nth-child(1) {
+    text-align: center !important;
+    width: 200px!important;
+}
+.operate-log-search-count table tbody td:nth-child(1) {
+    color: #999;
+}
+
+.operate-log-search-count table tbody td:nth-last-child(1) {
+    text-align: center !important;
+}
+.operate-log-search-count .input-sm
+{
+    width: 85px !important;
+    height: 33px;
+}
+.operate-log-search-count .calendar-btn
+{
+    height: 33px;
+    border-radius: 0 4px 4px 0!important;
+}
+.operate-log-search-count .labelHeight
+{
+line-height: 20px;
+}
+
+/*操作日志查询统计结束*/

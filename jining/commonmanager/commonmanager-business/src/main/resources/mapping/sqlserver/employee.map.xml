@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!-- namespace必须和接口名称一一对应 -->
+<mapper namespace="com.xinhai.caiyun.commonmanager.dao.EmployeeMapper1">
+   
+    <!--获取一个employee数据  -->
+    <select id="getEmployee" resultType="com.xinhai.caiyun.commonmanager.api.Employee1"
+            parameterType="String">
+		SELECT *FROM employee WHERE id = #{id};
+	</select>
+  
+</mapper>

@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xinhai.caiyun.systemmanager.dao.BmgzMapper">
+    <!--修改委托单编码规则.-->
+    <update id="updateBmgz">
+        update t_bmgz set bm1 = #{map.bmd1},bm2 = #{map.bmd2} where id = #{map.wtId}
+    </update>
+    <!--修改样品编码规则.-->
+    <update id="updateBmgzyp">
+        update t_bmgz set bm4 = #{map.ypaddress} where id = #{map.ypId}
+    </update>
+    <!--查询当前编码规则.-->
+    <select id="selectBmgz" resultType="Map">
+        select * from (select bm4 ypaddress from t_bmgz where id = '1') a join (select bm1,bm2,bm3,bm4 from t_bmgz where id = '2') b on 1=1
+    </select>
+    <!--新增委托单编码规则.-->
+    <insert id="insertBmgz">
+        insert into t_bmgz (id,bm1,bm2,bm5,bm6) values ('2',#{map.bmd1},#{map.bmd2},year(CURRENT_DATE),'9999')
+    </insert>
+    <!--新增样品编码规则.-->
+    <insert id="insertBmgzyp">
+        insert into t_bmgz (id,bm1,bm2,bm3,bm4,bm5,bm6) values ('1','','','',#{map.ypaddress},year(CURRENT_DATE),'9999')
+    </insert>
+    <!--取得最新的委托编码.-->
+    <select id="getMaxWtbm" resultType="String">
+        SELECT MAX(WTID) FROM (
+         SELECT  WTID FROM t_wt_jbxx WHERE (TYPE = '001' OR TYPE = '002') AND LEFT(WTID,LENGTH(WTID)-6) LIKE CONCAT('%',YEAR(NOW()),'%')) t
+        WHERE substr(t.WTID,LENGTH(t.WTID)-5,2) = MONTH(NOW()) ORDER BY WTID DESC
+    </select>
+    <!--取得最新的样品编码.-->
+    <select id="getMaxYpbm" resultType="String">
+        SELECT t.YPBM
+        FROM ( SELECT ID,YPBM FROM t_ypgl_jbxx WHERE LEFT(YPBM,LENGTH(YPBM)-6) LIKE CONCAT('%',YEAR(NOW()),'%')) t
+        WHERE substr(t.YPBM,LENGTH(t.YPBM)-5,2) = MONTH(NOW()) ORDER BY t.ID DESC limit 0,1
+    </select>
+    <select id="getMaxYpbm2" resultType="String">
+        SELECT YPBM FROM (
+          SELECT MAX(right(YPBM,8)) YPBM FROM t_ypgl_jbxx
+        ) t
+        WHERE LEFT(t.YPBM,4) = YEAR(NOW())
+    </select>
+</mapper>

@@ -1,0 +1,543 @@
+body {
+   /* 60px to make the container go all the way to the bottom of the topbar */
+  padding-bottom: 10px;
+  position: relative;
+}
+html,body{height:100%;}
+@media (max-width: 979px) {
+  body {
+    padding-top: 0px;
+  }
+}
+.control-group.hiddendiv{display:none}
+.padding-left-120{padding-left:150px;}
+.container,.clearfix,.span7{
+  height:100%
+}
+#components {
+  min-height: 500px;
+}
+
+#target fieldset {
+  padding: 5px;
+}
+
+.component {
+  cursor: pointer;
+  border: solid 1px #fff;
+
+}
+
+input {
+  cursor: pointer;
+}
+
+textarea {
+  resize: vertical;
+}
+
+.popover .control-group {
+  cursor: default;
+}
+.popover input {
+  cursor: text;
+}
+.popover input[type="checkbox"] {
+  cursor: pointer;
+}
+.popover textarea{
+   cursor:context-menu;
+   width:75%
+}
+.dic-option{
+    position: absolute;
+    margin-top: -25px;
+    margin-left: 78%;
+    cursor:pointer;
+
+}
+.lists-button{
+
+}
+.lists-option{
+
+}
+
+.temp{
+  width: 100%;
+  height: 100%;
+  background: transparent;
+  position: absolute;
+  z-index: 999999;
+  top: 0;
+  overflow-x: hidden;
+  left: 0;
+}
+
+.temp form {
+  padding: 8px 4px;
+  border: 1px dotted #ccc;
+  position: absolute;
+  background: white;
+  box-shadow: 0px 0px 30px #999;
+  -webkit-transition: -webkit-transform 0.1s ease-out;
+  overflow: hidden;
+}
+
+#render{
+  min-height: 500px;
+  font-family: monospace;
+}
+
+/* Popovers now are appended to their parent rather
+than to the body/main document as they once were.
+We need to over-ride some inherited stuff.. */
+form .popover .controls {
+  margin-left: 0;
+}
+
+form .popover .control-label {
+  text-align: left;
+}
+
+form .popover form {
+  width: 100%;
+}
+
+.popover-content form .btn{
+  margin-right: 10px
+}
+
+.target.rightComponent{
+    float: right!important;
+    margin-right: 5%;
+    padding-right: 11px;
+    margin-left: 0!important;
+}
+.target:after{
+  float:left;
+  content: " ";
+  height: 77px;
+  margin-top: 3px;
+  background: #f0f0f0;
+  width: 100%;
+  border: 1px dashed #ccc;
+}
+
+#target, #input, #radioscheckboxes, #select, #buttons {
+ -webkit-touch-callout: none;
+ -webkit-user-select: none;
+ -khtml-user-select: none;
+ -moz-user-select: none;
+ -ms-user-select: none;
+ user-select: none;
+}
+
+#target fieldset{
+ width: 100%;
+ overflow: hidden;
+}
+
+.controls .tableinput{
+text-align:center;
+
+}
+.controls .tableinput td{
+  height:23px;
+  width: 10%;
+}
+.controls .tableinput input{
+  width:85%!important;
+  border:0;
+  height:95%;
+  text-align:center;
+}
+.redpoint-num{
+  font-size: 20px;
+    color: red;
+    position: absolute;
+    margin-top: 5px;
+    display:none;
+}
+
+.redpoint{font-size: 20px;
+    color: red;
+    position: absolute;
+    margin-left:0px;
+    margin-top: 5px;
+    display:none;
+  }
+.temp .redpoint{
+margin-left:-15px;
+}
+.redpoint.required{display:block;}
+.redpoint-num.required{display:block;}
+.tab-content .component .controls{display: none!important;}
+.tab-content .component .control-group{
+  border:1px solid #ccc;
+  float:left;
+  margin-left:5px;
+
+}
+.tab-content .component .control-group .redpoint{
+  display:none;
+}
+.popover .num-plus{
+    position: absolute;
+    padding: 0px 5px;
+    margin-left: 60px;
+    margin-top: 5px;
+    cursor:pointer;
+    color:#fff;
+    background: #71B0FF
+  }
+
+.popover .table-button{
+    width: 80px;
+    text-align: center;
+    height: 20px;
+    padding: 5px;
+    border: 1px solid #ccc;
+    cursor: pointer;
+    margin: 10px 0;
+}
+
+.popover #lists{
+display:none;
+}
+.popover .table-option{
+    margin-top: 30px;
+    padding: 10px;
+}
+.popover .plus-container{
+    display:none;
+    position: absolute;
+    background: #fff;
+    border: 1px solid #ccc;
+    margin-left: 80px;
+    margin-top: 25px;
+    padding: 5px;
+}
+.popover .plus-container .plus-type:hover{
+  background: #ccc;
+  cursor:pointer;
+}
+.popover .table-option .lists-option{
+    cursor: pointer;
+    padding: 5px 10px;
+}
+.popover .table-option .lists-option p{
+  margin:0px;
+  min-height: 20px;
+}
+.popover .table-option .lists-option:hover{
+cursor:pointer;
+border: 1px solid #ccc;
+}
+.popover .table-option .delete-option{
+    position: absolute;
+    padding: 0px 7px;
+    background: #FF7575;
+    color: #fff;
+    margin-left: 160px;
+    margin-top: -20px;
+    cursor:pointer;
+
+}
+.popover .table-option .table-info{
+    width:228px;
+    position: absolute;
+    border: 1px solid #ccc;
+    top: 0;
+    left: 270px;
+    padding: 20px;
+    background: #fff;
+    display:none;
+}
+.popover .table-option .table-info .info-name{
+margin-top: 5px;
+}
+.popover .table-option .table-info textarea{
+margin-top: 10px;
+width: 195px;
+}
+.popover .table-option .table-info #require{
+    position: absolute;
+    margin-left: 0px;
+    margin-top: -22px;
+    cursor:pointer;
+}
+.tab-content .component .attribute-group{
+    float: left;
+    width: 160px;
+}
+.tab-content .component .attribute-group .delete-component{
+  display:none;}
+.tab-content .component .attribute-group legend{
+    display: block;
+    width: 100%;
+    text-align:center;
+    padding: 0;
+    margin-bottom: 5px;
+    font-size: 14px;
+    line-height: 20px;
+    color: #333;
+    border: 0;
+    border-bottom: none;
+}
+
+.number-unit{
+    position:absolute;
+    margin: 4px 0 0 40%;
+  }
+.half-form .number-unit{
+    margin: 4px 0 0 17%;
+}
+@media (max-width:1200px){
+.number-unit{
+    position:absolute;
+    margin: 4px 0 0 360px;
+  }
+.half-form .number-unit{
+    margin: 4px 0 0 140px;
+}
+}
+
+
+.float-left{float:left}
+.float-right{float:right}
+
+.border-around{
+  border:solid 1px #ccc!important;
+
+}
+
+.tab-content .component .control-group .control-label{
+  text-align: center;
+}
+
+
+.tabbable .twins-select .title{
+    width: 100%;
+    border: solid 1px #ccc;
+    padding: 10px;
+    font-weight: bold;
+    margin-bottom: 20px;
+}
+
+.tabbable .twins-select .choice{
+    float:left;
+    text-align:center;
+    cursor: pointer;
+}
+
+.delete-component{
+    display:none;
+
+}
+
+#target .component{float:left;width:100%;}
+
+.border-around .delete-component{
+  display:block;
+}
+.border-around .delete-component.displaynone{display:none;}
+
+#target .control-group .control-label{
+  width:110px;
+
+}
+
+#target .control-group .controls{
+  margin-left:120px;
+
+}
+
+#target .control-group .controls textarea{
+  height: 20px;
+}
+/*half-form*/
+
+
+
+.half-form{
+
+}
+.half-form .attribute-group{width:100%!important;}
+.half-form .control-group{width:100%; float:left;}
+.half-form .control-group .control-label{
+  width:65px;
+
+}
+.half-form .control-group .controls{
+  margin-left:75px;
+
+}
+.half-form .component{float: left;width:45%!important;}
+.half-form.component{float: left;width:45%!important;}
+
+.half-form .full-float-none{
+  width:90%!important;
+  float:none!important;
+}
+.half-form .full-float{
+  width:90%!important;
+}
+
+.half-form .control-group .controls .input-xlarge{
+width: 70%
+}
+.half-form .control-group .controls #selectmultiple{
+    height: 70px;
+}
+.half-form .control-group .controls .input-xxlarge{
+  width:65%;
+}
+.half-form .control-group .controls .input-large{
+  width:60%;
+}
+
+
+.half-form .table-full{width:100%!important;}
+.half-form .attribute-group{width:100%!important;}
+
+.half-form .control-group{
+  width:100%;
+  float:left;
+}
+
+.half-form .control-group .controls textarea{
+  width: 165px;
+  height: 20px;
+}
+
+/*half-form end*/
+
+
+/*tri-form*/
+
+.tri-form{
+
+}
+.tri-form .attribute-group{width:100%!important;}
+.tri-form .control-group{width:100%; float:left;}
+.tri-form .control-group .control-label{
+  width:65px;
+
+}
+.tri-form .control-group .controls{
+  margin-left:75px;
+
+}
+.tri-form .component{float: left;width:32%!important;}
+.tri-form.component{float: left;width:32%!important;}
+
+
+.tri-form .full-float-none{
+  width:100%!important;
+  float:none!important;
+}
+.tri-form .full-float{
+  width:100%!important;
+}
+
+.tri-form .control-group .controls .input-xlarge{
+  width:80%;
+}
+.tri-form .control-group .controls .input-xxlarge{
+  width:55%;
+}
+.tri-form .control-group .controls .input-large{
+  width:60%;
+}
+
+
+.tri-form .table-full{width:100%!important;}
+.tri-form .attribute-group{width:100%!important;}
+
+.tri-form .control-group{
+  width:100%;
+  float:left;
+}
+
+.tri-form .control-group .control-label{
+  width:60px;
+
+}
+
+
+
+.tri-form .control-group .controls textarea{
+  width: 110px;
+  height: 20px;
+}
+.tri-form .delete-component{
+    float: right;
+    margin-right: 1px;
+    margin-top: 5px;
+    border: 1px solid #ccc;
+    height: 19px;
+    padding-top: 0px;
+    width: 10px;
+    text-align: center;
+    color: #666;
+    font-size: 12px;
+
+}
+
+
+/*half-form end*/
+
+#build #target .attribute-group .controls{}
+
+.component .control-group{margin:10px 0 10px 0;}
+
+.popover-container{background:#ccc;width:300px;height:600px;position:absolute; left:680px; top:0px;z-index:9999;}
+
+
+.fade.in{
+
+}
+.popover{
+
+  overflow:hidden;
+  width:22%;
+  border: none;
+  border-left:1px solid #ccc;
+  border-radius:7px 0 0 0;
+}
+
+.popover-title{
+  width:100%;
+  margin-left:-256px;
+  border:1px solid #ccc;
+  border-left:none;
+}
+
+
+.popover-content{
+  width:90%;
+  margin-left:-256px;
+ border:1px solid #ccc;
+ border-left:none;
+ background-color:#fff;
+}
+
+
+.in .popover-title{
+  transform-origin: left;
+  transition: transform 0.8s;
+  transform: translateX(256px);
+  animation-timing-function: linear;
+
+}
+
+.in .popover-content{
+  transform-origin: left;
+  transition: transform 0.8s;
+  transform: translateX(256px);
+  animation-timing-function: linear;
+
+}
+
+

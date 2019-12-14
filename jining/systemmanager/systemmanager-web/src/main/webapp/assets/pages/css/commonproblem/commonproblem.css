@@ -1,0 +1,29 @@
+@CHARSET "UTF-8";
+/*常见问题页面开始*/
+/*常见问题的字体颜色文本的字体颜色*/
+
+.commonproblem table tr td {
+    color: #666 !important;
+}
+
+.commonproblem table tr td:nth-last-child(2) {
+    color: #999 !important;
+}
+
+/*#commonproblem_data > thead > tr > th:nth-last-child(1) {
+    width: 10px !important;
+}
+#commonproblem_data > thead > tr > th:nth-last-child(2){
+    width: 30px !important;
+}*/
+/*#commonproblem_data > tbody > tr > td:nth-last-child(1),
+#commonproblem_data > tbody > tr > td:nth-last-child(2){
+    text-align: center;
+}*/
+
+/*
+#commonproblem_data > thead > tr > th:nth-child(1),
+#commonproblem_data > tbody > tr > td:nth-child(1)
+{
+    text-align: left!important;
+}*/

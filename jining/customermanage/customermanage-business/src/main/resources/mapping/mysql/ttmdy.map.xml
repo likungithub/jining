@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xinhai.caiyun.customermanage.dao.TtmdyMapper">
+    <select id="tmdySelect" resultType="map">
+        select yp.id id,yp.htbm htbm,yp.htmc htmc,yp.ypbm ypbm,yp.ypmc ypmc,jc.zwmc_bm jcxm,yp.bzq bzq
+        from t_jcxm_jbxx jc,t_ypgl_jbxx yp,t_yp_jcxm ypjc
+        where jc.id = ypjc.jcxmid and yp.id = ypjc.ypid
+        <if test="map.htmc!=null and map.htmc!=''">
+            and htmc=#{map.htmc}
+        </if>
+        <if test="map.ypmc!=null and map.ypmc!=''">
+            and ypmc=#{map.ypmc}
+        </if>
+        <if test="map.jcxm!=null and map.jcxm!=''">
+            and jcxm=#{map.jcxm}
+        </if>
+        order by yp.id desc
+        limit #{map.start},#{map.length}
+    </select>
+
+    <select id="tmdyCount" resultType="java.lang.Integer">
+        select count(*)
+        from t_jcxm_jbxx jc,t_ypgl_jbxx yp,t_yp_jcxm ypjc
+        where jc.id = ypjc.jcxmid and yp.id = ypjc.ypid
+    </select>
+
+    <select id="tmsmSelect" resultType="com.xinhai.caiyun.customermanage.api.Typcb" parameterType="java.lang.String">
+        select yp.id id,yp.htbm htbm,yp.htmc htmc,yp.ypbm ypbm,yp.ypmc ypmc,yp.bzq bzq
+        from t_ypgl_jbxx yp
+        where yp.ypbm = #{ypbm}
+    </select>
+</mapper>

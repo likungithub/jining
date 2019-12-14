@@ -1,0 +1,345 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xinhai.caiyun.systemmanager.dao.ScwtMapper">
+
+    <!-- 将导入的省抽 数据插入 省抽的 抽样单表中-->
+    <insert id="addYpExcelToSc">
+        insert into sc_cyd_info(
+        YPMC,CHANPINZL,YPLAIYUAN,CYFANGSHI,YPSHUXING,YPLEIXIN,SB ,YPPHHBH,SCRQ,BZQ ,
+        YPZXBZ,GGXH,YPDJ,SCXKBH,YPDANJIA,IF_CK,YBJS,YPSL,YPDW,BYSL,YPBGFL,YPXT,YPBCTJ,CYYPBZ,JSYPDZ,
+        JSYPJZRQ,SCDW,SCDZ,SCDWLXR,SCDWLXDH,SC_SPFL_ID,SC_CYDH,RWLY,SC_RWLX,CYRQ,CYDD,SJDW,QYLX,
+        BCJDWDZ,FRDB,NXSE,YYZZH,BCJDWLXR,BCJDWYDDH,BCJDWCZ,BCJDWYB,CYDW,CYDWXXDZ,CYDWLXR,CYDWLXDH,CYDWCZ,
+        CYDWYB,CYRY,BZ ,CYDDSSHJ,BCJDWGM,BCJDWQY,CYFW,SJLY_BZ,SJWZ_BZ,SC_DRRQ,SC_DRRY,SC_TB_BD
+        ) values
+        <foreach collection="list" item="map" index="index" separator=",">
+            (
+            #{map.YPMC},#{map.CHANPINZL},#{map.YPLAIYUAN},#{map.CYFANGSHI},#{map.YPSHUXING},#{map.YPLEIXIN},
+            #{map.SB },#{map.YPPHHBH},#{map.SCRQ},#{map.BZQ },#{map.YPZXBZ},#{map.GGXH},
+            #{map.YPDJ},#{map.SCXKBH},#{map.YPDANJIA},#{map.IF_CK},#{map.YBJS},#{map.YPSL},
+            #{map.YPDW},#{map.BYSL},#{map.YPBGFL},#{map.YPXT},#{map.YPBCTJ},#{map.CYYPBZ},
+            #{map.JSYPDZ},#{map.JSYPJZRQ},#{map.SCDW},#{map.SCDZ},#{map.SCDWLXR},#{map.SCDWLXDH},
+            #{map.SC_SPFL_ID},#{map.SC_CYDH},#{map.RWLY},#{map.SC_RWLX},#{map.CYRQ},#{map.CYDD},
+            #{map.SJDW},#{map.QYLX},#{map.BCJDWDZ},#{map.FRDB},#{map.NXSE},#{map.YYZZH},#{map.BCJDWLXR},
+            #{map.BCJDWYDDH},#{map.BCJDWCZ},#{map.BCJDWYB},#{map.CYDW},#{map.CYDWXXDZ},#{map.CYDWLXR},
+            #{map.CYDWLXDH},#{map.CYDWCZ},#{map.CYDWYB},#{map.CYRY},#{map.BZ },#{map.CYDDSSHJ},
+            #{map.BCJDWGM},#{map.BCJDWQY},#{map.CYFW},'SC','N',now(),#{map.SC_DRRY},'N'
+            )
+        </foreach>
+    </insert>
+
+    <!--  查询 所有的省抽数据-->
+   <select id="findAllScsj" resultType="map">
+       SELECT
+               ID,WTID,YPBM,YPMC,CHANPINZL,YPLAIYUAN,CYFANGSHI,YPSHUXING,YPLEIXIN,SB ,YPPHHBH,SCRQ,BZQ ,
+               YPZXBZ,GGXH,YPDJ,SCXKBH,YPDANJIA,IF_CK,YBJS,YPSL,YPDW,BYSL,YPBGFL,YPXT,YPBCTJ,CYYPBZ,JSYPDZ,
+               JSYPJZRQ,SCDW,SCDZ,SCDWLXR,SCDWLXDH,SC_SPFL_ID,SC_CYDH,RWLY,SC_RWLX,CYRQ,CYDD,SJDW,QYLX,
+               BCJDWDZ,FRDB,NXSE,YYZZH,BCJDWLXR,BCJDWYDDH,BCJDWCZ,BCJDWYB,CYDW,CYDWXXDZ,CYDWLXR,CYDWLXDH,CYDWCZ,
+               CYDWYB,CYRY,BZ ,CYDDSSHJ,BCJDWGM,BCJDWQY,CYFW,SJLY_BZ,SJWZ_BZ,SC_DRRQ,SC_DRRY,SC_TB_BD
+       FROM
+        sc_cyd_info
+       WHERE
+         1=1
+           <if test="map.ypmc!=null and map.ypmc!=''">
+               AND ypmc like concat('%',#{map.ypmc},'%')
+           </if>
+           <if test="map.tbbz!=null and map.tbbz!=''">
+               AND SC_TB_BD = #{map.tbbz}
+           </if>
+            <if test="map.sjwz_bz!=null and map.sjwz_bz!=''">
+               AND SJWZ_BZ = #{map.sjwz_bz}
+           </if>
+           <choose>
+               <when test="map.startDate!=null and map.endDate!=null">
+                   and  SC_DRRQ between #{map.startDate} and #{map.endDate}
+               </when>
+               <otherwise>
+                   <choose>
+                       <when test="map.startDate!=null and map.endDate==null">
+                           and  SC_DRRQ  &gt;= #{map.startDate}
+                       </when>
+                       <otherwise>
+                           <choose>
+                               <when test="map.startDate==null and map.endDate!=null">
+                                   and SC_DRRQ &lt;= #{map.endDate}
+                               </when>
+                           </choose>
+                       </otherwise>
+                   </choose>
+               </otherwise>
+           </choose>
+       order by id desc
+       limit #{map.start},#{map.length};
+    </select>
+
+    <!-- 获取所有 省抽数据数量-->
+    <select id="findAllScsjNum" resultType="java.lang.Integer">
+       select count(*)
+        FROM
+        sc_cyd_info
+        WHERE
+        1=1
+        <if test="map.ypmc!=null and map.ypmc!=''">
+            AND ypmc like concat('%',#{map.ypmc},'%')
+        </if>
+        <if test="map.tbbz!=null and map.tbbz!=''">
+            AND SC_TB_BD = #{map.tbbz}
+        </if>
+        <if test="map.sjwz_bz!=null and map.sjwz_bz!=''">
+            AND SJWZ_BZ = #{map.sjwz_bz}
+        </if>
+        <choose>
+            <when test="map.startDate!=null and map.endDate!=null">
+                and  SC_DRRQ between #{map.startDate} and #{map.endDate}
+            </when>
+            <otherwise>
+                <choose>
+                    <when test="map.startDate!=null and map.endDate==null">
+                        and  SC_DRRQ  &gt;= #{map.startDate}
+                    </when>
+                    <otherwise>
+                        <choose>
+                            <when test="map.startDate==null and map.endDate!=null">
+                                and SC_DRRQ &lt;= #{map.endDate}
+                            </when>
+                        </choose>
+                    </otherwise>
+                </choose>
+            </otherwise>
+        </choose>
+    </select>
+
+    <select id="getScCydById" resultType="map">
+        SELECT
+        ID,WTID,YPBM,YPMC,CHANPINZL,YPLAIYUAN,CYFANGSHI,YPSHUXING,YPLEIXIN,SB ,YPPHHBH,SCRQ,BZQ ,
+        YPZXBZ,GGXH,YPDJ,SCXKBH,YPDANJIA,IF_CK,YBJS,YPSL,YPDW,BYSL,YPBGFL,YPXT,YPBCTJ,CYYPBZ,JSYPDZ,
+        JSYPJZRQ,SCDW,SCDZ,SCDWLXR,SCDWLXDH,SC_SPFL_ID,SC_CYDH,RWLY,SC_RWLX,CYRQ,CYDD,SJDW,QYLX,
+        BCJDWDZ,FRDB,NXSE,YYZZH,BCJDWLXR,BCJDWYDDH,BCJDWCZ,BCJDWYB,CYDW,CYDWXXDZ,CYDWLXR,CYDWLXDH,CYDWCZ,
+        CYDWYB,CYRY,BZ ,CYDDSSHJ,BCJDWGM,BCJDWQY,CYFW,SJLY_BZ,SJWZ_BZ,SC_DRRQ,SC_DRRY,SC_TB_BD
+        FROM
+        sc_cyd_info
+        WHERE
+        id IN
+        <foreach index="index" item="id" collection="ids" open="(" separator=","  close=")">
+            #{id}
+        </foreach>
+        order by id desc
+    </select>
+
+    <!-- 将省抽的 抽样单 同步到 本地委托-->
+    <insert id="scTbBdWt">
+        <foreach collection="list" item="map" index="index" separator=",">
+            insert into t_wt_jbxx(WTID,SC_CYDH,RWLY,SC_RWLX,CYRQ,CYDD,SJDW,QYLX,BCJDWDZ,FRDB,NXSE,YYZZH,BCJDWLXR,BCJDWYDDH,BCJDWCZ,
+                BCJDWYB,CYDW,CYDWXXDZ,CYDWLXR,CYDWLXDH,CYDWCZ,CYDWYB,CYRY,BZ,CYDDSSHJ,BCJDWGM,BCJDWQY,CYFW,SJLY_BZ,SJWZ_BZ,SC_DRRQ,SC_DRRY,cxzt,type,cydbm,if_sl)
+             values
+                    (
+                    #{map.WTID},#{map.SC_CYDH},#{map.RWLY},#{map.SC_RWLX},#{map.CYRQ},#{map.CYDD},#{map.SJDW},#{map.QYLX},#{map.BCJDWDZ},#{map.FRDB},
+                    #{map.NXSE},#{map.YYZZH},#{map.BCJDWLXR},#{map.BCJDWYDDH},#{map.BCJDWCZ},#{map.BCJDWYB},#{map.CYDW},#{map.CYDWXXDZ},#{map.CYDWLXR},
+                    #{map.CYDWLXDH},#{map.CYDWCZ},#{map.CYDWYB},#{map.CYRY},#{map.BZ},#{map.CYDDSSHJ},#{map.BCJDWGM},#{map.BCJDWQY},#{map.CYFW},
+                    'SC','N',now(),#{map.SC_DRRY},'002','003',#{map.SC_CYDH},'1'
+                    );
+        </foreach>
+
+        <foreach collection="list" item="map2" index="index" separator=",">
+            insert into t_ypgl_jbxx(
+                WTID,YPBM,YPMC,CHANPINZL,YPLAIYUAN,CYFANGSHI,YPSHUXING ,YPLEIXIN ,SB,YPPHHBH,SCRQ,BZQ,YPZXBZ,GGXH,YPDJ,SCXKBH,
+                YPDANJIA,IF_CK,YBJS,YPSL,YPDW,BYSL,YPBGFL,YPXT,YPBCTJ,CYYPBZ,JSYPDZ,JSYPJZRQ,SCDW,SCDZ,SCDWLXR,SCDWLXDH,SC_SPFL_ID,LRRQ,if_th,if_cy
+            ) values
+                (
+                    #{map2.WTID},#{map2.YPBM},#{map2.YPMC},#{map2.CHANPINZL},#{map2.YPLAIYUAN},#{map2.CYFANGSHI},#{map2.YPSHUXING },#{map2.YPLEIXIN },
+                    #{map2.SB},#{map2.YPPHHBH},#{map2.SCRQ},#{map2.BZQ},#{map2.YPZXBZ},#{map2.GGXH},#{map2.YPDJ},#{map2.SCXKBH},#{map2.YPDANJIA},
+                    #{map2.IF_CK},#{map2.YBJS},#{map2.YPSL},#{map2.YPDW},#{map2.BYSL},#{map2.YPBGFL},#{map2.YPXT},#{map2.YPBCTJ},#{map2.CYYPBZ},
+                    #{map2.JSYPDZ},#{map2.JSYPJZRQ},#{map2.SCDW},#{map2.SCDZ},#{map2.SCDWLXR},#{map2.SCDWLXDH},#{map2.SC_SPFL_ID},
+                    now(),'0','1'
+                );
+        </foreach>
+    </insert>
+
+    <!--  省抽同步到本地 委托后  更新 省抽数据的同步状态  同时 将检测项插入到 本地 委托的检测项对应表中-->
+    <update id="updateScTbZtAndJcx">
+        <foreach collection="list" item="item" index="index">
+            update sc_cyd_info set SC_TB_BD='Y' ,WTID=#{item.WTID},YPBM=#{item.WTID} where id=#{item.ID};
+        </foreach>
+            INSERT INTO t_yp_jcxm (ypid,jcxmid)
+            SELECT
+                a.ID AS ypid,
+                d.id AS jxcmid
+            FROM
+                t_ypgl_jbxx a,
+                t_wt_jbxx b,
+                sc_yp_jcxm c,
+                t_jcxm_jbxx d
+            WHERE
+            a.WTID IN
+            <foreach index="index" item="map" collection="list" open="(" separator=","  close=")">
+                #{map.WTID}
+            </foreach>
+                AND a.wtid = b.wtid
+                AND b.sc_cydh = c.sc_cydh
+                AND b.sjly_bz = 'SC'
+                AND c.id = d.SC_JCX_ID
+    </update>
+
+    <!-- 省抽 的 检测项 从 省抽HTTP远程更新下来后 写入到本地-->
+    <insert id="addCydJcx">
+        <!--  检测项同步完成 更新  省抽数据的 检测项完整度状态-->
+        UPDATE sc_cyd_info set SJWZ_BZ='Y' where id in
+        <foreach collection="list" item="map2" index="index" open="(" close=");"  separator=",">
+             #{map2.sc_cyd_id}
+        </foreach>
+
+        insert into  sc_yp_jcxm(
+            remark,inspectionItemType,minAllowLimitUnit,standardMinAllowLimitUnit,
+            byLaw,problemItemConclusion,inspectionItemName,inspectionResultUnit,
+            creatorName,editorName,maxAllowLimitUnit,methodDetectionLimitUnit,id,
+            standardMaxAllowLimitUnit,minAllowLimit,unitOfMesurement,creatorId,
+            standardMinAllowLimit,editorId,createTime,byLawShort,limitAmount,
+            inspectionMethod,maxAllowLimit,foodCategoryId,methodDetectionLimit,editTime,
+            itemDatasource,standardMaxAllowLimit,dataStatus,planName,planNo,sc_cydh,sc_cyd_id
+        ) values
+        <foreach collection="list" item="map" index="index" separator=",">
+            (
+            #{map.remark},#{map.inspectionItemType},#{map.minAllowLimitUnit},#{map.standardMinAllowLimitUnit},
+            #{map.byLaw},#{map.problemItemConclusion},#{map.inspectionItemName},#{map.inspectionResultUnit},
+            #{map.creatorName},#{map.editorName},#{map.maxAllowLimitUnit},#{map.methodDetectionLimitUnit},
+            #{map.id},#{map.standardMaxAllowLimitUnit},#{map.minAllowLimit},#{map.unitOfMesurement},#{map.creatorId},
+            #{map.standardMinAllowLimit},#{map.editorId},#{map.createTime},#{map.byLawShort},#{map.limitAmount},
+            #{map.inspectionMethod},#{map.maxAllowLimit},#{map.foodCategoryId},#{map.methodDetectionLimit},
+            #{map.editTime},#{map.itemDatasource},#{map.standardMaxAllowLimit},#{map.dataStatus},#{map.planName},
+            #{map.planNo},#{map.sc_cydh},#{map.sc_cyd_id}
+            )
+        </foreach>
+
+
+
+</insert>
+
+
+<!--  通过省抽  抽样单主键 删除 省抽抽样单信息及检测项信息-->
+    <delete id="deleteScInfo">
+        delete from sc_cyd_info where id=#{zjid};
+        delete from sc_yp_jcxm where sc_cyd_id = #{zjid};
+    </delete>
+
+
+    <!-- 将插入数据放到任务表中-->
+    <insert id="addT_RwglExcel">
+        insert into t_rwgl_jbxx(rwid,cyrq,cydd,cylxr,bzxx,wtid,blzt,bmdm,lrry,sjly,rw_type,lrrq)
+        values
+        <foreach collection="list" item="map" index="index" separator=",">
+            (
+            #{map.cydbh},#{map.cyrq},#{map.cydd},#{map.cyr},#{map.bz},#{map.cydbh},'002',
+            #{map.bmdm},#{map.lrry},'1','002',now()
+            )
+        </foreach>
+    </insert>
+    <!-- 将接口中的json数据放到数据库中-->
+    <insert id="addInterfaceJson">
+        insert into temp_sj_jcxm(cydbh,bgfl1,jyxmid,jyxm,jyjg,jgdw,bzxz,bzxzdw,jgpd,sm,jyyj,pdyj,ffjcx,ffjcxdw,bzffjcx,
+         bzffjcxdw,bzzxyxx,bzzxyxxdw,bzzdyxx,bzzdyxxdw,zxyxx,zxyxxdw,zdyxx,zdyxxdw,spflid
+        ) values
+        <foreach collection="list" item="map" index="index" separator=",">
+            (#{map.cydbh},#{map.bgfl1},#{map.jyxmid},#{map.jyxm},#{map.jyjg},#{map.jgdw},#{map.bzxz},#{map.bzxzdw},#{map.jgpd},
+            #{map.sm},#{map.jyyj},#{map.pdyj},#{map.ffjcx},#{map.ffjcxdw},#{map.bzffjcx},#{map.bzffjcxdw},#{map.bzzxyxx},#{map.bzzxyxxdw},
+            #{map.bzzdyxx},#{map.bzzdyxxdw},#{map.zxyxx},#{map.zxyxxdw},#{map.zdyxx},#{map.zdyxxdw},#{map.spflid})
+        </foreach>
+    </insert>
+    <!-- 根据cydbh查找对应的检验项目信息-->
+    <select id="findJyxmByCydbh" resultType="com.xinhai.caiyun.systemmanager.api.Scgl">
+       SELECT
+	sc.cydbh,
+	jc.bgfl1,
+	jc.jyxmid,
+	jc.jyxm,
+	jc.jyjg,
+	jc.jgdw,
+	jc.bzxz,
+	jc.bzxzdw,
+	jc.jgpd,
+	jc.sm,
+	jc.jyyj,
+	jc.pdyj,
+	jc.ffjcx,
+	jc.ffjcxdw,
+	jc.bzffjcx,
+	jc.bzffjcxdw,
+	jc.bzzxyxx,
+	jc.bzzxyxxdw,
+	jc.bzzdyxx,
+	jc.bzzdyxxdw,
+	jc.zxyxx,
+	jc.zxyxxdw,
+	jc.zdyxx,
+	jc.zdyxxdw
+  FROM
+ (SELECT * from t_scgl_jbxx where cydbh=#{cydbh}) sc
+ LEFT JOIN temp_sj_jcxm jc on sc.spflid=jc.spflid;
+    </select>
+    <!-- 根据cydbh查找对应的检验报告主信息-->
+    <select id="findBgzxxByCydbh" resultType="com.xinhai.caiyun.systemmanager.api.Scgl">
+        select wtid as cydbh,dwmc as wtdw,lxrmc as lxr,bgdh as dh,jdmc as dz,cz
+        from t_wt_jbxx
+        where wtid=#{cydbh};
+    </select>
+    <!--  根据抽样单编号  查找对应的抽样单信息 -->
+    <select id="findCyypByCydbh" resultType="com.xinhai.caiyun.systemmanager.api.Scgl">
+    SELECT
+	ypbm AS cydbh,
+	ypmc,
+	cpdlmc AS yplx,
+	bysl,
+	ypsl AS cysl,
+	ypdw AS cysldw,
+	ggxh,
+	ypph,
+	bzq,
+	zxbz,
+	zldj,
+	sb,
+	rq AS scrq,
+	sczmc AS bssczmc,
+	sczdz AS bssczdz,
+	ypbctj AS ypcctj,
+	bzxx AS bz,
+	rwly,
+	rwlb AS rwlx,
+	qylx,
+	cyjs,
+	bzlx,
+	yply,
+	ypsx,
+	yplx,
+	dj,
+	if_ck,
+	scxkzbh,
+	lxr AS bcydwlxr,
+	dh AS bcydwdh,
+	jsypjzrq,
+	jsypdz,
+	cysl
+    FROM
+	t_ypgl_jbxx where ypbm=#{cydbh};
+    </select>
+
+
+
+
+    <!-- 清空检省抽测项目临时表的信息-->
+    <delete id="cleanTempScJcxm">
+        delete from temp_sj_jcxm;
+    </delete>
+    <!-- 通过抽样单编号查找对应的食品分类id -->
+    <select id="findSpflidByCydbh" resultType="java.lang.String">
+        select spflid from t_scgl_jbxx
+        where cydbh=#{cydbh};
+    </select>
+    <!-- 通过抽样单编号 删除对应的省抽管理信息(t_scgl_jbxx)-->
+    <delete id="deleteRwglExcel">
+        delete from t_scgl_jbxx where cydbh=#{cydbh};
+    </delete>
+
+    <!-- 通过抽样单编号 删除对应的的任务表中的信息 t_rwgl_jbxx-->
+    <delete id="deleteRy_RwglExcel">
+        delete from t_rwgl_jbxx where wtid=#{cydbh};
+    </delete>
+</mapper>

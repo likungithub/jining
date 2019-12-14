@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!-- namespace必须和接口名称一一对应 -->
+<mapper namespace="com.xinhai.caiyun.commonmanager.dao.CommonManagerMapper">
+ 
+    <!--获取一个合同编码最大值  -->
+    <select id="getMaxHtbm" resultType="java.lang.String">
+		SELECT MAX(HTBM) FROM T_WT_JBXX;
+	</select>
+	
+	<!--获取一个代理机构编码编码最大值  -->
+    <select id="getMaxDljgbm" resultType="java.lang.String">
+        SELECT MAX(WTID) FROM T_WT_JBXX;
+    </select>
+    
+    <!--获取一个代理记账公司税号(纳税人识别号)最大值  -->
+    <select id="getMaxNsrsbh" resultType="java.lang.String">
+        SELECT MAX(YPBM) FROM T_YPGL_JBXX ;
+    </select>
+    
+    <!--获取一个员工编码（会计编码、职员编码）最大值  -->
+    <select id="getMaxYgbm" resultType="java.lang.String">
+        SELECT MAX(ZYDM) FROM USER;
+    </select>
+
+    <!-- 获取一个客户编码（代理记账公司的客户）最大值
+    <select id="getMaxKhbm" resultType="java.lang.String">
+        SELECT MAX(KHBM) FROM PT_KHXX;
+    </select>
+    
+    获取一个收据编码最大值 
+    <select id="getMaxSjbm" resultType="java.lang.String">
+        SELECT MAX(SJBM) FROM PT_SFGL_SFXX;
+    </select> -->
+    
+    <!--获取邮件系统配置 -->
+    <select id="getEmailConfig" resultType="com.xinhai.caiyun.commonmanager.api.EmailConfig">
+        SELECT KEY1 mailHost,KEY2 senderUsername,KEY3 senderPassword FROM CS_XTPZ WHERE DM_PZLX = '001' ;
+    </select>
+
+    <select id="getShareConfig" resultType="java.lang.String">
+        SELECT KEY1 shareurl FROM CS_XTPZ WHERE DM_PZLX = '002' ;
+    </select>
+    
+    <select id="getSysMb" parameterType="java.lang.String" resultType="java.lang.String">
+        SELECT KEY1 FROM CS_XTMB WHERE DM_PZLX = #{pzlx} AND MBID = #{mbId};
+    </select>
+    
+   
+</mapper>

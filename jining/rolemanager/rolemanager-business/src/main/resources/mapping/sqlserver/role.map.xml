@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.xinhai.rolemanager.dao.RoleMapper">
+    <resultMap id="roleMap" type="com.xinhai.rolemanager.entity.Role">
+        <id property="id" column="id"/>
+        <result property="name" column="name"/>
+        <result property="customerId" column="customer_id"/>
+        <result property="orderNo" column="order_no"/>
+        <result property="remark" column="remark"/>
+    </resultMap>
+
+    <insert id="addRole" parameterType="com.xinhai.rolemanager.entity.Role" keyProperty="id"
+            useGeneratedKeys="true">
+		INSERT INTO role (id, name, customer_id, order_no, remark)
+		VALUES (#{id}, #{name}, #{customerId}, #{orderNo}, #{remark});
+	</insert>
+    <insert id="setRoleAuth">
+        INSERT INTO role_auth (role_id, resource_id) VALUES
+        <foreach collection="authIds" item="authId" index="index" separator=",">
+            (#{id}, #{authId})
+        </foreach>
+    </insert>
+    <insert id="setRoleUsers">
+        INSERT INTO user_role (role_id, user_id) VALUES
+        <foreach collection="userIds" item="userId" index="index" separator=",">
+            (#{roleId}, #{userId})
+        </foreach>
+    </insert>
+    <update id="updateRole">
+		UPDATE role
+		SET name = #{role.name}, order_no = #{role.orderNo}, remark = #{role.remark} where id = #{id};
+	</update>
+    <delete id="deleteRole">
+		DELETE FROM role
+		WHERE id = #{id};
+	</delete>
+    <delete id="deleteRoleAuth">
+		DELETE FROM role_auth
+		WHERE role_id = #{id};
+	</delete>
+    <delete id="deleteRoleUser">
+        DELETE FROM user_role
+        WHERE role_id = #{roleId};
+    </delete>
+    <select id="getRole" resultMap="roleMap">
+		SELECT *
+		FROM role
+		WHERE id = #{id}
+	</select>
+    <select id="getRoles" resultMap="roleMap">
+		SELECT *
+		FROM role
+		WHERE customer_id = #{customerId};
+	</select>
+    <select id="roleHasExist" resultType="java.lang.Integer">
+		SELECT COUNT(id)
+		FROM role
+		WHERE name = #{name}
+			  AND customer_id = #{customerId};
+	</select>
+    <select id="getRoleAuth" resultType="java.lang.String">
+		SELECT resource_id
+		FROM role_auth
+		WHERE role_id = #{id};
+	</select>
+</mapper>

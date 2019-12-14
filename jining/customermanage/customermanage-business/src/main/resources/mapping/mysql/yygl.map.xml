@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xinhai.caiyun.customermanage.dao.YyglMapper">
+    <select id="yyglqueryList" resultType="Map">
+        select id as id,ypbm as ypbm,ypmc as ypmc,htmc as htmc,ypsl as ypsl,ypdw as ypdw,ypbctj as ypbctj,(now()-dysj) as cczq,bzq as bzq
+,jszt as jszt,ypjczt as ypjczt,if_fhcl as if_fhcl from t_ypgl_jbxx
+        where id>0
+        <if test="map.htmc!=null and map.htmc!=''">
+            and htmc = #{map.htmc}
+        </if>
+        <if test="map.ypmc!=null and map.ypmc!=''">
+            and ypmc = #{map.ypmc}
+        </if>
+        <if test="map.ypbctj!=null and map.ypbctj!=''">
+            and ypbctj = #{map.ypbctj}
+        </if>
+        limit #{map.start},#{map.length};
+    </select>
+    <select id="yyglCount" resultType="java.lang.Integer">
+        select count(*) from t_ypgl_jbxx
+        where id>0
+        <if test="map.htmc!=null and map.htmc!=''">
+            and htmc = #{map.htmc}
+        </if>
+        <if test="map.ypmc!=null and map.ypmc!=''">
+            and ypmc = #{map.ypmc}
+        </if>
+        <if test="map.ypbctj!=null and map.ypbctj!=''">
+            and ypbctj = #{map.ypbctj}
+        </if>
+    </select>
+</mapper>

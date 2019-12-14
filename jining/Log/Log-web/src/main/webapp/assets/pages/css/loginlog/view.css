@@ -1,0 +1,8 @@
+@CHARSET "UTF-8";
+.loginlog-m  .modal-dialog{
+    border-radius: 4px!important;
+}
+.loginlog-m  .modal-header .modal-title{
+    font-weight: 800;
+    color: #333;
+}

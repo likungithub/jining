@@ -1,0 +1,8 @@
+@CHARSET "UTF-8";
+#contacts_data thead > tr > th:nth-child(-n+3) {
+    width: 200px;
+}
+
+#contacts_data tbody > tr > td {
+    text-align: center;
+}

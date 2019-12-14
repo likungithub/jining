@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xinhai.caiyun.customermanage.dao.PageConfigMapper">
+    <select id="findById" resultType="map">
+        select *
+        from t_zddy
+        WHERE 1=1
+        <if test="map.ypmc !='' ">
+            and ymbm = #{map.ymbm}
+        </if>
+    </select>
+
+    <!--更新-->
+    <update id="update">
+        update t_zddy
+        set
+        mapAttrName = #{map.mapAttrName},
+        mapControlType = #{map.mapControlType},
+        mapAttrId = #{map.mapAttrId},
+        mapStoreColum = #{map.mapStoreColum},
+        mapDefauleValue = #{map.mapDefauleValue}
+        WHERE ymbm = #{map.ymbm}
+    </update>
+
+    <!--新增信息-->
+    <insert id="add">
+        INSERT into t_zddy
+        (ymbm,mapAttrName,mapControlType,mapAttrId,mapStoreColum,mapDefauleValue)
+        values (#{map.ymbm},#{map.mapAttrName},#{map.mapControlType},#{map.mapAttrId},#{map.mapStoreColum},#{map.mapDefauleValue});
+    </insert>
+
+    <delete id="del">
+        delete from t_zddy where ymbm=#{map.ymbm};
+    </delete>
+</mapper>

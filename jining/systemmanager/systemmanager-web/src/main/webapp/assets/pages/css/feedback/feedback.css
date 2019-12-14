@@ -1,0 +1,17 @@
+@CHARSET "UTF-8";
+.feedback-input-m {
+    height: 33px;
+    width: 100px!important;
+    position: relative;
+    top: 1px;
+}
+.feedback-label-m{
+    width: 70px;
+}
+.feedback-btn-m
+{
+    height: 33px;
+    position: relative;
+    top: 1px;
+    border-radius: 0 4px 4px 0!important;
+}

@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xinhai.caiyun.systemmanager.dao.YqWxsqMapper">
+        <select id="findAll_YqWxsq" resultType="com.xinhai.caiyun.systemmanager.api.YqWxsq">
+            select *
+            from yq_wxsq
+        </select>
+        <insert id="insert_YqWxsq" parameterType="com.xinhai.caiyun.systemmanager.api.YqWxsq">
+            insert into yq_wxsq
+            <trim prefix="(" suffix=")" suffixOverrides=",">
+                <if test="id!=0">
+                    id,
+                </if>
+                <if test="name!=null">
+                    name,
+                </if>
+                <if test="xh!=null">
+                    xh,
+                </if>
+                <if test="cj!=null">
+                    cj,
+                </if>
+                <if test="scrq!=null">
+                    scrq,
+                </if>
+                <if test="sqrq!=null">
+                    sqrq,
+                </if>
+                <if test="sqr!=null">
+                    sqr,
+                </if>
+                <if test="sqbm!=null">
+                    sqbm,
+                </if>
+                <if test="wtms!=null">
+                    wtms,
+                </if>
+                <if test="yqts!=null">
+                    yqts,
+                </if>
+            </trim>
+            <trim prefix="values (" suffix=")" suffixOverrides=",">
+                <if test="id!=0">
+                    #{id},
+                </if>
+                <if test="name!=null">
+                    #{name},
+                </if>
+                <if test="xh!=null">
+                    #{xh},
+                </if>
+                <if test="cj!=null">
+                    #{cj},
+                </if>
+                <if test="scrq!=null">
+                    #{scrq},
+                </if>
+                <if test="sqrq!=null">
+                    #{sqrq},
+                </if>
+                <if test="sqr!=null">
+                    #{sqr},
+                </if>
+
+                <if test="sqbm!=null">
+                    #{sqbm},
+                </if>
+                <if test="wtms!=null">
+                    #{wtms},
+                </if>
+            </trim>
+
+        </insert>
+    <!--条件查询申请记录-->
+    <select id="findsome" resultType="com.xinhai.caiyun.systemmanager.api.YqWxsq" parameterType="com.xinhai.caiyun.systemmanager.api.Yqwxcx">
+        select *
+        from yq_wxsq
+        where id>0
+          <if test="name!=null and name!=''">
+              and name=#{name}
+          </if>
+        <if test="sqbm!=null and name!=''">
+            and sqbm=#{sqbm}
+        </if>
+        <choose>
+            <when test="stardate!=null and enddate!=null">
+                and sqrq between #{stardate} and #{enddate}
+            </when>
+            <otherwise>
+                <choose>
+                    <when test="stardate!=null and enddate==null">
+                        and sqrq &gt; #{stardate}
+                    </when>
+                    <otherwise>
+                        <choose>
+                            <when test="stardate==null and enddate!=null">
+                                and sqrq &lt; #{enddate}
+                            </when>
+                        </choose>
+                    </otherwise>
+                </choose>
+            </otherwise>
+        </choose>
+    </select>
+    <select id="findyqsbtz" resultType="string">
+        select name
+        from yqsbtz
+    </select>
+</mapper>

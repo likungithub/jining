@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+																																																												<!-- namespace必须和接口名称一一对应 -->
+<mapper namespace="com.xinhai.caiyun.commonmanager.dao.ServiceNotificationMapper">
+
+    <resultMap id="_xzqy" type="com.xinhai.caiyun.commonmanager.api.ServiceNotification">
+        <result property="id" column="ID"/>
+        <result property="notificationType" column="FWTZLX_DM"/>
+        <result property="mblx" column="mblx"/>
+        <result property="notificationName" column="FWTZLX_MC"/>
+        <result property="agencyCode" column="DLJG_BM"/>
+        <result property="employeeCode" column="ZYDM"/>
+        <result property="customerCode" column="KHBM"/>
+        <result property="messageCode" column="XXBM"/>
+        <result property="messageContent" column="XXNR"/>
+        <result property="messageSandTime" column="XXFSRQ"/>
+        <result property="departmentCode" column="BMDM"/>
+    </resultMap>
+    <insert id="insertFollowUp" parameterType="com.xinhai.caiyun.commonmanager.api.ServiceNotification">
+    insert into pt_fwtz(FWTZLX_DM,mblx,FWTZLX_MC,DLJG_BM,ZYDM,KHBM,XXBM,XXNR,XXFSRQ,BMDM)
+     values(#{notificationType},#{mblx},#{notificationName},#{agencyCode},#{employeeCode},#{customerCode},#{messageCode},#{messageContent},#{messageSandTime},#{departmentCode})
+    </insert>
+</mapper>

@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xinhai.caiyun.systemmanager.dao.YqWhjlMapper">
+    <select id="findAll" resultType="com.xinhai.caiyun.systemmanager.api.YqWxsq">
+        select *
+        from yq_wxsq
+    </select>
+    <select id="findYqWhjlById" resultType="com.xinhai.caiyun.systemmanager.api.YqWxsq" parameterType="string">
+        select *
+        from yq_wxsq
+        where id=#{id}
+    </select>
+    <update id="updateYqWhjl" parameterType="com.xinhai.caiyun.systemmanager.api.YqWxsq">
+        update yq_wxsq
+              <set>
+                    <if test="name!=null">
+                        name=#{name},
+                    </if>
+                    <if test="scrq!=null">
+                        scrq=#{scrq},
+                    </if>
+                  <if test="whr!=null">
+                        whr=#{whr},
+                  </if>
+                  <if test="whrq!=null">
+                        whrq=#{whrq},
+                  </if>
+                  <if test="whnr!=null">
+                        whnr=#{whnr},
+                  </if>
+                  <if test="bzxx!=null">
+                        bzxx=#{bzxx},
+                  </if>
+                  <if test="zt!=null">
+                      zt=#{zt}
+                  </if>
+              </set>
+
+              where id=#{id}
+    </update>
+    <delete id="deleteYqwhjl" parameterType="string">
+        delete
+        from yq_wxsq
+        where id=#{id}
+    </delete>
+</mapper>

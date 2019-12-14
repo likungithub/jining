@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xinhai.caiyun.customermanage.dao.HyglMapper">
+    <select id="selectHyglList" resultType="Map">
+        select yp.id,wt.WTDW as htbm, wt.HTMC,yp.ypbm,yp.ypmc,yp.ypsl,yp.jszt as ypzt,yp.THRYNAME as hyry,yp.THSJ as THSJ
+        from  t_ypgl_jbxx yp left JOIN t_wt_jbxx wt on yp.WTID = wt.WTID
+        where yp.JSZT = '002' /*and yp.IF_TH = '0' gzk 19.03.26*/ /*and yp.ypsl>0 gzk 19.03.26*/ /*and yp.jszt = '204'  gzk 19.03.26*/
+        <if test="map.htmc!=null and map.htmc!=''">
+            and htmc = #{map.htmc}
+        </if>
+        <if test="map.ypmc!=null and map.ypmc!=''">
+            and ypmc = #{map.ypmc}
+        </if>
+        <if test="map.hyry!=null and map.hyry!=''">
+            and hyry = #{map.hyry}
+        </if>
+        limit #{map.start},#{map.length};
+    </select>
+    <select id="selectCount" resultType="java.lang.Integer">
+        select count(1) from  t_ypgl_jbxx yp left JOIN t_wt_jbxx wt on yp.WTID = wt.WTID
+        where yp.JSZT = '002' and yp.IF_TH = '0' and yp.ypsl>0 and yp.jszt = '204'
+        <if test="map.htmc!=null and map.htmc!=''">
+            and htmc = #{map.htmc}
+        </if>
+        <if test="map.ypmc!=null and map.ypmc!=''">
+            and ypmc = #{map.ypmc}
+        </if>
+        <if test="map.hyry!=null and map.hyry!=''">
+            and hyry = #{map.hyry}
+        </if>
+    </select>
+    <update id="updateHygl" parameterType="Map">
+        update t_ypgl_jbxx set THRYNAME = #{map.tyrymc},IF_TH = 1,THRYDM = #{map.zydm},THSJ= #{map.hysj},ypsl = 0 where id = #{map.id}
+    </update>
+</mapper>

@@ -1,0 +1,46 @@
+@CHARSET "UTF-8";
+/*启动图页面开始*/
+/*启动图的字体颜色文本的字体颜色*/
+
+.startpicture table tr td {
+    color: #666 !important;
+}
+
+.startpicture table tr td:nth-last-child(2) {
+    color: #999 !important;
+}
+
+#startpicture_data > thead > tr > th:nth-last-child(1) {
+    width: 10px !important;
+}
+#startpicture_data > thead > tr > th:nth-last-child(2){
+    width: 30px !important;
+}
+#startpicture_data > tbody > tr > td:nth-last-child(1),
+#startpicture_data > tbody > tr > td:nth-last-child(2){
+    text-align: center;
+}
+
+#startpicture_data > thead > tr > th:nth-child(1),
+#startpicture_data > tbody > tr > td:nth-child(1)
+{
+    text-align: left!important;
+}
+#startimeInputapp,#endtimeInputapp
+{
+    width: 100px;
+    height: 33px;
+    position: relative;
+    top: 1px;
+}
+#startimeAppStart button,#endtimeAppEnd button
+{
+    height: 33px;
+    position: relative;
+    top: 1px;
+    border-radius: 0 4px 4px 0!important;
+}
+
+.contentBgColor .rotate1{
+    transform: rotate(180deg);
+}

@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xinhai.caiyun.systemmanager.dao.SyhcljlMapper">
+
+    <select id="findByNaTy" resultType="Map">
+      select id,kqr,kqsj,hcmc,syl,bzq,cfwz from t_syhcjl where id>0
+      <if test="map.hcmc!=null and  map.hcmc!=''">
+          and hcmc = #{map.hcmc}
+      </if>
+    </select>
+    <select id="findByNaTyNum" resultType="java.lang.Integer">
+        select count(id) from t_syhcjl where id>0
+        <if test="map.hcmc!=null and  map.hcmc!=''">
+            and hcmc = #{map.hcmc}
+        </if>
+    </select>
+
+    <insert id="addCgsq">
+        insert into t_syhcjl (kqr,kqsj,hcmc,syl,bzq,cfwz)values(#{map.kqr},#{map.kqsj},#{map.hcmc},#{map.syljl},#{map.bzq},#{map.cfwz})
+    </insert>
+
+    <delete id="deleteCgsq">
+        delete from t_syhcjl  where id in
+        <foreach collection="ids" index="index" item="id" open="("  separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+    <!--打印-->
+    <select id="yp" resultType="map">
+        select id,kqr,kqsj,hcmc,syl,bzq,cfwz
+        from t_syhcjl
+        where id in
+        <foreach collection="dy" item="id" index="index" open="(" separator="," close=")">#{id} </foreach>
+    </select>
+</mapper>

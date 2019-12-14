@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+		"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.xinhai.resourcemanager.dao.ResourceMapper">
+	<resultMap id="resourceMap" type="com.xinhai.resourcemanager.entity.Resource">
+		<id property="id" column="id"/>
+		<result property="funcId" column="func_id"/>
+		<result property="customerId" column="customer_id"/>
+		<result property="name" column="name"/>
+		<result property="description" column="description"/>
+		<result property="identifier" column="identifier"/>
+		<result property="menuIcon" column="menu_icon"/>
+		<result property="url" column="url"/>
+		<result property="category" column="category"/>
+		<result property="parentId" column="parent_id"/>
+		<result property="orderNo" column="order_no"/>
+		<result property="enabled" column="enabled"/>
+	</resultMap>
+	<insert id="addResource">
+		INSERT INTO "resource" (
+			id,
+			func_id,
+			customer_id,
+			name,
+			description,
+			identifier,
+			menu_icon,
+			url,
+			category,
+			parent_id,
+			order_no,
+			enabled,
+			update_date)
+		VALUES (
+			#{resource.id,jdbcType=VARCHAR},
+			#{resource.funcId,jdbcType=VARCHAR},
+			#{resource.customerId,jdbcType=VARCHAR},
+			#{resource.name,jdbcType=VARCHAR},
+			#{resource.description,jdbcType=VARCHAR},
+			#{resource.identifier,jdbcType=VARCHAR},
+			#{resource.menuIcon,jdbcType=VARCHAR},
+			#{resource.url,jdbcType=VARCHAR},
+			#{resource.category,jdbcType=VARCHAR},
+			#{resource.parentId,jdbcType=VARCHAR},
+			#{resource.orderNo,jdbcType=INTEGER},
+			#{resource.enabled,jdbcType=INTEGER},
+			sysdate
+		)
+	</insert>
+
+	<update id="updateResource">
+		UPDATE "resource"
+		SET
+			name = #{resource.name,jdbcType=VARCHAR},
+			enabled = #{resource.enabled,jdbcType=VARCHAR},
+			category = #{resource.category,jdbcType=VARCHAR},
+			identifier = #{resource.identifier,jdbcType=VARCHAR},
+			url = #{resource.url,jdbcType=VARCHAR},
+			menu_icon = #{resource.menuIcon,jdbcType=VARCHAR},
+			description = #{resource.description,jdbcType=VARCHAR},
+			update_date = sysdate
+		WHERE id = #{id}
+	</update>
+	<update id="moveResource">
+		UPDATE "resource"
+		SET
+			parent_id = #{parentId,jdbcType=VARCHAR},
+			order_no = #{order,jdbcType=INTEGER},
+			update_date = sysdate
+		WHERE id = #{id}
+	</update>
+	<delete id="deleteResource">
+		DELETE FROM "resource"
+		WHERE id = #{id}
+	</delete>
+	<delete id="deleteResources">
+		DELETE FROM "resource" WHERE customer_id = #{customerId} AND func_id IN
+		<foreach item="id" collection="authIds" open="(" separator=","
+				 close=")">
+			#{id}
+		</foreach>
+	</delete>
+
+	<select id="getResources" resultMap="resourceMap">
+		SELECT *
+		FROM "resource"
+		WHERE customer_id = #{customerId} order by order_no, update_date desc
+	</select>
+	<select id="getResource" resultMap="resourceMap">
+		SELECT *
+		FROM "resource"
+		WHERE id = #{id}
+	</select>
+	<select id="getMaxOrder" resultType="java.lang.Integer">
+		SELECT MAX(order_no)
+		FROM "resource"
+		WHERE customer_id = #{customerId} AND parent_id = #{parentId}
+	</select>
+	<select id="isExist" resultType="java.lang.Integer">
+		SELECT count(1)
+		FROM resource
+		WHERE customer_id = #{customerId} AND name = #{name}
+		<if test="id != ''">
+			AND id != #{id}
+		</if>
+</select>
+</mapper>

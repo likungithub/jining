@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!-- namespace必须和接口名称一一对应 -->
+<mapper namespace="com.xinhai.caiyun.systemmanager.dao.AppSystemInformationMapper">
+    <resultMap id="appSystemInformationMap" type="com.xinhai.caiyun.systemmanager.api.AppSystemInformation">
+        <id property="id" column="ID"/>
+        <result property="phoneType" column="SJLX"/>
+        <result property="informationTypeCode" column="XXLX_DM"/>
+        <result property="informationTypeName" column="XXLX_MC"/>
+        <result property="messageJj" column="XXTX_JJ"/>
+        <result property="informationSpecial" column="XXTX_ZT"/>
+        <result property="message" column="XXTX_NR"/>
+        <result property="isRead" column="YDZT_DM"/>
+        <result property="isDelete" column="SCBZ"/>
+        <result property="enterStaff" column="LRRY"/>
+        <result property="updateStaff" column="GXRY"/>
+        <result property="deleteStaff" column="SCRY"/>
+        <result property="enterDate" column="LRRQ"/>
+        <result property="updateDate" column="GXRQ"/>
+        <result property="deleteDate" column="SCRQ"/>
+        <result property="clientType" column="KHDLB"/>
+        <result property="msgNumber" column="XXBH"/>
+        <result property="sjsj" column="SJSJ"/>
+    </resultMap>
+
+    <!-- 获取所有appsysteminformation -->
+    <select id="getAllAppSystemInformation" resultMap="appSystemInformationMap">
+        SELECT ID,SJLX,XXLX_DM,XXLX_MC,XXTX_JJ,XXTX_ZT,XXTX_NR,YDZT_DM,SCBZ,LRRY,GXRY,SCRY,LRRQ,GXRQ,SCRQ,KHDLB,sjsj
+        FROM pt_app_xtxx
+        WHERE SCBZ=0 and (DATE_FORMAT(lrrq,'%Y-%m') BETWEEN #{begin} and #{end})
+        ORDER BY LRRQ DESC limit #{start},#{length}
+    </select>
+    <select id="getAllAppSystemInformationLen" resultType="long">
+        SELECT count(1)
+        FROM pt_app_xtxx
+        WHERE SCBZ=0 and (DATE_FORMAT(lrrq,'%Y-%m') BETWEEN #{begin} and #{end})
+        ORDER BY LRRQ DESC
+    </select>
+    <!-- 根据ID查询appsysteminformation -->
+    <select id="getAppSystemInformationById" resultMap="appSystemInformationMap">
+        SELECT SJSJ,ID,SJLX,XXLX_DM,XXLX_MC,XXTX_JJ,XXTX_ZT,XXTX_NR,YDZT_DM,SCBZ,LRRY,GXRY,SCRY,LRRQ,GXRQ,SCRQ,KHDLB
+        FROM pt_app_xtxx
+        WHERE ID=#{id}
+    </select>
+    <!-- 模糊搜索appsysteminformation -->
+    <select id="searchAppSystemInformationByText" resultMap="appSystemInformationMap">
+        SELECT ID,SJLX,XXLX_DM,XXLX_MC,XXTX_JJ,XXTX_ZT,XXTX_NR,YDZT_DM,SCBZ,LRRY,GXRY,SCRY,LRRQ,GXRQ,SCRQ,KHDLB
+        FROM pt_app_xtxx
+        WHERE SCBZ=0 AND XXLX_MC LIKE #{searchText}
+        ORDER BY LRRQ DESC
+    </select>
+    <!-- 根据日期获取appsysteminformation -->
+    <select id="getAppSystemInformationByDate" resultMap="appSystemInformationMap">
+        SELECT ID,SJLX,XXLX_DM,XXLX_MC,XXTX_JJ,XXTX_ZT,XXTX_NR,YDZT_DM,SCBZ,LRRY,GXRY,SCRY,LRRQ,GXRQ,SCRQ,KHDLB
+        FROM pt_app_xtxx
+        WHERE SCBZ=0 AND LRRQ BETWEEN #{beginTime} AND #{endTime}
+        ORDER BY LRRQ DESC
+    </select>
+    <!-- 新增App系统消息 -->
+    <insert id="addAppSystemInformation" parameterType="com.xinhai.caiyun.systemmanager.api.AppSystemInformation">
+        INSERT INTO pt_app_xtxx (SJLX,XXLX_DM,XXLX_MC,XXTX_JJ,XXTX_ZT,XXTX_NR,LRRQ,KHDLB,XXBH,SJSJ,LRRY)
+        VALUES (#{appSystemInformation.phoneType},#{appSystemInformation.informationTypeCode},#{appSystemInformation.informationTypeName},
+        #{appSystemInformation.messageJj},#{appSystemInformation.informationSpecial},#{appSystemInformation.message},#{appSystemInformation.enterDate},#{appSystemInformation.clientType},#{appSystemInformation.msgNumber},#{appSystemInformation.sjsj},#{appSystemInformation.enterStaff});
+    </insert>
+    <!-- 更新App系统消息 -->
+    <update id="updateAppSystemInformation" parameterType="com.xinhai.caiyun.systemmanager.api.AppSystemInformation">
+        UPDATE pt_app_xtxx
+        <set>
+            <if test="appSystemInformation.phoneType != null">
+                SJLX = #{appSystemInformation.phoneType},
+            </if>
+            <if test="appSystemInformation.informationTypeCode != null">
+                XXLX_DM = #{appSystemInformation.informationTypeCode},
+            </if>
+            <if test="appSystemInformation.informationTypeName != null">
+                XXLX_MC = #{appSystemInformation.informationTypeName},
+            </if>
+             <if test="appSystemInformation.messageJj != null">
+                XXTX_JJ = #{appSystemInformation.messageJj},
+            </if>
+            <if test="appSystemInformation.informationSpecial != null">
+                XXTX_ZT = #{appSystemInformation.informationSpecial},
+            </if>
+            <if test="appSystemInformation.message != null">
+                XXTX_NR = #{appSystemInformation.message},
+            </if>
+            <if test="appSystemInformation.isRead != null">
+                YDZT_DM = #{appSystemInformation.isRead},
+            </if>
+            <if test="appSystemInformation.isDelete != null">
+                SCBZ = #{appSystemInformation.isDelete},
+            </if>
+            <if test="appSystemInformation.updateDate != null">
+                GXRQ = #{appSystemInformation.updateDate},
+            </if>
+
+            <if test="appSystemInformation.deleteDate != null">
+                SCRQ = #{appSystemInformation.deleteDate},
+            </if>
+
+            <if test="appSystemInformation.clientType != null">
+                KHDLB = #{appSystemInformation.clientType},
+            </if>
+            <if test="appSystemInformation.sjsj != null">
+                sjsj = #{appSystemInformation.sjsj},
+            </if>
+            <if test="appSystemInformation.msgNumber != null">
+                xxbh = #{appSystemInformation.msgNumber},
+            </if>
+            <if test="appSystemInformation.updateStaff != null">
+                gxry = #{appSystemInformation.updateStaff},
+            </if>
+            <if test="appSystemInformation.deleteStaff != null">
+                scry = #{appSystemInformation.deleteStaff},
+            </if>
+
+
+        </set>
+        WHERE ID=#{appSystemInformation.id};
+    </update>
+</mapper>

@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- namespace必须和接口名称一一对应 -->
+<mapper namespace="com.xinhai.caiyun.systemmanager.dao.CustomerTypeMapper">
+    
+    <!--获取所有数据  -->
+    <select id="findAllCustomerType" resultType="com.xinhai.caiyun.systemmanager.api.CustomerType">
+        SELECT ID,DLJG_BM,KHFL_DM,KHFL_MC,ZYDM,SCBZ,LRRY,GXRY,SCRY,LRRQ,GXRQ,SCRQ FROM CS_KHFL WHERE SCBZ = 0 AND DLJG_BM=#{dljgbm};
+    </select>
+    <!--根据id获取一个数据  -->
+    <select id="findByIdCustomerType" resultType="com.xinhai.caiyun.systemmanager.api.CustomerType"
+            parameterType="String">
+        SELECT ID,DLJG_BM,KHFL_DM,KHFL_MC,ZYDM,SCBZ,LRRY,GXRY,SCRY,LRRQ,GXRQ,SCRQ FROM CS_KHFL WHERE ID = #{id} AND SCBZ = 0;
+    </select>
+    <!--根据id获取一个数据  -->
+    <select id="findByNameCustomerType" resultType="com.xinhai.caiyun.systemmanager.api.CustomerType"
+            parameterType="String">
+        SELECT ID,DLJG_BM,KHFL_DM,KHFL_MC,ZYDM,SCBZ,LRRY,GXRY,SCRY,LRRQ,GXRQ,SCRQ FROM CS_KHFL WHERE KHFL_MC = #{name} AND SCBZ = 0 AND DLJG_BM=#{dljgbm};
+    </select>
+    <!-- 根据id修改客户分类-->
+    <update id="updateCustomerType" parameterType="com.xinhai.caiyun.systemmanager.api.CustomerType">
+    	UPDATE CS_KHFL
+    	<set>
+    		<if test="cust.khfl_mc!= null">
+               KHFL_MC = #{cust.khfl_mc},
+            </if>
+            <if test="cust.gxrq!= null">
+               GXRQ = #{cust.gxrq},
+            </if>
+            <if test="cust.gxry!= null">
+               GXRY = #{cust.gxry},
+            </if>
+            <if test="cust.lrrq!= null">
+               LRRQ = #{cust.lrrq},
+            </if>
+            <if test="cust.lrry!= null">
+               LRRY = #{cust.lrry},
+            </if>
+            <if test="cust.scbz!= null">
+               SCBZ = #{cust.scbz},
+            </if>
+            <if test="cust.scry!= null">
+               SCRY = #{cust.scry},
+            </if>
+            <if test="cust.scrq!= null">
+               SCRQ = #{cust.scrq}
+            </if>
+    	</set>
+    	WHERE id = #{id};
+    </update>
+    <insert id="addCustomerType" parameterType="com.xinhai.caiyun.systemmanager.api.CustomerType"
+            keyProperty="id" useGeneratedKeys="true">
+       INSERT INTO CS_KHFL(DLJG_BM,KHFL_DM,KHFL_MC,ZYDM,SCBZ,LRRY,LRRQ) 
+    		VALUES (#{dljg_bm},#{khfl_dm},#{khfl_mc},#{zydm},0,#{lrry},#{lrrq});
+    </insert>
+</mapper>

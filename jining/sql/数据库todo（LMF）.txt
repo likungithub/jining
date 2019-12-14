@@ -1,0 +1,104 @@
+1、整理一份最干净的表（含初始化数据、清空测试数据、自增重新开始计算），提交到SVN。
+
+
+2、需要truncate的表如下，其它表保留不变：
+（1） 参数设置  cs_cssz，清空（由存储过程存入）
+
+（2） 税种设置  cs_khfl，清空（由存储过程存入）
+
+（3） 代理记账公司信息   customer，保留初始化的管理员信息（DL0000000001数据），其它清空。
+
+（4） 手册类别  dm_sclb
+
+（5） 通知通告类型  dm_tztglx
+
+（6） log
+
+（7） loguser
+ 
+（8） 操作日志      log_czrz
+
+（9） 登录信息      log_dlxx
+
+（10）行为记录      log_xwjl
+
+（11）组织机构管理   organization（保留3条管理员记录）
+
+（12）分享好友     pt_app_fxhy
+
+（13）功能介绍     pt_app_gnjs
+
+（14）沟通反馈     pt_app_gtfk
+
+（15）客户信息     pt_app_khxx
+
+（16）APP系统消息  pt_app_xtxx
+
+（17）业务合作     pt_app_ywhz
+
+（18）业务合作_合作类型   pt_app_ywhz_hzlx
+
+（19）业务合作_证照       pt_app_ywhz_zz
+
+（20）财务报表_报表状态   pt_cwbb_bbzt
+
+（21）客户附件信息        pt_fjxx
+
+（22）服务通知            pt_fwtz
+
+（23）公告阅读情况        pt_ggydqk
+
+（24）跟进服务            pt_gjfw
+
+（25）合同管理—附件信息   pt_htgl_fjxx
+
+（26）合同管理—基本信息   pt_htgl_jbxx
+
+（27）合同管理—收费项目   pt_htgl_sfxm
+
+（28）客户会计角色（代理记账公司客户） pt_khkjjs
+
+（29）客户信息            pt_khxx
+
+（30）流程手册            pt_lcsc
+
+（31）利润表    pt_lrb
+
+（32）聊天信息（代理与客户）   pt_messages
+
+（33）纳税申报     pt_nssb
+
+（34）派工管理      pt_pggl
+
+（35）催费预警     pt_sfgl_cfyj
+
+（36）收费管理——收费信息   pt_sfgl_sfxx
+
+（37）税务提醒   pt_swtx
+
+（38）现金流量表  pt_xjllb
+
+（39）系统公告    pt_xtgg
+
+（40）消息提醒    pt_xxtx
+
+（41）员工评价_公司评价  pt_ygpj_gspj
+
+（42）员工评价_客户评价  pt_ygpj_khpj
+
+（43）员工信息_附件信息   pt_ygxx_fjxx
+
+（44）代理记账公司_附件信息   pt_yhxx_fjxx
+
+（45）资产负债表   pt_zcfzb
+
+（46）角色表  role、role_auth，只保留初始化的信息
+
+（47）员工信息  user、user_auth  只保留初始化的账号信息
+
+（48）员工角色关系表  user_role   只保留初始化的账号信息
+
+（49）员工业务角色关系表  user_role_kh
+
+
+3、发布完，内部测试完最后一稿，即可清空测试数据。

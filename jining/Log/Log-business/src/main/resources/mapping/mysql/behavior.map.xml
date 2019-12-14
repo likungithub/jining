@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!-- namespace必须和接口名称一一对应 -->
+<mapper namespace="com.xinhai.Log.dao.BehaviorMapper">
+    <resultMap type="com.xinhai.Log.api.Behavior" id="BehaviorMap">
+        <id column="ID" property="id"></id>
+        <result property="module" column="GNMK"></result>
+        <result property="url" column="SFYM"></result>
+        <result property="time" column="FWSJ"></result>
+        <result property="ip" column="IP"></result>
+        <result property="outtime" column="TCSJ"></result>
+        <result property="address" column="FKDQ"></result>
+        <result property="device" column="ZDSB"></result>
+        <result property="browser" column="LLQXX"></result>
+        <result property="title" column="YMBT"></result>
+        <result property="resolution" column="ZMFBL"></result>
+        <result property="referrer" column="REFERRER"></result>
+        <result property="institutionid" column="DLJG_BM"></result>
+        <result property="staffmember" column="ZYDM"></result>
+    </resultMap>
+    <!-- 插入记录 -->
+    <insert id="createBehavior" parameterType="com.xinhai.Log.api.Behavior"
+            keyProperty="id" useGeneratedKeys="true">
+        INSERT INTO LOG_XWJL (GNMK, SFYM, FWSJ, IP, TCSJ, FKDQ, ZDSB, LLQXX, YMBT,ZMFBL,REFERRER,DLJG_BM,ZYDM)
+            VALUES (#{module},#{url},#{time},#{ip},#{outtime},#{address},#{device},#{browser},#{title},#{resolution},#{referrer},#{institutionid},#{staffmember});
+    </insert>
+    <!--获取一条数据  -->
+    <select id="findById" resultMap="BehaviorMap"
+            parameterType="String">
+        SELECT ID,GNMK,SFYM,FWSJ,IP,TCSJ,FKDQ,ZDSB,LLQXX,YMBT,ZMFBL,REFERRER,DLJG_BM,ZYDM FROM LOG_XWJL WHERE ID = #{id};
+    </select>
+    <!--获取所有数据  -->
+    <select id="findAll" resultMap="BehaviorMap">
+        SELECT ID,GNMK,SFYM,FWSJ,IP,TCSJ,FKDQ,ZDSB,LLQXX,YMBT,ZMFBL,REFERRER,DLJG_BM,ZYDM FROM LOG_XWJL where 1 = 1 
+        <if test="starDate!=null">
+            and FWSJ >= #{starDate}
+        </if>
+        <if test="endDate!=null">
+            and #{endDate} >= FWSJ
+        </if>
+    </select>
+    <select id="findAllLoginLogSize" resultType="long">
+        select count(id) from LOG_XWJL where 1=1 
+        <if test="starDate!=null">
+            and FWSJ >= #{starDate}
+        </if>
+        <if test="endDate!=null">
+            and #{endDate} > FWSJ
+        </if>
+    </select>
+    
+    <select id="getLoginLogByPage" resultMap="BehaviorMap">
+       SELECT ID,GNMK,SFYM,FWSJ,IP,TCSJ,FKDQ,ZDSB,LLQXX,YMBT,ZMFBL,REFERRER,DLJG_BM,ZYDM FROM LOG_XWJL WHERE 1=1
+        <if test="starDate!=null">
+            and FWSJ >= #{starDate}
+        </if>
+        <if test="endDate!=null">
+            and #{endDate} > FWSJ
+        </if>
+        LIMIT #{start},#{length};
+    </select>
+   <!--公司访问情况（TOP10）-->
+    <select id="searchCompanyCountByWeek" resultType="java.util.HashMap">
+        select a.count, a.gsmc from
+        (
+            select count(1) as count , a.gsmc
+            from log_czrz as a
+            left join customer b on a.dljg_bm = b.code
+            where
+            a.GSMC !=''
+            and b.if_cs = false
+            group by a.GSMC
+            order by count DESC
+            limit 0,10
+        ) a
+        order by a.count asc;
+    </select>
+</mapper>

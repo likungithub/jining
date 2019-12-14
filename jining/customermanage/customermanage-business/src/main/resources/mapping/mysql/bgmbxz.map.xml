@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xinhai.caiyun.customermanage.dao.BgmbxzMapper">
+
+    <select id="mbsjzd" resultType="map">
+    SELECT SJZD,CCDZ FROM t_bgmodel where ID=#{map.mbid}
+  </select>
+
+    <select id="mbxz" resultType="map">
+    SELECT ID,BGNAME FROM t_bgmodel
+  </select>
+
+    <select id="ypsjzd" resultType="map">
+     select ${map.sjzd} from (
+  select a.BGLJ,a.BGBZZT,a.BGSHZT ,a.BGPZZT ,a.BGDYZT ,a.ID, CASE BGLJ WHEN '' THEN b.HTMC ELSE CONCAT(b.HTMC,'(有报告)') END as HTMC,a.YPBM,a.YPMC,
+  (SELECT GROUP_CONCAT(xm.ZWMC_BM) from t_yp_jcxm ypxm LEFT JOIN t_jcxm_jbxx xm ON xm.id=ypxm.jcxmid where ypxm.ypid=a.id) as JCXM,
+  (select zxry_dm from t_bggl_rydm ry where ry.ypid=a.id and ry.lx='2' and ry.th='0') as PZR,
+a.SJCJRQ,b.SFMC,b.CSMC,b.XJMC,b.DWMC,b.TYPE,b.LXDH,b.JYLB,b.BZ,b.XXDZ,a.YPSL,a.YPDW,a.GGXH,a.BZQ,a.YPDJ,a.YPWT,
+a.SB,a.SCRQ,a.YPPHHBH,a.CYDBH,a.YPZT,a.SCDW,a.SCDWLXDH,a.YBJS,c.SJDW,c.SJDWXXDZ,c.CYDD,c.CYRQ,c.CYRY,c.CYJS
+from t_wt_jbxx b  LEFT JOIN t_ypgl_jbxx a on b.WTID=a.WTID
+   left join t_cy_jbxx c on a.cydbh=c.cydbh
+where a.id=#{map.id} ) d
+    </select>
+
+    <select id="mbzdlx" resultType="map">
+    SELECT lx,bgmodelzd FROM t_bgmodel_zdlx where bgmodelid=#{map.mbid}
+  </select>
+
+
+    <select id="ifsl" resultType="map">
+    SELECT if_sl FROM t_wt_jbxx where id=#{map.id}
+  </select>
+
+    <!--更新报告领取人签字路径-->
+    <update id="updateqzlj">
+        update t_wt_jbxx set bglqr = #{map.url}, bgffzt='002' where id = #{map.id}
+    </update>
+
+    <!--更新委托经办人签字路径-->
+    <update id="updatewtqz">
+        update t_wt_jbxx set wtjbr = #{map.url} where id = #{map.id}
+    </update>
+
+    <select id="bglqfindAll" resultType="map">
+
+        select a.BGLJ, a.BGBZZT,a.BGSHZT ,a.BGPZZT ,a.BGDYZT  ,b.ID,CASE BGLJ WHEN '' THEN b.HTMC ELSE CONCAT(b.HTMC,'(有报告)') END as HTMC,a.YPBM,a.YPMC,
+        (SELECT GROUP_CONCAT(xm.ZWMC_BM) from t_yp_jcxm ypxm LEFT JOIN t_jcxm_jbxx xm ON xm.id=ypxm.jcxmid where ypxm.ypid=a.id) as JCXM,
+        b.DWMC,b.SFMC,b.CSMC,b.XJMC from t_ypgl_jbxx a LEFT JOIN t_wt_jbxx b
+        on a.WTID=b.WTID where a.scbz=0 and a.BGBZZT in('001','003','002') and b.cxzt in('001','002','004','005')
+        <if test="cxtj.ypmc!=null and cxtj.ypmc!=''">
+            and a.YPMC like concat('%',#{cxtj.ypmc}, '%')
+        </if>
+        <if test="cxtj.ypbm!=null and cxtj.ypbm!=''">
+            and a.ypbm like concat('%',#{cxtj.ypbm}, '%')
+        </if>
+
+        order by b.id desc  limit  ${cxtj.start},${cxtj.length}
+
+    </select>
+
+    <select id="bglqfindCount" resultType="long">
+
+        select  count(1) from t_ypgl_jbxx a LEFT JOIN t_wt_jbxx b on a.WTID=b.WTID
+        where a.scbz=0 and a.BGBZZT in('001','003','002') and b.cxzt in('001','002','004','005')
+        <if test="cxtj.ypmc!=null and cxtj.ypmc!=''">
+            and a.YPMC like concat('%',#{cxtj.ypmc}, '%')
+        </if>
+        <if test="cxtj.ypbm!=null and cxtj.ypbm!=''">
+            and a.ypbm like concat('%',#{cxtj.ypbm}, '%')
+        </if>
+
+
+    </select>
+
+    <select id="pdfqzfindAll2" resultType="map">
+        select id,pdfname,jysj,jhsj,
+        (select name from user where zydm = jyry) as jyry,
+        (select name from user where zydm = jhry) as jhry
+        from pdfqz
+        order by id desc
+    </select>
+
+    <select id="pdfqzfindAll" resultType="map">
+        select id,pdfname,jysj,jhsj,
+        (select name from user where zydm = jyry) as jyry,
+        (select name from user where zydm = jhry) as jhry
+        from pdfqz
+        where 1=1
+        <if test="cxtj.ypmc!=null and cxtj.ypmc!=''">
+            and pdfname like concat('%',#{cxtj.ypmc}, '%')
+        </if>
+        order by id desc  limit  ${cxtj.start},${cxtj.length}
+    </select>
+
+    <select id="pdfqzfindCount" resultType="long">
+        select  count(1) from pdfqz
+        where 1=1
+        <if test="cxtj.ypmc!=null and cxtj.ypmc!=''">
+            and pdfname like concat('%',#{cxtj.ypmc}, '%')
+        </if>
+    </select>
+
+    <insert id="addpdfname">
+          insert into pdfqz (pdfname) values (#{map.pdfname});
+    </insert>
+
+    <update id="updatepdfsj">
+    <foreach collection="data" item="item" index="index">
+      update pdfqz set jyry=#{item.jyry}, jhry=#{item.jhry}, zxry=#{item.zydm}, zxsj = now() where id=#{item.id};
+    </foreach>
+    </update>
+
+
+    <update id="updatepdfjy">
+        <foreach collection="data" item="item" index="index">
+            update pdfqz set jyry=#{item.zydm}, jysj = now() where id=#{item.id};
+        </foreach>
+    </update>
+
+    <update id="updatepdfjh">
+        <foreach collection="data" item="item" index="index">
+            update pdfqz set jhry=#{item.zydm}, jhsj = now() where id=#{item.id};
+        </foreach>
+    </update>
+
+    <!--查询样品是否存在于样品表-->
+    <select id="selectYpbm" parameterType="String" resultType="java.lang.Integer">
+        select count(*) from t_ypgl_jbxx where 1=1
+        <if test="ypbm != '' and ypbm !=null">
+            and ypbm = #{ypbm}
+        </if>
+    </select>
+    <!--通过样品编码查询样品ID-->
+    <select id="selectYpid" resultType="map">
+        select id from t_ypgl_jbxx where ypbm = #{map.ypbm}
+    </select>
+    <!--插入样品表退还人签字-->
+    <update id="upThrqz">
+        update t_ypgl_jbxx set thrqz = #{map.url} where id = #{map.ypid}
+    </update>
+
+</mapper>

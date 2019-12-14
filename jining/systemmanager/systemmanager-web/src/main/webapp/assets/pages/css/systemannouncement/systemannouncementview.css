@@ -1,0 +1,11 @@
+@CHARSET "UTF-8";
+.system-announce-dialog > .modal-dialog {
+    width:576px!important;
+    border-radius: 4px;
+}
+.system-announce-dialog img{
+    width: 533px;
+}
+#systemannouncementView #announcementContent{
+    padding: 0 15px;
+}

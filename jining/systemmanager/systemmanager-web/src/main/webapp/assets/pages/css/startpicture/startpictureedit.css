@@ -1,0 +1,57 @@
+@CHARSET "UTF-8";
+/*启动图的编辑页面开始*/
+
+.common-pro-modal > .modal-dialog {
+    width: 660px !important;
+}
+
+.common-pro-modal > .modal-dialog .modal-footer {
+    padding-right: 28px;
+}
+
+.common-pro-modal > .modal-dialog > .modal-content {
+    border-radius: 4px !important;
+}
+
+.common-pro-modal .modal-title {
+    font-weight: 900;
+}
+
+#startpictureForm  .form-horizontal .form-group{
+    margin-left: 0;
+}
+
+#startpictureForm  .img-description>label{
+    height: 100px;
+    line-height: 100px;
+}
+#startpictureForm textarea[name='imgremark']
+{
+    float: left;
+    width: 500px;
+    resize: none;
+    border-radius: 0 4px 4px 0 !important;
+    height: 100px;
+}
+
+.imgqdt{
+    width:70%;
+    border:1px solid  #dedede;
+    padding:10px;
+    display: block;
+    margin:0 auto;
+}
+#startpictureForm input[name='imgurl']
+{
+    text-indent: 300px;
+    padding-top: 5px;
+}
+#lastRowStartpicture
+{
+    border: 1px solid rgb(229,229,229);
+    height: 33px;
+    width: 500px;
+    border-radius: 0 4px 4px 0!important;
+    line-height: 33px;
+    text-align: center;
+}

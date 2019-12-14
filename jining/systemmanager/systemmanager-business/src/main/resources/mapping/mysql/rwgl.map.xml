@@ -1,0 +1,247 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xinhai.caiyun.systemmanager.dao.RwglMapper">
+    <!-- 获取所有的任务管理的信息-->
+   <select id="findAllRwgl" resultType="map">
+       select  id,cydbh,rwlx,cyhj,cydd,sfby, rwly, cyr,cyrlxdh,cyrq, sfztc,bcydwmc, bcydwdz,bcydwqygm,ytlx, qylx,  bcydwyyzz, bcydwfrdb,
+       xkzlx, xkzh,bcydwnxse,bcydwlxr,bcydwdh, bcydwcz, bcydwyb,ypmc, yply, cyfs,ypsx ,yplx, sb, ypph, rqxz, scrq, bzq,
+       zxbz,ggxh,zldj,scxkzbh,dj, sfck, cyjs, cysl, cysldw,bysl,jhl,kcl, bzfl,ypxt,cysypdcctj, cctjqt,cctjwd,cctjsd,cyypbz,
+       ypbzqt, cygj,txm,jsypjzrq ,bssczmc, bssczdz,bssczlxr, bssczlxdh,cydwmc,cydwjb, cydwdz, cydwlxr, cydwlxdh,cydwlxrdh,
+       cydwlxremail,cydwcz,cydwyb,bz,scdrsj
+       from  t_scgl_jbxx
+       <where>
+           <if test="map.ypmc!=null and map.ypmc!=''">
+               ypmc like concat('%',#{map.ypmc},'%')
+           </if>
+           <if test="map.rwlx!=null and map.rwlx!=''">
+               and rwlx like concat('%',#{map.rwlx},'%')
+           </if>
+           <choose>
+               <when test="map.startDate!=null and map.endDate!=null">
+                   and  scdrsj between #{map.startDate} and #{map.endDate}
+               </when>
+               <otherwise>
+                   <choose>
+                       <when test="map.startDate!=null and map.endDate==null">
+                           and  scdrsj  &gt;= #{map.startDate}
+                       </when>
+                       <otherwise>
+                           <choose>
+                               <when test="map.startDate==null and map.endDate!=null">
+                                   and scdrsj &lt;= #{map.endDate}
+                               </when>
+                           </choose>
+                       </otherwise>
+                   </choose>
+               </otherwise>
+           </choose>
+       </where>
+       order by id desc
+       limit #{map.start},#{map.length};
+    </select>
+    <!-- 获取所有的任务管理的数量-->
+    <select id="findAllRwglNum" resultType="java.lang.Integer">
+       select count(*)
+       from t_scgl_jbxx
+        <where>
+            <if test="map.ypmc!=null and map.ypmc!=''">
+                ypmc like concat('%',#{map.ypmc},'%')
+            </if>
+            <if test="map.rwlx!=null and map.rwlx!=''">
+                and rwlx like concat('%',#{map.rwlx},'%')
+            </if>
+            <choose>
+                <when test="map.startDate!=null and map.endDate!=null">
+                    and scdrsj between #{map.startDate} and #{map.endDate}
+                </when>
+                <otherwise>
+                    <choose>
+                        <when test="map.startDate!=null and map.endDate==null">
+                            and scdrsj  &gt;= #{map.startDate}
+                        </when>
+                        <otherwise>
+                            <choose>
+                                <when test="map.startDate==null and map.endDate!=null">
+                                    and scdrsj &lt;= #{map.endDate}
+                                </when>
+                            </choose>
+                        </otherwise>
+                    </choose>
+                </otherwise>
+            </choose>
+        </where>
+    </select>
+    <!-- 循环插入数据-->
+    <insert id="addRwglExcel">
+        insert into  t_scgl_jbxx(
+        cydbh,rwlx,cyhj,cydd,sfby, rwly, cyr,cyrlxdh,cyrq, sfztc,bcydwmc, bcydwdz,bcydwqygm,ytlx, qylx,  bcydwyyzz, bcydwfrdb,
+        xkzlx, xkzh,bcydwnxse,bcydwlxr,bcydwdh, bcydwcz, bcydwyb,ypmc, yply, cyfs,ypsx ,yplx, sb, ypph, rqxz, scrq, bzq,
+        zxbz,ggxh,zldj,scxkzbh,dj, sfck, cyjs,  cysl, cysldw,bysl,jhl,kcl, bzfl,ypxt,cysypdcctj, cctjqt,cctjwd,cctjsd,cyypbz,
+        ypbzqt, cygj,txm,jsypjzrq ,bssczmc, bssczdz,bssczlxr, bssczlxdh,cydwmc,cydwjb, cydwdz, cydwlxr, cydwlxdh,cydwlxrdh,
+        cydwlxremail,cydwcz,cydwyb,bz,scdrsj
+        ) values
+        <foreach collection="list" item="map" index="index" separator=",">
+            (
+            #{map.cydbh},#{map.rwlx},#{map.cyhj},#{map.cydd},#{map.sfby}, #{map.rwly}, #{map.cyr},#{map.cyrlxdh},#{map.cyrq}, #{map.sfztc},#{map.bcydwmc}, #{map.bcydwdz},#{map.bcydwqygm},#{map.ytlx},
+            #{map.qylx},#{map.bcydwyyzz}, #{map.bcydwfrdb},#{map.xkzlx}, #{map.xkzh},#{map.bcydwnxse},#{map.bcydwlxr},#{map.bcydwdh}, #{map.bcydwcz}, #{map.bcydwyb},#{map.ypmc},
+            #{map.yply}, #{map.cyfs},#{map.ypsx },#{map.yplx}, #{map.sb}, #{map.ypph}, #{map.rqxz}, #{map.scrq}, #{map.bzq},
+            #{map.zxbz},#{map.ggxh},#{map.zldj},#{map.scxkzbh},#{map.dj}, #{map.sfck}, #{map.cyjs},  #{map.cysl}, #{map.cysldw},
+            #{map.bysl},#{map.jhl},#{map.kcl}, #{map.bzfl},#{map.ypxt},#{map.cysypdcctj}, #{map.cctjqt},#{map.cctjwd},#{map.cctjsd},#{map.cyypbz},
+            #{map.ypbzqt}, #{map.cygj},#{map.txm},#{map.jsypjzrq },#{map.bssczmc}, #{map.bssczdz},#{map.bssczlxr}, #{map.bssczlxdh},
+            #{map.cydwmc},#{map.cydwjb},  #{map.cydwdz}, #{map.cydwlxr}, #{map.cydwlxdh},#{map.cydwlxrdh},
+            #{map.cydwlxremail},#{map.cydwcz},#{map.cydwyb},#{map.bz},now()
+            )
+        </foreach>
+    </insert>
+    <!-- 将导入的数据插入到样品表中-->
+    <insert id="addYpExcel">
+        insert into t_ypgl_jbxx(
+        ypmc,ypph,sb,yplx,rwly,rwlb,cpdlmc,yply,ypsx,bzq,zxbz,ggxh,zldj,scxkzbh,if_ck,cyjs,
+        cysl,qylx,ypbm,wtid,htbm,jszt,ytlx,xkzh,xkzlx,jhl,ypbctj,ccwd,
+        sczdz,sczmc,lrrq,scrq1,if_cy
+        ) values
+        <foreach collection="list" item="map" index="index" separator=",">
+           (
+            #{map.ypmc},#{map.ypph},#{map.sb},#{map.yplx},#{map.rwly},#{map.rwlx},#{map.cpzl},#{map.yply},
+            #{map.ypsx},#{map.bzq},#{map.zxbz},#{map.ggxh},#{map.zldj},#{map.scxkzbh},#{map.sfck},#{map.cyjs},
+            #{map.cysl},#{map.qylx},#{map.cydbh},#{map.cydbh},#{map.cydbh},'200',#{map.ytlx},
+            #{map.xkzh},#{map.xkzlx},#{map.jhl},#{map.cysybcctj},#{map.cctjwd},#{map.bssczdz},#{map.bssczmc},now(),#{map.scrq},'1'
+            )
+        </foreach>
+    </insert>
+    <!-- 将导入的数据放到委托表-->
+    <insert id="addWtExcel">
+        insert into t_wt_jbxx(dwmc,lxrmc,lxdh,cz,wtid,htbm,wtdwxxdz,type,if_cy,lrry,bmdm,lrrq,cylxr,cylxfs,cydw,bzxx,cyrq,cydd,jylb)
+        values
+        <foreach collection="list" item="map" index="index" separator=",">
+            (
+            #{map.bcydwmc},#{map.bcydwlxr},#{map.bcydwdh},#{map.bcydwcz},#{map.cydbh},#{map.cydbh},#{map.bcydwdz},
+            '002','1',#{map.lrry},#{map.bmdm},now(),#{map.cyr},#{map.cyrlxdh},#{map.cydwmc},#{map.bz},#{map.cyrq},#{map.cydd},#{map.jylb}
+            )
+        </foreach>
+    </insert>
+    <!-- 将插入数据放到任务表中-->
+    <insert id="addT_RwglExcel">
+        insert into t_rwgl_jbxx(rwid,cyrq,cydd,cylxr,bzxx,wtid,blzt,bmdm,lrry,sjly,rw_type,lrrq)
+        values
+        <foreach collection="list" item="map" index="index" separator=",">
+            (
+            #{map.cydbh},#{map.cyrq},#{map.cydd},#{map.cyr},#{map.bz},#{map.cydbh},'002',
+            #{map.bmdm},#{map.lrry},'1','002',now()
+            )
+        </foreach>
+    </insert>
+    <!-- 将接口中的json数据放到数据库中-->
+    <insert id="addInterfaceJson">
+        insert into temp_sj_jcxm(cydbh,bgfl1,jyxmid,jyxm,jyjg,jgdw,bzxz,bzxzdw,jgpd,sm,jyyj,pdyj,ffjcx,ffjcxdw,bzffjcx,
+         bzffjcxdw,bzzxyxx,bzzxyxxdw,bzzdyxx,bzzdyxxdw,zxyxx,zxyxxdw,zdyxx,zdyxxdw,spflid
+        ) values
+        <foreach collection="list" item="map" index="index" separator=",">
+            (#{map.cydbh},#{map.bgfl1},#{map.jyxmid},#{map.jyxm},#{map.jyjg},#{map.jgdw},#{map.bzxz},#{map.bzxzdw},#{map.jgpd},
+            #{map.sm},#{map.jyyj},#{map.pdyj},#{map.ffjcx},#{map.ffjcxdw},#{map.bzffjcx},#{map.bzffjcxdw},#{map.bzzxyxx},#{map.bzzxyxxdw},
+            #{map.bzzdyxx},#{map.bzzdyxxdw},#{map.zxyxx},#{map.zxyxxdw},#{map.zdyxx},#{map.zdyxxdw},#{map.spflid})
+        </foreach>
+    </insert>
+    <!-- 根据cydbh查找对应的检验项目信息-->
+    <select id="findJyxmByCydbh" resultType="com.xinhai.caiyun.systemmanager.api.Scgl">
+       SELECT
+	sc.cydbh,
+	jc.bgfl1,
+	jc.jyxmid,
+	jc.jyxm,
+	jc.jyjg,
+	jc.jgdw,
+	jc.bzxz,
+	jc.bzxzdw,
+	jc.jgpd,
+	jc.sm,
+	jc.jyyj,
+	jc.pdyj,
+	jc.ffjcx,
+	jc.ffjcxdw,
+	jc.bzffjcx,
+	jc.bzffjcxdw,
+	jc.bzzxyxx,
+	jc.bzzxyxxdw,
+	jc.bzzdyxx,
+	jc.bzzdyxxdw,
+	jc.zxyxx,
+	jc.zxyxxdw,
+	jc.zdyxx,
+	jc.zdyxxdw
+  FROM
+ (SELECT * from t_scgl_jbxx where cydbh=#{cydbh}) sc
+ LEFT JOIN temp_sj_jcxm jc on sc.spflid=jc.spflid;
+    </select>
+    <!-- 根据cydbh查找对应的检验报告主信息-->
+    <select id="findBgzxxByCydbh" resultType="com.xinhai.caiyun.systemmanager.api.Scgl">
+        select wtid as cydbh,dwmc as wtdw,lxrmc as lxr,bgdh as dh,jdmc as dz,cz
+        from t_wt_jbxx
+        where wtid=#{cydbh};
+    </select>
+    <!--  根据抽样单编号  查找对应的抽样单信息 -->
+    <select id="findCyypByCydbh" resultType="com.xinhai.caiyun.systemmanager.api.Scgl">
+    SELECT
+	ypbm AS cydbh,
+	ypmc,
+	cpdlmc AS yplx,
+	bysl,
+	ypsl AS cysl,
+	ypdw AS cysldw,
+	ggxh,
+	ypph,
+	bzq,
+	zxbz,
+	zldj,
+	sb,
+	rq AS scrq,
+	sczmc AS bssczmc,
+	sczdz AS bssczdz,
+	ypbctj AS ypcctj,
+	bzxx AS bz,
+	rwly,
+	rwlb AS rwlx,
+	qylx,
+	cyjs,
+	bzlx,
+	yply,
+	ypsx,
+	yplx,
+	dj,
+	if_ck,
+	scxkzbh,
+	lxr AS bcydwlxr,
+	dh AS bcydwdh,
+	jsypjzrq,
+	jsypdz,
+	cysl
+    FROM
+	t_ypgl_jbxx where ypbm=#{cydbh};
+    </select>
+    <!-- 清空检省抽测项目临时表的信息-->
+    <delete id="cleanTempScJcxm">
+        delete from temp_sj_jcxm;
+    </delete>
+    <!-- 通过抽样单编号查找对应的食品分类id -->
+    <select id="findSpflidByCydbh" resultType="java.lang.String">
+        select spflid from t_scgl_jbxx
+        where cydbh=#{cydbh};
+    </select>
+    <!-- 通过抽样单编号 删除对应的省抽管理信息(t_scgl_jbxx)-->
+    <delete id="deleteRwglExcel">
+        delete from t_scgl_jbxx where cydbh=#{cydbh};
+    </delete>
+    <!-- 通过抽样单编号 删除对应的样品表中的信息t_ypgl_jbxx-->
+    <delete id="deleteYpglExcel">
+        delete from t_ypgl_jbxx where ypbm=#{cydbh};
+    </delete>
+    <!-- 通过抽样单编号， 删除对应的委托表的信息 t_wt_jbxx-->
+    <delete id="deleteWtExcel">
+        delete from t_wt_jbxx where wtid=#{cydbh};
+    </delete>
+    <!-- 通过抽样单编号 删除对应的的任务表中的信息 t_rwgl_jbxx-->
+    <delete id="deleteRy_RwglExcel">
+        delete from t_rwgl_jbxx where wtid=#{cydbh};
+    </delete>
+</mapper>

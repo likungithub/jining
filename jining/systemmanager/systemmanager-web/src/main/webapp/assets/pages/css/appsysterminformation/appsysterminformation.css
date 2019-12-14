@@ -1,0 +1,10 @@
+@CHARSET "UTF-8";
+/*搜索日历input 的宽度*/
+.appsysinfo-m{
+    width: 90px!important;
+}
+/*日历按钮的的调节*/
+.appsysinfobtn-m{
+    height: 33px;
+    border-radius: 0 4px 4px 0!important;
+}

@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xinhai.caiyun.customermanage.dao.YyclMapper">
+    <select id="selectYycl" resultType="Map">
+        select DISTINCT t.ypbm as ypbm,t.ypmc as ypmc,t.LRRQ as LRRQ,w.dwmc as dwmc,t.jssp as jssp,t.jbrsp as jbrsp,t.abz as bzxx
+        from t_ypgl_jbxx t,t_wt_jbxx w where w.WTID = t.WTID
+        and t.id>0 and t.ypsl >0
+        <if test="map.xhyp!=null and map.xhyp!=''">
+            and t.jbrsp='1'
+        </if>
+        <if test="map.sfbz==1" >
+            and datediff(now(),t.LRRQ) &lt; t.bzq
+        </if>
+        <if test="map.sfbz==2">
+            and datediff(now(),t.LRRQ) &gt; t.bzq
+        </if>
+        <if test="map.htmc!=null and map.htmc!=''">
+            and t.htmc=#{map.htmc}
+        </if>
+        <if test="map.ypmc!=null and map.ypmc!=''">
+            and t.ypmc=#{map.ypmc}
+        </if>
+        <if test="map.clfs!=null and map.clfs!=''">
+            and t.if_fhcl=#{map.clfs}
+        </if>
+        limit #{map.start},#{map.length};
+    </select>
+    <!--查询条数-->
+    <select id="selectCount" resultType="java.lang.Integer">
+        select count(DISTINCT t.ypbm)
+        from t_ypgl_jbxx t,t_wt_jbxx w where w.WTID = t.WTID
+        and t.id>0 and t.ypsl >0
+        <if test="map.xhyp!=null and map.xhyp!=''">
+            and t.jbrsp='1'
+        </if>
+        <if test="map.sfbz==1" >
+            and datediff(now(),t.LRRQ) &lt; t.bzq
+        </if>
+        <if test="map.sfbz==2">
+            and datediff(now(),t.LRRQ) &gt; t.bzq
+        </if>
+        <if test="map.htmc!=null and map.htmc!=''">
+            and t.htmc=#{map.htmc}
+        </if>
+        <if test="map.ypmc!=null and map.ypmc!=''">
+            and t.ypmc=#{map.ypmc}
+        </if>
+        <if test="map.clfs!=null and map.clfs!=''">
+            and t.if_fhcl=#{map.clfs}
+        </if>
+    </select>
+    <update id="destoryYpzt">
+        update t_ypgl_jbxx set yyclry = #{map.yyclry},clsj = #{map.clsj},if_fhcl = '0',YPSL = 0 where ypbm = #{map.ypbm}
+    </update>
+    <!--增加退样信息-->
+    <update id="updateYycl">
+        update t_ypgl_jbxx set alqr =#{map.ajsr},atel = #{map.atel},abz = #{map.abz},xhhybz = '001',YPSL = 0 where ypbm = #{map.ypbm}
+    </update>
+    <!--增加销毁申请信息-->
+    <update id="updateXhsq">
+        update t_ypgl_jbxx set xhsj = #{map.xhsj},xhfs = #{map.xhfs},xhyy = #{map.xhyy},xhdd = #{map.xhdd},xhhybz = '002' where ypbm = #{map.ypbm}
+    </update>
+    <!--查询当前人员身份-->
+    <select id="findInd" resultType="Map">
+        select name from role where id =
+          (select role_id from user_role where user_id =
+            (select u.id from user u where u.zydm = #{map.dqry}))
+    </select>
+    <!--技术负责人界面显示-->
+    <select id="findCgsq" resultType="Map">
+        select DISTINCT t.ypbm as ypbm,t.ypmc as ypmc,t.LRRQ as dysj,w.dwmc as dwmc,t.CPDLDM as yplx,t.abz as bzxx
+        from t_ypgl_jbxx t,t_wt_jbxx w where w.WTID = t.WTID and t.id>0 and t.ypsl >0 and t.xhhybz = '002' and jssp = '0'
+        limit #{map.start},#{map.length};
+    </select>
+    <select id="findCount" resultType="java.lang.Integer">
+        select count(DISTINCT t.ypbm)
+        from t_ypgl_jbxx t,t_wt_jbxx w where w.WTID = t.WTID and t.id>0 and t.ypsl >0 and t.xhhybz = '002' and jssp = '0'
+
+    </select>
+    <!--经办人显示界面-->
+    <select id="findjbCgsq" resultType="Map">
+        select DISTINCT t.ypbm as ypbm,t.ypmc as ypmc,t.LRRQ as dysj,w.dwmc as dwmc,t.CPDLDM as yplx,t.abz as bzxx
+        from t_ypgl_jbxx t,t_wt_jbxx w where w.WTID = t.WTID and t.id>0 and t.ypsl >0 and t.xhhybz = '002' and jssp = '1' and jbrsp = '0'
+        limit #{map.start},#{map.length};
+    </select>
+    <select id="findjbCount" resultType="java.lang.Integer">
+        select count(DISTINCT t.ypbm)
+        from t_ypgl_jbxx t,t_wt_jbxx w where w.WTID = t.WTID and t.id>0 and t.ypsl >0 and t.xhhybz = '002' and jssp = '1' and jbrsp = '0'
+    </select>
+    <!--审批操作-->
+    <update id="updateJssp">
+        update t_ypgl_jbxx set jssp = '1',jsfzr = #{map.dqry},jsspsj = #{map.clsj} where ypbm = #{map.ypbm}
+    </update>
+    <!--退回操作-->
+    <update id="updateJsth">
+        update t_ypgl_jbxx set jssp = '2',jsfzr = #{map.dqry},jsspsj = #{map.clsj} where ypbm = #{map.ypbm}
+    </update>
+    <!--经办人审批-->
+    <update id="updateJbr">
+        update t_ypgl_jbxx set jbrsp = '1',jbr = #{map.dqry},jbrspsj =#{map.clsj} where ypbm = #{map.ypbm}
+    </update>
+    <!--经办人退回-->
+    <update id="updateJbrth">
+        update t_ypgl_jbxx set jbrsp = '2',jbr = #{map.dqry},jbrspsj =#{map.clsj} where ypbm = #{map.ypbm}
+    </update>
+</mapper>

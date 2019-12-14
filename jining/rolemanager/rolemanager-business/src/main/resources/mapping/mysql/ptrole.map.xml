@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.xinhai.rolemanager.dao.PtRoleMapper">
+
+    <select id="findAll" resultType="com.xinhai.rolemanager.entity.PtRole">
+        SELECT id, uuid, name, dm, sjdm, fldm, lrry, lrrq, scbz
+        FROM pt_resource
+        WHERE scbz = FALSE;
+    </select>
+
+    <insert id="insert" parameterType="com.xinhai.rolemanager.entity.Role" keyProperty="id"
+            useGeneratedKeys="true">
+		INSERT INTO pt_resource (name, uuid, dm, sjdm, fldm, lrry, lrrq, scbz)
+		VALUES (#{name}, #{uuid}, #{dm}, #{sjdm}, #{fldm}, #{lrry}, now(), false);
+	</insert>
+
+    <update id="update" parameterType="com.xinhai.rolemanager.entity.Role">
+		UPDATE pt_resource
+		SET name = #{name}, gxry = #{gxry}, gxrq = now() where id = #{id};
+	</update>
+	
+	<update id="delete" parameterType="com.xinhai.rolemanager.entity.Role">
+        UPDATE pt_resource
+        SET scbz = true where id = #{id};
+    </update>
+
+    <select id="getSonMenuDm" resultType="java.lang.String">
+        select concat_ws('_',(left(ifnull(max(dm),#{sjdm}),3)), LPAD(right(ifnull(max(dm),'000'),3)+1,3,0)) dm from pt_resource where sjdm=#{sjdm};
+    </select>
+
+    <select id="getBtnMenuDm" resultType="java.lang.String">
+        select concat_ws('_',(left(ifnull(max(dm),#{sjdm}),7)), LPAD(right(ifnull(max(dm),'000'),3)+1,3,0)) dm from pt_resource where sjdm=#{sjdm};
+    </select>
+
+    <select id="getPMenuDm" resultType="java.lang.String">
+        select LPAD(right(ifnull(max(dm),'000'),3)+1,3,0) dm from pt_resource where sjdm='0';
+    </select>
+
+    <select id="getPMenu" resultType="com.xinhai.rolemanager.entity.PtRole">
+        SELECT id, uuid, name, dm, sjdm, fldm, lrry, lrrq, scbz
+        FROM pt_resource
+        WHERE sjdm=#{sjdm} and scbz = false;
+    </select>
+
+</mapper>

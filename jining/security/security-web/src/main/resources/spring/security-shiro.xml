@@ -1,0 +1,225 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:util="http://www.springframework.org/schema/util"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.2.xsd
+		http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
+
+    <context:component-scan base-package="com.xinhai.*">
+    </context:component-scan>
+    <!--自定义Realm-->
+    <bean id="customAuthoringRealm" class="com.xinhai.security.shiro.CustomAuthoringRealm">
+    <property name="cachingEnabled" value="false"/>
+    <property name="authorityVerify" ref="authorityVerify"/>
+</bean>
+
+    <!--登录服务，完成登陆信息验证以及权限获取-->
+    <bean id="authorityVerify" class="com.xinhai.security.business.SecurityServiceImpl"/>
+
+    <!-- 用户授权信息Cache（本机内存实现） -->
+    <bean id="memoryConstrainedCacheManager"
+          class="org.apache.shiro.cache.MemoryConstrainedCacheManager"/>
+
+    <!-- 会话ID生成器 -->
+    <bean id="sessionIdGenerator"
+          class="org.apache.shiro.session.mgt.eis.JavaUuidSessionIdGenerator"/>
+
+    <bean id="customShiroSessionDAO" class="com.xinhai.security.shiro.dao.CustomShiroSessionDAO">
+        <property name="sessionIdGenerator" ref="sessionIdGenerator"/>
+    </bean>
+
+    <!-- sessionIdCookie的实现,用于重写覆盖容器默认的JSESSIONID -->
+    <bean id="sharesession" class="org.apache.shiro.web.servlet.SimpleCookie">
+        <!-- cookie的name,对应的默认是 JSESSIONID -->
+        <constructor-arg name="name" value="SHAREJSESSIONID"/>
+        <!-- jsessionId的path为 / 用于多个系统共享jsessionId -->
+        <property name="path" value="/"/>
+        <property name="httpOnly" value="true"/>
+    </bean>
+
+    <!--session管理-->
+    <bean id="defaultWebSessionManager"
+          class="org.apache.shiro.web.session.mgt.DefaultWebSessionManager">
+        <!-- session超时时间设置为30分钟 -->
+        <property name="globalSessionTimeout" value="${security.session.timeout}"></property>
+        <!-- 会话验证器调度时间 -->
+        <property name="sessionValidationInterval" value="${security.session.timeout}"/>
+        <!-- sessionIdCookie的实现,用于重写覆盖容器默认的JSESSIONID -->
+        <property name="sessionIdCookie" ref="sharesession"/>
+        <!-- 定时检查失效的session -->
+        <property name="sessionValidationSchedulerEnabled" value="true"/>
+
+        <property name="sessionDAO" ref="customShiroSessionDAO"/>
+       <!--   <property name="cacheManager" ref="shiroEhCacheManager"/>  -->
+        
+    </bean>
+
+    <bean id="remembermeCookie" class="org.apache.shiro.web.servlet.SimpleCookie">
+        <property name="name" value="remember"/>
+        <property name="path" value="/"/>
+        <property name="maxAge" value="604800"/>
+    </bean>
+
+    <bean id="remembermeManager" class="org.apache.shiro.web.mgt.CookieRememberMeManager">
+        <property name="cookie" ref="remembermeCookie"/>
+    </bean>
+
+    <bean id="securityManager" class="org.apache.shiro.web.mgt.DefaultWebSecurityManager">
+        <property name="sessionManager" ref="defaultWebSessionManager"/>
+        <property name="realm" ref="customAuthoringRealm"/>
+        <property name="cacheManager" ref="memoryConstrainedCacheManager"/>
+        <property name="rememberMeManager" ref="remembermeManager"/>
+    </bean>
+
+    <bean class="org.springframework.beans.factory.config.MethodInvokingFactoryBean">
+        <property name="staticMethod" value="org.apache.shiro.SecurityUtils.setSecurityManager"/>
+        <property name="arguments" ref="securityManager"/>
+    </bean>
+
+    <bean id="formAuthenticationFilter"
+          class="com.xinhai.security.shiro.CustomFormAuthenticationFilter">
+        <property name="usernameParam" value="username"/>
+        <property name="passwordParam" value="password"/>
+        <property name="rememberMeParam" value="remember"/>
+        <property name="failureKeyAttribute" value="shiroLoginFailure"/>
+        <property name="loginUrl" value="/login"/>
+    </bean>
+
+    <!--验证码-->
+    <bean id="jCaptchaValidateFilter" class="com.xinhai.security.shiro.JCaptchaValidateFilter">
+        <!-- 是否启用验证码 从属性配置文件中读取，可以灵活配置-->
+        <property name="jCaptchaDisabled" value="${security.captchaDisabled}"/>
+        <!-- 页面输入的验证码-->
+        <property name="jCaptchaCode" value="jCaptchaCode"/>
+        <!-- 验证失败  -->
+        <property name="failureKeyAttribute" value="shiroLoginFailure"/>
+    </bean>
+
+    <bean id="sysUserFilter" class="com.xinhai.security.shiro.SysUserFilter"/>
+
+<!-- <bean id="nativeEhCacheManager" class="org.springframework.cache.ehcache.EhCacheManagerFactoryBean">
+    <property name="configLocation" value="classpath:ehcache.xml" />
+    <property name="shared" value="true"></property>
+</bean>
+ -->
+
+<!--  <bean id="shiroEhCacheManager" class="org.apache.shiro.cache.ehcache.EhCacheManager">
+    <property name="cacheManager" ref="nativeEhCacheManager" />
+</bean> -->
+
+<!-- 
+<bean id="localSessionDAO" class="com.xinhai.security.shiro.dao.LocalRedisSessionDAO">
+    <property name="redisSessionDAO" ref="customShiroSessionDAO"></property>
+    <property name="cacheManager" ref="shiroEhCacheManager"></property> 
+    <property name="activeSessionsCacheName" value="shiroSessionCache"></property>
+</bean>
+ -->
+
+    <!-- 自定义过滤器链管理 -->
+    <bean id="filterChainManager" class="com.xinhai.security.shiro.CustomDefaultFilterChainManager">
+        <property name="loginUrl" value="/logintip.html"/>
+        <property name="successUrl" value="/"/>
+        <property name="unauthorizedUrl" value="/unauthorized.jsp"/>
+        <property name="customFilters">
+            <util:map>
+                <!-- 定义自己的过滤器注册到shiro过滤器链中 -->
+                <entry key="authc" value-ref="formAuthenticationFilter"/>
+                <entry key="jCaptchaValidate" value-ref="jCaptchaValidateFilter"/>
+                <entry key="sysUser" value-ref="sysUserFilter"/>
+            </util:map>
+        </property>
+        <property name="defaultFilterChainDefinitions">
+            <value>
+                /assets/** = anon
+                /special/**= anon
+                /jcaptcha.jpg = anon
+                /login.jsp = anon
+                /chargeBill.jsp = anon
+                /mobilPhoneAgreement.jsp = anon
+                /mobRegsuccessfully.jsp = anon
+                /register.jsp = anon
+                /agentAPPintroduce.jsp = anon
+                /registerSuccessfully.jsp = anon
+                /registerFailed.jsp = anon
+                /legalStatement.jsp = anon
+                /privacyStatement.jsp = anon
+                /termsOfService.jsp = anon
+                /registrationProtocol.jsp = anon
+                /aboutMe.jsp = anon
+                /404.jsp = anon
+                /500.jsp = anon
+                /imPhone.jsp = anon
+                /imPhoneList.jsp = anon
+                /wechatPaySuccess.jsp =anon
+                /mediaHelp.jsp = anon
+                /mobilereg.jsp=anon
+                /mobileAboutMe.jsp=anon
+                /sign.jsp = anon
+                /introduction.jsp = anon
+                /login2.jsp = anon
+                /logintip.html = anon
+                /forgetpassword.jsp = anon
+                /forgetPasswordSuccessfully.jsp = anon
+                /forgetPasswordFailed.jsp = anon
+                /cjwt.jsp = anon
+                /cjwtview.jsp = anon
+                /receipt.jsp = anon
+                /**/onekeylogin1.jsp = anon
+                /index.jsp = authc
+                /index1.jsp = authc
+                /index = authc
+                /setimg.jsp = authc 
+                /setlogo.jsp = authc
+                /orderReceipt.jsp=authc
+                /setNsrsbh.jsp = authc
+                /modifypwd.jsp = authc
+                /userinfoedit.jsp = authc
+                /companyinfoedit.jsp = authc
+                /companyinfoimage.jsp = authc
+                /payment.jsp = authc
+                /pay.jsp = authc
+                /notify_url.jsp = authc
+                /login = jCaptchaValidate
+                /logout = authc
+                /unauthorized.jsp = authc
+                / = authc
+                /**/**.jsp = sysUser
+                /**/**.html = sysUser
+            </value>
+        </property>
+    </bean>
+
+    <bean id="filterChainResolver"
+          class="com.xinhai.security.shiro.CustomPathMatchingFilterChainResolver">
+        <property name="customDefaultFilterChainManager" ref="filterChainManager"/>
+    </bean>
+
+    <bean id="shiroFilter" class="org.apache.shiro.spring.web.ShiroFilterFactoryBean">
+        <property name="securityManager" ref="securityManager"/>
+    </bean>
+
+    <bean class="org.springframework.beans.factory.config.MethodInvokingFactoryBean">
+        <property name="targetObject" ref="shiroFilter"/>
+        <property name="targetMethod" value="setFilterChainResolver"/>
+        <property name="arguments" ref="filterChainResolver"/>
+    </bean>
+
+    <!-- shiro的生命周期，自动初始化和销毁 -->
+    <bean id="lifecycleBeanPostProcessor"
+          class="org.apache.shiro.spring.LifecycleBeanPostProcessor"/>
+
+    <bean class="com.xinhai.security.shiro.SecurityConfig">
+        <property name="securityDisabled" value="${security.securityDisabled}"></property>
+        <property name="captchaDisabled" value="${security.captchaDisabled}"></property>
+        <property name="verifyType" value="${security.verifytype}"></property>
+        <property name="adUrl" value="${security.AD.URL}"></property>
+        <property name="adDomain" value="${security.AD.domain}"></property>
+        <property name="adAdminUser" value="${security.AD.AdminUser}"></property>
+        <property name="adAdminPwd" value="${security.AD.AdminPwd}"></property>
+        <property name="adRootOrg" value="${security.AD.RootOrg}"></property>
+        <property name="adGroup" value="${security.AD.Group}"></property>
+        <property name="sysTitle" value="${sys.title}"></property>
+        <property name="copyright" value="${sys.copyright}"></property>
+    </bean>
+</beans>

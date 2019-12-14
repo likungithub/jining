@@ -1,0 +1,294 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xinhai.caiyun.statisticalanalysis.dao.TjcxMapper">
+
+
+    <select id="jcltj_queryList" resultType="map">
+        select w.htmc as htmc, w.htbm as htbm,w.wtid as id, w.htwcrq as htwcrq, yj.jcxsl as jcxsl,yj.ypmc as ypmc,
+        yj.ypjczt as ypjczt, yj.ypsl as ypsl,uyro.jcry as jcry,uyro.jcks as jcks,yj.jclbdm as jclbdm from
+        (select * from t_wt_jbxx
+        <where>
+            <choose>
+                <when test="map.startDate!=null and map.endDate!=null">
+                    htwcrq between #{map.startDate} and #{map.endDate}
+                </when>
+                <otherwise>
+                    <choose>
+                        <when test="map.startDate!=null and map.endDate==null">
+                            htwcrq &gt;= #{map.startDate}
+                        </when>
+                        <otherwise>
+                            <choose>
+                                <when test="map.startDate==null and map.endDate!=null">
+                                    htwcrq &lt;= #{map.endDate}
+                                </when>
+                            </choose>
+                        </otherwise>
+                    </choose>
+                </otherwise>
+            </choose>
+        </where>
+        ) w,
+        (select count(*) as jcxsl,y.id as id,y.ypjczt as ypjczt ,y.ypsl as ypsl,y.ypmc as ypmc,y.wtid as wtid,
+        y.jclbdm as jclbdm from
+        (select * from t_ypgl_jbxx
+        <where>
+            <if test="map.jclbdm!=null and map.jclbdm!=''">
+                and jclbdm=#{map.jclbdm}
+            </if>
+        </where>
+        ) y,t_yp_jcxm j
+        where y.id=j.ypid
+        group by y.id) yj,
+        (select u.name as jcry,y.id as id ,o.name as jcks from (select * from user
+        <where>
+            <if test="map.jcry!=null and map.jcry!=''">
+                and name=#{map.jcry}
+            </if>
+        </where>
+        ) u,t_ypgl_jbxx y,t_jcgl_rydm r,
+        (select * from organization
+        <where>
+            <if test="map.jcks!=null and map.jcks!=''">
+                and name=#{map.jcks}
+            </if>
+        </where>
+        ) o where
+        r.YPID=y.ID and r.ZXRY_DM=u.zydm and u.bmdm=o.code) uyro
+        where yj.wtid=w.wtid and yj.id=uyro.id
+        limit #{map.start},#{map.length};
+    </select>
+
+    <select id="jcltj_findCount" resultType="java.lang.Integer">
+        select count(*) from
+        (select * from t_wt_jbxx
+        <where>
+            <choose>
+                <when test="map.startDate!=null and map.endDate!=null">
+                    htwcrq between #{map.startDate} and #{map.endDate}
+                </when>
+                <otherwise>
+                    <choose>
+                        <when test="map.startDate!=null and map.endDate==null">
+                            htwcrq &gt;= #{map.startDate}
+                        </when>
+                        <otherwise>
+                            <choose>
+                                <when test="map.startDate==null and map.endDate!=null">
+                                    htwcrq &lt;= #{map.endDate}
+                                </when>
+                            </choose>
+                        </otherwise>
+                    </choose>
+                </otherwise>
+            </choose>
+        </where>
+        ) w,
+        (select count(*) as jcxsl,y.id as id,y.ypjczt as ypjczt ,y.ypsl as ypsl,y.ypmc as ypmc,y.wtid as wtid,
+        y.jclbdm as jclbdm from
+        (select * from t_ypgl_jbxx
+        <where>
+            <if test="map.jclbdm!=null and map.jclbdm!=''">
+                and jclbdm=#{map.jclbdm}
+            </if>
+        </where>
+        ) y,t_yp_jcxm j
+        where y.id=j.ypid
+        group by y.id) yj,
+        (select u.name as jcry,y.id as id ,o.name as jcks from (select * from user
+        <where>
+            <if test="map.jcry!=null and map.jcry!=''">
+                and name=#{map.jcry}
+            </if>
+        </where>
+        ) u,t_ypgl_jbxx y,t_jcgl_rydm r,
+        (select * from organization
+        <where>
+            <if test="map.jcks!=null and map.jcks!=''">
+                and name=#{map.jcks}
+            </if>
+        </where>
+        ) o where
+        r.YPID=y.ID and r.ZXRY_DM=u.zydm and u.bmdm=o.code) uyro
+        where yj.wtid=w.wtid and yj.id=uyro.id;
+    </select>
+
+    <!--检测科室统计-->
+    <select id="ksjcl_queryList" resultType="map">
+        select w.htmc as htmc, w.htbm as htbm,w.wtid as id, w.htwcrq as htwcrq, yj.jcxsl as jcxsl,yj.ypmc as ypmc,
+        yj.ypjczt as ypjczt, yj.ypsl as ypsl,uyro.jcry as jcry,uyro.jcks as jcks,yj.jclbdm as jclbdm from
+        (select * from t_wt_jbxx
+        <where>
+            <choose>
+                <when test="map.startDate!=null and map.endDate!=null">
+                    htwcrq between #{map.startDate} and #{map.endDate}
+                </when>
+                <otherwise>
+                    <choose>
+                        <when test="map.startDate!=null and map.endDate==null">
+                            htwcrq &gt;= #{map.startDate}
+                        </when>
+                        <otherwise>
+                            <choose>
+                                <when test="map.startDate==null and map.endDate!=null">
+                                    htwcrq &lt;= #{map.endDate}
+                                </when>
+                            </choose>
+                        </otherwise>
+                    </choose>
+                </otherwise>
+            </choose>
+        </where>
+        ) w,
+        (select count(*) as jcxsl,y.id as id,y.ypjczt as ypjczt ,y.ypsl as ypsl,y.ypmc as ypmc,y.wtid as wtid,
+        y.jclbdm as jclbdm from
+        (select * from t_ypgl_jbxx
+        <where>
+            <if test="map.jclbdm!=null and map.jclbdm!=''">
+                and jclbdm=#{map.jclbdm}
+            </if>
+        </where>
+        ) y,t_yp_jcxm j
+        where y.id=j.ypid
+        group by y.id) yj,
+        (select u.name as jcry,y.id as id ,o.name as jcks from (select * from user
+        <where>
+            <if test="map.jcry!=null and map.jcry!=''">
+                and name=#{map.jcry}
+            </if>
+        </where>
+        ) u,t_ypgl_jbxx y,t_jcgl_rydm r,
+        (select * from organization
+        <where>
+            <if test="map.jcks!=null and map.jcks!=''">
+                and name=#{map.jcks}
+            </if>
+        </where>
+        ) o where
+        r.YPID=y.ID and r.ZXRY_DM=u.zydm and u.bmdm=o.code) uyro
+        where yj.wtid=w.wtid and yj.id=uyro.id
+        limit #{map.start},#{map.length};
+    </select>
+
+    <select id="ksjcl_findCount" resultType="java.lang.Integer">
+        select count(*) from
+        (select * from t_wt_jbxx
+        <where>
+            <choose>
+                <when test="map.startDate!=null and map.endDate!=null">
+                    htwcrq between #{map.startDate} and #{map.endDate}
+                </when>
+                <otherwise>
+                    <choose>
+                        <when test="map.startDate!=null and map.endDate==null">
+                            htwcrq &gt;= #{map.startDate}
+                        </when>
+                        <otherwise>
+                            <choose>
+                                <when test="map.startDate==null and map.endDate!=null">
+                                    htwcrq &lt;= #{map.endDate}
+                                </when>
+                            </choose>
+                        </otherwise>
+                    </choose>
+                </otherwise>
+            </choose>
+        </where>
+        ) w,
+        (select count(*) as jcxsl,y.id as id,y.ypjczt as ypjczt ,y.ypsl as ypsl,y.ypmc as ypmc,y.wtid as wtid,
+        y.jclbdm as jclbdm from
+        (select * from t_ypgl_jbxx
+        <where>
+            <if test="map.jclbdm!=null and map.jclbdm!=''">
+                and jclbdm=#{map.jclbdm}
+            </if>
+        </where>
+        ) y,t_yp_jcxm j
+        where y.id=j.ypid
+        group by y.id) yj,
+        (select u.name as jcry,y.id as id ,o.name as jcks from (select * from user
+        <where>
+            <if test="map.jcry!=null and map.jcry!=''">
+                and name=#{map.jcry}
+            </if>
+        </where>
+        ) u,t_ypgl_jbxx y,t_jcgl_rydm r,
+        (select * from organization
+        <where>
+            <if test="map.jcks!=null and map.jcks!=''">
+                and name=#{map.jcks}
+            </if>
+        </where>
+        ) o where
+        r.YPID=y.ID and r.ZXRY_DM=u.zydm and u.bmdm=o.code) uyro
+        where yj.wtid=w.wtid and yj.id=uyro.id;
+    </select>
+
+
+    <!-- 报告发放统计的数据-->
+    <select id="bgfftj_queryList" resultType="map">
+        SELECT
+        w.id ,w.wtid,(SELECT GROUP_CONCAT(y.ypmc) FROM t_ypgl_jbxx y WHERE y.wtid = w.wtid) AS ypmc,w.dwmc,w.bgffzt,
+        w.bgffrq,w.bglqr,w.bz
+        FROM
+        t_wt_jbxx w left join t_ypgl_jbxx y on w.wtid=y.wtid
+        <where>
+            AND IFNULL(w.zfbs,'0') != '1'
+            <if test="map.wtid!=null and map.wtid!=''">
+                and w.wtid like concat('%',#{map.wtid},'%')
+            </if>
+            <if test="map.ypmc!=null and map.ypmc!=''">
+                and y.ypmc like concat('%',#{map.ypmc},'%')
+            </if>
+            <if test="map.startDate!=null">
+                and w.bgffrq >= #{map.startDate}
+            </if>
+            <if test="map.endDate!=null">
+                and #{map.endDate} >= w.bgffrq
+            </if>
+        </where>
+        order by w.bgffzt desc
+        limit #{map.start},#{map.length};
+    </select>
+    <!-- 报告发放统计的数量-->
+    <select id="bgfftj_findCount" resultType="java.lang.Integer">
+        SELECT count(w.id)
+        FROM
+        t_wt_jbxx w left join t_ypgl_jbxx y on w.wtid=y.wtid
+        <where>
+            AND IFNULL(w.zfbs,'0') != '1'
+            <if test="map.wtid!=null and map.wtid!=''">
+                and w.wtid like concat('%',#{map.wtid},'%')
+            </if>
+            <if test="map.ypmc!=null and map.ypmc!=''">
+                and y.ypmc like concat('%',#{map.ypmc},'%')
+            </if>
+            <if test="map.startDate!=null">
+                and w.bgffrq >= #{map.startDate}
+            </if>
+            <if test="map.endDate!=null">
+                and #{map.endDate} >= w.bgffrq
+            </if>
+        </where>
+        order by w.bgffzt desc
+    </select>
+    <!-- 保存报告方法数据-->
+    <update id="updateBgff">
+        update t_wt_jbxx set bgffr = #{map.bgffr},bgffrq = #{map.bgffrq},bgffzt=#{map.bgffzt} where id in
+        <foreach collection="map.ids" index="index" item="id" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </update>
+    <!-- -->
+    <select id="bgfftj_getData" resultType="map">
+         SELECT
+	      w.id ,w.wtid,(SELECT GROUP_CONCAT(y.ypmc) FROM t_ypgl_jbxx y WHERE y.wtid = w.wtid) AS ypmc,w.dwmc,w.bgffzt,
+	      w.bgffrq,w.bglqr,w.bz
+          FROM
+	     t_wt_jbxx w left join t_ypgl_jbxx y on w.wtid=y.wtid
+	     where w.id in
+        <foreach collection="ids" index="index" item="id" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </select>
+</mapper>

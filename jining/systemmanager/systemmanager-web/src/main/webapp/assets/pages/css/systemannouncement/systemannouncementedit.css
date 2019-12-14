@@ -1,0 +1,79 @@
+@CHARSET "UTF-8";
+/*系统公告编辑样式开始*/
+#systemannouncementForm .pad0{
+    padding:0;
+}
+#systemannouncementForm .addBtn
+{
+    position: absolute;
+    right: 10px;
+    top: 0;
+    height: 33px;
+    width: 50px;
+    border-radius: 0 4px 4px 0!important;
+    border: 1px solid #dadada;
+    outline: none;
+}
+.addAnnounceTypeQuickly .modal-dialog{
+    width: 720px;
+}
+
+
+.system-announce-dialog > .modal-dialog {
+    width: 720px !important;
+    border-radius: 4px;
+}
+
+.system-announce-dialog > .modal-dialog > .modal-footer {
+    padding-right: 60px;
+}
+
+.system-announce-dialog .modal-title {
+    font-weight: 900;
+}
+
+.system-announce-dialog .modal-footer {
+    padding-right: 16px;
+}
+
+#announcementContent #edui1 {
+    width: 554px !important;
+}
+
+#announcementContent #edui1_iframeholder body > p {
+    width: 484px !important;
+}
+
+#systemannouncementForm span.select2-container{
+    width: 170px!important;
+    left: 110px;
+}
+#systemannouncementForm .select2-selection__rendered{
+    position: absolute;
+}
+
+#systemannouncementForm span.select2-selection.select2-selection--single{
+    height: 33px;
+}
+
+#systemannouncementForm #edui1_iframeholder{
+    width: auto!important;
+}
+#systemannouncementForm .wrap12
+{
+    float: left;
+    border: 1px solid #ccc;
+    width: 66px;
+    height: 33px;
+    line-height: 33px;
+    padding-left: 14px;
+    border-radius: 0 4px 4px 0!important;
+}
+#systemannouncementForm input[name='announcementName']{
+    border-right: none!important;
+    border-radius: 0!important;
+}
+#systemannouncementForm .iputNewlength{
+    width: 566px!important;
+}
+/*系统公告编辑页面结束*/

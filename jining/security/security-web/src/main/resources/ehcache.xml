@@ -1,0 +1,16 @@
+ <?xml version="1.0" encoding="UTF-8"?>
+<!-- <ehcache name="es_shiro" updateCheck="false"> -->
+<ehcache>
+  <cache name="shiroSessionCache"
+       maxEntriesLocalHeap="5000"
+       eternal="false"
+       timeToIdleSeconds="60"
+       timeToLiveSeconds="60"
+       overflowToDisk="true"
+       statistics="true">
+</cache>
+
+  
+
+</ehcache> 
+

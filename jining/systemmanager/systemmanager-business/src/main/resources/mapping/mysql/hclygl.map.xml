@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xinhai.caiyun.systemmanager.dao.HclyglMapper">
+    <!--得到领用申请的信息 -->
+    <select id="queryLyglAll" resultType="map">
+        select rk.hcmc,rk.id as kcid,rk.gg,rk.jb,rk.sl,ly.id as id,rk.sccj,rk.hclx,
+        (select name from user where zydm=ly.lyr) as lyr,
+        ly.lyrq,ly.lysl,ly.lyzt,ly.lysp1,ly.lysp2
+        from t_hcly_jbxx ly
+        left join t_cgrk_jbxx rk
+        on ly.kcid=rk.id
+        <where>
+            <if test="map.hclx==null or map.hclx==''">
+                and rk.hclx != '5'
+            </if>
+            <if test="map.hclx!=null and map.hclx!=''">
+                and rk.hclx=#{map.hclx}
+            </if>
+            <if test="map.hcmc!=null and map.hcmc!=''">
+                and rk.hcmc like concat('%',#{map.hcmc},'%')
+            </if>
+            <if test="map.startDate!=null">
+                and ly.lyrq >=  #{map.startDate}
+            </if>
+            <if test="map.endDate!=null">
+                and  #{map.endDate} >= ly.lyrq
+            </if>
+        </where>
+        order by ly.id desc
+        limit #{map.start},#{map.length};
+    </select>
+    <!--得到领用申请的信息的数量 -->
+    <select id="queryLyglAllNum" resultType="java.lang.Integer">
+        select count(ly.id)
+        from t_hcly_jbxx ly
+        left join t_cgrk_jbxx rk
+        on ly.kcid=rk.id
+        <where>
+            <if test="map.hclx==null or map.hclx==''">
+                and rk.hclx != '5'
+            </if>
+            <if test="map.hclx!=null and map.hclx!=''">
+                and rk.hclx=#{map.hclx}
+            </if>
+            <if test="map.hcmc!=null and map.hcmc!=''">
+                and rk.hcmc like concat('%',#{map.hcmc},'%')
+            </if>
+            <if test="map.startDate!=null">
+                and ly.lyrq >=  #{map.startDate}
+            </if>
+            <if test="map.endDate!=null">
+                and  #{map.endDate} >= ly.lyrq
+            </if>
+        </where>
+        order by ly.id desc;
+    </select>
+    <!-- 获得领用报告的信息-->
+    <select id="getReportData" resultType="map">
+        SELECT
+	    rk.hcmc,
+	    rk.id AS kcid,
+	    rk.gg,
+	    rk.jb,
+	    rk.sl as kcsl,
+	    ly.id AS id,
+	    rk.sccj,
+	    rk.hclx,
+	    rk.cfwz,
+	   (select name from user where zydm = ly.lyr) AS lyr,
+       ly.lyrq,
+       ly.lysl
+       FROM
+	   t_hcly_jbxx ly
+       LEFT JOIN t_cgrk_jbxx rk ON ly.kcid = rk.id
+       where ly.id in
+       <foreach collection="ids" item="id" index="index" open="(" separator="," close=")">
+            #{id}
+       </foreach>
+    </select>
+    <!-- 批量删除数据-->
+    <delete id="delLygl">
+        delete from t_hcly_jbxx where id in
+        <foreach collection="ids" index="index" item="id" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

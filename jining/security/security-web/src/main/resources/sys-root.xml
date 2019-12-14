@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	   xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+	<!-- 使用disconf必须添加以下配置 -->
+	<bean id="disconfMgrBean" class="com.baidu.disconf.client.DisconfMgrBean"
+		  destroy-method="destroy">
+		<property name="scanPackage" value="com.xinhai"/>
+	</bean>
+	<bean id="disconfMgrBean2" class="com.baidu.disconf.client.DisconfMgrBeanSecond"
+		  init-method="init" destroy-method="destroy">
+	</bean>
+
+	<!--
+		使用托管方式的disconf配置(无代码侵入, 配置更改不会自动reload)
+		此处加载所有的配置文件，dubbo-consumer.xml 文件可以直接使用配置文件中的属性
+		如果有其他的xml文件，亦可使用此处加载的配置文件中的属性
+		此处可以加载多个配置文件，在list配置节中增加value即可
+	-->
+	<bean id="autoConfigurerNotReload"
+		  class="com.baidu.disconf.client.addons.properties.ReloadablePropertiesFactoryBean">
+		<property name="locations">
+			<list>
+				<value>classpath*:**/global.properties</value>
+				<value>classpath*:**/custom.properties</value>
+			</list>
+		</property>
+	</bean>
+
+	<bean id="propertyConfigurerNotReload"
+		  class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+		<property name="ignoreResourceNotFound" value="true"/>
+		<property name="ignoreUnresolvablePlaceholders" value="true"/>
+		<property name="propertiesArray">
+			<list>
+				<ref bean="autoConfigurerNotReload"/>
+			</list>
+		</property>
+	</bean>
+
+	<!--如果调试时不需要Dubbo服务则注释掉-->
+	<!--<import resource="classpath:dubbo/dubbo-consumer.xml"/>-->
+
+	<!--如果调试时不需要Dubbo服务则启用，同时注释掉dubbo-consumer.xml文件的导入-->
+	<import resource="classpath*:spring/spring-mybatis.xml" />
+
+	<import resource="classpath*:spring/security-shiro.xml"/>
+	<import resource="classpath*:spring/spring-redis.xml"/>
+<!-- 	<import resource="classpath*:spring/spring-cache.xml"/> -->
+</beans>

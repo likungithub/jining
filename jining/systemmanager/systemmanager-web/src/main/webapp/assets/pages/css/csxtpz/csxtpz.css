@@ -1,0 +1,31 @@
+@CHARSET "UTF-8";
+/*财税360管理样式开始*/
+.product-360-manager table, .product-360-manager table th {
+    border: none !important;
+}
+
+.product-360-manager .dataTables_wrapper {
+    background: #fff;
+}
+
+.product-360-manager .dataTables_wrapper tr > td:nth-last-child(1) > a > i {
+    font-size: 20px;
+    color: #2CADFF;
+}
+
+.product-360-manager .dataTables_wrapper tr > th:nth-last-child(1) {
+    width: 100px;
+}
+
+.product-360-manager .dataTables_wrapper tr > th:nth-last-child(2),
+.product-360-manager .dataTables_wrapper tr > td:nth-last-child(2),
+.product-360-manager .dataTables_wrapper tr > th:nth-child(1),
+.product-360-manager .dataTables_wrapper tr > td:nth-child(1) {
+    text-align: left !important;
+}
+
+.product-360-manager .dataTables_wrapper table > tbody > tr > td {
+    color: #666 !important;
+}
+
+/*财税360管理样式结束*/

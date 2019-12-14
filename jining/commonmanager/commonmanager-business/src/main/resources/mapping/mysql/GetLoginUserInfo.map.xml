@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+                                                                                                                                                                                                                                                <!-- namespace必须和接口名称一一对应 -->
+<mapper namespace="com.xinhai.caiyun.commonmanager.dao.GetLoginUserInfoMapper">
+    <resultMap id="loginuser" type="com.xinhai.usermanager.entity.User">
+        <id property="id" column="id"/>
+        <result column="user_account" property="userAccount"/>
+        <result column="password" property="password"/>
+        <result column="name" property="name"/>
+        <result column="is_enabled" property="enabled"/>
+        <result column="tel" property="tel"/>
+        <result column="email" property="email"/>
+        <result column="customer_id" property="customerId"/>
+        <result column="org_id" property="orgId"/>
+        <result column="bmdm" property="bmdm"/>
+        <result column="last_login_date" property="lastLoginDate"/>
+        <result column="create_Date" property="createDate"/>
+        <result column="remark" property="remark"/>
+        <result column="ygid" property="ygid"/>
+        <result column="is_delete" property="isDelete"/>
+        <result column="zydm" property="zydm"/>
+        <result column="xbdm" property="xbdm"/>
+        <result column="csrq" property="csrq"/>
+        <result column="yddh" property="yddh"/>
+        <result column="qq" property="qq"/>
+        <result column="bzxx" property="bzxx"/>
+        <result column="lxdz" property="lxdz"/>
+        <result column="jsdm" property="jsdm"/>
+        <result column="nsrsbh" property="nsrsbh"/>
+        <result column="dljg_bm" property="dljgBm"/>
+        <result column="lrry" property="lrry"/>
+        <result column="gxry" property="gxry"/>
+        <result column="scry" property="scry"/>
+        <result column="gxrq" property="gxrq"/>
+        <result column="scrq" property="scrq"/>
+        <result column="ygtx" property="ygtx"/>
+    </resultMap>
+    <select id="findUserById" resultMap="loginuser" parameterType="java.lang.String">
+        SELECT id,user_account,password,name,is_enabled,tel,email,customer_id,org_id,bmdm,last_login_date,create_Date,remark,ygid,is_delete,zydm,xbdm,csrq,yddh,qq,bzxx,lxdz,jsdm,nsrsbh,dljg_bm,lrry,ygtx FROM user where id=#{id};
+    </select>
+</mapper>

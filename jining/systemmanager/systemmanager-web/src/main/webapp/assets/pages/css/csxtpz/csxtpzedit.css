@@ -1,0 +1,63 @@
+@CHARSET "UTF-8";
+/*财税360管理编辑样式开始*/
+
+.finance-360-manager > .modal-dialog {
+    width:700px !important;
+}
+
+.finance-360-manager > .modal-dialog .modal-footer {
+    padding-right: 33px;
+}
+
+.finance-360-manager > .modal-dialog > .modal-content {
+    border-radius: 4px !important;
+}
+
+.finance-360-manager .modal-title {
+    font-weight: 900;
+}
+.finance-360-manager  .pro-description{
+    width:100%;
+}
+.finance-360-manager  .pro-description>label{
+    height: 100px;
+    line-height: 100px;
+}
+.finance-360-manager textarea[name='productDescription']
+{
+    float: left;
+    width: 500px;
+    resize: none;
+    border-radius: 0 4px 4px 0 !important;
+    height: 100px;
+}
+.finance-360-manager textarea[name='remark']
+{
+    float: left;
+    width: 500px;
+    resize: none;
+    border-radius: 0 4px 4px 0 !important;
+    height: 100px;
+}
+.finance-360-manager .form-horizontal .form-group{
+    margin-left: 0;
+}
+#editProductWrap-m{
+    border: 1px solid #ccc;
+    width: 500px;
+    text-align: center;
+    height: 200px;
+    line-height: 200px;
+    border-radius: 0 4px 4px 0!important;
+    overflow: hidden;
+}
+#uploadPic-m{
+    border: 1px solid #ccc;
+    border: 1px solid #ccc;
+    height: 33px;
+    width: 500px;
+    padding-top: 5px;
+    border-radius: 0 4px 4px 0!important;
+}
+
+/*财税360管理编辑样式结束*/

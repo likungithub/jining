@@ -1,0 +1,175 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.xinhai.rolemanager.dao.RoleMapper">
+    <resultMap id="roleMap" type="com.xinhai.rolemanager.entity.Role">
+        <id property="id" column="id"/>
+        <result property="jsdm" column="jsdm"/>
+        <result property="name" column="name"/>
+        <result property="customerId" column="customer_id"/>
+        <result property="orderNo" column="order_no"/>
+        <result property="remark" column="remark"/>
+        <result property="nsrsbh" column="nsrsbh"/>
+        <result property="dljgBm" column="dljg_bm"/>
+        <result property="zydm" column="zydm"/>
+        <result property="jsbz" column="jsbz"/>
+        <result property="createDate" column="create_date"/>
+    </resultMap>
+
+    <insert id="addRole" parameterType="com.xinhai.rolemanager.entity.Role" keyProperty="id"
+            useGeneratedKeys="true">
+		INSERT INTO role (id, name, customer_id, order_no, remark, nsrsbh, dljg_bm, zydm, create_date, jsbz, scbz)
+		VALUES (#{id}, #{name}, #{customerId}, #{orderNo}, #{remark}, #{nsrsbh}, #{dljgBm}, #{zydm}, #{createDate}, #{jsbz}, false);
+	</insert>
+    <insert id="setRoleAuth">
+        INSERT INTO role_auth (role_id, resource_id, jsbz) VALUES
+        <foreach collection="authIds" item="authId" index="index" separator=",">
+            (#{id}, #{authId}, #{jsbz})
+        </foreach>
+    </insert>
+    <insert id="setRoleUsers">
+        INSERT INTO user_role (role_id, user_id) VALUES
+        <foreach collection="userIds" item="userId" index="index" separator=",">
+            (#{roleId}, #{userId})
+        </foreach>
+    </insert>
+    <!-- 对一个客户授角色 -->
+    <insert id="setRoleUser">
+        INSERT INTO user_role (role_id, user_id) VALUES (#{roleId}, #{userId});
+    </insert>
+    <update id="updateRole">
+		UPDATE role
+		SET name = #{role.name}, order_no = #{role.orderNo}, remark = #{role.remark} where id = #{id} and scbz = false;
+	</update>
+	
+	<update id="updateRoleByJsdm">
+        UPDATE role
+        SET name = #{role.name}, remark = #{role.remark} where jsdm = #{jsdm} and scbz = false;
+    </update>
+
+    <update id="deleteRole">
+		UPDATE role
+		SET scbz = TRUE
+		WHERE id = #{id};
+	</update>
+    <delete id="deleteRoleAuth">
+		DELETE FROM role_auth
+		WHERE role_id = #{id};
+	</delete>
+	
+	<delete id="deleteRoleAuthWithJsbz">
+        DELETE FROM role_auth
+        WHERE role_id = #{id} and jsbz = #{jsbz};
+    </delete>
+	
+    <delete id="deleteRoleUser">
+		DELETE FROM user_role
+		WHERE role_id = #{roleId} and user_id in 
+		<foreach collection="userIds" item="userId" index="index" separator="," close=")" open="(">
+            #{userId}
+        </foreach>
+	</delete>
+	
+	<!-- 根据id获得role信息 -->
+    <select id="getRole" resultMap="roleMap">
+		SELECT id, jsdm, name, customer_id, order_no, remark, nsrsbh, dljg_bm, zydm, jsbz, create_date
+		FROM role
+		WHERE id = #{id} and scbz = false;
+	</select>
+	
+	<!-- 根据jsdm获取角色信息 -->
+	<select id="getRoleByJsdm" resultMap="roleMap">
+        SELECT id, jsdm, name, customer_id, order_no, remark, nsrsbh, dljg_bm, zydm, jsbz, create_date
+        FROM role
+        WHERE jsdm = #{jsdm} and scbz = false;
+    </select>
+    
+    <!-- 根据角色名称获取角色信息 -->
+	<select id="getRoleByName" resultMap="roleMap">
+        SELECT id, jsdm, name, customer_id, order_no, remark, nsrsbh, dljg_bm, zydm, jsbz, create_date
+        FROM role
+        WHERE name = #{name} and scbz = false;
+    </select>
+    
+    <!-- 无用 -->
+    <select id="getRoles" resultMap="roleMap">
+		SELECT id, jsdm, name, customer_id, order_no, remark, nsrsbh, dljg_bm, zydm, jsbz, create_date
+		FROM role
+		WHERE customer_id = #{customerId} and jsbz = 001 and scbz = false;
+	</select>
+	
+	<!-- 查询代理机构的所有角色信息 -->
+	<select id="getRolesByJsbz" resultMap="roleMap">
+        SELECT id, jsdm, name, customer_id, order_no, remark, nsrsbh, dljg_bm, zydm, jsbz, create_date
+        FROM role
+        WHERE customer_id = #{customerId} and jsbz = #{jsbz} and scbz = false;
+    </select>
+    
+    <!-- 查询最新的数据 -->
+    <select id="getNew" resultMap="roleMap">
+        SELECT id, jsdm, name, customer_id, order_no, remark, nsrsbh, dljg_bm, zydm, jsbz, create_date
+        FROM role
+        WHERE jsdm = (
+	        select max(jsdm) 
+	        from role 
+	        where customer_id = #{customerId} and jsbz = #{jsbz}
+	        ) and scbz = false;
+    </select>
+    
+    <!-- 根据角色id查询对应的user_id -->
+	<select id="selectUserrole" resultType="java.lang.String">
+        SELECT user_id
+        FROM user_role
+        WHERE role_id = #{id};
+    </select>
+    
+    <!-- 查询角色是否已经存在 -->
+    <select id="roleHasExist" resultType="java.lang.Integer">
+		SELECT COUNT(id)
+		FROM role
+		WHERE name = #{name} AND customer_id = #{customerId};
+	</select>
+	
+	<!-- 根据角色id查询资源id -->
+    <select id="getRoleAuth" resultType="java.lang.String">
+		SELECT resource_id
+		FROM role_auth
+		WHERE role_id = #{id};
+	</select>   
+	
+	<!-- 获取该角色的所有资源id -->
+	<select id="getCustomerRoleAuth" resultType="java.lang.String">
+        SELECT resource_id
+        FROM role_auth
+        WHERE role_id = #{id} and jsbz = #{jsbz};
+    </select>
+    
+	<!-- 增加当前代理机构的角色 -->
+    <select id="createRole" statementType="CALLABLE" parameterType="java.lang.String">
+        <![CDATA[
+            call P_createCustomerInfo(
+                #{customer_id,mode=IN}
+            )
+        ]]>
+    </select>
+    
+    <!-- 删除当前不同意的代理机构的信息 -->
+    <select id="DelRole" statementType="CALLABLE" parameterType="java.lang.String">
+        <![CDATA[
+           call P_delCustomerInfo(
+                #{customer_id,mode=IN}
+            )
+        ]]>
+    </select>	
+    
+    <insert id="setDefaultAuth">
+        INSERT INTO role_auth (role_id, resource_id, jsbz) VALUES (#{role_id}, #{authId}, '001');
+    </insert>
+    
+    <!-- 更新派工管理中的角色名称 -->
+    <update id="updatePgglRole" parameterType="java.lang.String">
+        UPDATE pt_pggl
+        SET pgjs_mc = #{name} where pgjs_dm = #{jsdm};
+    </update>
+</mapper>

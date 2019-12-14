@@ -1,0 +1,17 @@
+@CHARSET "UTF-8";
+.allotTask_mdw .modal-dialog{
+    width: 720px;
+}
+
+#allot-task-form span.select2.select2-container.select2-container--bootstrap{
+    float: left;
+}
+#allot-task-form .taskM>input{
+    vertical-align: text-bottom;
+}
+
+#allot-task-form span.select2-selection.select2-selection--single,
+#allot-task-form span.select2-selection.select2-selection--multiple{
+    height: 33px;
+    border-radius: 0 4px 4px 0!important;
+}

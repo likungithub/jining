@@ -1,0 +1,177 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!-- namespace必须和接口名称一一对应 -->
+<mapper namespace="com.xinhai.caiyun.systemmanager.dao.OverdueReminderMapper">
+
+    <!-- 获取所有超时的  样品收样  -->
+    <select id="getQuerySampleCollection" resultType="com.xinhai.caiyun.systemmanager.api.YPSYOverdueReminder">
+        SELECT
+			tw.DWMC,tw.SYRQ AS LRRQ,workdaynum(tw.SYRQ,NOW()) AS cqts,ty.WTID
+		FROM
+			t_wt_jbxx tw
+			LEFT JOIN t_ypgl_jbxx ty ON tw.WTID = ty.WTID
+			WHERE IFNULL(tw.SYRQ,'') != ''
+			AND ty.JSZT !=002
+			AND workdaynum(tw.SYRQ,NOW()) > 1
+    </select>
+
+    <!-- 获取所有超时的  样品拆分  -->
+    <select id="getQuerySampleSplit" resultType="com.xinhai.caiyun.systemmanager.api.YPCFOverdueReminder">
+        	 SELECT distinct ty.WTID, tw.DWMC,ty.LRRQ,workdaynum(ty.LRRQ, NOW()) AS cqts
+			 FROM t_ypgl_jbxx ty
+			 LEFT JOIN ypcf yp ON ty.WTID = yp.htbm
+			 LEFT JOIN t_wt_jbxx tw  ON ty.WTID = tw.WTID
+			 WHERE IFNULL(ty.LRRQ,'') != '' AND IFNULL(yp.LRRQ,'') != ''
+			 AND workdaynum(ty.LRRQ, NOW()) > 1
+    </select>
+    <!-- 获取所有超时的  任务分配  -->
+	<select id="getQueryDistribution" resultType="com.xinhai.caiyun.systemmanager.api.RWFPOverdueReminder">
+		SELECT
+			typ.WTID,tr.LQRQ as LRRQ,workdaynum(tr.LQRQ,NOW()) AS cqts,tw.DWMC
+			FROM
+			 t_ypgl_jbxx typ
+			LEFT JOIN t_yp_jcxm tjc ON tjc.ypid = typ.ID
+			LEFT JOIN t_ypgl_rydm tr ON tr.ypid = typ.ID
+			LEFT JOIN t_wt_jbxx tw ON typ.WTID = tw.WTID
+			WHERE IFNULL(tr.LQRQ,'') != ''
+			AND tjc.fpzt = 001
+			AND workdaynum(tr.LQRQ,NOW()) > 1;
+	</select>
+	<!-- 获取所有超时的  任务分配 制备 -->
+	<select id="getQueryDistributionPreparation" resultType="com.xinhai.caiyun.systemmanager.api.RWFPOverdueReminder">
+		  SELECT
+			typ.WTID,tz.lqsj as LRRQ,workdaynum(tz.lqsj,NOW()) AS cqts,tw.DWMC
+			FROM
+			 t_ypgl_jbxx typ
+			LEFT JOIN t_yp_jcxm tjc ON tjc.ypid = typ.ID
+			LEFT JOIN t_yp_zbwc tz ON tz.ypid = typ.ID
+			LEFT JOIN t_wt_jbxx tw ON typ.WTID = tw.WTID
+			WHERE IFNULL(tz.lqsj,'') != ''
+			AND typ.IF_SGR = 1
+			AND tjc.fpzt = 001
+			AND workdaynum(tz.lqsj,NOW()) > 1
+	</select>
+    <!-- 获取所有超时的  样品制备  -->
+	<select id="getQueryPreparation" resultType="com.xinhai.caiyun.systemmanager.api.YPZBOverdueReminder">
+		SELECT ty.wtid,ty.zbfpsj as lrrq,workdaynum(tz.tjsj,NOW()) AS cqts,tw.DWMC,tz.ypmc
+			FROM t_ypgl_jbxx ty
+			LEFT JOIN t_wt_jbxx tw ON ty.wtid = tw.wtid
+			LEFT JOIN t_yp_zbwc tz ON ty.id = tz.ypid
+			WHERE ty.IF_SGR = 1
+			AND IFNULL(tz.tjsj,'') != ''
+			AND tz.lqzt != 002
+			AND workdaynum(tz.tjsj,NOW()) > 1
+	</select>
+    <!-- 获取所有超时的  检测  -->
+    <select id="getQueryTesting" resultType="com.xinhai.caiyun.systemmanager.api.JCOverdueReminder">
+	SELECT tw.WTID,tj.e_date as lrrq,workdaynum(tj.e_date,NOW()) AS cqts, tw.DWMC
+		 FROM t_ypgl_jbxx ty
+		 LEFT JOIN t_yp_jcxm tj ON ty.id = tj.ypid
+		 LEFT JOIN t_wt_jbxx tw ON ty.wtid = tw.WTID
+		 WHERE IFNULL(tj.e_date,'') != ''
+		 AND ty.YPJCZT != 002
+		 AND workdaynum(tj.e_date,NOW()) > 10
+    </select>
+
+    <!-- 获取所有超时的  报告编制 -->
+    <select id="getQueryPresentationEdit" resultType="com.xinhai.caiyun.systemmanager.api.BGBZOverdueReminder">
+      select
+		tw.DWMC,
+		tw.WTID,
+		(SELECT str_to_date(REPLACE(REPLACE(REPLACE(bgscsj,'年','-'),'月','-'),'日',''),'%Y-%m-%d') FROM t_wt_jbxx where id=tw.id) as lrrq,
+		workdaynum ( (SELECT str_to_date(REPLACE(REPLACE(REPLACE(bgscsj,'年','-'),'月','-'),'日',''),'%Y-%m-%d') FROM t_wt_jbxx where id=tw.id), NOW( ) ) AS cqts
+		from t_wt_jbxx tw
+		LEFT JOIN t_ypgl_jbxx ty ON ty.wtid = tw.wtid
+		WHERE
+			IFNULL( tw.bgscsj, '' ) != ''
+			AND ty.BGBZZT != '002'
+			AND workdaynum ( (SELECT str_to_date(REPLACE(REPLACE(REPLACE(bgscsj,'年','-'),'月','-'),'日',''),'%Y-%m-%d') FROM t_wt_jbxx where id=tw.id), NOW( ) ) > 1
+    </select>
+
+    <!-- 获取所有超时的  报告审核  -->
+    <select id="getQueryPresentationExamine" resultType="com.xinhai.caiyun.systemmanager.api.BGSHOverdueReminder">
+       	 SELECT tw.WTID,tb.LRRQ,workdaynum(tb.LRRQ, NOW()) AS cqts,tw.DWMC,ty.ypbm
+					FROM t_bggl_rydm tb LEFT JOIN t_ypgl_jbxx  ty ON ty.id = tb.YPID
+					LEFT JOIN t_wt_jbxx tw ON ty.wtid = tw.WTID
+					WHERE IFNULL(tb.LRRQ,'') != ''
+					AND tb.LX = 1
+					AND ty.bgshzt in(001,003)
+					AND tb.ZXRY_DM=#{zxry_dm}
+					AND workdaynum(tb.LRRQ, NOW()) > 1
+    </select>
+
+    <!-- 获取所有超时的  报告批准  -->
+    <select id="getQueryPresentationApproval" resultType="com.xinhai.caiyun.systemmanager.api.BGPZOverdueReminder">
+       	SELECT tw.WTID,tb.LRRQ,workdaynum(tb.LRRQ, NOW()) AS cqts,tw.DWMC,ty.ypbm
+					FROM t_bggl_rydm tb LEFT JOIN t_ypgl_jbxx  ty ON ty.id = tb.YPID
+					LEFT JOIN t_wt_jbxx tw ON ty.wtid = tw.WTID
+					WHERE IFNULL(tb.LRRQ,'') != ''
+					AND ty.BGSHZT = 002
+					AND tb.LX = 2
+					AND ty.bgpzzt in(001,003)
+					AND tb.ZXRY_DM=#{zxry_dm}
+					AND workdaynum(tb.LRRQ, NOW()) > 1
+    </select>
+
+    <!-- 获取所有超时的  报告打印  -->
+    <select id="getQueryPresentationPrinting" resultType="com.xinhai.caiyun.systemmanager.api.BGDYOverdueReminder">
+       SELECT ty.WTID,tb.LRRQ
+		<!--,workdaynum(tb.LRRQ, NOW()) AS cqts -->
+					FROM t_bggl_rydm tb LEFT JOIN t_ypgl_jbxx ty ON tb.YPID = ty.ID
+					WHERE IFNULL(tb.LRRQ,'') != ''
+					AND tb.LX = 2
+					AND ty.BGDYZT != 002
+					<!--AND workdaynum(tb.LRRQ, NOW()) > 1 -->
+    </select>
+
+    <!-- 获取所有超时的  报告打印  -->
+    <select id="getfindAll" resultType="map">
+      SELECT
+	    a.WTID,
+	    a.YPBM,
+	    a.BGLJ,
+	    a.BGBZZT,
+	    a.BGSHZT,
+	    a.BGPZZT,
+	    a.BGDYZT,
+	    a.SCDW,
+	    b.ID,
+	    CASE BGLJ
+    WHEN '' THEN
+	    b.HTMC
+    ELSE
+	    CONCAT(b.HTMC, '(有报告)')
+    END AS HTMC,
+    a.YPBM,
+    a.YPMC,
+    (
+	SELECT
+		    GROUP_CONCAT(xm.ZWMC_BM)
+	    FROM
+		    t_yp_jcxm ypxm
+	    LEFT JOIN t_jcxm_jbxx xm ON xm.id = ypxm.jcxmid
+	    WHERE
+	    	ypxm.ypid = a.id
+    ) AS JCXM,
+    b.DWMC,
+    b.SFMC,
+    b.CSMC,
+    b.XJMC,
+    DATE_FORMAT(A.BGZJSPSJ, '%Y-%m-%d') AS BGZJSPSJ
+    FROM
+	    t_ypgl_jbxx a
+    LEFT JOIN t_wt_jbxx b ON a.WTID = b.WTID
+    WHERE
+	    a.scbz = 0
+    AND a.BGBZZT = '002'
+    AND a.bgzjsp IN ('002', '000')
+    AND a.BGSHZT = '002'
+    AND BGPZZT = '002'
+    AND IFNULL(b.zfbs, '0') != '1'
+    AND BGLJ IS NOT NULL
+    ORDER BY
+	a.ypbm DESC
+    </select>
+</mapper>

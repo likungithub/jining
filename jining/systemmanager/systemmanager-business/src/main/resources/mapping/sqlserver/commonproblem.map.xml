@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!-- namespace必须和接口名称一一对应 -->
+<mapper namespace="com.xinhai.caiyun.systemmanager.dao.CommonProblemMapper">
+    <!-- 获取所有commonproblem  -->
+    <select id="getAllCommonProblem" resultType="com.xinhai.caiyun.systemmanager.api.CommonProblem">
+        SELECT * FROM pt_cjwt WHERE SCBZ=0;
+    </select>
+    <!-- 根据用户查找commonproblem -->
+    <select id="getCommonProblemByUser" resultType="com.xinhai.caiyun.systemmanager.api.CommonProblem"
+            parameterType="String">
+        SELECT * FROM pt_cjwt WHERE ID=#{id} AND SCBZ=0;
+    </select>
+    <!-- 添加commonproblem -->
+    <insert id="addCommonProblem" parameterType="com.xinhai.caiyun.systemmanager.api.CommonProblem"
+            keyProperty="id" useGeneratedKeys="true">
+    </insert>
+</mapper>

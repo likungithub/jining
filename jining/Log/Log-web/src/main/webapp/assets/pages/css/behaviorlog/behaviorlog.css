@@ -1,0 +1,13 @@
+@CHARSET "UTF-8";
+
+.behavior-input-style{
+    height: 33px;
+    width: 85px!important;
+}
+.behavior-label-l
+{ line-height: 20px;}
+.behaviorcalendar-btn
+{
+    height: 33px;
+    border-radius: 0 4px 4px 0!important;
+}

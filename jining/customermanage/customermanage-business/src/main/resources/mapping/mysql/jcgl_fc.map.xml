@@ -1,0 +1,624 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xinhai.caiyun.customermanage.dao.JcglFcMapper">
+
+    <!-- 通过部门名称获得人员的代码 -->
+    <select id="findAllRydmByBmmc" resultType="map">
+        select u.name,u.zydm from user u,dm_mrry m
+        where u.zydm = m.zydm
+        <if test="map.ry_fl!=null and  map.ry_fl!=''">
+            and m.ry_fl=#{map.ry_fl}
+        </if>
+    </select>
+
+    <!-- 检测管理中获得显示的数据 -->
+    <select id="findAll" resultType="map">
+
+        <if test="cxtj.bs=='queryry'.toString()">
+            select GROUP_CONCAT(b.`name`)as rymc,lx from t_jcgl_rydm a LEFT JOIN user b on a.ZXRY_DM=b.zydm where
+            YPID=#{cxtj.id} group by lx order by lx
+        </if>
+        <!-- 任务分配界面  ！ -->
+        <if test="cxtj.bs=='rwfp'.toString()">
+            SELECT
+                a.ID,
+                a.YPBM,
+                a.YPMC,
+                a.YPSL,
+                a.YPDW,
+                a.JSZT,
+                a.IF_CY,
+                a.BZQ,
+                a.SB,
+                a.BZXX,
+                b.WTDW AS DWMC,
+                b.id AS wtid,
+                (select GROUP_CONCAT(DISTINCT y.name) from t_ypjc_rydm x,USER y  where x.ZXRY_DM = y.zydm and  x.lx=4 and x.ypid= a.ID) AS YP_JCRY,
+                (select GROUP_CONCAT(DISTINCT y.name) from t_ypjc_rydm x,USER y  where x.fhry_dm = y.zydm and  x.lx=4 and x.ypid= a.ID) AS YP_FHRY,
+                DATE_FORMAT(a.YP_FPRQ,'%Y-%m-%d') AS YP_FPRQ,
+                (case when a.YP_SFFP is null then '未分配' else if(a.YP_SFFP='001','未分配','已分配') end ) AS FPZT,
+                YP_SFFP
+            FROM
+                t_ypgl_jbxx a
+            LEFT JOIN t_wt_jbxx b ON a.wtid = b.wtid
+            WHERE
+                a.IF_SC = '0'  /*是否删除*/
+            AND ifnull( a.JSZT, '001' ) = '001'  /*#接收状态  000  未确认   001 未接收   002 已接收*/
+            AND b.IF_SL = '1'  /*#是否受理 1 是*/
+            AND IFNULL( b.zfbs, '0' ) != '1'  /*#作废标志*/
+            <if test="cxtj.ypbm!=null and cxtj.ypbm!=''">
+                AND a.ypbm like concat('%',#{cxtj.ypbm},'%')
+            </if>
+            <if test="cxtj.ypmc!=null and cxtj.ypmc!=''">
+                and a.ypmc like concat('%',#{cxtj.ypmc},'%')
+            </if>
+            <if test="cxtj.fpzt!=null and cxtj.fpzt!=''">
+                and a.YP_SFFP =#{cxtj.fpzt}
+            </if>
+            order by b.lrrq DESC,a.id DESC
+                limit #{cxtj.start},#{cxtj.length};
+        </if>
+        <!-- 样品检测显示数据部分 -->
+        <if test="cxtj.bs=='ypjc'.toString()">
+            SELECT  ypxm.id as jcxmid,GROUP_CONCAT(zb.lqzt) lqzt,y.id,y.ypbm,y.ypmc,
+            (select name from user where zydm = zb.lqry) lqry,zb.lqsj,y.ypjczt,y.if_ssg,GROUP_CONCAT(zb.lx) as lx,y.wtid,
+            (select w.slrq from t_wt_jbxx w where w.wtid = y.wtid) as wtslrq,wt.cydbm,y.ypdj,y.YPPHHBH,y.GGXH,y.ypzxbz
+            from t_yp_zbwc zb
+            LEFT JOIN t_jcgl_rydm TT ON TT.ypid=zb.id
+            LEFT JOIN t_ypgl_jbxx y ON y.id=zb.ypid
+            inner JOIN t_wt_jbxx wt ON wt.wtid=y.wtid AND IFNULL(wt.zfbs,'0') != '1'
+            LEFT JOIN t_yp_jcxm ypxm ON ypxm.ypid=y.id
+            LEFT JOIN t_jcxm_jbxx jcxm ON ypxm.jcxmid=jcxm.id
+            where 1=1
+            <if test="cxtj.ypmc!=null">
+                and y.ypmc like concat('%',#{cxtj.ypmc}, '%')
+            </if>
+            <if test="cxtj.jcxmc!=null">
+                and jcxm.zwmc_bm like concat('%',#{cxtj.jcxmc}, '%')
+            </if>
+            <if test='cxtj.jclbdm!=null'>
+                and jcxm.jclbdm = #{cxtj.jclbdm}
+            </if>
+            AND zb.lx != 4 and TT.zxry_dm= #{cxtj.zydm}
+            GROUP BY y.id
+            order by y.ypjczt,y.id desc
+            limit #{cxtj.start},#{cxtj.length};
+        </if>
+        <!-- 数据校核显示数据部分 -->
+        <if test="cxtj.bs=='sjjy'.toString()">
+            select a.YPJCZT,a.SJJYZT,a.SJSCZT ,a.ID, b.HTMC,a.YPBM,a.YPMC,(SELECT GROUP_CONCAT(xm.ZWMC_BM) from
+            t_yp_jcxm ypxm
+            LEFT JOIN t_jcxm_jbxx xm ON xm.id=ypxm.jcxmid where ypxm.ypid=a.id) as
+            JCXM,a.IF_SSG,b.DWMC,b.SFMC,b.CSMC,b.XJMC from t_ypgl_jbxx a
+            inner JOIN t_wt_jbxx b
+            on a.WTID=b.WTID AND IFNULL(b.zfbs,'0') != '1'
+            LEFT JOIN t_yp_jcxm c
+            on c.ypid = a.id
+            LEFT JOIN t_jcxm_jbxx d on d.id = c.jcxmid
+            where a.YPJCZT='002' and (a.SJJYZT='002' or a.SJJYZT='001')
+            <if test="cxtj.ypmc!=null">
+                and a.YPMC like concat('%',#{cxtj.ypmc}, '%')
+            </if>
+            <if test="cxtj.ypbm!=null">
+                and a.YPBM like concat('%',#{cxtj.ypbm}, '%')
+            </if>
+            <if test="cxtj.jclbdm !=null">
+                and d.jclbdm = #{cxtj.jclbdm}
+            </if>
+            order by a.sjjyzt
+            limit #{cxtj.start},#{cxtj.length}
+        </if>
+
+        <!-- 数据复合显示数据部分 -->
+        <if test="cxtj.bs=='sjsc'.toString()">
+            select a.YPJCZT,a.SJJYZT,a.SJSCZT ,a.ID, b.HTMC,a.YPBM,a.YPMC,(SELECT GROUP_CONCAT(xm.ZWMC_BM) from
+            t_yp_jcxm ypxm
+            LEFT JOIN t_jcxm_jbxx xm ON xm.id=ypxm.jcxmid where ypxm.ypid=a.id) as
+            JCXM,a.IF_SSG,b.DWMC,b.SFMC,b.CSMC,b.XJMC from t_ypgl_jbxx a
+            inner JOIN t_wt_jbxx b
+            on a.WTID=b.WTID  AND IFNULL(b.zfbs,'0') != '1'
+            LEFT JOIN t_yp_jcxm c
+            on c.ypid = a.id
+            LEFT JOIN t_jcxm_jbxx d on d.id = c.jcxmid
+            where a.YPJCZT='002' and a.SJJYZT='002' and (a.sjsczt='002' or a.sjsczt='001')
+            <if test="cxtj.ypmc!=null">
+                and a.YPMC like concat('%',#{cxtj.ypmc}, '%')
+            </if>
+            <if test="cxtj.ypbm!=null">
+                and a.YPBM like concat('%',#{cxtj.ypbm}, '%')
+            </if>
+            <if test="cxtj.jclbdm!=null">
+                and d.jclbdm = #{cxtj.jclbdm}
+            </if>
+            order by a.sjsczt
+            limit ${cxtj.start},${cxtj.length};
+        </if>
+
+        <!--and a.YPJCZT='002' and a.SJJYZT='002' and a.SJSCZT='002'-->
+        <if test="cxtj.bs=='sjxg'.toString()">
+            select a.YPJCZT,a.SJJYZT,a.SJSCZT ,a.SJXGZT,a.ID, b.HTMC,a.YPBM,a.YPMC,(SELECT GROUP_CONCAT(xm.ZWMC_BM) from
+            t_yp_jcxm ypxm LEFT JOIN t_jcxm_jbxx xm ON xm.id=ypxm.jcxmid where ypxm.ypid=a.id) as
+            JCXM,b.DWMC,b.SFMC,b.CSMC,b.XJMC from t_ypgl_jbxx a LEFT JOIN t_wt_jbxx b
+            on a.WTID=b.WTID
+            <where>
+                <if test="cxtj.ypmc!=null">
+                    a.YPMC like concat('%',#{cxtj.ypmc}, '%')
+                </if>
+            </where>
+            AND FuncAuthorityWt(#{cxtj.zydm},a.wtid) = 1
+            order by a.lrrq desc limit ${cxtj.start},${cxtj.length}
+        </if>
+    </select>
+
+    <!-- 检测管理中获得显示的数量  chen-->
+    <select id="findCount" resultType="long">
+        <if test="cxtj.bs=='rwfp'.toString()">
+            SELECT
+            COUNT(1)
+            FROM
+                t_ypgl_jbxx a
+            LEFT JOIN t_wt_jbxx b ON a.wtid = b.wtid
+            WHERE
+            a.IF_SC = '0'  /*是否删除*/
+            AND ifnull( a.JSZT, '001' ) = '001'  /*#接收状态  000  未确认   001 未接收   002 已接收*/
+            AND b.IF_SL = '1'  /*#是否受理 1 是*/
+            AND IFNULL( b.zfbs, '0' ) != '1'  /*#作废标志*/
+                <if test="cxtj.ypbm!=null and cxtj.ypbm!=''">
+                    AND a.ypbm like concat('%',#{cxtj.ypbm},'%')
+                </if>
+                <if test="cxtj.ypmc!=null and cxtj.ypmc!=''">
+                    and a.ypmc like concat('%',#{cxtj.ypmc},'%')
+                </if>
+                <if test="cxtj.fpzt!=null and cxtj.fpzt!=''">
+                    and a.YP_SFFP =#{cxtj.fpzt}
+                </if>
+        </if>
+        <!-- 样品检测显示数量-->
+        <!-- and a.ypjczt='001'-->
+        <if test="cxtj.bs=='ypjc'.toString()">
+            SELECT count(1)
+            from (
+            select y.id
+            from t_yp_zbwc zb
+            LEFT JOIN t_ypgl_jbxx y ON y.id=zb.ypid
+            LEFT JOIN t_jcgl_rydm TT ON TT.ypid=zb.id
+            inner JOIN t_wt_jbxx wt ON wt.wtid=y.wtid AND IFNULL(wt.zfbs,'0') != '1'
+            LEFT JOIN t_yp_jcxm ypxm ON ypxm.ypid=y.id
+            LEFT JOIN t_jcxm_jbxx jcxm ON ypxm.jcxmid=jcxm.id
+            where 1=1
+            <if test="cxtj.ypmc!=null">
+                and y.ypmc like concat('%',#{cxtj.ypmc}, '%')
+            </if>
+            <if test="cxtj.jcxmc!=null">
+                and jcxm.zwmc_bm like concat('%',#{cxtj.jcxmc}, '%')
+            </if>
+            <if test="cxtj.jclbdm!=null">
+                and jcxm.jclbdm= #{cxtj.jclbdm}
+            </if>
+            AND zb.lx != 4 and TT.zxry_dm=#{cxtj.zydm}
+            GROUP BY y.id
+            ) a
+        </if>
+        <!-- 数据校验部分数据数量-->
+        <if test="cxtj.bs=='sjjy'.toString()">
+            select count(1) from t_ypgl_jbxx a
+            inner JOIN t_wt_jbxx b
+            on a.WTID=b.WTID AND IFNULL(b.zfbs,'0') != '1'
+            LEFT JOIN t_yp_jcxm c
+            on c.ypid = a.id
+            LEFT JOIN t_jcxm_jbxx d on d.id = c.jcxmid
+            where a.YPJCZT='002' and (a.SJJYZT='002' or a.SJJYZT='001')
+            <if test="cxtj.ypmc!=null">
+                and a.YPMC like concat('%',#{cxtj.ypmc}, '%')
+            </if>
+            <!--       yuanao  0713 -->
+            <if test="cxtj.ypbm!=null">
+                and a.YPBM like concat('%',#{cxtj.ypbm}, '%')
+            </if>
+            <if test="cxtj.jclbdm!=null">
+                and d.jclbdm = #{cxtj.jclbdm}
+            </if>
+        </if>
+        <!-- 数据复合部分数据数量-->
+        <if test="cxtj.bs=='sjsc'.toString()">
+            select count(1) from t_ypgl_jbxx a LEFT JOIN t_wt_jbxx b
+            on a.WTID=b.WTID  AND IFNULL(b.zfbs,'0') != '1'
+            LEFT JOIN t_yp_jcxm c
+            on c.ypid = a.id
+            LEFT JOIN t_jcxm_jbxx d on d.id = c.jcxmid
+            where a.YPJCZT='002' and a.SJJYZT='002' and
+            (a.sjsczt='002' or a.sjsczt='001')
+            <!--yuanao 0818-->
+            <if test="cxtj.ypmc!=null">
+                and a.YPMC like concat('%',#{cxtj.ypmc}, '%')
+            </if>
+            <!--         yuanao  0714    -->
+            <if test="cxtj.ypbm!=null">
+                and a.YPBM like concat('%',#{cxtj.ypbm}, '%')
+            </if>
+            <if test="cxtj.jclbdm!=null">
+                and d.jclbdm = #{cxtj.jclbdm}
+            </if>
+            <!-- order by a.lrrq desc  limit  ${cxtj.start},${cxtj.length}  -->
+        </if>
+
+        <if test="cxtj.bs=='sjxg'.toString()">
+            select count(1) from t_ypgl_jbxx a LEFT JOIN t_wt_jbxx b
+            on a.WTID=b.WTID where a.YPJCZT='002' and a.SJJYZT='002' and a.SJSCZT='002'
+            <if test="cxtj.ypmc!=null">
+                and a.YPMC like concat('%',#{cxtj.ypmc}, '%')
+            </if>
+            AND FuncAuthorityWt(#{cxtj.zydm},a.wtid) = 1
+            <!-- order by a.lrrq desc  limit  ${cxtj.start},${cxtj.length}  -->
+        </if>
+
+    </select>
+    <!-- 样品管理    中的任务分配  在 样品制备 样品领取之前 所以 没有 制备数据 找个地方记下来，制备时 直接带着 -->
+    <update id="rwfp_ypjc">
+        <!-- 任务分配状态 -->
+        <if test="map.zt=='002'.toString()">
+            update t_ypgl_jbxx set ypjczt='',YP_SFFP='002',YP_FPRQ=now() where id=#{map.ypid};
+            delete from t_ypjc_rydm where ypid=#{map.ypid} and lx=4;
+            <foreach collection="map.list_zxry" index="index" item="list" separator=";">
+                insert into t_ypjc_rydm(ypid,fhry_dm,lrry,lrrq,zxry_dm,lx)
+                values (#{list.ypid},#{list.fhry_dm},#{list.lrry},now(),#{list.zxry},4)
+            </foreach>
+        </if>
+    </update>
+
+    <sql id="queryCommon">
+    </sql>
+
+    <select id="sjxg_queryList" resultType="map">
+     select ypid,jcxmid,ZWMC_BM as YPMC,ifnull(jcz,'') as jcz,ifnull(wd,'') as wd,ifnull(sd,'') as sd from t_yp_jcxm a LEFT JOIN t_jcxm_jbxx b ON a.jcxmid=b.id  where ypid=#{cxtj.id}
+  </select>
+
+    <update id="sjxg_update">
+        <foreach collection="cxtj" item="item" index="index" separator=";">
+            update t_yp_jcxm set jcz=#{item.jcz},wd=#{item.wd},sd=#{item.sd},zxry_dm=#{item.zxry_dm},lrrq=now() where
+            ypid=#{item.ypid} and jcxmid=#{item.xmid}
+        </foreach>
+    </update>
+
+
+    <!--复制-->
+    <select id="jcxmAll" resultType="map">
+select GROUP_CONCAT(jb.ZWMC_BM) AS rymc from t_yp_jcxm jc LEFT JOIN t_jcxm_jbxx jb on jc.jcxmid=jb.id where jc.YPID=#{cxtj.id}
+  </select>
+
+
+    <insert id="insert">
+        insert into t_jcgl_rydm(ypid,zxry_dm,lx,lrry,lrrq)
+        VALUES
+        <foreach collection="data" item="item" index="index" separator=",">
+            (#{item.id},#{item.zydm},#{item.lx},#{item.lrry},now())
+        </foreach>
+        ;
+        <foreach collection="data" item="item" index="index" separator=";">
+            <if test="index==0">
+                <if test="item.lx==1">
+                    update t_ypgl_jbxx set ypjczt='001' where id =#{item.id}
+                </if>
+                <if test="item.lx==2">
+                    update t_ypgl_jbxx set sjjyzt='001' where id =#{item.id}
+                </if>
+                <if test="item.lx==3">
+                    update t_ypgl_jbxx set sjsczt='001' where id =#{item.id}
+                </if>
+            </if>
+        </foreach>
+    </insert>
+
+
+    <select id="findCyrwAll" resultType="map">
+        <if test="cxtj.bs=='rwfp'.toString()">
+            select a.ID, b.HTMC,a.YPBM,a.YPMC,a.JCXM,b.DWMC,b.SFMC,b.CSMC,b.XJMC from t_ypgl_jbxx a LEFT JOIN t_wt_jbxx
+            b on a.WTID=b.WTID
+            where b.if_cy = TRUE and ((a.ypjczt='000') or (a.sjjyzt='000') or (a.sjsczt='000'))
+            <if test="cxtj.ypmc!=null">
+                and a.YPMC like concat('%',#{cxtj.ypmc}, '%')
+            </if>
+            <include refid="queryCommon"/>
+            order by a.lrrq desc limit ${cxtj.start},${cxtj.length}
+        </if>
+
+        <if test="cxtj.bs=='ypjc'.toString()">
+            select a.ID, b.HTMC,a.YPBM,a.YPMC,a.JCXM,b.DWMC,b.SFMC,b.CSMC,b.XJMC from t_ypgl_jbxx a LEFT JOIN t_wt_jbxx
+            b
+            on a.WTID=b.WTID where b.if_cy = TRUE and a.ypjczt='001' and a.id in(select YPID from T_JCGL_RYDM where lx=1
+            and ZXRY_DM=#{cxtj.zydm})
+            <if test="cxtj.ypmc!=null">
+                and a.YPMC like concat('%',#{cxtj.ypmc}, '%')
+            </if>
+            <include refid="queryCommon"/>
+            order by a.lrrq desc limit ${cxtj.start},${cxtj.length}
+        </if>
+    </select>
+
+    <select id="findCyrwCount" resultType="long">
+        <if test="cxtj.bs=='rwfp'.toString()">
+            select count(1) from t_ypgl_jbxx a LEFT JOIN t_wt_jbxx b on a.WTID=b.WTID
+            where b.if_cy = TRUE and ((a.ypjczt='000') or (a.sjjyzt='000') or (a.sjsczt='000'))
+            <if test="cxtj.ypmc!=null">
+                and a.YPMC like concat('%',#{cxtj.ypmc}, '%')
+            </if>
+            <include refid="queryCommon"/>
+        </if>
+
+        <if test="cxtj.bs=='ypjc'.toString()">
+            select count(1) from t_ypgl_jbxx a LEFT JOIN t_wt_jbxx b
+            on a.WTID=b.WTID where b.if_cy = TRUE and a.ypjczt='001' and a.id in(select YPID from T_JCGL_RYDM where lx=1
+            and ZXRY_DM=#{cxtj.zydm})
+            <if test="cxtj.ypmc!=null">
+                and a.YPMC like concat('%',#{cxtj.ypmc}, '%')
+            </if>
+            <include refid="queryCommon"/>
+            order by a.lrrq desc limit ${cxtj.start},${cxtj.length}
+        </if>
+
+    </select>
+
+    <!-- 检测管理中提交通过和退回的操作   -->
+    <update id="updatezt">
+        <foreach collection="data" item="item" index="index">
+            <if test="item.lx=='1'.toString()">
+                update t_ypgl_jbxx set YPJCZT=#{item.zt},YPJCSJ=now(),SJJYZT=#{item.zt},SJSCZT=#{item.zt},bgbzzt='001' where id=#{item.id};
+            </if>
+            <if test="item.lx=='2'.toString()">
+                <!-- 如果if_ssg 为0   那就不是食品水工业产品-->
+                <if test="item.if_ssg=='0'.toString()">
+                    update t_ypgl_jbxx set SJJYZT=#{item.zt} where id=#{item.id};
+                </if>
+                <!-- 如果if_ssg 为1  那就是食品水工业产品  不需要复核功能-->
+                <if test="item.if_ssg=='1'.toString()">
+                    update t_ypgl_jbxx set SJJYZT=#{item.zt},SJSCZT=#{item.zt} where id=#{item.id};
+                </if>
+            </if>
+            <if test="item.lx=='3'.toString()">
+                update t_ypgl_jbxx set SJSCZT=#{item.zt} where id=#{item.id};
+            </if>
+            <if test="item.lx=='4'.toString()">
+                update t_ypgl_jbxx set SJXGZT=#{item.zt} where id=#{item.id};
+            </if>
+        </foreach>
+        <!-- 退回功能  陈-->
+        <foreach collection="data" item="item" index="index">
+            <if test="item.zt=='003'.toString()">
+                <if test="item.lx=='2'.toString()">
+                    update t_ypgl_jbxx set SJJYZT='001', YPJCZT='000',SJSCZT='001' where id=#{item.id};
+                    update t_yp_jcxm set tjzt='0' where ypid=#{item.id};
+                </if>
+                <if test="item.lx=='3'.toString()">
+                    update t_ypgl_jbxx set SJJYZT='001',SJSCZT='001',YPJCZT='000' where id=#{item.id};
+                    update t_yp_jcxm set tjzt='0' where ypid=#{item.id};
+                </if>
+            </if>
+        </foreach>
+    </update>
+    <!--更新委托录入人-->
+    <update id="updateWtLrry">
+    update t_wt_jbxx
+    set lrry = #{zxry}
+    where wtid = (select wtid
+    from
+    t_ypgl_jbxx where ypbm=#{ypbm})
+  </update>
+    <!-- 查找检测项是否全部检测完成 -->
+    <select id="findTjztByYpid" resultType="map">
+    select tjzt,bzzt from t_yp_jcxm
+    where  ypid=#{ypid};
+  </select>
+    <!-- 将退回信息放入数据库中 -->
+    <insert id="backReason">
+        insert into t_thyy_jbxx (ypid,thyy,thrq,rydm,thwz,ypmc)
+        values
+        (#{map.ypid},#{map.thyy},now(),#{map.rydm},#{map.thwz},#{map.ypmc});
+    </insert>
+
+    <!-- 获得退回记录信息 -->
+    <select id="findThjlList" resultType="map">
+        select t.id,t.ypmc,t.ypid,t.thyy,t.thwz,t.thrq,
+        (select name from user where zydm=t.rydm) zxr
+        from t_thyy_jbxx t
+        LEFT JOIN t_yp_jcxm  yj on yj.ypid = t.ypid
+        LEFT JOIN t_jcxm_jbxx jcxm on jcxm.id =yj.jcxmid
+        <where>
+            <if test="map.ypmc!=null and map.ypmc!=''">
+                t.ypmc like concat('%',#{map.ypmc},'%')
+            </if>
+            <if test = "map.jclbdm !=null  and map.jclbdm!=''">
+                jcxm.jclbdm = #{map.jclbdm}
+            </if>
+        </where>
+        order by t.id desc
+        limit #{map.start},#{map.length};
+    </select>
+    <!-- 获得退回记录信息的数量 -->
+    <select id="findThjlListNum" resultType="java.lang.Integer">
+        select count(1)
+        from t_thyy_jbxx t
+        LEFT JOIN t_yp_jcxm  yj on yj.ypid = t.ypid
+        LEFT JOIN t_jcxm_jbxx jcxm on jcxm.id =yj.jcxmid
+        <where>
+            <if test="map.ypmc!=null and map.ypmc!=''">
+                t.ypmc like concat('%',#{map.ypmc},'%')
+            </if>
+            <if test = "map.jclbdm !=null  and map.jclbdm!=''">
+                jcxm.jclbdm = #{map.jclbdm}
+            </if>
+        </where>
+        order by t.id desc;
+    </select>
+    <!-- 删除退回记录信息 -->
+    <delete id="delThjlByIds">
+        delete from t_thyy_jbxx where id in
+        <foreach collection="list" item="it" index="index" open="(" separator="," close=")">
+            #{it}
+        </foreach>
+    </delete>
+    <!-- 获得检验结果录入的信息 -->
+    <select id="findJcxxlrList" resultType="map">
+        select j.id as jcxmid, y.id as ypid,y.ypmc,y.ypbm,j.zwmc_bm as jcxmc ,j.jcx,
+        ypjc.jcz,ypjc.jcff,ypjc.tjzt,ypzb.lqzt,ypjc.wd,ypjc.sd,j.xlz,ypjc.yqnames,
+        (select u.name from user u where u.zydm=ypjc.zxry_dm) as jcr,ypjc.yqid as sbmc,ypjc.s_date,ypjc.e_date
+        from t_yp_zbwc ypzb
+        LEFT JOIN t_ypgl_jbxx y ON ypzb.ypid=y.id
+        LEFT JOIN t_yp_jcxm ypjc on y.id=ypjc.ypid
+        LEFT JOIN t_jcxm_jbxx j on ypjc.jcxmid=j.id
+        where
+        ypzb.lqzt='003' and y.jszt='002'
+        <if test="map.jcrwlqry!=null and map.jcrwlqry!=''">
+            and ypzb.jcrwlqry = #{map.jcrwlqry}
+        </if>
+        <if test="map.jcxmc!=null and map.jcxmc!=''">
+            and j.zwmc_bm like concat('%',#{map.jcxmc},'%')
+        </if>
+        <if test="map.ypmc!=null and map.ypmc!=''">
+            and y.ypmc like concat('%',#{map.ypmc},'%')
+        </if>
+        <if test="map.tjzt!=null and map.tjzt!=''">
+            and ypjc.tjzt = #{map.tjzt}
+        </if>
+        <if test="map.jclbdm!=null and map.jclbdm!=''">
+            and j.jclbdm = #{map.jclbdm}
+        </if>
+        <if test="map.ypbm!=null and map.ypbm!=''">
+            and y.ypbm like concat('%',#{map.ypbm},'%')
+        </if>
+        order by ypjc.tjzt,y.id desc
+        limit #{map.start},#{map.length};
+    </select>
+    <!-- 获得检验结果录入的信息的数量 -->
+    <select id="findJcxxlrListNum" resultType="java.lang.Integer">
+        select count(1)/*distinct ypjc.jcxmid,ypjc.ypid*/
+        from t_yp_zbwc ypzb
+        LEFT JOIN t_ypgl_jbxx y ON ypzb.ypid=y.id
+        LEFT JOIN t_yp_jcxm ypjc on y.id=ypjc.ypid
+        LEFT JOIN t_jcxm_jbxx j on ypjc.jcxmid=j.id
+        where
+        ypzb.lqzt='003' and y.jszt='002'
+        <if test="map.jcrwlqry!=null and map.jcrwlqry!=''">
+            and ypzb.jcrwlqry = #{map.jcrwlqry}
+        </if>
+        <if test="map.jcxmc!=null and map.jcxmc!=''">
+            and j.zwmc_bm like concat('%',#{map.jcxmc},'%')
+        </if>
+        <if test="map.ypmc!=null and map.ypmc!=''">
+            and y.ypmc like concat('%',#{map.ypmc},'%')
+        </if>
+        <if test="map.tjzt!=null and map.tjzt!=''">
+            and ypjc.tjzt = #{map.tjzt}
+        </if>
+        <if test="map.jclbdm!=null and map.jclbdm!=''">
+            and j.jclbdm = #{map.jclbdm}
+        </if>
+        <if test="map.ypbm!=null and map.ypbm!=''">
+            and y.ypbm like concat('%',#{map.ypbm},'%')
+        </if>
+    </select>
+    <!-- 听过仪器id的集合 查找仪器的名称 -->
+    <select id="queryYqNameByIds" resultType="java.lang.String">
+        select sbmc from t_yqsbtz where id in
+        <foreach collection="ids" index="index" item="id" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </select>
+    <!-- 获得主检人-->
+    <select id="getZJR" resultType="java.lang.String">
+        <!-- 获得可重复的人员-->
+        <if test="map.lx=='many'.toString()">
+            select zxry_dm from t_yp_jcxm where ypid=#{map.ypid};
+        </if>
+        <!-- 获得不可重复的人员-->
+        <if test="map.lx=='less'.toString()">
+            select distinct zxry_dm from t_yp_jcxm where ypid=#{map.ypid};
+        </if>
+    </select>
+    <!-- 将主检人到数据库中  t_ypgl_jbxx -->
+    <update id="saveZJR">
+    update t_ypgl_jbxx set zjr=#{map.zjr} where id=#{map.ypid};
+  </update>
+    <!--  查找样品中的是否是水食品工业产品    if_ssg -->
+    <select id="queryIf_ssg" resultType="java.lang.String">
+    select if_ssg from t_ypgl_jbxx
+    where  id=#{ypid}
+  </select>
+
+
+    <!-- 检测任务领取 查询全部 -->
+    <select id="findLWLQAll" resultType="map">
+        select z.id as id, GROUP_CONCAT(j.id) as jcxmid, y.id as ypid,y.ypmc,GROUP_CONCAT(j.zwmc_bm) as jcxmc ,j.jcx,y.wtid,
+        (select w.slrq from t_wt_jbxx w where w.wtid = y.wtid) as wtslrq,
+        ypjc.jcz,ypjc.jcff,ypjc.tjzt,ypjc.wd,ypjc.sd,j.xlz,ypjc.yqnames,
+        (select GROUP_CONCAT(u.name) from t_jcgl_rydm rydm left join user u on rydm.zxry_dm=u.zydm
+        where rydm.jcxmid=ypjc.jcxmid and  rydm.ypid=ypjc.ypid) as jcr,
+        (SELECT GROUP_CONCAT(xm.ZWMC_BM) from t_yp_jcxm ypxm LEFT JOIN t_jcxm_jbxx xm ON xm.id=ypxm.jcxmid where ypxm.ypid=y.id) as jcxm,
+        ypjc.yqid as sbmc,ypjc.s_date,ypjc.e_date,ypjc.fpzt,z.lqzt,z.lx,z.zbypbm
+        from t_ypgl_jbxx y
+        LEFT JOIN t_yp_zbwc z ON y.id =z.ypid
+        LEFT JOIN t_yp_jcxm ypjc on y.id=ypjc.ypid
+        LEFT JOIN t_jcxm_jbxx j on ypjc.jcxmid=j.id
+        LEFT JOIN t_jcgl_rydm tr ON z.id = tr.ypid
+        <where>
+            <if test="map.jcxmc!=null and map.jcxmc!=''">
+                j.zwmc_bm like concat('%',#{map.jcxmc},'%')
+            </if>
+            <if test="map.ypmc!=null and map.ypmc!=''">
+                and y.ypmc like concat('%',#{map.ypmc},'%')
+            </if>
+            <if test="map.jclbdm !=null and map.jclbdm!=''">
+                and j.jclbdm = #{map.jclbdm}
+            </if>
+            <if test="map.ZXRY_DM!=null and map.ZXRY_DM!=''">
+                and tr.ZXRY_DM =#{map.ZXRY_DM}
+            </if>
+            AND z.rwfp = '002'
+        </where>
+        GROUP BY z.id
+        order by ypjc.fpzt
+        limit #{map.start},#{map.length};
+    </select>
+
+
+    <!--  检测任务领取中获得显示的数量  -->
+    <select id="findLWLQCount" resultType="long">
+        select count(1)
+        from(
+        select ypjc.ypid
+        from t_ypgl_jbxx y
+        LEFT JOIN t_yp_zbwc z ON y.id =z.ypid
+        LEFT JOIN t_yp_jcxm ypjc on y.id=ypjc.ypid
+        LEFT JOIN t_jcxm_jbxx j on ypjc.jcxmid=j.id
+        LEFT JOIN t_jcgl_rydm tr ON z.id = tr.ypid
+        <where>
+            <if test="map.jcxmc!=null and map.jcxmc!=''">
+                j.zwmc_bm like concat('%',#{map.jcxmc},'%')
+            </if>
+            <if test="map.ypmc!=null and map.ypmc!=''">
+                and y.ypmc like concat('%',#{map.ypmc},'%')
+            </if>
+            <if test="map.jclbdm !=null and map.jclbdm!=''">
+                and j.jclbdm = #{map.jclbdm}
+            </if>
+            <if test="map.ZXRY_DM!=null and map.ZXRY_DM!=''">
+                and tr.ZXRY_DM =#{map.ZXRY_DM}
+            </if>
+            AND z.rwfp = '002'
+        </where>
+        GROUP BY z.id) a
+    </select>
+
+    <!--任务领取 -->
+    <update id="upTaskCollection">
+        UPDATE t_yp_zbwc set lqzt = #{map.lqzt},jcrwlqry = #{map.jcrwlqry},jcrwlqsj = #{map.jcrwlqsj} where id = #{map.id}
+    </update>
+
+    <!--  任务退回前判断该样品是否已经完成检测项提交了  -->
+    <select id="findYpJcZt" resultType="java.lang.String">
+        select yp.ypjczt
+        from t_yp_zbwc zb
+        left join t_ypgl_jbxx yp on zb.ypbm = yp.ypbm
+        where zb.id =  #{map.id}
+
+    </select>
+</mapper>

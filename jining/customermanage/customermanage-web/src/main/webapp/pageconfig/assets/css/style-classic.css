@@ -1,0 +1,471 @@
+
+.show-view{width:97%!important; }
+form{margin:0;}
+.form-horizontal .control-label{text-align: left;padding-left: 25px;}
+
+.input-xlarge{width:72%;}
+.input-xxlarge{width:70%;}
+#target .control-group .controls textarea{
+width:70%;
+}
+#target.half-form .control-group .controls textarea{
+width:65%;
+}
+legend{
+    font-size: 16px;
+    font-weight:bold;
+    color:#1e2c54;
+    width: 90%;
+    padding-left:25px;
+    border: none;
+    border-left:5px solid #008dde;
+}
+
+.span7{width:78%}
+.span7 .popover{
+border-radius:0;
+border: none;
+border-left:1px solid #bcd4ec;
+padding-top:17px;
+position:fixed;
+top:0!important;
+overflow-y:auto;
+overflow-x:hidden;
+background: #efeff7;
+}
+.span7 .popover-title{
+border-radius:0;
+border: none;
+border-right:1px solid #bcd4ec;
+border-left:5px solid #008dde;
+background-color: #efeff7;
+padding: 2px 14px;
+font-size:16px;
+color:#1e2c54;
+}
+.span7 .popover-content{
+    border: none;
+    border-right:1px solid #bcd4ec;
+    background-color: #efeff7;
+	padding-bottom:50px;
+}
+
+.span7 .popover-content .control-label{
+    padding-left: 0;
+    font-size: 14px;
+    color: #1e2c54;
+    margin-top: 15px;
+}
+
+.span7 .popover-content .field{
+
+}
+.span7 .popover-content select{
+width: 82%;
+}
+.span7 .popover-content .checkbox{
+    margin-top: 15px;
+}
+.popover .table-option .lists-option{
+    border: 1px solid #efeff7;
+}
+.popover .num-plus{
+    position: absolute;
+    padding: 0px 5px;
+    margin-left: 180px;
+    margin-top: 22px;
+  }
+.popover .table-option{
+    margin-top: 50px;
+}
+.popover .plus-container{
+    margin-left: 110px;
+    margin-top: 40px;
+}
+.popover .table-option .table-info{
+    width: 90%;
+    height: 80%;
+    position: absolute;
+    border: none;
+    top: 0;
+    left: 0;
+    padding: 20px;
+    background: #efeff7;
+    z-index: 9999;
+    display:none;
+}
+.popover .table-option .table-info .info-name{
+    margin-bottom: 5px;
+}
+.popover .table-option .table-info input{
+    margin-bottom: 15px;
+        width: 75%;
+}
+.popover .table-option .table-info textarea{
+    margin-bottom: 15px;
+    min-height: 70px;
+        width: 75%;
+}
+.popover .table-option .table-info #dic-option{
+    position: absolute;
+    margin-top: -40px;
+    margin-left: 75%;
+    cursor: pointer;
+}
+.popover .table-option .table-info .info-close{
+    width: 65px;
+    height: 25px;
+    padding-top: 5px;
+    background-color: #FF7575;
+    color: #fff;
+    text-align: center;
+    cursor: pointer;
+    margin-top: 20px;
+}
+.popover .table-option .table-info .info-close:hover{
+    opacity: 0.9;
+}
+.span7 .controls .check-box{
+    float:left;
+    width:75%;
+}
+  .span7 .controls .radio-box{
+    float:left;
+    width:75%;
+}
+.span4{
+    width:21%;
+    background-color:#efeff7;
+    border-left:1px solid #bcd4ec;
+    position:fixed;
+    right: 0px;
+    top:0px;
+    height:980px;
+    overflow-y: auto;
+    overflow-x: hidden;
+     }
+.span4 .tabbable{
+    }
+.span4 .tabbable .nav-tabs{
+    border:none;
+    margin-top:20px;
+}
+.span4 .tabbable .nav-tabs .active a{
+    border-radius:0;
+    border:none;
+    border-left:5px solid #008dde;
+    background-color:#efeff7;
+    font-size:16px;
+    color:#1e2c54;
+    padding-top:10px;
+    line-height: 6px;
+}
+.span4 .tabbable form{
+
+}
+.span4 .tabbable .tab-pane .component{
+    border:none;
+}
+.span4 .tabbable .tab-pane .component .control-group{
+    border: 1px solid #008dde;
+    width:43%;
+    color:#1e2c54;
+    height:40px;
+    margin:5px 2%;
+}
+.span4 .tabbable .tab-pane .component .control-label{
+
+}
+.span4 .tabbable .tab-content{
+    margin-left:5%;
+    overflow: hidden;
+}
+.span4 .tabbable .tab-pane .component .attribute-group{
+    height: 40px;
+    width: 33%;
+    padding-left: 10%;
+}
+.span4 .tabbable .tab-pane .component .control-group:hover{
+    background-color:#008dde;
+    color:#fff;
+}
+.span4 .tabbable .tab-pane .component .attribute-group legend{
+    font-weight:normal;
+    margin-top: 8px;
+}
+.span4 .tabbable .tab-pane .component .control-group:hover>legend{
+color:#fff;
+}
+.span4 .tabbable .tab-pane .component .control-label{
+    padding: 10px 0 0 10%;
+    width:100%;
+}
+.span4 .tabbable .twins-select{
+    margin-top:54px;
+}
+.span4 .tabbable .twins-select .title{
+    border:none;
+    border-left:5px solid #008dde;
+    padding: 0 0 0 14px;
+    font-size:16px;
+    font-weight:normal;
+    color: #1e2c54
+
+}
+/*设置背景*/
+.span4 .tabbable .bg-textinput{
+background: url(../img/textinput.png) no-repeat;
+background-position: 10% 8px;
+}
+.span4 .tabbable .bg-textinput:hover{
+background: url(../img/textinputhover.png) no-repeat;
+background-position: 10% 8px;
+}
+
+.span4 .tabbable .bg-passwordinput{
+background: url(../img/passwordinput.png) no-repeat;
+background-position: 10% 8px;
+}
+.span4 .tabbable .bg-passwordinput:hover{
+background: url(../img/passwordinputhover.png) no-repeat;
+background-position: 10% 8px;
+}
+.span4 .tabbable .bg-textarea{
+background: url(../img/textarea.png) no-repeat;
+background-position: 10% 8px;
+}
+.span4 .tabbable .bg-textarea:hover{
+background: url(../img/textareahover.png) no-repeat;
+background-position: 10% 8px;
+}
+.span4 .tabbable .bg-numberinput{
+background: url(../img/numberinput.png) no-repeat;
+background-position: 10% 8px;
+}
+.span4 .tabbable .bg-numberinput:hover{
+background: url(../img/numberinputhover.png) no-repeat;
+background-position: 10% 8px;
+}
+.span4 .tabbable .bg-dateinput{
+background: url(../img/dateinput.png) no-repeat;
+background-position: 10% 8px;
+}
+.span4 .tabbable .bg-dateinput:hover{
+background: url(../img/dateinputhover.png) no-repeat;
+background-position: 10% 8px;
+}
+.span4 .tabbable .bg-selectbasic{
+background: url(../img/selectbasic.png) no-repeat;
+background-position: 10% 8px;
+}
+.span4 .tabbable .bg-selectbasic:hover{
+background: url(../img/selectbasichover.png) no-repeat;
+background-position: 10% 8px;
+}
+.span4 .tabbable .bg-selectmultiple{
+background: url(../img/checkboxes.png) no-repeat;
+background-position: 10% 8px;
+}
+.span4 .tabbable .bg-selectmultiple:hover{
+background: url(../img/checkboxeshover.png) no-repeat;
+background-position: 10% 8px;
+}
+.span4 .tabbable .bg-radios{
+background: url(../img/radios.png) no-repeat;
+background-position: 10% 8px;
+}
+.span4 .tabbable .bg-radios:hover{
+background: url(../img/radioshover.png) no-repeat;
+background-position: 10% 8px;
+}
+.span4 .tabbable .bg-checkboxes{
+background: url(../img/checkboxes.png) no-repeat;
+background-position: 10% 8px;
+}
+.span4 .tabbable .bg-checkboxes:hover{
+background: url(../img/checkboxeshover.png) no-repeat;
+background-position: 10% 8px;
+}
+.span4 .tabbable .bg-datalist{
+background: url(../img/tableinput.png) no-repeat;
+background-position: 10% 8px;
+}
+.span4 .tabbable .bg-datalist:hover{
+background: url(../img/tableinputhover.png) no-repeat;
+background-position: 10% 8px;
+}
+.span4 .tabbable .bg-tableinput{
+background: url(../img/tableinput.png) no-repeat;
+background-position: 10% 8px;
+}
+.span4 .tabbable .bg-tableinput:hover{
+background: url(../img/tableinputhover.png) no-repeat;
+background-position: 10% 8px;
+}
+.span4 .tabbable .bg-filebutton{
+background: url(../img/filebutton.png) no-repeat;
+background-position: 10% 8px;
+}
+.span4 .tabbable .bg-filebutton:hover{
+background: url(../img/filebuttonhover.png) no-repeat;
+background-position: 10% 8px;
+}
+.span4 .tabbable .bg-advancefilebutton{
+background: url(../img/filebutton.png) no-repeat;
+background-position: 10% 8px;
+}
+.span4 .tabbable .bg-advancefilebutton:hover{
+background: url(../img/filebuttonhover.png) no-repeat;
+background-position: 10% 8px;
+}
+.span4 .tabbable .attribute-group{
+background: url(../img/attribute.png) no-repeat;
+background-position: 10% 8px;
+}
+.span4 .tabbable .attribute-group:hover{
+background: url(../img/attributehover.png) no-repeat;
+background-position: 10% 8px;
+}
+.span4 .tabbable .bg-member{
+background: url(../img/member.png) no-repeat;
+background-position: 10% 8px;
+}
+.span4 .tabbable .bg-member:hover{
+background: url(../img/memberhover.png) no-repeat;
+background-position: 10% 8px;
+}
+.span4 .tabbable .bg-department{
+background: url(../img/department.png) no-repeat;
+background-position: 10% 8px;
+}
+.span4 .tabbable .bg-department:hover{
+background: url(../img/departmenthover.png) no-repeat;
+background-position: 10% 8px;
+}
+/*设置背景end*/
+.span4 .tabbable .twins-select .choice{
+    border: 1px solid #008dde;
+    width: 35%;
+    padding-left: 10%;
+    color:#1e2c54;
+    height:30px;
+    padding-top:10px;
+}
+.span4 .tabbable .twins-select .choice:hover{
+    opacity:0.8;
+}
+.span4 .tabbable .twins-select .choice-full{
+    margin-left:5%;
+    background: url(../img/along.png) no-repeat;
+    background-position: 10% 10px;
+}
+.span4 .tabbable .twins-select .selected.choice-full{
+    background-image: url(../img/alonghover.png);
+    background-repeat: no-repeat;
+}
+.span4 .tabbable .twins-select .choice-half{
+    background: url(../img/twins.png) no-repeat;
+    background-position: 10% 10px;
+}
+.span4 .tabbable .twins-select .selected.choice-half{
+    background-image: url(../img/twinshover.png);
+    background-repeat: no-repeat;
+}
+.span4 .tabbable .twins-select .selected{
+    color:#fff;
+    background-color:#008dde;
+}
+
+#target fieldset{
+	padding-bottom:50px;
+}
+/*target-full*/
+#target .component table{
+    width:75%;
+}
+#target .component{
+    width:80%;
+    margin-left:2%;
+}
+#target .component legend{
+    height: 20px;
+    margin-top: 10px;
+    line-height: 20px;
+}
+
+#target .border-around{
+    border-radius: 5px;
+    border-color: #bcd4ec!important;
+    background-color:#cae2fc;
+}
+#target .delete-component {
+    float: right;
+    margin-right: 30px;
+    margin-top: 6px;
+    color: #fff;
+    padding-top: 0px;
+    text-align: center;
+
+}
+#target .delete-component:hover{
+    opacity:0.8;
+}
+#target .table-full .delete-component{
+    margin-top: -40px;
+    margin-right: 20px;
+}
+#target .attribute-group .delete-component{
+    margin-top: -35px;
+}
+
+#target .control-group .control-label{
+    padding-left: 60px;
+    width: 110px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+#target .redpoint{
+    margin-left: -30px;
+}
+/*target-half*/
+#target.half-form .component table{
+    width:80%;
+}
+#target.half-form .delete-component {
+    margin-top: 5px;
+    margin-right: 30px;
+}
+#target.half-form .table-full .delete-component{
+    margin-top: -40px;
+}
+#target.half-form .attribute-group .delete-component{
+    margin-top: -35px;
+}
+#target.half-form .redpoint{
+    margin-left: -20px;
+}
+#target.half-form .control-group .control-label{
+    width: 110px;
+    padding-left: 25px;
+}
+select{
+appearance:none;
+-moz-appearance:none;
+background: url("../img/selectarrow.png") no-repeat scroll right center #fff;
+}
+input[type="number"]{
+appearance:textfield;
+-moz-appearance:textfield;
+}
+input[readonly]{
+cursor: context-menu;
+}
+select[disabled]{
+cursor: context-menu;
+}
+.selectinput{background: url("../img/selectarrow.png") no-repeat scroll right center transparent;}
+#target.half-form fieldset>:first-child{
+	width:55%!important;
+	margin:0!important;
+}

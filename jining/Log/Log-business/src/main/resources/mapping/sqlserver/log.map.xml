@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!-- namespace必须和接口名称一一对应 -->
+<mapper namespace="com.xinhai.Log.dao.LogMapper">
+	<resultMap id="_log" type="com.xinhai.Log.api.Log">
+		<id property="id" column="id"/>
+        <result property="logDate" column="logDate"/>
+        <result property="menuID" column="menuID"/>
+        <result property="menuName" column="menuName"/>
+        <result property="logValue" column="logValue"/>
+        <result property="userID" column="userID"/>
+        <result property="userName" column="userName"/>
+        <result property="orgID" column="orgID"/>
+        <result property="orgName" column="orgName"/>
+        <result property="ip" column="ip"/>
+        <result property="detail" column="detail"/>
+        <result property="logLevel" column="log_level"/>
+	</resultMap>
+	<!-- 插入log记录 -->
+	<insert id="createLog" parameterType="com.xinhai.Log.api.Log"
+		keyProperty="id" useGeneratedKeys="true">
+		INSERT INTO Log (logdate, menuID, logValue, userID, ip, detail, log_level)
+			VALUES (#{logDate}, #{menuID},#{logValue}, #{userID}, #{ip}, #{detail}, #{logLevel});
+	</insert>
+	<!--通过id,更新一条log数据 -->
+	<update id="updateLog" parameterType="com.xinhai.Log.api.Log">
+		UPDATE Log
+			<set>
+				<if test="log.logDate != null">
+					logdate = #{log.logDate},
+				</if>
+				<if test="log.menuName != null">
+					menuID = #{log.menuID},
+				</if>
+				<if test="log.logValue != null">
+					logValue = #{log.logValue},
+				</if>
+				<if test="log.userID != null">
+					userID = #{log.userID},
+				</if>				
+			</set>
+		WHERE id = #{id};
+	</update>
+	<!--同时删除多条额log数据  -->
+	<delete id="deleteLogList" parameterType="list">
+		DELETE FROM Log
+			WHERE id in
+				<foreach item="id" collection="list" open="(" separator=","
+					close=")">
+					#{id}
+				</foreach>
+	</delete>
+	<!--通过id删除一条log数据  -->
+	<delete id="deleteLog" parameterType="string">
+		DELETE FROM Log
+			WHERE id = #{id}
+	</delete>
+	<!--获取一个log数据  -->
+	<select id="getLog" resultMap="_log" parameterType="string">
+		select * from(Select tb5.id,tb5.menuID,tb5.logValue,tb5.ip,tb5.menuName,tb5.logdate,tb5.userID,tb5.userName,tb5.orgID,
+		tb6.name as orgName from (select tb3.id,tb3.menuID,tb3.logValue,tb3.ip,tb4.name as menuName,tb3.logdate,tb3.userID,tb3.userName,
+		tb3.orgid from (select tb1.id,tb1.menuID,tb1.logdate,tb1.logValue,tb1.ip,tb1.userID,tb2.name as userName,tb2.org_id as orgID
+		from log as tb1 left join [user] as tb2 on tb1.userID=tb2.id) as tb3 left join resource as tb4 on tb3.menuID=tb4.id)
+		as tb5 left join organization as tb6 on tb5.orgID=tb6.id) as tb WHERE tb.id = #{id};
+	</select>
+	<!--获取所有log数据  -->
+	<select id="getLogList" resultMap="_log">
+		        select l.*,
+        rs.id as menuID,rs.name as menuName,
+        us.id as userID,us.name as userName,
+        org.id as orgID,org.name as orgName
+        from log l
+        left join resource rs on l.menuID=rs.id
+        left join [user] us on l.userID= us.id
+        left join organization org on us.org_id=org.id
+	</select>
+	<!--查询  -->
+	<select id="searchLog" resultMap="_log">
+        select l.*,
+        rs.id as menuID,rs.name as menuName,
+        us.id as userID,us.name as userName,
+        org.id as orgID,org.name as orgName
+        from log l
+        left join resource rs on l.menuID=rs.id
+        left join [user] us on l.userID= us.id
+        left join organization org on us.org_id=org.id
+        WHERE 1=1
+		<if test="menuID != null and menuID !=''">
+			AND l.menuID = #{menuID}
+		</if>
+		<if test="userID != null and userID != ''">
+			AND l.userID = #{userID}
+		</if>
+		<if test="starDate !=null">
+			AND l.logdate >= #{starDate}
+		</if>
+		<if test="endDate !=null">
+			AND #{endDate} >=l.logdate
+		</if>
+	</select>
+</mapper>

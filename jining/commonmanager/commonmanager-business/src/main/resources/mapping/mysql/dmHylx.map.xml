@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+																																																												<!-- namespace必须和接口名称一一对应 -->
+<mapper namespace="com.xinhai.caiyun.commonmanager.dao.DmHylxMapper">
+
+    <resultMap id="_dmHylx" type="com.xinhai.caiyun.commonmanager.api.DmHylx">
+        <id column="id" property="id"/>
+        <result column="hydm" property="hydm"/>
+        <result column="hymc" property="hymc"/>
+        <result column="mlbz" property="mlbz"/>
+        <result column="dlbz" property="dlbz"/>
+        <result column="zlbz" property="zlbz"/>
+        <result column="xlbz" property="xlbz"/>
+        <result column="SJHY_DM" property="sjhyDm"/>
+        <result column="scbz" property="scbz"/>
+        <result column="xybz" property="xybz"/>
+        <result column="yxbz" property="yxbz"/>     
+        <result column="lrry" property="lrry"/>
+        <result column="gxry" property="gxry"/>
+        <result column="lrrq" property="lrrq"/>
+        <result column="gxrq" property="gxrq"/>
+        <result column="scrq" property="scrq"/>
+    </resultMap>
+    
+	<!--获取所有DmHylx数据  -->
+	<select id="getDmHylxList" resultMap="_dmHylx">
+		SELECT id,hydm,hymc,mlbz,dlbz,zlbz,xlbz,SJHY_DM,xybz,yxbz,
+		scbz,lrry,gxry,scry,lrrq,gxrq,scrq FROM dm_hylx where scbz=0;
+	</select>
+	
+	<!--获取所有门类数据  -->
+    <select id="getML" resultMap="_dmHylx">
+        SELECT id,hydm,hymc,mlbz,dlbz,zlbz,xlbz,SJHY_DM,xybz,yxbz,
+        scbz,lrry,gxry,scry,lrrq,gxrq,scrq FROM dm_hylx where mlbz='Y' order by hydm;
+    </select>
+    
+    <!--获取所有大类数据  -->
+    <select id="getDL" resultMap="_dmHylx">
+        SELECT id,hydm,hymc,mlbz,dlbz,zlbz,xlbz,SJHY_DM,xybz,yxbz,
+        scbz,lrry,gxry,scry,lrrq,gxrq,scrq FROM dm_hylx where dlbz='Y' and sjhy_dm = #{sjdm} order by hydm;
+    </select>
+	
+	<!--根据上级代码获取所有DmHylx数据  -->
+    <select id="findNext" resultMap="_dmHylx" parameterType="java.lang.String">
+        SELECT id,hydm,hymc,mlbz,dlbz,zlbz,xlbz,SJHY_DM,xybz,yxbz,
+        scbz,lrry,gxry,scry,lrrq,gxrq,scrq FROM dm_hylx where SJHY_DM=#{sjhyDm};
+    </select>
+    
+</mapper>

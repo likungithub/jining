@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xinhai.caiyun.systemmanager.dao.LyckMapper">
+    <!--得到领用出库的信息 陈-->
+    <select id="queryLyckAll" resultType="map">
+         select rk.hcmc,rk.id as kcid,rk.gg,rk.jb,rk.sl,ly.id as id,
+        (select name from user where zydm=ly.lyr) as lyr,
+        (select name from user where zydm=ly.lyspr1) as lyspr1,
+        (select name from user where zydm=ly.lyspr2) as lyspr2,
+        ly.lyrq,ly.lysl,ly.lyzt,ly.lysp1,ly.lysp2,ly.lysprq1,ly.lysprq2
+        from t_hcly_jbxx ly
+        left join t_cgrk_jbxx rk
+        on ly.kcid=rk.id
+        where ly.lysp1='002' and ly.lysp2='002' and ly.lyr=#{map.lyr}
+        <if test="map.hclx==null or map.hclx==''">
+            and  rk.hclx != '5'
+        </if>
+        <if test="map.hclx!=null and map.hclx!=''">
+            and rk.hclx = #{map.hclx}
+        </if>
+        <if test="map.hcmc!=null and map.hcmc!=''">
+            and rk.hcmc like concat('%',#{map.hcmc},'%')
+        </if>
+        order by ly.id desc
+        limit #{map.start},#{map.length};
+    </select>
+    <!--得到领用出库的信息的数量  陈-->
+    <select id="queryLyckAllNum" resultType="java.lang.Integer">
+        select count(ly.id)
+        from t_hcly_jbxx ly
+        left join t_cgrk_jbxx rk
+        on ly.kcid=rk.id
+        where ly.lysp1='002' and ly.lysp2='002' and ly.lyr=#{map.lyr}
+        <if test="map.hclx==null or map.hclx==''">
+            and  rk.hclx != '5'
+        </if>
+        <if test="map.hclx!=null and map.hclx!=''">
+            and rk.hclx = #{map.hclx}
+        </if>
+        <if test="map.hcmc!=null and map.hcmc!=''">
+            and rk.hcmc like concat('%',#{map.hcmc},'%')
+        </if>
+        order by ly.id desc;
+    </select>
+    <!--保存出库的状态 陈-->
+    <update id="saveCkzt">
+        update  t_hcly_jbxx set lyzt='004' where id=#{map.id};
+        update t_cgrk_jbxx set sl=#{map.sl} where id=(select kcid from t_hcly_jbxx where id=#{map.id});
+    </update>
+    <!-- 得到库存数量 陈-->
+    <select id="queryKcNum" resultType="java.lang.String">
+        select sl as kcsl from t_cgrk_jbxx where id=(select kcid from t_hcly_jbxx where id=#{id});
+    </select>
+    <!-- 得到领用数量 陈-->
+    <select id="queryLyNum" resultType="java.lang.String">
+         select lysl from t_hcly_jbxx where id=#{id};
+    </select>
+
+</mapper>

@@ -1,0 +1,17 @@
+@CHARSET "UTF-8";
+/*操作日志查询统计查看页面开始*/
+.operate-log-count .modal-dialog  .modal-content {
+    width: 800px;
+    border-radius: 4px !important;
+}
+.operate-log-count .modal-dialog  .modal-content h4{
+    font-weight: 800;
+}
+
+.operate-log-count .modal-content p.log-content {
+    word-break: break-all; /*支持IE，chrome，FF不支持*/
+    word-wrap: break-word; /*支持IE，chrome，FF*/
+}
+
+
+/*操作日志查询统计查看页面结束*/

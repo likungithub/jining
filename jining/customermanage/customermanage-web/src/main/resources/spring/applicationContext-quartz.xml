@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.3.xsd
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.2.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.3.xsd
+		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.3.xsd">
+
+ <!-- <context:property-placeholder location="classpath:quartz.properties" file-encoding="UTF-8"/> --> <!-- 使用配置文件 -->
+<!-- quartz -->
+ 	<bean id="Job" class="com.xinhai.caiyun.customermanage.business.Job" />
+	
+	<bean id="jobDetail"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="Job" />
+		<property name="targetMethod" value="work" /><!-- 调用的方法 -->
+		
+		<!--  设置为true则多个job并发执行 -->
+		<property name="concurrent" value="false" />   
+	</bean> 
+	
+	<!-- Trigger -->
+	<bean id="cronTrigger"
+		class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+		<property name="jobDetail" ref="jobDetail" />
+		<!-- <property name="cronExpression" value="0/10 * * * * ?" /> -->
+		<property name="cronExpression" value="0 55 23 * * ?" /> <!-- 每天晚上23点55分触发 -->
+		<!-- <property name="cronExpression" value="${trigger.cron.start_jobTask}" /> -->
+	</bean> 
+
+	<!-- 定时任务调度器 -->
+	 <bean id="schedulerFactory" lazy-init="false" autowire="no"
+		class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
+		<property name="triggers">
+			<list>
+				<ref bean="cronTrigger" />
+				<!-- <ref bean="job2Trigger" /> -->
+			</list>
+		</property>
+       
+	</bean>
+	<!-- quartz -->
+</beans>

@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xinhai.caiyun.systemmanager.dao.Cgck2Mapper">
+
+
+  <select id="cgck2_queryList" resultType="map">
+     select a.id,a.gg,a.ph,a.cdjb,a.lb,a.dw,a.sqsl,a.sqrq,a.state,a.bz,a.name,
+      (select b.name from user b where b.zydm=a.sqr)as sqr,
+      (select b.name from user b where b.zydm=a.spr)as spr
+      from hc_manage a where state in('006','007','008')
+      <if test="map.hcmc!=null and map.hcmc!=''">
+        and  name=#{map.hcmc}
+      </if>
+      order by state
+    limit #{map.start},#{map.length};
+  </select>
+
+  <select id="cgck2_findCount" resultType="java.lang.Integer">
+    select count(*) from hc_manage  where state in('006','007','008')
+
+  </select>
+  <!--查询库存信息-->
+  <select id="cgck" resultType="java.lang.String">
+     select sl from cgrk where hcmc = #{map.hcmc} and gg = #{map.gg} and hclx= #{map.hclx}
+  </select>
+  <!--更改库存中的耗材数量-->
+  <update id="updateKc">
+     update cgrk set sl=#{map.sjsl} where hcmc = #{map.hcmc} and gg = #{map.gg} and hclx= #{map.hclx};
+  </update>
+    <update id="updatesqKc">
+        update cgsq set sl=#{map.sjsl} where cgmc = #{map.hcmc} and gg = #{map.gg} and hclx= #{map.hclx};
+    </update>
+  <!--更新状态-->
+  <update id="updateZt">
+     update hc_manage set state= '008' where name = #{map.hcmc} and gg = #{map.gg} and lb= #{map.hclx}
+  </update>
+</mapper>

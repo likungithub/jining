@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xinhai.caiyun.customermanage.dao.LyglFcMapper">
+    <!--查询 chen -->
+    <select id="findAll" resultType="map">
+      SELECT  distinct yz.id,y.ypbm,y.ypmc,yz.zbypbm as jcybm,yz.lqzt,(select name from user where zydm = yz.lqry) as lqry,yz.lqsj,yz.zbdate,yz.lx,yz.zbzl as zbsyl,yz.ypid,
+      (SELECT GROUP_CONCAT(xm.ZWMC_BM) from t_yp_jcxm ypxm LEFT JOIN t_jcxm_jbxx xm ON xm.id=ypxm.jcxmid where ypxm.ypid=y.id) as jcxm,
+        (
+        SELECT
+        GROUP_CONCAT( xm.id )
+        FROM
+        t_yp_jcxm ypxm
+        LEFT JOIN t_jcxm_jbxx xm ON xm.id = ypxm.jcxmid
+        WHERE
+        ypxm.ypid = y.id
+        ) AS jcxmid,
+      yz.rwfp
+       from t_yp_zbwc yz
+       LEFT JOIN t_ypgl_jbxx y ON y.ypbm=yz.ypbm
+       LEFT JOIN t_yp_jcxm yj on yj.ypid =y.id
+       LEFT JOIN t_jcxm_jbxx jcxm on jcxm.id= yj.jcxmid
+       where yz.lx != 4 and ifnull(yz.zbzl,'0') != '0'
+        and  yz.lqzt in ('001','002') /*and yz.jszt = '2'*/
+        AND yz.jszt='1'
+        and FuncAuthorityYP(y.id,#{map.zydm},4)=1
+        <if test="map.ypmc!=null and map.ypmc!=''">
+           and  y.ypmc like concat('%',#{map.ypmc},'%')
+       </if>
+        <if test="map.lx!=null and map.lx!=''">
+            and  yz.lx =#{map.lx}
+        </if>
+        <if test="map.jclbdm!=null and map.jclbdm !=''">
+            and jcxm.jclbdm = #{map.jclbdm}
+        </if>
+        <if test="map.lqzt!=null and map.lqzt !=''">
+            and yz.lqzt = #{map.lqzt}
+        </if>
+       order by  yz.lqzt,yz.zbdate desc
+       limit  #{map.start},#{map.length}
+    </select>
+    <!--查询条数 chen -->
+    <select id="findCount" resultType="Integer">
+       SELECT count(distinct yz.id)
+       from t_yp_zbwc yz
+       LEFT JOIN t_ypgl_jbxx y ON y.ypbm=yz.ypbm
+       LEFT JOIN t_yp_jcxm yj on yj.ypid =y.id
+       LEFT JOIN t_jcxm_jbxx jcxm on jcxm.id= yj.jcxmid
+       where yz.lx != 4 and ifnull(yz.zbzl,'0') != '0'
+        and yz.lqzt in ('001','002') /*and yz.jszt = '2'*/
+        AND yz.jszt='1'
+        and FuncAuthorityYP(y.id,#{map.zydm},4)=1
+        <if test="map.ypmc!=null and map.ypmc!=''">
+            and  y.ypmc like concat('%',#{map.ypmc},'%')
+        </if>
+        <if test="map.lx!=null and map.lx!=''">
+            and  yz.lx =#{map.lx}
+        </if>
+         <if test="map.jclbdm!=null and map.jclbdm !=''">
+            and jcxm.jclbdm = #{map.jclbdm}
+        </if>
+        <if test="map.lqzt!=null and map.lqzt !=''">
+            and yz.lqzt = #{map.lqzt}
+        </if>
+    </select>
+    <!--修改状态 chen -->
+    <update id="updatelqzt">
+        UPDATE t_yp_zbwc set lqzt = '002',lqry = #{map.zydm},lqsj = #{map.lqsj},lyzl=#{map.lyzl},lqryname=#{map.zyname} where id = #{map.id};
+    </update>
+
+
+    <select id="getRwfpXx" resultType="map">
+            select  fhry_dm, lrry,lrrq,zxry_dm from t_ypjc_rydm  a
+		 where ypid=#{map.ypid}  and lx=4;
+    </select>
+
+    <!-- 肥城专用——在 检测管理下 的 肥城检测领样 进行领样时 调用此方法，模拟原 检测任务分配 初始化数据，保持后续流程一致性。 原因：肥城 将 检测任务分配 流程提前到 样品领样前!!  -->
+    <update id="jclyMnNwfp">
+            update t_ypgl_jbxx set ypjczt='001' where id=#{map.ypid} and if(ypjczt='' or ypjczt is null,'000',ypjczt)='000';
+            update t_yp_zbwc
+            <set>
+                <if test="map.zt!=null">
+                    rwfp=#{map.zt},
+                </if>
+                <if test="map.rwfpsj!=null">
+                    rwfpsj=#{map.rwfpsj},
+                </if>
+                <if test="map.rwfprybm!=null">
+                    rwfprybm=#{map.rwfprybm},
+                </if>
+            </set>
+            where id=#{map.id};
+            delete from t_jcgl_rydm where ypid=#{map.id};
+            <foreach collection="map.list_zxry" index="index" item="list" separator=";">
+                insert into t_jcgl_rydm(ypid,fhry_dm,jcxmid,lrry,lrrq,zxry_dm,ypjcxm)
+                values (#{list.id},#{list.fhry_dm},#{list.jcxmid},#{list.lrry},#{list.lrrq},#{list.zxry},#{list.ypjcxm})
+            </foreach>
+    </update>
+
+
+
+
+
+
+
+
+    <!--检测项与制备样相关联-->
+    <update id="updatejcYp">
+        update t_yp_jcxm set zbypbm ='1'
+        where ypid =(select c.id from (select b.zbypbm,a.id from t_ypgl_jbxx a,(select zbypbm,ypbm from t_yp_zbwc where id = #{map.id})b where a.ypbm = b.ypbm )c)
+    </update>
+    <!--查询制备完成样品-->
+    <select id="findYpzb" parameterType="com.xinhai.caiyun.customermanage.api.Lygl" resultType="com.xinhai.caiyun.customermanage.api.Ypzbwc">
+        select a.id id,a.zbypbm zbypbm,a.ypbm ypbm,a.ypzt ypzt,a.lqzt lqzt from t_yp_zbwc a where a.ypbm = #{ypbm} order by lqzt
+    </select>
+    <!-- 通过样品id  查找样品制备没有被领取的剩余量  陈 -->
+    <select id="queryYpNumByYpid" resultType="java.lang.Integer">
+        select count(ypid) from t_yp_zbwc
+        WHERE lqzt='001'
+        and ifnull(zbzl,'0') != '0'
+        and ypid=#{ypid};
+    </select>
+    <!--通过id获取制备质量 lyh-->
+    <select id="findZbzlById" resultType="Integer">
+        select zbzl
+        from  t_yp_zbwc
+        where id=#{id}
+    </select>
+
+    <!--删除操作 由于 在 检测领样中 模拟了 检测任务分配的数据，所以如何 检测领样功能做清空 操作 ，同样要把 模拟的 检测任务分配 数据 清空充值回去-->
+    <update id="deletedlqzt">
+        UPDATE t_yp_zbwc set lqzt = '001',lqry = null ,lqsj = null ,lyzl=null,lqryname=null,rwfp=null,rwfpsj=null,rwfprybm=null where id = #{map.id};
+        delete from t_jcgl_rydm where ypid=#{map.id} and jcxmid is not null ;
+    </update>
+</mapper>

@@ -1,0 +1,53 @@
+@CHARSET "UTF-8";
+/*常见问题的编辑页面开始*/
+.common-pro-modal img{
+    width: 510px;
+}
+.common-pro-modal p{
+    margin: 1px!important;
+}
+.common-pro-modal > .modal-dialog {
+    width: 660px !important;
+}
+
+.common-pro-modal > .modal-dialog .modal-footer {
+    padding-right: 28px;
+}
+
+.common-pro-modal > .modal-dialog > .modal-content {
+    border-radius: 4px !important;
+}
+
+.common-pro-modal .modal-title {
+    font-weight: 900;
+}
+
+#commonproblemForm input.form-control.border4, #commonproblemForm #edui1 {
+    width: 486px !important;
+}
+
+#problemContent #edui1_iframeholder {
+    width: 486px !important;
+}
+
+#problemContent #edui1_iframeholder body > p {
+    width:486px !important;
+}
+
+.common-pro-modal #commonproblemForm div.form-body div.col-md-9 {
+    padding-left: 0 !important;
+    position: relative;
+    top: 1px;
+}
+
+.common-pro-modal span.select2.select2-container.select2-container--bootstrap{
+    display: inline-block;
+    width: 500px!important;
+}
+
+.common-pro-modal span.select2-selection.select2-selection--single{
+    height: 33px;
+    border-radius: 0 4px 4px 0!important;
+}
+
+/*常见问题的编辑页面结束*/

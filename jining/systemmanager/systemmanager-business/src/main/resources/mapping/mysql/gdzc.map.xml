@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xinhai.caiyun.systemmanager.dao.GdzcMapper">
+    <select id="selectYqsbtz" resultType="Map">
+        select a.* from t_gdzc_jbxx a where 1 = 1
+        <if test="map.gdzcbm!= null and map.gdzcbm!= ''">
+            and a.gdzcbm = #{map.gdzcbm}
+        </if>
+        limit #{map.start},#{map.length};
+    </select>
+    <select id="selectYqtzCount" resultType="java.lang.Integer">
+        select count(1) from t_gdzc_jbxx a where 1 = 1
+        <if test="map.gdzcbm!= null and map.gdzcbm!= ''">
+            and a.gdzcbm = #{map.gdzcbm}
+        </if>
+    </select>
+    <!-- 插入Excel表格数据-->
+    <insert id="importyqsbtzExcel">
+        insert into t_yqsbtz(skbh,sbmc,ggxh,zqddj,fbl,sccs,sbyz,bzxx)
+         values (#{map.skbh},#{map.sbmc},#{map.ggxh},#{map.zqddj},#{map.fbl},#{map.sccs},#{map.sbyz},#{map.bzxx})
+    </insert>
+    <!--插入t_jdwhhc_jl基本信息-->
+    <insert id="importyqsbtzBaseExcel">
+        insert into t_jdwhhc_jl(skbh,sbmc,ggxh,zqddj,fbl,jdrq,jdjg)
+          values(#{map.skbh},#{map.sbmc},#{map.ggxh},#{map.zqddj},#{map.fbl},#{map.jdrq},#{map.jdjg})
+    </insert>
+    <!--/*删除台账记录*/-->
+    <delete id="deleteYqsbtz">
+        delete from t_gdzc_jbxx where id = #{map.id}
+    </delete>
+    <!--关于受控编号-->
+    <select id="selectSkbh" resultType="Map">
+        select skbh from t_yqsbtz
+    </select>
+    <!--新增仪器设备-->
+    <insert id="insertNewYqsb">
+        insert into t_gdzc_jbxx(gdzcbm,cwbm,zcdl,zcxl,gdzcmc,ggxh,sccj,cjdh,dw,sl,dj,xj,szlc,ks,bgs,fjh,syry,isbd,bz,lrry,lrrq)
+        values(#{map.gdzcbm},#{map.cwbm},#{map.zcdl},#{map.zcxl},#{map.gdzcmc},#{map.ggxh},#{map.sccj},#{map.cjdh},#{map.dw},#{map.sl},
+        #{map.dj},#{map.xj},#{map.szlc},#{map.ks},#{map.bgs},#{map.fjh},#{map.syry},#{map.isbd},#{map.bz},#{map.lrry},#{map.lrrq})
+    </insert>
+    <!--将信息存入t_jdwhhc_jl-->
+    <insert id="insertBaseYqsb">
+        insert into t_jdwhhc_jl(skbh,sbmc,ggxh,zqddj,fbl)
+        values(#{map.skbh},#{map.sbmc},#{map.ggxh},#{map.zqddj},#{map.fbl})
+    </insert>
+    <!--修改仪器设备台账信息-->
+    <update id="updateYqsbtz">
+        update t_gdzc_jbxx set gdzcbm = #{map.gdzcbm},
+            cwbm = #{map.cwbm},
+            zcdl = #{map.zcdl},
+            zcxl = #{map.zcxl},
+            gdzcmc = #{map.gdzcmc},
+            ggxh = #{map.ggxh},
+            sccj = #{map.sccj},
+            cjdh = #{map.cjdh},
+            dw = #{map.dw},
+            sl = #{map.sl},
+            dj = #{map.dj},
+            xj = #{map.xj},
+            szlc = #{map.szlc},
+            ks = #{map.ks},
+            bgs = #{map.bgs},
+            fjh = #{map.fjh},
+            syry = #{map.syry},
+            isbd = #{map.isbd},
+            bz = #{map.bz}
+            where id = #{map.id}
+    </update>
+    <!--修改t_jdwhhc_jl基本信息-->
+    <update id="updateBaseYqsb">
+        update t_jdwhhc_jl set sbmc = #{map.sbmc},ggxh = #{map.ggxh},zqddj = #{map.zqddj},fbl = #{map.fbl} where skbh = #{map.skbh}
+    </update>
+    <!--通过skbh查找设备信息-->
+    <select id="findBySkbh" resultType="com.xinhai.caiyun.systemmanager.api.YqsbXx">
+        select skbh,sbmc,ggxh,zqddj,fbl,sccs,sbyz,jdjg,jdrq,bzxx from t_yqsbtz where skbh = #{map.skbh}
+    </select>
+    <!-- 获取是否存在未读的维修消息，如果存在限制发送 -->
+    <select id="yqjdxxXZfs" resultType="java.lang.Integer">
+        select  COUNT(*)  from pt_xxtx where txbt='仪器消息提醒' and ydzt_dm='0' and SCBZ='0' and txnr like concat('%设备需要检定%')
+    </select>
+    <select id="findyqsbjd" resultType="Map">
+      select if(datediff(now(),jdrq),datediff(now(),jdrq),365) as jdzq
+      from t_jdwhhc_jl
+    </select>
+    <select id="findJD" resultType="java.lang.String">
+        select skbh from t_jdwhhc_jl where if(datediff(now(),jdrq),datediff(now(),jdrq),365)>(365-90)
+    </select>
+
+    <!-- 获取是否存在未读的维修消息，如果存在限制发送 -->
+    <select id="yqwhxxXZfs" resultType="java.lang.Integer">
+        select  COUNT(*)  from pt_xxtx where txbt='仪器消息提醒' and ydzt_dm='0' and SCBZ='0'and txnr like concat ('%设备需要维护%')
+    </select>
+    <select id="findyqsbwh" resultType="Map">
+      select if(datediff(now(),whrq),datediff(now(),whrq),365) as whzq
+      from t_jdwhhc_jl
+    </select>
+    <select id="findWH" resultType="java.lang.String">
+        select skbh from t_jdwhhc_jl where if(datediff(now(),whrq),datediff(now(),whrq),365)>(365-90)
+    </select>
+
+    <!-- 获取是否存在未读的维修消息，如果存在限制发送 -->
+    <select id="yqhcxxXZfs" resultType="java.lang.Integer">
+        select  COUNT(*)  from pt_xxtx where txbt='仪器消息提醒' and ydzt_dm='0' and SCBZ='0'and txnr like concat('%设备需要核查%')
+    </select>
+    <select id="findyqsbhc" resultType="Map">
+      select if(datediff(now(),hcrq),datediff(now(),hcrq),365) as hczq
+      from t_jdwhhc_jl
+    </select>
+    <select id="findHC" resultType="java.lang.String">
+        select skbh from t_jdwhhc_jl where if(datediff(now(),hcrq),datediff(now(),hcrq),365)>(365-90)
+    </select>
+</mapper>

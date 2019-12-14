@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xinhai.customer.dao.CustomerMapper">
+    <resultMap id="_customer" type="com.xinhai.customer.api.Customer">
+        <id column="id" property="id"/>
+        <result column="name" property="name"/>
+        <result column="code" property="code"/>
+        <result column="create_date" property="createdate"/>
+        <result column="state" property="state"/>
+        <result column="ext_atrr" property="extAtrr"/>
+    </resultMap>
+
+    <insert id="creatCustomer" parameterType="com.xinhai.customer.api.Customer">
+        INSERT INTO customer (id, name,code, create_date, state,ext_atrr) VALUES (#{id},#{name}, #{code}, #{createdate}, #{state},#{extAtrr})
+    </insert>
+
+    <update id="updateCustomer" parameterType="com.xinhai.customer.api.Customer">
+        UPDATE customer SET code=#{code},create_date=#{createdate},state=#{state},name=#{name},ext_atrr=#{extAtrr} where id=#{id}
+    </update>
+    <update id="startOrStopCustomer">
+        UPDATE customer SET state=#{state} WHERE id=#{id}
+    </update>
+
+    <delete id="removeCustomer" parameterType="string">
+        DELETE FROM customer WHERE  id=#{id}
+    </delete>
+
+    <delete id="removeCustomers">
+        DELETE FROM customer
+        WHERE id IN
+        <foreach index="index" item="id" collection="ids" open="(" separator=","
+                 close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+    <select id="getCustomer" resultMap="_customer" parameterType="string">
+        SELECT * FROM customer WHERE  id=#{id}
+    </select>
+
+    <select id="getAllCustomers" resultMap="_customer">
+        SELECT * FROM customer
+    </select>
+
+    <!-- 查询编码是否存在 -->
+    <select id="existByCode" resultType="integer" parameterType="string">
+        SELECT COUNT(*)   FROM customer  WHERE  code=#{code}
+    </select>
+
+    <!-- 查询名称是否存在 -->
+    <select id="existByName" resultType="integer" parameterType="string">
+        SELECT COUNT(*)   FROM customer  WHERE  name=#{name}
+    </select>
+</mapper>

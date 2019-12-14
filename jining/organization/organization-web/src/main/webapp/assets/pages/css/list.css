@@ -1,0 +1,13 @@
+@CHARSET "UTF-8";
+#org-manager-content .textArea{
+    height: 86px;
+    width: 500px;
+    border-bottom-right-radius: 4px !important;
+    border-top-right-radius: 4px !important;
+    padding:15px;
+    border:1px solid #e5e5e5;
+    resize: none;
+}
+#org-manager-content  .saveOrg{
+    padding-left: 550px;
+}

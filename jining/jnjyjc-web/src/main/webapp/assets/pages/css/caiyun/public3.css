@@ -1,0 +1,460 @@
+@CHARSET "UTF-8";
+/*去掉所有按钮的outline*/
+button{
+    outline: none!important;
+}
+/*主菜单的图标左移*/
+.page-sidebar-closed.page-sidebar-fixed .page-sidebar:hover .page-sidebar-menu .sub-menu > li > a > i, .page-sidebar .page-sidebar-menu .sub-menu > li > a > i {
+    margin-left: 6px;
+
+}
+
+/*表单类公用样式*/
+.inputCommon {
+    border: 1px solid #e5e5e5 !important;
+    border-radius: 0 4px 4px 0 !important;
+    height: 33px;
+    outline: none;
+    text-indent: 10px;
+    float: left;
+}
+
+/*一列的input样式*/
+.inputWidth-col-one {
+    width: 500px !important;
+}
+
+/*二列的input样式*/
+.inputWidth-col-two {
+    width: 200px !important;
+}
+
+/* 新增按钮后的input查询框样式 */
+.inputSearch {
+    border: 1px solid #e5e5e5 !important;
+    border-radius: 4px !important;
+    height: 33px;
+    outline: none;
+    text-indent: 30px;
+}
+
+/*label公用样式
+*/
+.labelCommon {
+    border-radius: 4px 0 0 4px !important;
+    background: #f6f6f6 !important;
+    border: 1px solid #ccc !important;
+    border-right: none !important;
+    height: 33px;
+    line-height: 32px;
+    text-align: center;
+    /*font-weight: 800 !important;*/
+    float: left;
+    color: #333;
+}
+
+/*一列的input样式*/
+.labelWidth-col-one {
+    width: 110px !important;
+}
+
+/*二列的input样式*/
+.labelWidth-col-two {
+    width: 100px !important;
+}
+
+/*网站公用颜色*/
+
+/*字体颜色*/
+.color666 {
+    color: #666 !important;
+}
+
+.color999 {
+    color: #999 !important;
+}
+
+.color333 {
+    color: #333 !important;
+}
+
+.colorfff {
+    color: #fff !important;
+}
+
+.colorBlue-10a0f7 {
+    color: #10a0f7 !important;
+}
+
+.colorRed {
+    color: red !important;
+}
+
+.colorccc {
+    color: #ccc !important;
+}
+
+/*背景色*/
+.blueBg {
+    background: #10a0f7 !important;
+}
+
+.redBg {
+    background: #FF2625 !important;
+}
+
+.labelBg {
+    background: #f6f6f6 !important;
+    float: left;
+}
+
+.fffBg {
+    background: #fff !important;
+}
+
+body {
+    color: #333 !important;
+}
+
+.select2-container--bootstrap .select2-selection--single .select2-selection__rendered {
+    color: #666 !important;
+    font-size: 12px !important;
+}
+
+/*btn按钮颜色公用样式*/
+.btnAdd {
+    background: #82C70C !important;
+    border: 1px solid #82C70C !important;
+}
+
+.btnAdd:hover {
+    border: 1px solid rgba(130, 199, 12, .8) !important;
+    background: rgba(130, 199, 12, .8) !important;
+}
+
+.btnCancel {
+    background: #FF2625 !important;
+}
+
+/*添加按钮,后边带蓝色边框的按钮样式*/
+.btnBorderColor {
+    border: 1px solid #10a0f7;
+}
+
+/*蓝色按钮*/
+.btnBlue {
+    background: #10a0f7 !important;
+    border: 1px solid #10a0f7 !important;
+}
+
+.btnBlue:hover {
+    opacity: 0.9;
+}
+
+/*清除按钮划过颜色*/
+.btn-default:hover,
+.btn-default:focus,
+.btn-default:active,
+.btn-default.active,
+.open .dropdown-toggle.btn-default {
+    /*background: rgba(16,160,247,.1) !important;*/
+    opacity: .8 !important;
+}
+
+.borderRadius4 {
+    border-radius: 4px !important;
+}
+
+/*table公用样式*/
+table, td, th {
+    border: none !important;
+}
+
+.table-hover > tbody > tr:hover > td,
+.table-hover > tbody > tr:hover > th {
+    background-color: #ECF9FF !important;
+
+}
+
+/*字体图标公用样式*/
+/*左侧灰色图标*/
+.iconFontColor-ECF9FF {
+    color: #ECF9FF !important;
+}
+
+.iconFontColor-FFF {
+    color: #fff !important;
+}
+
+.iconFontColor-10a0f7 {
+    color: #10a0f7 !important;
+}
+
+.iconFontSize {
+    font-size: 14px !important;
+}
+
+.backgroundWhite {
+    background: white;
+}
+
+.contentBgColor .portlet-body {
+    /* background: #f4f8f9;*/
+}
+
+.contentBgColor {
+    background: #f4f8f9 !important;
+}
+
+.contentBgColor .table-toolbar {
+    margin: 10px;
+    width: 100%;
+    background: #fff;
+    height: 40px;
+    padding-left: 15px;
+    margin-left: 0px;
+    /*border-bottom: 1px solid #dedede;*/
+}
+
+/*通用边距样式*/
+.mr {
+    margin-right: 10px !important;
+}
+
+.ml {
+    margin-left: 10px !important;
+}
+
+/* .dataTables_wrapper{
+	background:#fff !important;
+} */
+.portlet-form .form-body, .form .form-body {
+    padding-top: 0px !important;
+}
+
+.modal-content {
+    border-radius: 4px !important;
+}
+
+/*置空右侧的paading值*/
+.padding-reset-r {
+    padding-right: 0 !important;
+}
+
+/* 清除border */
+.borderNone {
+    border: none !important;
+}
+
+/* 清除元素背景色 */
+.bgNone {
+    background: transparent !important;
+}
+
+/*标题文本加粗*/
+.title-thick {
+    font-weight: 800 !important;
+}
+
+/* 清除bootstrap label默认底部边距 */
+label {
+    margin-bottom: 0 !important;
+}
+
+/* 验证错误显示的信息 */
+.error {
+    color: #a94442;
+}
+
+/* .control-label .required, .form-group .required{
+	color: #666 !important;
+    font-size: 12px;
+    padding-left: 2px;
+} */
+.fontSize12 {
+    font-size: 12px !important;
+}
+
+/*文本左对齐优先*/
+.text-left {
+    text-align: left !important;
+}
+
+/*重置bootstrap表格的样式*/
+.table td {
+    font-size: 12px;
+}
+
+/*重置datatables中th的字体*/
+table > thead > tr > th {
+    font-size: 12px !important;
+    color: #333 !important;
+    font-weight: 700 !important;
+}
+
+.help-block {
+    display: none !important;
+}
+
+.table > tbody > tr > td, .table > tbody > tr > th, .table > tfoot > tr > td, .table > tfoot > tr > th, .table > thead > tr > td, .table > thead > tr > th {
+    line-height: inherit;
+}
+
+/*保存和关闭按钮中文字和图标的间距*/
+.iconMr {
+    margin-right: 5px;
+    color: #b7b8bc !important;
+}
+
+/*设置datepicker中label开始和结束的公共长度*/
+.dateLabel-m {
+    width: 60px !important;
+}
+
+.spinnerWrap {
+    width: 100%;
+    height: 100%;
+    position: fixed;
+    background: white;
+    z-index: 158566;
+}
+
+.loader {
+    position: absolute;
+    width: 5em;
+    height: 5em;
+    border-radius: 50%;
+    transform: rotate(165deg);
+    animation: rotate 2s infinite;
+    z-index: 1588778777;
+    top: 50%;
+    left: 50%;
+    margin-left: -2.5em;
+    margin-top: -2.5em;
+}
+
+@keyframes rotate {
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+.loader::before, .loader::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    display: block;
+    width: 0.5em;
+    height: 0.5em;
+    border-radius: 0.25em;
+    transform: translate(-50%, -50%);
+}
+
+.loader::before {
+    animation: before 2s infinite;
+}
+
+@keyframes before {
+    0% {
+        width: 0.5em;
+        box-shadow: 1em -0.5em 0.5em rgba(100, 156, 136, 0.75),
+        -1em 0.5em 0.5em rgba(150, 120, 20, 0.75);
+    }
+    55% {
+        width: 2.5em;
+        box-shadow: 0 -0.5em rgba(100, 156, 136, 0.75),
+        0 0.5em rgba(150, 120, 20, 0.75);
+    }
+    70% {
+        width: 0.5em;
+        box-shadow: -1em -0.5em rgba(100, 156, 136, 0.75),
+        1em 0.5em rgba(150, 120, 20, 0.75);
+    }
+    100% {
+        box-shadow: 1em -0.5em rgba(100, 156, 136, 0.75),
+        -1em 0.5em rgba(150, 120, 20, 0.75);
+    }
+}
+
+.loader::after {
+    animation: after 2s infinite;
+
+}
+
+@keyframes after {
+    0% {
+        height: 0.5em;
+        box-shadow: -0.5em -1em 0.5em rgba(200, 56, 36, 0.75),
+        0.5em 1em 0.5em rgba(50, 60, 80, 0.75);
+    }
+    55% {
+        height: 2.5em;
+        box-shadow: -0.5em 0 rgba(200, 56, 36, 0.75),
+        0.5em 0 rgba(50, 60, 80, 0.75);
+    }
+    70% {
+        height: 0.5em;
+        box-shadow: -0.5em 1em rgba(200, 56, 36, 0.75),
+        0.5em -1em rgba(50, 60, 80, 0.75);
+    }
+    100% {
+        box-shadow: -0.5em -1em rgba(200, 56, 36, 0.75),
+        0.5em 1em rgba(50, 60, 80, 0.75);
+    }
+}
+
+/*去掉tab选项卡右键菜单上变动的小三角*/
+.dropdown > .dropdown-menu:after, .dropdown-toggle > .dropdown-menu:after, .btn-group > .dropdown-menu:after,
+.dropdown > .dropdown-menu:before, .dropdown-toggle > .dropdown-menu:before, .btn-group > .dropdown-menu:before {
+    top: -1000px;
+}
+
+textarea {
+    resize: none !important;
+}
+
+.table > tbody > tr > td, .table > tbody > tr > th, .table > tfoot > tr > td, .table > tfoot > tr > th, .table > thead > tr > td, .table > thead > tr > th {
+    vertical-align: middle !important;
+}
+
+/* 处理分页器 */
+div.dataTables_wrapper div.dataTables_info {
+    padding-top: 3px !important;
+    padding-right: 10px !important;
+    height: 30px !important;
+    line-height: 20px !important;
+    padding-left: 8px !important;
+}
+#customerManage-manager-content .table .btn {
+    line-height: 27px;
+}
+/*#page-content-firstpage{*/
+/*background: #17181C!important;*/
+/*}*/
+
+/*<让每个表格颜色>*/
+.table-striped>tbody>tr:nth-of-type(odd) {
+    background-color: #fff;
+}
+.table-striped>tbody>tr:nth-of-type(even) {
+    background-color: #f9f9f9;
+}
+.table-striped>thead>tr {
+    background-color: #f9f9f9;
+}
+table.table-striped.table-hover{
+    border-collapse: collapse!important;
+}
+.table-striped>thead>tr{
+    border-bottom: 1px solid #333;
+}
+/*</让每个表格颜色>*/
+/*<搜索按钮大小>*/
+.searchIcoBtn{
+    font-size: 16px!important;
+}
+/*</搜索按钮大小>*/

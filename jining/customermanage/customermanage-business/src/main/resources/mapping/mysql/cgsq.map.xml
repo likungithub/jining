@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xinhai.caiyun.customermanage.dao.Cgsq1Mapper">
+    <select id="getCgsqInfo" resultType="map">
+        select cgmc,gg,xh,sl,bzxx,sqry,sqrq,ksprq,jsprq,zsprq,kszrbm,jsfzrbm,zxldbm,jsyq,pp from cgsq
+        where id = #{id}
+    </select>
+    <select id="getCgsqInfo1" resultType="map">
+        select cgmc,gg,xh,sl,bzxx,sqry,sqrq,zsprq,zxldbm,cgry,cgrq,dj,je,jsyq,qh,pp,gys
+        from cgsq
+        where id = #{id}
+    </select>
+</mapper>

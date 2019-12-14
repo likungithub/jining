@@ -1,0 +1,467 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xinhai.caiyun.systemmanager.dao.GztzMapper">
+    <!-- 工作量统计  汇总-->
+    <select id="getGzltjByRy" resultType="Map">
+        select  TT.lrry,
+        Y.name,
+        sum(wtdjsl) wtdjsl,
+        sum(yplqsl) yplqsl,
+        sum(zjrjcsl) zjrjcsl,
+        sum(bgbzsl) bgbzsl,
+        sum(bgpzsl) bgpzsl,
+        sum(bgdysl) bgdysl
+        from (
+            SELECT
+                lrry,
+                count(1)  wtdjsl,
+                sum(0) as yplqsl,
+                sum(0) as zjrjcsl,
+                sum(0)  as bgbzsl,
+                sum(0) as bgpzsl,
+                sum(0)  as bgdysl
+                FROM
+                t_wt_jbxx
+                WHERE
+                lrry IS NOT NULL
+                <if test="map.rqq!=null and map.rqq!=''">
+                    and DATE_FORMAT(lrrq,'%Y-%m-%d')&gt;=#{map.rqq}
+                </if>
+                <if test="map.rqz!=null and map.rqz!=''">
+                    and DATE_FORMAT(lrrq,'%Y-%m-%d')&lt;=#{map.rqz}
+                </if>
+                group by lrry
+        union all
+        SELECT
+        lqry,
+        sum(0)	as wtdjsl,
+        count(1) as yplqsl,
+        sum(0) as zjrjcsl,
+        sum(0)  as bgbzsl,
+        sum(0) as bgpzsl,
+        sum(0)  as bgdysl
+        FROM
+        t_ypgl_jbxx
+        WHERE
+        lqry IS NOT NULL
+        <if test="map.rqq!=null and map.rqq!=''">
+            and DATE_FORMAT(lqrq,'%Y-%m-%d')&gt;=#{map.rqq}
+        </if>
+        <if test="map.rqz!=null and map.rqz!=''">
+            and DATE_FORMAT(lqrq,'%Y-%m-%d')&lt;=#{map.rqz}
+        </if>
+        group by lqry
+        union all
+        SELECT
+        zjr,
+        sum(0)	as wtdjsl,
+        sum(0) as yplqsl,
+        count(1) as zjrjcsl,
+        sum(0)  as bgbzsl,
+        sum(0) as bgpzsl,
+        sum(0)  as bgdysl
+        FROM
+        t_ypgl_jbxx
+        WHERE
+        zjr IS NOT NULL
+        <if test="map.rqq!=null and map.rqq!=''">
+            and DATE_FORMAT(YPJCSJ,'%Y-%m-%d')&gt;=#{map.rqq}
+        </if>
+        <if test="map.rqz!=null and map.rqz!=''">
+            and DATE_FORMAT(YPJCSJ,'%Y-%m-%d')&lt;=#{map.rqz}
+        </if>
+        group by zjr
+        union all
+        SELECT
+        bgzbr ,
+        sum(0)	as wtdjsl,
+        sum(0) as yplqsl,
+        sum(0) as  zjrjcsl,
+        count(1)  as bgbzsl,
+        sum(0) as bgpzsl,
+        sum(0)  as bgdysl
+        FROM
+        t_ypgl_jbxx
+        WHERE
+        bgzbr IS NOT NULL
+        <if test="map.rqq!=null and map.rqq!=''">
+            and DATE_FORMAT(bbbzrq,'%Y-%m-%d')&gt;=#{map.rqq}
+        </if>
+        <if test="map.rqz!=null and map.rqz!=''">
+            and DATE_FORMAT(bbbzrq,'%Y-%m-%d')&lt;=#{map.rqz}
+        </if>
+        group by bgzbr
+        union all
+        SELECT
+        bgpzr ,
+        sum(0)	as wtdjsl,
+        sum(0) as yplqsl,
+        sum(0) as  zjrjcsl,
+        sum(0) as bgbzsl,
+        count(1)  as bgpzsl,
+        sum(0)  as bgdysl
+        FROM
+        t_ypgl_jbxx
+        WHERE
+        bgpzr IS NOT NULL
+        <if test="map.rqq!=null and map.rqq!=''">
+            and DATE_FORMAT(bgpzsj,'%Y-%m-%d')&gt;=#{map.rqq}
+        </if>
+        <if test="map.rqz!=null and map.rqz!=''">
+            and DATE_FORMAT(bgpzsj,'%Y-%m-%d')&lt;=#{map.rqz}
+        </if>
+        group by bgpzr
+        union all
+        SELECT
+        bgdyry,
+        sum(0)	as wtdjsl,
+        sum(0) as yplqsl,
+        sum(0) as  zjrjcsl,
+        sum(0) as bgbzsl,
+        sum(0) as bgpzsl,
+        count(1) as bgdysl
+        FROM
+        t_ypgl_jbxx
+        WHERE
+        bgdyry IS NOT NULL
+        <if test="map.rqq!=null and map.rqq!=''">
+            and DATE_FORMAT(bgdyrq,'%Y-%m-%d') &gt;=#{map.rqq}
+        </if>
+        <if test="map.rqz!=null and map.rqz!=''">
+            and DATE_FORMAT(bgdyrq,'%Y-%m-%d')&lt;=#{map.rqz}
+        </if>
+        group by bgdyry
+            ) TT, user Y
+             where
+                TT.lrry = Y.ZYDM
+            <if test="map.ryxm!=null and map.ryxm!=''">
+                and  Y.name like CONCAT('%',#{map.ryxm},'%')
+            </if>
+            group by TT.lrry,Y.name
+        order by TT.lrry desc
+        limit ${map.start},${map.length}
+    </select>
+    <!-- 显示库存的信息的数量  陈-->
+    <select id="getGzltjByRyNum" resultType="java.lang.Long">
+    select count(1) from (
+        select
+            TT.lrry,
+            Y.NAME,
+            sum( wtdjsl ) wtdjsl,
+            sum( yplqsl ) yplqsl,
+            sum( zjrjcsl ) zjrjcsl,
+            sum( bgbzsl ) bgbzsl,
+            sum( bgpzsl ) bgpzsl,
+            sum( bgdysl ) bgdysl
+        from (
+            SELECT
+            lrry,
+            count(1)  wtdjsl,
+            sum(0) as yplqsl,
+            sum(0) as zjrjcsl,
+            sum(0)  as bgbzsl,
+            sum(0) as bgpzsl,
+            sum(0)  as bgdysl
+            FROM
+            t_wt_jbxx
+            WHERE
+            lrry IS NOT NULL
+            <if test="map.rqq!=null and map.rqq!=''">
+                and DATE_FORMAT(lrrq,'%Y-%m-%d')&gt;=#{map.rqq}
+            </if>
+            <if test="map.rqz!=null and map.rqz!=''">
+                and DATE_FORMAT(lrrq,'%Y-%m-%d')&lt;=#{map.rqz}
+            </if>
+            group by lrry
+            union all
+            SELECT
+            lqry,
+            sum(0)	as wtdjsl,
+            count(1) as yplqsl,
+            sum(0) as zjrjcsl,
+            sum(0)  as bgbzsl,
+            sum(0) as bgpzsl,
+            sum(0)  as bgdysl
+            FROM
+            t_ypgl_jbxx
+            WHERE
+            lqry IS NOT NULL
+            <if test="map.rqq!=null and map.rqq!=''">
+                and DATE_FORMAT(lqrq,'%Y-%m-%d')&gt;=#{map.rqq}
+            </if>
+            <if test="map.rqz!=null and map.rqz!=''">
+                and DATE_FORMAT(lqrq,'%Y-%m-%d')&lt;=#{map.rqz}
+            </if>
+            group by lqry
+            union all
+            SELECT
+            zjr,
+            sum(0)	as wtdjsl,
+            sum(0) as yplqsl,
+            count(1) as zjrjcsl,
+            sum(0)  as bgbzsl,
+            sum(0) as bgpzsl,
+            sum(0)  as bgdysl
+            FROM
+            t_ypgl_jbxx
+            WHERE
+            zjr IS NOT NULL
+            <if test="map.rqq!=null and map.rqq!=''">
+                and DATE_FORMAT(YPJCSJ,'%Y-%m-%d')&gt;=#{map.rqq}
+            </if>
+            <if test="map.rqz!=null and map.rqz!=''">
+                and DATE_FORMAT(YPJCSJ,'%Y-%m-%d')&lt;=#{map.rqz}
+            </if>
+            group by zjr
+            union all
+            SELECT
+            bgzbr ,
+            sum(0)	as wtdjsl,
+            sum(0) as yplqsl,
+            sum(0) as  zjrjcsl,
+            count(1)  as bgbzsl,
+            sum(0) as bgpzsl,
+            sum(0)  as bgdysl
+            FROM
+            t_ypgl_jbxx
+            WHERE
+            bgzbr IS NOT NULL
+            <if test="map.rqq!=null and map.rqq!=''">
+                and DATE_FORMAT(bbbzrq,'%Y-%m-%d')&gt;=#{map.rqq}
+            </if>
+            <if test="map.rqz!=null and map.rqz!=''">
+                and DATE_FORMAT(bbbzrq,'%Y-%m-%d')&lt;=#{map.rqz}
+            </if>
+            group by bgzbr
+            union all
+            SELECT
+            bgpzr ,
+            sum(0)	as wtdjsl,
+            sum(0) as yplqsl,
+            sum(0) as  zjrjcsl,
+            sum(0) as bgbzsl,
+            count(1)  as bgpzsl,
+            sum(0)  as bgdysl
+            FROM
+            t_ypgl_jbxx
+            WHERE
+            bgpzr IS NOT NULL
+            <if test="map.rqq!=null and map.rqq!=''">
+                and DATE_FORMAT(bgpzsj,'%Y-%m-%d')&gt;=#{map.rqq}
+            </if>
+            <if test="map.rqz!=null and map.rqz!=''">
+                and DATE_FORMAT(bgpzsj,'%Y-%m-%d')&lt;=#{map.rqz}
+            </if>
+            group by bgpzr
+            union all
+            SELECT
+            bgdyry,
+            sum(0)	as wtdjsl,
+            sum(0) as yplqsl,
+            sum(0) as  zjrjcsl,
+            sum(0) as bgbzsl,
+            sum(0) as bgpzsl,
+            count(1) as bgdysl
+            FROM
+            t_ypgl_jbxx
+            WHERE
+            bgdyry IS NOT NULL
+            <if test="map.rqq!=null and map.rqq!=''">
+                and DATE_FORMAT(bgdyrq,'%Y-%m-%d') &gt;=#{map.rqq}
+            </if>
+            <if test="map.rqz!=null and map.rqz!=''">
+                and DATE_FORMAT(bgdyrq,'%Y-%m-%d')&lt;=#{map.rqz}
+            </if>
+            group by bgdyry
+        ) TT, user Y
+        where
+        TT.lrry = Y.ZYDM
+        <if test="map.ryxm!=null and map.ryxm!=''">
+            and  Y.name like CONCAT('%',#{map.ryxm},'%')
+        </if>
+        group by TT.lrry,Y.name ) qq
+    </select>
+
+    <!--工作量统计 明细 -->
+    <select id="getGzltjByRyMx" resultType="Map">
+        SELECT
+            a.cydbm,
+            a.wtid,
+            b.ypmc,
+            a.wtdw,
+            a.sjdw,
+            FuncGetName(a.lrry) as lrry,
+            a.lrrq,
+            FuncGetName(b.lqry) as lqry,
+            b.lqrq,
+            FuncGetName(b.zjr) as zjr,
+            b.YPJCSJ,
+            FuncGetName(b.bgzbr) as bgzbr,
+            b.bbbzrq,
+            FuncGetName(b.bgpzr) as bgpzr,
+            b.bgpzsj,
+            FuncGetName(b.bgdyry) as bgdyry,
+            b.bgdyrq
+        FROM
+            t_wt_jbxx a,
+            t_ypgl_jbxx b
+        WHERE
+            a.wtid = b.wtid
+            <if test="map.lie==1">
+                AND a.lrry IS NOT NULL
+                <if test="map.ryxm!=null and map.ryxm!=''">
+                    and  FuncGetName(a.lrry) like CONCAT('%',#{map.ryxm},'%')
+                </if>
+                <if test="map.rqq!=null and map.rqq!=''">
+                    and DATE_FORMAT(a.lrrq,'%Y-%m-%d')&gt;=#{map.rqq}
+                </if>
+                <if test="map.rqz!=null and map.rqz!=''">
+                    and DATE_FORMAT(a.lrrq,'%Y-%m-%d')&lt;=#{map.rqz}
+                </if>
+            </if>
+        <if test="map.lie==2">
+            AND b.lqry IS NOT NULL
+            <if test="map.ryxm!=null and map.ryxm!=''">
+                and  FuncGetName(b.lqry) like CONCAT('%',#{map.ryxm},'%')
+            </if>
+            <if test="map.rqq!=null and map.rqq!=''">
+                and DATE_FORMAT(b.lqrq,'%Y-%m-%d')&gt;=#{map.rqq}
+            </if>
+            <if test="map.rqz!=null and map.rqz!=''">
+                and DATE_FORMAT(b.lqrq,'%Y-%m-%d')&lt;=#{map.rqz}
+            </if>
+        </if>
+        <if test="map.lie==3">
+            AND b.zjr IS NOT NULL
+            <if test="map.ryxm!=null and map.ryxm!=''">
+                and  FuncGetName(b.zjr) like CONCAT('%',#{map.ryxm},'%')
+            </if>
+            <if test="map.rqq!=null and map.rqq!=''">
+                and DATE_FORMAT(b.YPJCSJ,'%Y-%m-%d')&gt;=#{map.rqq}
+            </if>
+            <if test="map.rqz!=null and map.rqz!=''">
+                and DATE_FORMAT(b.YPJCSJ,'%Y-%m-%d')&lt;=#{map.rqz}
+            </if>
+        </if>
+        <if test="map.lie==4">
+            AND b.bgzbr IS NOT NULL
+            <if test="map.ryxm!=null and map.ryxm!=''">
+                and  FuncGetName(b.bgzbr) like CONCAT('%',#{map.ryxm},'%')
+            </if>
+            <if test="map.rqq!=null and map.rqq!=''">
+                and DATE_FORMAT(b.bbbzrq,'%Y-%m-%d')&gt;=#{map.rqq}
+            </if>
+            <if test="map.rqz!=null and map.rqz!=''">
+                and DATE_FORMAT(b.bbbzrq,'%Y-%m-%d')&lt;=#{map.rqz}
+            </if>
+        </if>
+        <if test="map.lie==5">
+            AND b.bgpzr IS NOT NULL
+            <if test="map.ryxm!=null and map.ryxm!=''">
+                and  FuncGetName(b.bgpzr) like CONCAT('%',#{map.ryxm},'%')
+            </if>
+            <if test="map.rqq!=null and map.rqq!=''">
+                and DATE_FORMAT(b.bgpzsj,'%Y-%m-%d')&gt;=#{map.rqq}
+            </if>
+            <if test="map.rqz!=null and map.rqz!=''">
+                and DATE_FORMAT(b.bgpzsj,'%Y-%m-%d')&lt;=#{map.rqz}
+            </if>
+        </if>
+        <if test="map.lie==6">
+            AND b.bgdyry IS NOT NULL
+            <if test="map.ryxm!=null and map.ryxm!=''">
+                and  FuncGetName(b.bgdyry) like CONCAT('%',#{map.ryxm},'%')
+            </if>
+            <if test="map.rqq!=null and map.rqq!=''">
+                and DATE_FORMAT(b.bgdyrq,'%Y-%m-%d')&gt;=#{map.rqq}
+            </if>
+            <if test="map.rqz!=null and map.rqz!=''">
+                and DATE_FORMAT(b.bgdyrq,'%Y-%m-%d')&lt;=#{map.rqz}
+            </if>
+        </if>
+        limit ${map.start},${map.length}
+    </select>
+    <select id="getGzltjByRyMxNum" resultType="java.lang.Long">
+        SELECT
+            count(1)
+        FROM
+        t_wt_jbxx a,
+        t_ypgl_jbxx b
+        WHERE
+        a.wtid = b.wtid
+        <if test="map.lie==1">
+            AND a.lrry IS NOT NULL
+            <if test="map.ryxm!=null and map.ryxm!=''">
+                and  FuncGetName(a.lrry) like CONCAT('%',#{map.ryxm},'%')
+            </if>
+            <if test="map.rqq!=null and map.rqq!=''">
+                and DATE_FORMAT(a.lrrq,'%Y-%m-%d')&gt;=#{map.rqq}
+            </if>
+            <if test="map.rqz!=null and map.rqz!=''">
+                and DATE_FORMAT(a.lrrq,'%Y-%m-%d')&lt;=#{map.rqz}
+            </if>
+        </if>
+        <if test="map.lie==2">
+            AND b.lqry IS NOT NULL
+            <if test="map.ryxm!=null and map.ryxm!=''">
+                and  FuncGetName(b.lqry) like CONCAT('%',#{map.ryxm},'%')
+            </if>
+            <if test="map.rqq!=null and map.rqq!=''">
+                and DATE_FORMAT(b.lqrq,'%Y-%m-%d')&gt;=#{map.rqq}
+            </if>
+            <if test="map.rqz!=null and map.rqz!=''">
+                and DATE_FORMAT(b.lqrq,'%Y-%m-%d')&lt;=#{map.rqz}
+            </if>
+        </if>
+        <if test="map.lie==3">
+            AND b.zjr IS NOT NULL
+            <if test="map.ryxm!=null and map.ryxm!=''">
+                and  FuncGetName(b.zjr) like CONCAT('%',#{map.ryxm},'%')
+            </if>
+            <if test="map.rqq!=null and map.rqq!=''">
+                and DATE_FORMAT(b.YPJCSJ,'%Y-%m-%d')&gt;=#{map.rqq}
+            </if>
+            <if test="map.rqz!=null and map.rqz!=''">
+                and DATE_FORMAT(b.YPJCSJ,'%Y-%m-%d')&lt;=#{map.rqz}
+            </if>
+        </if>
+        <if test="map.lie==4">
+            AND b.bgzbr IS NOT NULL
+            <if test="map.ryxm!=null and map.ryxm!=''">
+                and  FuncGetName(b.bgzbr) like CONCAT('%',#{map.ryxm},'%')
+            </if>
+            <if test="map.rqq!=null and map.rqq!=''">
+                and DATE_FORMAT(b.bbbzrq,'%Y-%m-%d')&gt;=#{map.rqq}
+            </if>
+            <if test="map.rqz!=null and map.rqz!=''">
+                and DATE_FORMAT(b.bbbzrq,'%Y-%m-%d')&lt;=#{map.rqz}
+            </if>
+        </if>
+        <if test="map.lie==5">
+            AND b.bgpzr IS NOT NULL
+            <if test="map.ryxm!=null and map.ryxm!=''">
+                and  FuncGetName(b.bgpzr) like CONCAT('%',#{map.ryxm},'%')
+            </if>
+            <if test="map.rqq!=null and map.rqq!=''">
+                and DATE_FORMAT(b.bgpzsj,'%Y-%m-%d')&gt;=#{map.rqq}
+            </if>
+            <if test="map.rqz!=null and map.rqz!=''">
+                and DATE_FORMAT(b.bgpzsj,'%Y-%m-%d')&lt;=#{map.rqz}
+            </if>
+        </if>
+        <if test="map.lie==6">
+            AND b.bgdyry IS NOT NULL
+            <if test="map.ryxm!=null and map.ryxm!=''">
+                and  FuncGetName(b.bgdyry) like CONCAT('%',#{map.ryxm},'%')
+            </if>
+            <if test="map.rqq!=null and map.rqq!=''">
+                and DATE_FORMAT(b.bgdyrq,'%Y-%m-%d')&gt;=#{map.rqq}
+            </if>
+            <if test="map.rqz!=null and map.rqz!=''">
+                and DATE_FORMAT(b.bgdyrq,'%Y-%m-%d')&lt;=#{map.rqz}
+            </if>
+        </if>
+
+    </select>
+</mapper>

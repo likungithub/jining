@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xinhai.caiyun.systemmanager.dao.CgshMapper">
+    <!-- 获得审核的数据  chen-->
+    <select id="queryCgshXx" resultType="map">
+        select id,hcmc,gg,jb,sl,sccj,cgmd,(select name from user where zydm = c.sqr)as sqr,
+        sqrq,dj,zj,bz,sqzt,hclx,spr,sprq,(select name from user where zydm = c.shr)as shr,shrq,shzt
+        from t_cgsq_jbxx c
+        <where>
+            <if test="map.hclx==null or map.hclx==''">
+                and hclx != '5'
+            </if>
+            <if test="map.hclx!=null and  map.hclx!=''">
+                and hclx = #{map.hclx}
+            </if>
+            <if test="map.shzt!=null and  map.shzt!=''">
+                and shzt = #{map.shzt}
+            </if>
+            <if test="map.hcmc!=null and  map.hcmc!=''">
+                and hcmc like concat('%',#{map.hcmc},'%')
+            </if>
+            <if test="map.startDate!=null">
+                and sqrq >= #{map.startDate}
+            </if>
+            <if test="map.endDate!=null">
+                and #{map.endDate} >= sqrq
+            </if>
+
+        </where>
+        order by shzt
+        limit #{map.start},#{map.length};
+    </select>
+    <!-- 获得审批的数据的数量  chen-->
+    <select id="queryCgshXxNum" resultType="java.lang.Integer">
+        select count(id)
+        from t_cgsq_jbxx
+        <where>
+            <if test="map.hclx==null or map.hclx==''">
+                and hclx != '5'
+            </if>
+            <if test="map.hclx!=null and  map.hclx!=''">
+                and hclx = #{map.hclx}
+            </if>
+            <if test="map.hcmc!=null and  map.hcmc!=''">
+                and hcmc like concat('%',#{map.hcmc},'%')
+            </if>
+            <if test="map.startDate!=null">
+                and sqrq >= #{map.startDate}
+            </if>
+            <if test="map.endDate!=null">
+                and #{map.endDate} >= sqrq
+            </if>
+        </where>
+        order by shzt
+    </select>
+    <!-- 更新审核和退回的状态 chen-->
+    <update id="saveShzt">
+        update  t_cgsq_jbxx  set shzt=#{map.shzt},shr=#{map.shr},sprq=now()
+        where id  in
+        <foreach collection="map.ids" item="id" index="index" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </update>
+    <!-- 得到退回的消息内容 chen-->
+    <select id="queryMess" resultType="map">
+        select hcmc,sqr from t_cgsq_jbxx
+        where id in
+        <foreach collection="ids" item="id" index="index" open="(" separator="," close=")">
+           #{id}
+        </foreach>
+    </select>
+</mapper>

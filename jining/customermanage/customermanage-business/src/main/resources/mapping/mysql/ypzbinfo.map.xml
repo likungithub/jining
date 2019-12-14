@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xinhai.caiyun.customermanage.dao.YpzbinfoMapper">
+    <!--获取样品制备新-->
+    <select id="getAll" resultType="map">
+        SELECT id,ypbm,ypmc,zbypbm,zbzl,tjsj,tjryname,jssj,jsryname,jszt,lqry,lqsj,lx,lqryname
+        FROM t_yp_zbwc
+        where jszt <![CDATA[ <> ]]> '0'
+        <if test="map.ypmc!=''" >
+            and YPMC like concat('%',#{map.ypmc}, '%')
+        </if>
+        <if test="map.ypbm!=''">
+            and YPBM like concat('%',#{map.ypbm}, '%')
+        </if>
+        order by id desc
+        limit #{map.start},#{map.length}
+    </select>
+    <!--获取总数-->
+    <select id="getCount" resultType="Integer">
+        select count(1)
+        from t_yp_zbwc
+        where jszt <![CDATA[ <> ]]> '0'
+        <if test="map.ypmc!=''" >
+            and YPMC like concat('%',#{map.ypmc}, '%')
+        </if>
+        <if test="map.ypbm!=''">
+            and YPBM like concat('%',#{map.ypbm}, '%')
+        </if>
+    </select>
+    <!--制备样品信息提交-->
+    <insert id="insert">
+    <foreach collection="data" item="item" index="index" >
+        insert into t_ypgl_rydm(ypbm,zxry_dm,lrry,lrrq,lx)
+        VALUES
+        (#{item.ypbm},#{item.zydm},#{item.lrry},now(),#{item.lx});
+    </foreach>
+    <foreach collection="data" item="item" index="index" separator=";">
+        update t_ypgl_jbxx set JSZT=#{item.jszt} where ypbm =#{item.ypbm}
+    </foreach>
+    </insert>
+    <!--更新制备信息提交人提交时间-->
+    <update id="updateYpzbInfo">
+        update t_yp_zbwc
+        set tjsj=#{map.tjsj},tjrydm=#{map.tjrydm},tjryname=#{map.tjryname}
+        where
+        ypbm in
+        <foreach collection="map.list" item="item" separator="," index="index" open="(" close=");">
+            #{item}
+        </foreach>
+    </update>
+    <!--更新接收人信息-->
+    <update id="updateYpzbTjInfo">
+        update t_yp_zbwc
+        set jssj=#{map.jssj},jsrydm=#{map.zydm},jsryname=#{map.zyname},jszt='2'
+        where id in
+        <foreach collection="map.list" item="item" index="index" separator="," close=");" open="(">
+            #{item}
+        </foreach>
+    </update>
+    <!--制备信息导出-->
+    <select id="zbInfoDaochu" resultType="Map">
+        SELECT ifnull(ypbm,'') as ypbm,ifnull(ypmc,'') as ypmc,ifnull(zbfs,'') as zbfs,GROUP_CONCAT(zbzl ORDER BY id) as zbzl,GROUP_CONCAT(lx ORDER BY id) as lx,bzxx,zbyq,zbrydm,zbDate
+        FROM t_yp_zbwc
+        WHERE zbDate = #{map.zbdate}
+        AND zbrydm = #{map.zbrydm}
+        GROUP BY ypbm
+    </select>
+    <!--样品出入库信息导出-->
+    <select id="findCrkInfo" resultType="Map">
+  SELECT IFNULL(a.YPBM,'/') as YPBM,IFNULL(a.LRRQ,'/') as RKRQ,IFNULL(a.YPMC,'/') as YPMC,IFNULL(a.GGXH,'/') as GGXH,IFNULL(CONCAT(a.YPSL,a.YPDW),'/') as YPSL,IFNULL(a.YPZT,'/') as YPZT,IFNULL(b.tjry,'/') as JSRYDM,IFNULL(c.LRRQ,'/') as ZYLQRQ,IFNULL(a.YPZT,'/')  as ZYZT,
+  IFNULL(CONCAT(a.YPSL,a.YPDW),'/') as ZYLQSL,IFNULL(c.LRRY,'/') as ZYLQRYDM,IFNULL(MAX(d.tjsj),'/') as ZYFHRQ,IFNULL(a.YPZT,'/') as TJZBYZT,IFNULL(CONCAT(d.sl,"件"),'/') as TJSL,IFNULL(d.jsrydm,'/') as ZBYJSRYDM,
+  IFNULL(GROUP_CONCAT(d.lqsj ORDER BY d.id),'/') as LQSJ,IFNULL(GROUP_CONCAT(d.ZBZL ORDER BY d.id),'/') as ZBZL,IFNULL(GROUP_CONCAT(d.ypzt),'/') as zbypzt,IFNULL(GROUP_CONCAT(d.lqry ORDER BY d.id),'/') as zblqry
+  FROM t_ypgl_jbxx a
+  LEFT JOIN t_wt_jbxx b
+  ON a.WTID = b.WTID
+  LEFT JOIN t_ypgl_rydm c
+  ON a.YPBM = c.YPBM
+  LEFT JOIN t_yp_zbwc d
+  ON a.YPBM = d.ypbm
+  WHERE c.LX = 3 and d.lqzt = '002'
+	GROUP BY a.YPBM
+    </select>
+</mapper>

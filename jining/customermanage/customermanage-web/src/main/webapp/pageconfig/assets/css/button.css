@@ -1,0 +1,14 @@
+.d-button{
+	padding: 0px 15px;
+	font-size:14px;
+    color: #fff!important;
+    border-color: #008dde;
+    background-color: #008dde!important;
+}
+.d-button.d-button-hover{
+	border-color: #1e2c54;
+	background-color: #1e2c54!important;
+}
+.d-dialog .d-button{
+	padding: 0px;
+}

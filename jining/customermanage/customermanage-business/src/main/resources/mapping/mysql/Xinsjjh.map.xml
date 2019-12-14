@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xinhai.caiyun.customermanage.dao.XinsjjhMapper">
+
+    <!-- 数据校核的数据  陈  -->
+    <select id="sjjh_queryList" resultType="Map">
+          select GROUP_CONCAT(c.zwmc_bm)as jcxmmc,a.ypbm ,c.id as xmid,a.ypmc,b.jcz,b.wd,b.sd,c.jcx,b.jcff,c.xlz,b.s_date,b.e_date,
+         (select  u.name from user u where  b.ZXRY_DM=u.zydm ) as ZXRY_DM
+         from t_ypgl_jbxx a
+         LEFT JOIN t_yp_jcxm b on a.id=b.ypid
+         LEFT JOIN t_jcxm_jbxx c on b.jcxmid=c.id
+          where a.id=#{map.ypid1} GROUP BY xmid ORDER BY xmid
+         limit #{map.start},#{map.length}
+  </select>
+    <!-- 数据校核的数据的数量  陈  -->
+    <select id="sjjh_findCount" resultType="java.lang.Integer">
+         select count(*) as jcxsl
+         from t_ypgl_jbxx a
+         LEFT JOIN t_yp_jcxm b on a.id=b.ypid
+         LEFT JOIN t_jcxm_jbxx c on b.jcxmid=c.id
+         where a.id=#{map.ypid1} GROUP BY xmid ORDER BY xmid
+
+  </select>
+
+    <!--数据复合的数据  陈-->
+    <select id="sjfh_queryList" resultType="Map">
+          select GROUP_CONCAT(c.zwmc_bm)as jcxmmc,a.ypbm ,c.id as xmid,a.ypmc,b.jcz,b.wd,b.sd,c.jcx,b.jcff,c.xlz,b.s_date,b.e_date,
+         (select  u.name from user u where  b.ZXRY_DM=u.zydm ) as ZXRY_DM,
+         b.jcxmjl,c.BJF
+         from t_ypgl_jbxx a
+         LEFT JOIN t_yp_jcxm b on a.id=b.ypid
+         LEFT JOIN t_jcxm_jbxx c on b.jcxmid=c.id
+         where a.id=#{map.ypid1} GROUP BY xmid ORDER BY xmid
+         limit #{map.start},#{map.length}
+
+  </select>
+    <!--数据复合的数据的数量 陈-->
+    <select id="sjfh_findCount" resultType="java.lang.Integer">
+         select count(*) as jcxsl
+         from t_ypgl_jbxx a
+         LEFT JOIN t_yp_jcxm b on a.id=b.ypid
+         LEFT JOIN t_jcxm_jbxx c on b.jcxmid=c.id
+         where a.id=#{map.ypid1} GROUP BY xmid ORDER BY xmid
+  </select>
+
+</mapper>

@@ -1,0 +1,10 @@
+@CHARSET "UTF-8";
+.edit-users-info .modal-dialog{
+    width: 800px!important;
+}
+.edit-users-info .modal-dialog .modal-content {
+    border-radius: 4px !important;
+}
+.edit-users-info .modal-dialog .modal-content .modal-title{
+    font-weight: 800;
+}

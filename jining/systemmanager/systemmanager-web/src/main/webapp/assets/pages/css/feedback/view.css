@@ -1,0 +1,9 @@
+@CHARSET "UTF-8";
+.feedback-dialog-m .modal-dialog{
+    width: 660px!important;
+    border-radius: 4px !important;
+}
+.feedback-dialog-m .modal-dialog .modal-header h4{
+    font-weight: 800;
+    color: #333;
+}

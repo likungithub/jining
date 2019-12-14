@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xinhai.caiyun.systemmanager.dao.LyspMapper">
+    <!--得到领用一级审批的信息 陈-->
+    <select id="queryLysp1All" resultType="map">
+        select rk.hcmc,rk.id as kcid,rk.gg,rk.jb,rk.sl,ly.id as id,
+        (select name from user where zydm=ly.lyr) as lyr,
+        ly.lyrq,ly.lysl,ly.lyzt,ly.lysp1,ly.lysp2
+        from t_hcly_jbxx ly
+        left join t_cgrk_jbxx rk
+        on ly.kcid=rk.id
+        where ly.lysp1='001' and ly.lysp2='001'
+        <if test="map.hcmc!=null and map.hcmc!=''">
+            and rk.hcmc like concat('%',#{map.hcmc},'%')
+        </if>
+        order by ly.id desc
+        limit #{map.start},#{map.length};
+    </select>
+    <!--得到领用一级审批的信息的数量 陈-->
+    <select id="queryLysp1AllNum" resultType="java.lang.Integer">
+        select count(ly.id)
+        from t_hcly_jbxx ly
+        left join t_cgrk_jbxx rk
+        on ly.kcid=rk.id
+        where ly.lysp1='001' and ly.lysp2='001'
+        <if test="map.hcmc!=null and map.hcmc!=''">
+            and rk.hcmc like concat('%',#{map.hcmc},'%')
+        </if>
+        order by ly.id desc;
+    </select>
+    <!--一级审批通过和退回操作 陈-->
+    <update id="saveZt1">
+        <!-- 通过 陈-->
+        <if test="map.lx=='001'.toString()">
+            <!-- 一级审批的类型 陈-->
+            <if test="map.hclx=='1'.toString() or map.hclx=='2'.toString()">
+                update t_hcly_jbxx set lyspr1=#{map.lyspr1},lyspr2=#{map.lyspr2},
+                lysprq1=now(),lysprq2=now(),lysp1='002',lysp2='002',lyzt='002'
+                where id=#{map.id};
+            </if>
+            <!-- 对于易制毒和易制爆物品需要二级审批 陈-->
+            <if test="map.hclx=='3'.toString() or map.hclx=='4'.toString()">
+                update t_hcly_jbxx set lyspr1=#{map.lyspr1},lysprq1=now(),lysp1='002'
+                where id=#{map.id};
+            </if>
+        </if>
+        <!-- 退回 陈-->
+        <if test="map.lx=='002'.toString()">
+            update t_hcly_jbxx set lyspr1=#{map.lyspr1},
+            lysprq1=now(),lysp1='003',lyzt='003'
+            where id=#{map.id};
+        </if>
+    </update>
+    <!-- 获得耗材的类型 陈-->
+    <select id="queryHclxById" resultType="java.lang.String">
+        select rk.hclx from t_cgrk_jbxx rk,t_hcly_jbxx ly
+        where rk.id=ly.kcid and ly.id=#{id};
+    </select>
+    <!-- 获得领用申请人 陈-->
+    <select id="queryLyrById" resultType="java.lang.String">
+        select lyr from t_hcly_jbxx
+        where id=#{id};
+    </select>
+
+    <!--得到领用二级审批的信息 陈-->
+    <select id="queryLysp2All" resultType="map">
+        select rk.hcmc,rk.id as kcid,rk.gg,rk.jb,rk.sl,ly.id as id,
+        (select name from user where zydm=ly.lyr) as lyr,
+        (select name from user where zydm=ly.lyspr1) as lyspr1,
+        ly.lyrq,ly.lysl,ly.lyzt,ly.lysp1,ly.lysp2,ly.lysprq1
+        from t_hcly_jbxx ly
+        left join t_cgrk_jbxx rk
+        on ly.kcid=rk.id
+        where ly.lysp1='002' and ly.lysp2='001'
+        <if test="map.hcmc!=null and map.hcmc!=''">
+            and rk.hcmc like concat('%',#{map.hcmc},'%')
+        </if>
+        order by ly.id desc
+        limit #{map.start},#{map.length};
+    </select>
+    <!--得到领用二级审批的信息的数量 陈-->
+    <select id="queryLysp2AllNum" resultType="java.lang.Integer">
+        select count(ly.id)
+        from t_hcly_jbxx ly
+        left join t_cgrk_jbxx rk
+        on ly.kcid=rk.id
+        where ly.lysp1='002' and ly.lysp2='001'
+        <if test="map.hcmc!=null and map.hcmc!=''">
+            and rk.hcmc like concat('%',#{map.hcmc},'%')
+        </if>
+        order by ly.id desc;
+    </select>
+    <!--一级审批通过和退回操作 陈-->
+    <update id="saveZt2">
+        <!-- 通过 陈-->
+        <if test="map.lx=='001'.toString()">
+            update t_hcly_jbxx set lyspr2=#{map.lyspr2},
+            lysprq2=now(),lysp2='002',lyzt='002'
+            where id=#{map.id};
+        </if>
+        <!-- 退回 陈-->
+        <if test="map.lx=='002'.toString()">
+            update t_hcly_jbxx set lyspr2=#{map.lyspr2},
+             lysprq2=now(),lysp2='003',lyzt='003'
+             where id=#{map.id};
+        </if>
+    </update>
+</mapper>

@@ -1,0 +1,26 @@
+@CHARSET "UTF-8";
+/*通用基础参数样式开始*/
+#common-basic-params > #params_data_wrapper > table > thead > tr > th:nth-child(1),
+#common-basic-params > #params_data_wrapper > table > thead > tr > th:nth-child(2) {
+    width: 90px;
+}
+
+#common-basic-params > #params_data_wrapper > table > thead > tr > th:nth-child(3) {
+    width: 140px;
+}
+
+#common-basic-params > #params_data_wrapper > table > thead > tr > th:nth-child(5) {
+    width: 72px !important;
+}
+
+#common-basic-params > #params_data_wrapper > table > thead > tr > th:nth-child(1),
+#common-basic-params > #params_data_wrapper > table > tbody > tr > td:nth-child(1),
+#common-basic-params > #params_data_wrapper > table > thead > tr > th:nth-child(2),
+#common-basic-params > #params_data_wrapper > table > tbody > tr > td:nth-child(2),
+#common-basic-params > #params_data_wrapper > table > thead > tr > th:nth-child(3),
+#common-basic-params > #params_data_wrapper > table > tbody > tr > td:nth-child(3) {
+    text-align: left !important;
+    overflow: auto;
+}
+
+/*通用基础参数样式结束*/

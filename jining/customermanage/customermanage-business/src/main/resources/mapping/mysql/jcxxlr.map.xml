@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.xinhai.caiyun.customermanage.dao.JcxxlrMapper">
+    <!-- 开始获得温度湿度-->
+    <select id="startWsd" resultType="map">
+        select wd , sd  from  wsd;
+    </select>
+    <!-- 结束获得温度湿度-->
+    <select id="endWsd" resultType="map">
+        select wd , sd  from  wsd;
+    </select>
+    <!-- 清空温湿度表-->
+    <delete id="deleteWsd">
+        delete from wsd;
+    </delete>
+    <!-- 将温度湿度放入样品检测项目表中 -->
+    <update id="saveWsd">
+        update t_yp_jcxm set wd=#{map.wd},sd=#{map.sd},max_wd=#{map.max_wd},min_wd=#{map.min_wd},max_sd=#{map.max_sd},min_sd=#{map.min_sd}
+        where ypid=#{map.ypid} and jcxmid=#{map.jcxmid};
+    </update>
+</mapper>

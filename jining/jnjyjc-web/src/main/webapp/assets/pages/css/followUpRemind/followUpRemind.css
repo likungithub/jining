@@ -1,0 +1,268 @@
+@CHARSET "UTF-8";
+/* .followRemind-m .modal-dialog {
+    width: 1050px !important;
+}
+ */
+#followupremind .remindTop {
+    margin-bottom: 15px;
+}
+
+#followupremind #searchByTime1 {
+    height: 55px;
+}
+
+#followupremind #searchByTime1 .pickerInput {
+    height: 33px;
+}
+
+#followupremind span.select2.select2-container {
+    /*position: absolute;*/
+    width: 100px;
+    /*right: 382px;*/
+    border-radius: 4px !important;
+    border-color: #dadada;
+    float: left;
+    margin-right: 15px;
+}
+
+#followupremind span.select2-selection.select2-selection--single {
+    border-radius: 4px !important;
+}
+
+#SWTXTable {
+    width: 80.555%;
+    float: left;
+}
+
+#RWTXTable {
+    width: 60.3%;
+    float: left;
+    margin-right: 1%;
+}
+
+#operatebtn {
+    float: right;
+    width: 39%;
+    height: 280px;
+}
+
+#operatebtn > .wrap, #operatebtn > .wrap1, #operatebtn > .wrap2 {
+    height: 100%;
+    box-shadow: 2px 2px 10px #c9c9c9!important;
+    background: #fff !important;
+    width: 48%;
+    float: right;
+    margin-left: 2%;
+}
+
+#operatebtn > .wrap > div {
+    height: 33.33333333%;
+    border: 1px solid #f5f5f5;
+    cursor: pointer;
+    text-align: center;
+    transition: background 1s cubic-bezier(0, 0.97, 1, 1);
+    padding-top: 14%;
+    font-size: 14px;
+    color: #666;
+}
+
+#operatebtn > .wrap > div:nth-child(1) :nth-child(2) {
+    animation: tada 2s linear infinite;
+}
+
+#operatebtn > .wrap > div > i {
+    font-size: 24px;
+}
+
+#operatebtn > .wrap > div:nth-child(1) > i {
+    color: #63c000;
+}
+
+#operatebtn > .wrap > div:nth-child(2) > i {
+    color: #11CFC8;
+}
+
+#operatebtn > .wrap > div:nth-child(3) > i {
+    color: #CC8E82;
+}
+
+#operatebtn > .wrap > div:nth-child(4) > i {
+    color: #FF4BC9;
+}
+
+#operatebtn > .wrap > div:nth-child(5) > i {
+    color: #CC8E82;
+}
+
+#operatebtn > .wrap > div:hover {
+    background: #bed4e6;
+    box-shadow: -2px -2px 10px #bed4e6;
+}
+
+#operatebtn > .wrap > div:nth-child(n+2) {
+    width: 50%;
+    float: left;
+    padding-top: 10%;
+    border-top: none;
+}
+
+#operatebtn > .wrap > div:nth-child(2n) {
+    border-right: none;
+}
+
+#operatebtn > .wrap > div:nth-child(2), #operatebtn > .wrap > div:nth-child(3) {
+    border: 1px solid #f5f5f5;
+}
+
+/*#newcomer {*/
+    /*padding-top: 9%;*/
+/*}*/
+
+@-moz-keyframes tada {
+    0% {
+        -moz-transform: scale(1);
+    }
+    10%, 20% {
+        -moz-transform: scale(0.9) rotate(-3deg);
+    }
+    30%, 50%, 70%, 90% {
+        -moz-transform: scale(1.2) rotate(3deg);
+    }
+    40%, 60%, 80% {
+        -moz-transform: scale(1.2) rotate(-3deg);
+    }
+    100% {
+        -moz-transform: scale(1) rotate(0);
+    }
+}
+
+@-webkit-keyframes tada {
+    0% {
+        -webkit-transform: scale(1);
+    }
+    10%, 20% {
+        -webkit-transform: scale(0.9) rotate(-3deg);
+    }
+    30%, 50%, 70%, 90% {
+        -webkit-transform: scale(1.2) rotate(3deg);
+    }
+    40%, 60%, 80% {
+        -webkit-transform: scale(1.2) rotate(-3deg);
+    }
+    100% {
+        -webkit-transform: scale(1) rotate(0);
+    }
+}
+
+/*初始化菜单*/
+#operatebtn > .wrap1 > .switchBtn {
+    width: 100%;
+    height: 40px;
+    background: #FBFBFB;
+    border-bottom: 1px solid #ccc;
+    line-height: 40px;
+    padding-left: 12px;
+}
+
+/*#operatebtn > .wrap1 > .switchBtn > span {*/
+    /*position: absolute;*/
+    /*top: 36%;*/
+/*}*/
+
+#operatebtn > .wrap1 > .switchBtn > i {
+    position: absolute;
+    top: 36%;
+    right: 12%;
+    cursor: pointer;
+}
+
+#operatebtn > .wrap1 > ul {
+    height: 86%;
+    border: 1px solid #f5f5f5;
+    border-top: none;
+    padding: 0;
+}
+
+#operatebtn > .wrap1 > ul > li {
+    height: 25.2%;
+    width: 50%;
+    line-height: 500%;
+    transition: background 1s cubic-bezier(0, 1.1, 1, 1);
+    cursor: pointer;
+    float: left;
+    padding-left: 4%;
+    border-bottom: 1px solid #f5f5f5;
+    border-right: 1px solid #f5f5f5;
+}
+
+#operatebtn > .wrap1 > ul > li:nth-child(even) {
+    border-right: 0;
+}
+
+#operatebtn > .wrap1 > ul > li > i {
+    color: #1E9FFF;
+}
+
+#operatebtn > .wrap1 > ul > li:hover {
+    background: #bed4e6;
+    box-shadow: -2px -2px 2px #bed4e6;
+}
+
+/*客户级别*/
+#operatebtn > .wrap2 > .switchBtn1 {
+    width: 100%;
+    height: 40px;
+    background: #FBFBFB;
+    border-bottom: 1px solid #ccc;
+    line-height: 40px;
+    padding-left: 12px;
+}
+
+/*#operatebtn > .wrap2 > .switchBtn1 > span {*/
+    /*position: absolute;*/
+    /*top: 36%;*/
+/*}*/
+
+#operatebtn > .wrap2 > .switchBtn1 > i {
+    position: absolute;
+    top: 36%;
+    right: 12%;
+    cursor: pointer;
+}
+
+#operatebtn > .wrap2 > .switchBtn1 > i:hover, #operatebtn > .wrap1 > .switchBtn > i:hover {
+    color: #1E9FFF;
+}
+
+#operatebtn > .wrap2 > .chartWrap {
+    /*border: 1px solid #f5f5f5;*/
+    border-top: none;
+    height: 80%;
+}
+
+/*上首次进入的遮罩层*/
+#firstLoad_m {
+    position: fixed;
+    top: 0;
+    left: 0;
+    background: rgba(0, 0, 0, .5);
+    width: 100%;
+    height: 100%;
+    z-index: 20;
+    display: none;
+}
+
+#firstLoad_m > div {
+    position: absolute;
+    right: 20%;
+    top: 333px;
+}
+
+#firstLoad_m > div > .IKnow {
+    position: absolute;
+    width: 111px;
+    height: 50px;
+    right: 137px;
+    bottom: 40px;
+    cursor: pointer;
+}

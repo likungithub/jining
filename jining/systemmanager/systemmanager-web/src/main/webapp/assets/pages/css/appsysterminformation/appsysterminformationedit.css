@@ -1,0 +1,11 @@
+@CHARSET "UTF-8";
+#appsysteminformationForm span.select2.select2-container
+{
+    width: 448px!important;
+    float: left;
+}
+#appsysteminformationForm span.select2-selection.select2-selection--single{
+    height: 33px;
+    border-radius: 0 4px 4px 0!important;
+    border: 1px solid #dadada;
+}

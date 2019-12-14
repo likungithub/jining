@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xinhai.caiyun.customermanage.dao.BgzbMapper">
+    <!--报告制表查询检测项信息-->
+    <select id="findJcxInfo" resultType="Map">
+         SELECT GROUP_CONCAT(DISTINCT d.ZWMC_BM ORDER BY a.jcxmid) as JCX,c.SJDW,GROUP_CONCAT(DISTINCT a.jcxmid ORDER BY a.jcxmid) as JCXMID
+        FROM t_yp_jcxm a
+        LEFT JOIN t_ypgl_jbxx b
+        ON a.ypid = b.ID
+        LEFT JOIN t_wt_jbxx c
+        ON b.WTID = c.WTID
+        LEFT JOIN t_jcxm_jbxx d
+        ON d.ID = a.jcxmid
+        WHERE c.ID = #{id}
+    </select>
+    <!--获取检测值与样品名称-->
+    <select id="findJczInfo" resultType="map">
+        SELECT GROUP_CONCAT(IF(a.JCZ>d.XLZ,a.JCZ,CONCAT('<![CDATA[<]]>',d.XLZ)) ORDER BY a.jcxmid) as JCZ,
+        b.YPMC,b.YPBM,c.SJDW,a.ypid as YPID
+        FROM t_yp_jcxm a
+        LEFT JOIN t_ypgl_jbxx b
+        ON a.ypid = b.ID
+        LEFT JOIN t_wt_jbxx c
+        ON b.WTID = c.WTID
+        LEFT JOIN t_jcxm_jbxx d
+        ON a.jcxmid = d.ID
+        WHERE c.ID = #{id}
+        GROUP  BY a.ypid
+
+    </select>
+    <!--获取检测项目名称-->
+    <select id="JcxName" resultType="String">
+        	SELECT ZWMC_BM
+		FROM t_jcxm_jbxx
+		WHERE ID = #{id}
+    </select>
+    <!--获取判定结果-->
+    <select id="findJcjg" resultType="boolean">
+        SELECT IF(b.JCZ>a.XLZ,TRUE,false ) as jyjg
+		FROM t_jcxm_jbxx a
+		LEFT JOIN t_yp_jcxm b
+		ON a.ID = b.jcxmid
+		WHERE b.YPID = #{id}
+    </select>
+</mapper>

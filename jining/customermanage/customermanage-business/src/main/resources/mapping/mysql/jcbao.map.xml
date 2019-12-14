@@ -1,0 +1,321 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xinhai.caiyun.customermanage.dao.JcbaoMapper">
+    <select id="getAll" resultType="map">
+        SELECT DISTINCT jcbname,jcbdl,jcbid,COUNT(jcxid) as jcxsl
+        FROM t_jcxm_jc
+        where zt = '1'
+        <if test="jcbname != ''">
+            and jcbname like concat('%',#{jcbname},'%')
+        </if>
+        GROUP BY jcbid
+        limit #{start},#{length}
+    </select>
+    <select id="getAllCount" resultType="Long">
+        SELECT count(1)
+        FROM
+        (SELECT distinct jcbid
+        FROM t_jcxm_jc
+        where zt = '1'
+        <if test="jcbname != ''">
+            and jcbname like concat('%',#{jcbname},'%')
+        </if>
+        GROUP BY jcbid) AS a
+    </select>
+    <select id="getAllJcx" resultType="map">
+        SELECT ZWMC_BM,JCX,XLZ,JCYJ,JLDW,ID,JCFA
+          FROM t_jcxm_jbxx
+          WHERE ID
+            in (
+                  SELECT jcxid
+                  FROM t_jcxm_jc
+                  WHERE jcbid=#{jcbid})
+          limit #{start},#{length}
+    </select>
+    <select id="getAllJcxNew" resultType="map">
+        SELECT ZWMC_BM,JCX,XLZ,JCYJ,JLDW,ID,JCFA
+          FROM t_jcxm_jbxx
+          WHERE ID
+            in (
+                  SELECT jcxid
+                  FROM t_jcxm_jc
+                  WHERE jcbid=#{jcbid})
+    </select>
+    <!--获取当前检测包信息-->
+    <select id="findJcbinfo" resultType="map">
+        select DISTINCT jcbname,jcbdl
+        FROM t_jcxm_jc
+        WHERE jcbid = #{jcbid}
+    </select>
+    <!--增加检测项-->
+    <insert id="addJcx">
+        <foreach collection="list" item="item" index="index">
+            insert into t_jcxm_jc(jcbname,jcbdl,jcxid,zt,jcbid) values (#{jcbname},#{jcbdl},#{item},'1',#{jcbid});
+        </foreach>
+    </insert>
+    <!--获取检测项id-->
+    <select id="getAllJcxId" resultType="String">
+        SELECT ID
+          FROM t_jcxm_jbxx
+          WHERE ID
+            in (
+                  SELECT jcxid
+                  FROM t_jcxm_jc
+                  WHERE jcbid=#{jcbid})
+    </select>
+    <!--删除对应关系-->
+    <delete id="deletejcx">
+        <foreach collection="list" item="item" index="index">
+            delete from t_jcxm_jc
+            where jcxid=#{item} and jcbid=#{jcbid};
+        </foreach>
+    </delete>
+    <!--新增检测包-->
+    <insert id="addjcb">
+        insert into t_jcxm_jc (jcbname,jcbdl,jcbid) values (#{jcbname},#{jcbdl},#{jcbid})
+    </insert>
+    <!--修改检测包名字-->
+    <update id="updatejcbName">
+            update t_jcxm_jc set jcbname = #{jcbmc} where jcbid = #{jcbid};
+    </update>
+    <!--插入检测项-->
+    <insert id="insertYpJcxmList">
+        INSERT INTO t_yp_jcxm
+        (ypid,jcxmid)
+        VALUES
+        <foreach collection="jcxids" item="id" index="index" separator=",">
+            (#{ypid},#{id})
+        </foreach>
+    </insert>
+    <!--获取任务-->
+    <select id="findAll" resultType="map">
+
+        select a.ID, b.WTID,a.YPBM,a.YPMC,(SELECT GROUP_CONCAT(xm.ZWMC_BM) from t_yp_jcxm ypxm LEFT JOIN t_jcxm_jbxx xm ON xm.id=ypxm.jcxmid where ypxm.ypid=a.id) as JCXM,a.SJCJRQ,b.DWMC,b.SFMC,b.CSMC,b.XJMC,a.YPJCZT,a.SJJYZT,a.SJSCZT from t_ypgl_jbxx a LEFT JOIN t_wt_jbxx b on a.WTID=b.WTID
+        where  a.scbz=0
+        <if test="ypmc!=null">
+            and a.YPMC like concat('%',#{ypmc}, '%')
+        </if>
+        <if test="wtdwmc!=null">
+            and b.DWMC like concat('%',#{wtdwmc}, '%')
+        </if>
+        AND FuncAuthorityWt(#{zydm},a.wtid) = 1
+        order by a.lrrq  desc  limit ${start},${length}
+    </select>
+    <!--获取检测包数量-->
+    <select id="JcbCount" resultType="long">
+        select count(jcbid)
+        from t_jcxm_jc
+    </select>
+    <!--获取每个检测包的检测项数量-->
+    <select id="JcxSl" resultType="long">
+        select count(1)
+        from t_jcxm_jc
+        where jcbid =#{jcbid}
+    </select>
+    <!--根据委托获取样品id-->
+    <select id="findWtidById" resultType="String">
+      select id
+      from t_ypgl_jbxx
+      where wtid = (
+        select wtid
+        from t_wt_jbxx
+        where id = #{id})
+    </select>
+    <!-- 插入Excel表格数据-->
+    <insert id="insertJcxm">
+        insert into t_jcxm_jbxx (zwmc_bm,xl,cyl,yl,cpdlmc,cpdldm,jclbdm,jcfa,pdyj,pdyjmc,zm,bl,if_pd,bjf,pdnh,xlzmrz,jcyj,jcyjmc,if_cma,if_cmaf,if_cnas,if_catl,jcx,xlz,jldw,ywmc,bzxx,lrry,bmdm,gxry,scry,bzffjcxdw,bzzxyxx,bzzxyxxdw,bzzdyxx,bzzdyxxdw,if_yqfp,jcff,wswnz,wswmz,wswcz,if_xtpd,jg,if_bzff,zbzl,zbzldw,yyckjz,bz,scbz,lrrq)
+        values(#{map.zwmc_bm},#{map.xl},#{map.cyl},#{map.yl},#{map.cpdlmc},#{map.cpdldm},#{map.jclbdm},#{map.jcfa},#{map.pdyj},#{map.pdyjmc},#{map.zm},#{map.bl},#{map.if_pd},#{map.bjf},#{map.pdnh},#{map.xlzmrz},#{map.jcyj},#{map.jcyjmc},#{map.if_cma},#{map.if_cmaf},#{map.if_cnas},#{map.if_catl},#{map.jcx},#{map.xlz},#{map.jldw},#{map.ywmc},#{map.bzxx},#{map.lrry},#{map.bmdm},#{map.gxry},#{map.scry},#{map.bzffjcxdw},#{map.bzzxyxx},#{map.bzzxyxxdw},#{map.bzzdyxx},#{map.bzzdyxxdw},#{map.if_yqfp},#{map.jcff},#{map.wswnz},#{map.wswmz},#{map.wswcz},#{map.if_xtpd},#{map.jg},#{map.if_bzff},#{map.zbzl},#{map.zbzldw},#{map.yyckjz},#{map.bz},0,now())
+    </insert>
+    <!--查询插入检测项ID-->
+    <select id="selectJcxmId" parameterType="Map" resultType="String">
+        select max(id) from t_jcxm_jbxx
+    </select>
+    <!-- 插入Excel表格数据-->
+    <insert id="insertJcb">
+        insert into t_jcxm_jc(jcbname,jcbdl,jcxid,zt,jcbid) values(#{map.jcbname},#{map.jcbdl},#{map.jcxid},#{map.zt},#{map.jcbid})
+    </insert>
+    <!--根据检测包查询检测项-->
+    <select id="findByJcbid" resultType="com.xinhai.caiyun.customermanage.api.Jcxmbgl">
+          SELECT
+            a.jcbid markid,
+            b.zwmc_bm,
+            b.xl,
+            b.cyl,
+            b.yl,
+            b.cpdlmc,
+            b.cpdldm,
+            b.jclbdm,
+            b.jcfa,
+            b.pdyj,
+            b.pdyjmc,
+            b.zm,
+            b.bl,
+            b.if_pd,
+            b.bjf,
+            b.pdnh,
+            b.xlzmrz,
+            b.jcyj,
+            b.jcyjmc,
+            b.if_cma,
+            b.if_cmaf,
+            b.if_cnas,
+            b.if_catl,
+            b.jcx,
+            b.xlz,
+            b.jldw,
+            b.ywmc,
+            b.bzxx,
+            b.lrry,
+            b.bmdm,
+            b.gxry,
+            b.scry,
+            b.bzffjcxdw,
+            b.bzzxyxx,
+            b.bzzxyxxdw,
+            b.bzzdyxx,
+            b.bzzdyxxdw,
+            b.if_yqfp,
+            b.jcff,
+            b.wswnz,
+            b.wswmz,
+            b.wswcz,
+            b.if_xtpd,
+            b.jg,
+            b.if_bzff,
+            b.zbzl,
+            b.zbzldw,
+            b.yyckjz,
+            b.bz
+        FROM
+            t_jcxm_jc a
+                LEFT JOIN
+            t_jcxm_jbxx b ON a.jcxid = b.id
+        WHERE
+            b.id = #{id}
+    </select>
+
+    <select id="findJcbByJcbid" resultType="com.xinhai.caiyun.customermanage.api.Jcb">
+        SELECT
+            a.jcbid markid,jcbname, jcbdl
+        FROM
+            t_jcxm_jc a
+                LEFT JOIN
+            t_jcxm_jbxx b ON a.jcxid = b.id
+        WHERE
+            a.jcbid = #{map.jcbid}
+        GROUP BY a.jcbid,jcbname , jcbdl;
+    </select>
+    <select id="jcxid" parameterType="Map" resultType="com.xinhai.caiyun.customermanage.api.Jcxmbgl">
+        SELECT
+                        a.jcbid markid,
+            b.zwmc_bm,
+            b.xl,
+            b.cyl,
+            b.yl,
+            b.cpdlmc,
+            b.cpdldm,
+            b.jclbdm,
+            b.jcfa,
+            b.pdyj,
+            b.pdyjmc,
+            b.zm,
+            b.bl,
+            b.if_pd,
+            b.bjf,
+            b.pdnh,
+            b.xlzmrz,
+            b.jcyj,
+            b.jcyjmc,
+            b.if_cma,
+            b.if_cmaf,
+            b.if_cnas,
+            b.if_catl,
+            b.jcx,
+            b.xlz,
+            b.jldw,
+            b.ywmc,
+            b.bzxx,
+            b.lrry,
+            b.bmdm,
+            b.gxry,
+            b.scry,
+            b.bzffjcxdw,
+            b.bzzxyxx,
+            b.bzzxyxxdw,
+            b.bzzdyxx,
+            b.bzzdyxxdw,
+            b.if_yqfp,
+            b.jcff,
+            b.wswnz,
+            b.wswmz,
+            b.wswcz,
+            b.if_xtpd,
+            b.jg,
+            b.if_bzff,
+            b.zbzl,
+            b.zbzldw,
+            b.yyckjz,
+            b.bz
+        FROM
+            t_jcxm_jc a
+                LEFT JOIN
+            t_jcxm_jbxx b ON a.jcxid = b.id
+        WHERE
+            a.jcbid = #{map.jcbid}
+    </select>
+    <select id="jcbid" parameterType="Map" resultType="Map">
+        SELECT
+            a.id
+        FROM
+            t_jcxm_jc a
+        WHERE
+            a.jcbid = #{map.jcbid}
+    </select>
+
+    <select id="selectJbcmc" parameterType="Map" resultType="String">
+        select jcbid from t_jcxm_jc where 1=1
+        <if test="map.jcbname!=null and map.jcbname!=''">
+            and jcbname  = #{map.jcbname}
+        </if>
+        group by jcbid
+    </select>
+    <!--删除检测包，不进行物理删除，改为更新检测包状态为2 2019.06.30新加-->
+    <delete id="deletejcb">
+        <foreach collection="list" item="item" index="index">
+            update t_jcxm_jc set zt='2'
+            where jcbid=#{item};
+        </foreach>
+    </delete>
+
+    <select id="getJcbByJcbAndJcxMc" resultType="map">
+        SELECT ZWMC_BM,JCX,XLZ,JCYJ,JLDW,ID,JCFA,XL,PDYJ
+          FROM t_jcxm_jbxx
+          WHERE ID
+            in (
+                  SELECT jcxid
+                  FROM t_jcxm_jc
+                  WHERE jcbid=#{jcbid})
+        <if test="jcxMc!=null and  jcxMc!=''">
+            and zwmc_bm like concat('%',#{jcxMc},'%')
+        </if>
+          limit #{start},#{length}
+    </select>
+    <select id="getJcbByJcbAndJcxMcNum" resultType="Long">
+        SELECT count(id)
+        FROM t_jcxm_jbxx
+        WHERE ID
+        in (
+        SELECT jcxid
+        FROM t_jcxm_jc
+        WHERE jcbid=#{jcbid})
+        <if test="jcxMc!=null and  jcxMc!=''">
+            and zwmc_bm like concat('%',#{jcxMc},'%')
+        </if>
+    </select>
+    <!--20190830添加新方法修改检测包与大类名-->
+    <!--修改检测包名字-->
+    <update id="updatejcbNameNew">
+            update t_jcxm_jc set jcbname = #{map.jcbmc},jcbdl = #{map.jcxmNewDl} where jcbid = #{map.jcbid};
+    </update>
+</mapper>

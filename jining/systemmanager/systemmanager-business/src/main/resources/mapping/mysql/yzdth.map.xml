@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xinhai.caiyun.systemmanager.dao.YzdthMapper">
+
+
+  <select id="yzdth_queryList" resultType="map">
+
+     select id,cdjb,gg,lb,dw,sqr,sqsl,state,bz,name,ghsl,ghr from hc_manage where state in('008') and lb='3'
+      <if test="map.hcmc!=null and map.hcmc!=''">
+        and  name=#{map.hcmc}
+      </if>
+    limit #{map.start},#{map.length};
+  </select>
+
+  <select id="yzdth_findCount" resultType="java.lang.Integer">
+    select count(*) from hc_manage  where state in('008')and lb='3'
+
+  </select>
+  <!--查询库存信息-->
+  <select id="cgck" resultType="java.lang.String">
+      select sl from cgrk where hcmc = #{map.hcmc} and gg = #{map.gg} and hclx= #{map.hclx}
+  </select>
+  <!--更改库存中的耗材数量-->
+  <update id="updateKc">
+     update cgrk set sl =#{map.sjsl} where hcmc = #{map.hcmc} and gg = #{map.gg} and hclx= #{map.hclx}
+  </update>
+  <!--更新状态-->
+  <update id="updateZt">
+     update hc_manage set state= '009' where  id= #{map.id}
+  </update>
+
+    <!--归还数量-->
+  <update id="ghsl">
+     update hc_manage set ghsl=#{map.ghsl},ghr=#{map.zydm} where ID=#{map.id}
+  </update>
+</mapper>

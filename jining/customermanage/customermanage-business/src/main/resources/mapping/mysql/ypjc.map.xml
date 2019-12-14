@@ -1,0 +1,221 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xinhai.caiyun.customermanage.dao.YpjcMapper">
+
+
+    <!-- 获得检测项录入模态框中的检测项目数据 -->
+    <select id="selectLr" resultType="Map">
+        SELECT distinct y.ypid as ypid,y.jcxmid as jcxmid,o.zwmc_bm as zwmc,ifnull(y.jcz,0) as jcz,y.jcff as
+        jcff,y.wd,y.sd,ifnull(y.xlz,o.xlz) xlz,y.yqnames,y.bzzt,y.bzwz,o.pdyj as pdyj,o.BZFFJCXDW,
+        CONCAT(o.jcyj,o.jcfa) as  jcfa,ifnull(y.xlzdw,o.BZFFJCXDW) xlzdw,
+        y.jcxmjl,ifnull(y.jldw,o.jldw) as jldw,ifnull(y.JCXMBZ,"") as jcxmbz,
+        (select name from user where zydm =y.zxry_dm) as jcr,y.tjzt as tjzt,ifnull(y.jcx,o.jcx) as jcx,y.zbypbm,y.s_date,y.e_date,
+        o.BJF,y.WD,y.SD
+        from
+        t_yp_jcxm y,t_jcxm_jbxx o where
+        o.id = y.jcxmid and y.ypid = #{map.ypid1}
+        <if test="map.jcxmc!=null and map.jcxmc!=''">
+            and o.zwmc_bm like CONCAT('%',#{map.jcxmc},'%')
+        </if>
+        <if test="map.tjzt!=null and map.tjzt!=''">
+            and y.tjzt like CONCAT('%',#{map.tjzt},'%')
+        </if>
+        <if test="map.bzzt!=null and map.bzzt!=''">
+            and y.bzzt like CONCAT('%',#{map.bzzt},'%')
+        </if>
+        order by y.bzzt
+        limit #{map.start},#{map.length}
+    </select>
+    <!-- 获得检测项录入模态框中的检测项目数据的数量 陈-->
+    <select id="selectCount" resultType="java.lang.Integer">
+        SELECT count(distinct y.jcxmid) from
+        t_yp_jcxm y,t_jcxm_jbxx o where
+        o.id = y.jcxmid and y.ypid = #{map.ypid1}
+        <if test="map.jcxmc!=null and map.jcxmc!=''">
+            and o.zwmc_bm like CONCAT('%',#{map.jcxmc},'%')
+        </if>
+        <if test="map.tjzt!=null and map.tjzt!=''">
+            and y.tjzt like CONCAT('%',#{map.tjzt},'%')
+        </if>
+        <if test="map.bzzt!=null and map.bzzt!=''">
+            and y.bzzt like CONCAT('%',#{map.bzzt},'%')
+        </if>
+        order by y.bzzt
+    </select>
+    <!--修改检测值及状态 -->
+    <update id="updateYpjc">
+        update t_yp_jcxm
+        <set>
+            <if test="map.jcz!=null">
+                jcz = #{map.jcz},
+            </if>
+            <if test="map.xlz!=null">
+                xlz = #{map.xlz},
+            </if>
+            <if test="map.jcxmbz!=null">
+                jcxmbz = #{map.jcxmbz},
+            </if>
+            <if test="map.jcx!=null">
+                jcx = #{map.jcx},
+            </if>
+            <if test="map.wd!=null">
+                wd=#{map.wd},
+            </if>
+            <if test="map.sd!=null">
+                sd=#{map.sd},
+            </if>
+            <if test="map.jcry!=null">
+                zxry_dm = #{map.jcry},
+            </if>
+            <if test="map.jcff!=null">
+                jcff = #{map.jcff},
+            </if>
+            <if test="map.tjzt!=null">
+                tjzt=#{map.tjzt},
+            </if>
+            <if test="map.bzzt!=null">
+                bzzt=#{map.bzzt},
+            </if>
+            <if test="map.s_date!=null">
+                s_date = #{map.s_date},
+            </if>
+            <if test="map.e_date!=null">
+                e_date = #{map.e_date},
+            </if>
+            <if test='map.bzwz !=null'>
+                bzwz = #{map.bzwz},
+            </if>
+            <if test='map.jcxmjl !=null'>
+                jcxmjl = #{map.jcxmjl},
+            </if>
+            lrrq = now(), jldw = #{map.jldw},xlzdw= #{map.xlzdw},jcx_bjf=#{map.jcx_bjf}
+        </set>
+        where jcxmid = #{map.jcxmid} and ypid = #{map.ypid};
+        update t_ypgl_jbxx set ypjczt='001' where id=#{map.ypid} and if(ypjczt='' or ypjczt is null,'000',ypjczt)='000' <!--ifnull(ypjczt,'000')='000';-->
+    </update>
+    <update id="submitYpjc">
+        update t_yp_jcxm
+        <set>
+            <if test="map.tjzt!=null">
+                tjzt=#{map.tjzt},
+            </if>
+            e_date = now()
+        </set>
+        where ypid = #{map.ypid}
+        and zxry_dm = #{map.zydm}
+    </update>
+    <select id="findNotSubmit" resultType="map">
+        select *
+        from t_yp_jcxm
+        where ypid = #{map.ypid}
+        and tjzt = '0'
+    </select>
+    <select id="findNotRwfp" resultType="map">
+        select *
+        from t_yp_zbwc
+        where ypid = #{map.ypid}
+        and ifnull(rwfp,'0') != '002'
+        and ifnull(zbzl,'0') != '0'
+    </select>
+    <select id="findAllYq" resultType="map">
+        <!-- 查找仪器-->
+        select id,sbmc,ggxh,skbh,zqddj,sbyz
+        from t_yqsbtz
+        <where>
+            <if test="map.sbmc!=null and map.sbmc!=''">
+                sbmc like concat('%',#{map.sbmc},'%')
+            </if>
+            <if test="map.skbh!=null and map.skbh!=''">
+                and skbh like concat('%',#{map.skbh},'%')
+            </if>
+        </where>
+        order by sbmc,skbh
+        limit #{map.start},#{map.length};
+    </select>
+    <!-- 查找仪器数量-->
+    <select id="findAllYqNum" resultType="java.lang.Integer">
+        select count(id)
+        from t_yqsbtz
+        <where>
+            <if test="map.sbmc!=null and map.sbmc!=''">
+                sbmc like concat('%',#{map.sbmc},'%')
+            </if>
+            <if test="map.skbh!=null and map.skbh!=''">
+                and skbh like concat('%',#{map.skbh},'%')
+            </if>
+        </where>
+    </select>
+    <!--根据样品id查询仪器-->
+    <select id="findYqByYpid" resultType="map">
+        <!-- 查找仪器-->
+        SELECT
+        b.id, sbmc, ggxh, skbh, zqddj, sbyz
+        FROM
+        (SELECT
+        yqid
+        FROM
+        t_yp_jcxm
+        WHERE
+        ypid = #{map.ypid}) a
+        JOIN
+        t_yqsbtz b ON FIND_IN_SET(b.id, a.yqid)
+        <where>
+            <if test="map.sbmc!=null and map.sbmc!=''">
+                sbmc like concat('%',#{map.sbmc},'%')
+            </if>
+            <if test="map.skbh!=null and map.skbh!=''">
+                and skbh like concat('%',#{map.skbh},'%')
+            </if>
+        </where>
+        group by b.id, sbmc, ggxh, skbh, zqddj, sbyz
+        limit #{map.start},#{map.length};
+    </select>
+    <!--根据样品id查询仪器数量-->
+    <select id="findYqNumByYpid" resultType="java.lang.Integer">
+        SELECT
+        count(1)
+        FROM
+        t_yqsbtz a
+        LEFT JOIN
+        t_yp_jcxm b ON a.id = b.yqid
+        <where>
+            <if test="map.sbmc!=null and map.sbmc!=''">
+                sbmc like concat('%',#{map.sbmc},'%')
+            </if>
+            <if test="map.skbh!=null and map.skbh!=''">
+                and skbh like concat('%',#{map.skbh},'%')
+            </if>
+            <if test="map.ypid!=null and map.ypid!=''">
+                b.ypid = #{map.ypid}
+            </if>
+        </where>
+    </select>
+    <!--更样品的检测状态 001 检测中 chen-->
+    <update id="updteYpjczt">
+        update t_ypgl_jbxx set ypjczt='001' where id=#{map.ypid} and ypjczt='000';
+    </update>
+    <!-- 在yp_jcxm表中增加仪器 chen-->
+    <update id="addYqOnJcxm">
+          update t_yp_jcxm set yqid = #{map.yqids},yqnames=#{map.yqnames} where jcxmid=#{map.jcxmid} and ypid=#{map.ypid}
+    </update>
+    <!-- 通过名称获得职员代码-->
+    <select id="queryZydmByNames" resultType="string">
+        select zydm from user
+        where  name in
+        <foreach collection="list" index="index" item="name" open="(" separator="," close=")">
+            #{name}
+        </foreach>
+    </select>
+    <!--查询是否在报告编制里选择过仪器-->
+    <select id="yqsb" resultType="java.lang.String">
+         select yqid from t_bgbz_yqsb where ypid = #{map.ypid}
+    </select>
+    <!--插入报告编制页面选择的仪器-->
+    <insert id="insertYqsb">
+        insert into t_bgbz_yqsb (yqid,ypid) values (#{map.yqids},#{map.ypid})
+    </insert>
+    <!--删除报告编制仪器-->
+    <delete id="delYqsb">
+        delete from t_bgbz_yqsb where ypid = #{map.ypid}
+    </delete>
+</mapper>

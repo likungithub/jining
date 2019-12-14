@@ -1,0 +1,23 @@
+<!--
+	功能模块 
+	name:功能模块描述
+-->
+<module name="">
+	<!--
+		功能菜单 
+		name:功能菜单描述； 
+		url: 功能菜单地址
+			请使用相对路径从跟目录下开始，
+			比如demo/list.jsp，demo为模块根目录下的文件夹，list.jsp为demo文件夹下功能能入口页面；
+	-->
+	<menu name="" url="">
+		<!--
+			功能操作项
+			name: 操作项名称
+			key: 操作项标识
+				只能包含字母、数字和下划线，且不能以数字开头
+				请使用 模块_功能_操作项 的编码格式，比如 demo_employee_addEmployee
+		-->
+		<item name="" key=""></item>
+	</menu>
+</module>

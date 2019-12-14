@@ -1,0 +1,364 @@
+/* Cubic Bezier Transition */
+/***
+Login page
+***/
+/* bg color */
+/*娓呴櫎娴姩鐨勭被*/
+body,html {
+	font-family:"Helvetica Neue", "Luxi Sans", "DejaVu Sans", Tahoma, "Hiragino Sans GB", STHeiti, "Microsoft YaHei" !important;
+	font-size: 12px !important;
+}
+.color999{
+	color: #999!important;
+}
+.help-block
+{
+	color: #a94442!important;
+}
+.clear:after{
+	content: "";
+	height:0;
+	display: block;
+	clear: both;
+	visibility: hidden;
+}
+.clear{
+	zoom: 1;}
+/**/
+#wrap{
+	position: absolute;
+	top:50%;
+	left:0;
+	right:0;
+	margin-top: -200px;
+
+}
+#loginTopM{
+	height: 50px;
+	background: rgba(255,255,255,.5);
+	position: fixed;
+	top: 0;
+	left: 0;
+	width: 100%;
+	z-index: 20;
+	display:none;
+}
+#loginTopM>.wrap
+{
+	padding-top: 6px;
+	width: 100px;
+	margin-left: 20%;
+	display: inline-block;
+}
+#loginTopM>.wrap>img{
+	width: 150px;
+}
+
+.login {
+	background-color: white !important; }
+
+#head{
+	padding-top: 10px;
+	min-width: 1024px;
+	margin: 0 auto;
+	position: relative;
+}
+#head>.top_left{
+	width: 200px;
+	height: 44px;
+	float: left;
+	padding-left: 262px;
+}
+#head>.top_right{
+	position: absolute;
+	right: 10%;
+	height: 64px;
+	line-height: 72px;
+}
+#mid{
+	background: rgba(255,255,255,0.5);
+	position: relative;
+	height: 413px;
+	width: 385px;
+	margin: 0 auto;
+	border-radius: 4px!important;
+}
+/*#mid>.content{*/
+	/*width: 100%;*/
+	/*height: 100%;*/
+	/*background: url(../img/login_02.png) no-repeat;*/
+	/*background-position: center top !important;*/
+	/*padding-top:54px ;*/
+	/*position:relative;*/
+/*}*/
+#mid>.content>form.login-form{
+	background: #ffffff;
+	width: 352px;
+	position: absolute;
+	left: 4%;
+	top: 17px;
+	padding: 30px 26px 0;
+	box-shadow: 1px 1px 5px grey;
+	-moz-border-radius: 4px !important; /* Firefox */
+	-webkit-border-radius: 4px !important; /* Safari 鍜� Chrome */
+	border-radius: 4px !important;
+}
+#mid>.content>form.login-form>.wrap{
+	margin-bottom: 16px;
+}
+#mid>.content>form.login-form>.wrap>h3{
+	font-size: 20px;
+	display: inline-block;
+	/*padding-right: 166px;*/
+	margin: 0px;
+}
+#mid>.content>form.login-form input{
+	-moz-border-radius: 4px !important; /* Firefox */
+	-webkit-border-radius: 4px !important; /* Safari 鍜� Chrome */
+	border-radius: 4px !important;
+	height: 44px;
+}
+#mid>.content>form.login-form i{
+	line-height: 22px;
+}
+#mid>.content>form.login-form .form-group {
+	margin-bottom: 10px;
+}
+
+#forgetPwd{
+	color:rgb(52, 73, 94);
+	margin-left: 150px;
+
+}
+#forgetPwd:hover,#foot >ul>li>a:hover,#quickRegister:hover{
+	color: #059bf2;
+}
+#mid>.content .form-actions button{
+	-moz-border-radius: 4px !important; /* Firefox */
+	-webkit-border-radius: 4px !important; /* Safari 鍜� Chrome */
+	border-radius: 4px !important;
+	height: 42px;
+	width:300px;
+	margin:15px auto 60px;
+	background: #199af4;
+	border-color: #199af4;
+	box-shadow: 2px 2px 4px #999;
+}
+#mid>.content .form-actions button:hover{
+box-shadow: none;
+	opacity: 0.9;
+}
+#mid>.content>form.login-form ul{
+	width: 352px;
+	height: 50px;
+	background: #6E6E6E;
+	position: absolute;
+	left: 0;
+	bottom:0;
+	margin-bottom: 0px;
+	line-height: 50px;
+}
+#mid>.content>form.login-form ul>li{
+	float: left;
+}
+#mid>.content>form.login-form ul>li:nth-child(1) span{
+	color:#abc1ac;
+	font-size: 14px;
+	cursor: default;
+}
+#mid>.content>form.login-form ul>li a{
+	color:#abc1ac;
+}
+#mid>.content>form.login-form ul>li a:hover{
+	color: #059bf2;
+}
+#mid>.content>form.login-form ul>li:nth-child(1){
+	padding-left: 52px;
+}#mid>.content>form.login-form ul>li:nth-child(3){
+	 padding-right: 30px;
+ }
+#mid>.content>form.login-form ul>li img{
+	padding-left: 10px;
+}
+/*搴曢儴鐨勬牱寮�*/
+#foot{
+	position: fixed;
+	/*bottom: 30px;*/
+	width: 100%;
+}
+#foot>ul{
+	margin-left: 370px;
+	width:1000px;
+	margin: 0 auto;
+	padding-bottom: 15px;
+}
+
+#foot >ul>li:nth-child(n+2){
+	display: inline-block;
+	text-align: center;
+}
+/*#foot >ul>li:nth-last-child(1){*/
+	/*padding-left: 15px;*/
+/*}*/
+#foot >ul>li:nth-last-child(1)>a{
+	border-right:none!important;
+}
+#foot >ul>li>a{
+	color:#999!important;
+	padding: 0px 15px!important;
+	border-right: 1px solid #999!important;
+}
+#wrap .img1{position: absolute;top: -130px;width: 150px;display: none;z-index: 21}
+#mid>.content>form.login-form ul>li>a:hover+.img1{
+	display: block !important;
+}
+#publicHeader {
+	 border-bottom:none!important;
+}
+
+/*侧边的菜单的样式*/
+#loginRightInfoM{
+	position: fixed;
+	right: 10px;
+	bottom: 100px;
+	z-index: 1000;
+}
+#loginRightInfoM>.mainList{
+
+}
+#loginRightInfoM>.mainList>li{
+	width: 55px;
+	height: 55px;
+	background: #199AF5;
+	text-align: center;
+	line-height: 55px;
+	cursor: pointer;
+	transition: all 0.8s;
+}
+#loginRightInfoM>.mainList>li:hover{
+	background:#fff;
+}
+#loginRightInfoM>.mainList>li:hover>span{
+	color: #199AF5;
+}
+
+#loginRightInfoM>.mainList>li:nth-child(2)>.appList{
+	display: none;
+	position: absolute;
+	width: 139px;
+	left: -139px;
+	margin: 0;
+	top: -195px;
+	background: #fff;
+	border-radius: 4px!important;
+	padding-top: 10px;
+}
+#loginRightInfoM>.mainList>li:nth-child(2):hover>.appList,
+#loginRightInfoM>.mainList>li:nth-child(3):hover>.helpQQ
+{
+	display: block;
+}
+#loginRightInfoM>.mainList>li{
+position: relative;
+}
+#loginRightInfoM>.mainList>li>span{
+	color: #ffffff;
+}
+#loginRightInfoM>.mainList>li:nth-child(-n+3){
+	border-bottom: 1px solid #59abd2;
+}
+#loginRightInfoM>.mainList>li:nth-child(2)>.appList>li>img{
+width: 120px;
+}
+#loginRightInfoM>.mainList>li:nth-child(2)>.appList>li>p{
+	margin: 0;
+	height: 30px;
+	line-height: 30px;
+	color: #666!important;
+}
+#loginRightInfoM>.mainList>li:nth-child(3)>.helpQQ{
+	display: none;
+	margin: 0;
+	background: rgb(255,255,255);
+	width: 100px;
+	position: absolute;
+	left: -100px;
+	top: -34px;
+	border-radius: 4px!important;
+}
+#loginRightInfoM>.mainList>li:nth-child(3)>.helpQQ>li:hover{
+background: rgba(0,0,0,.5);
+}
+#loginRightInfoM>.mainList>li:nth-child(3)>.helpQQ>li>a{
+	color: #666!important;
+	display: block;
+	height: 100%;
+}
+#loginRightInfoM>.mainList>li:nth-child(3)>.helpQQ>li:hover>a{
+	text-decoration: none;
+	color: #fff!important;
+}
+#mid .mobileVerification
+{
+	margin-bottom: 20px;
+	position: absolute;
+	bottom: 20px;
+	left: 150px;
+	z-index: 10;
+}
+
+#loginRightInfoM>.mainList>li:nth-child(1) ul.kuaijiApp{
+	display: none;
+}
+#loginRightInfoM>.mainList>li:nth-child(1):hover> ul.kuaijiApp{
+	display: block;
+}
+
+/*手机验证码登录*/
+#log-form1
+{	height: 374px;
+	width: 352px;
+	background: #fff;
+	padding: 30px 26px;
+	position: absolute;
+	left: 17px;
+	top: 20px;
+	border-radius: 4px;
+}
+#log-form1 .inputSty{
+	border-radius: 4px !important;
+	height: 44px;
+	width: 300px;
+	padding: 6px 12px 6px 33px;
+}
+#log-form1 .titleh3
+{
+	font-size: 20px;
+	display: inline-block;
+	/*padding-right: 107px;*/
+	margin: 0px;
+	margin-bottom: 16px;
+}
+
+#log-form1 .agentAppList{
+	background: #6E6E6E;
+	position: absolute;
+	bottom: -10px;
+	height: 50px;
+	width: 354px;
+	left: -2px;
+	border-radius: 0 0 4px 4px!important;
+}
+#log-form1 .agentAppList>li
+{
+	float: left;
+	height: 50px;
+	line-height: 50px;
+}
+#log-form1 .agentAppList>li a{
+	text-decoration: none;
+}
+#log-form1 .agentAppList>li:nth-child(1){
+	padding-left: 52px;
+	cursor: default;
+}

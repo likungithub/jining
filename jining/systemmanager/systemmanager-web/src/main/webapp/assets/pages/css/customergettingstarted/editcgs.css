@@ -1,0 +1,13 @@
+@CHARSET "UTF-8";
+.newcomer-introduction .modal-dialog  {
+    border-radius: 4px !important;
+    width: 652px;
+}
+
+.newcomer-introduction .modal-dialog .modal-header h4.modal-title {
+    font-weight: 900;
+}
+
+.newcomer-introduction .modal-footer {
+    padding-right: 22px;
+}

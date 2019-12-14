@@ -1,0 +1,202 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xinhai.caiyun.systemmanager.dao.YqsbjhspMapper">
+    <!--查询身份-->
+    <select id="selectInd" resultType="Map">
+        select name from role where id =
+          (select role_id from user_role where user_id =
+            (select u.id from user u where u.zydm = #{map.zydm}))
+    </select>
+    <!--审核人界面-->
+    <select id="selectYqsbjdjh" resultType="Map">
+        select a.skbh,a.sbmc,a.ggxh,b.zqddj,b.fbl,b.sccs,a.jhjdjg,a.jhjdrq,a.jhxcjdrq,a.jdjhzt
+        from t_jdwhhc_jl a,t_yqsbtz b
+        where a.skbh = b.skbh and a.jdjhzt = '0' and a.jdshr is null and a.jhjdrq is not null
+        <if test="map.sbmc!=null and map.sbmc!=''">
+            and a.sbmc = #{map.sbmc}
+        </if>
+        <if test="map.skbh!=null and map.skbh!=''">
+            and a.skbh = #{map.skbh}
+        </if>
+        limit #{map.start},#{map.length};
+    </select>
+    <select id="selectJdjhCount" resultType="java.lang.Integer">
+        select count(skbh)
+        from t_jdwhhc_jl
+        where id>0 and jdjhzt = '0' and jdshr is null and jhjdrq is not null
+        <if test="map.sbmc!=null and map.sbmc!=''">
+            and sbmc = #{map.sbmc}
+        </if>
+        <if test="map.skbh!=null and map.skbh!=''">
+            and skbh = #{map.skbh}
+        </if>
+    </select>
+    <!--批准人界面-->
+    <select id="selectJdpz" resultType="Map">
+        select a.skbh,a.sbmc,a.ggxh,b.zqddj,b.fbl,b.sccs,a.jhjdjg,a.jhjdrq,a.jhxcjdrq,a.jdjhzt
+        from t_jdwhhc_jl a,t_yqsbtz b
+        where a.skbh = b.skbh and a.jdjhzt = '0' and a.jdshr is not null
+        <if test="map.sbmc!=null and map.sbmc!=''">
+            and a.sbmc = #{map.sbmc}
+        </if>
+        <if test="map.skbh!=null and map.skbh!=''">
+            and a.skbh = #{map.skbh}
+        </if>
+        limit #{map.start},#{map.length};
+    </select>
+    <select id="selectJdpzCount" resultType="java.lang.Integer">
+        select count(skbh)
+        from t_jdwhhc_jl
+        where id>0 and jdjhzt = '0' and jdshr is not null
+        <if test="map.sbmc!=null and map.sbmc!=''">
+            and sbmc = #{map.sbmc}
+        </if>
+        <if test="map.skbh!=null and map.skbh!=''">
+            and skbh = #{map.skbh}
+        </if>
+    </select>
+    <!--审核人审批-->
+    <update id="shrsp">
+        update t_jdwhhc_jl set jdshr = #{map.zydm} where skbh = #{map.skbh}
+    </update>
+    <!--审核人退回-->
+    <update id="shrth">
+        update t_jdwhhc_jl set jdshr = #{map.zydm},jdjhzt = '2' where skbh = #{map.skbh}
+    </update>
+    <!--批准人审批-->
+    <update id="pzrsp">
+        update t_jdwhhc_jl set jdpzr = #{map.zydm},jdjhzt = '1' where skbh = #{map.skbh}
+    </update>
+    <update id="pzrth">
+        update t_jdwhhc_jl set jdpzr = #{map.zydm},jdjhzt = '2' where skbh = #{map.skbh}
+    </update>
+
+    <!--审核人界面-->
+    <select id="selectYqsbwhjh" resultType="Map">
+        select skbh,sbmc,ggxh,zqddj,fbl,sccs,bypc,jhwhrq,jhxcwhrq,whjhzt
+        from t_jdwhhc_jl
+        where id>0 and whjhzt = '0' and whshr is null
+        <if test="map.sbmc!=null and map.sbmc!=''">
+            and sbmc = #{map.sbmc}
+        </if>
+        <if test="map.skbh!=null and map.skbh!=''">
+            and skbh = #{map.skbh}
+        </if>
+        limit #{map.start},#{map.length};
+    </select>
+    <select id="selectWhjhCount" resultType="java.lang.Integer">
+        select count(skbh)
+        from t_jdwhhc_jl
+        where id>0 and whjhzt = '0' and whshr is null
+        <if test="map.sbmc!=null and map.sbmc!=''">
+            and sbmc = #{map.sbmc}
+        </if>
+        <if test="map.skbh!=null and map.skbh!=''">
+            and skbh = #{map.skbh}
+        </if>
+    </select>
+    <!--批准人界面-->
+    <select id="selectWhpz" resultType="Map">
+        select skbh,sbmc,ggxh,zqddj,fbl,sccs,bypc,jhwhrq,jhxcwhrq,whjhzt
+        from t_jdwhhc_jl
+        where id>0 and whjhzt = '0' and whshr is not null
+        <if test="map.sbmc!=null and map.sbmc!=''">
+            and sbmc = #{map.sbmc}
+        </if>
+        <if test="map.skbh!=null and map.skbh!=''">
+            and skbh = #{map.skbh}
+        </if>
+        limit #{map.start},#{map.length};
+    </select>
+    <select id="selectWhpzCount" resultType="java.lang.Integer">
+        select count(skbh)
+        from t_jdwhhc_jl
+        where id>0 and whjhzt = '0' and whshr is not null
+        <if test="map.sbmc!=null and map.sbmc!=''">
+            and sbmc = #{map.sbmc}
+        </if>
+        <if test="map.skbh!=null and map.skbh!=''">
+            and skbh = #{map.skbh}
+        </if>
+    </select>
+    <!--审核人审批-->
+    <update id="whshrsp">
+        update t_jdwhhc_jl set whshr = #{map.zydm} where skbh = #{map.skbh}
+    </update>
+    <!--审核人退回-->
+    <update id="whshrth">
+        update t_jdwhhc_jl set whshr = #{map.zydm},whjhzt = '2' where skbh = #{map.skbh}
+    </update>
+    <!--批准人审批-->
+    <update id="whpzrsp">
+        update t_jdwhhc_jl set whpzr = #{map.zydm},whjhzt = '1' where skbh = #{map.skbh}
+    </update>
+    <update id="whpzrth">
+        update t_jdwhhc_jl set whpzr = #{map.zydm},whjhzt = '2' where skbh = #{map.skbh}
+    </update>
+
+    <!--审核人界面-->
+    <select id="selectYqsbhcjh" resultType="Map">
+        select skbh,sbmc,ggxh,zqddj,fbl,sccs,hcpc,jhhcrq,hcjhzt
+        from t_jdwhhc_jl
+        where id>0 and hcjhzt = '0' and hcshr is null
+        <if test="map.sbmc!=null and map.sbmc!=''">
+            and sbmc = #{map.sbmc}
+        </if>
+        <if test="map.skbh!=null and map.skbh!=''">
+            and skbh = #{map.skbh}
+        </if>
+        limit #{map.start},#{map.length};
+    </select>
+    <select id="selectHcjhCount" resultType="java.lang.Integer">
+        select count(skbh)
+        from t_jdwhhc_jl
+        where id>0 and hcjhzt = '0' and hcshr is null
+        <if test="map.sbmc!=null and map.sbmc!=''">
+            and sbmc = #{map.sbmc}
+        </if>
+        <if test="map.skbh!=null and map.skbh!=''">
+            and skbh = #{map.skbh}
+        </if>
+    </select>
+    <!--批准人界面-->
+    <select id="selectHcpz" resultType="Map">
+        select skbh,sbmc,ggxh,zqddj,fbl,sccs,hcpc,jhhcrq,hcjhzt
+        from t_jdwhhc_jl
+        where id>0 and hcjhzt = '0' and hcshr is not null
+        <if test="map.sbmc!=null and map.sbmc!=''">
+            and sbmc = #{map.sbmc}
+        </if>
+        <if test="map.skbh!=null and map.skbh!=''">
+            and skbh = #{map.skbh}
+        </if>
+        limit #{map.start},#{map.length};
+    </select>
+    <select id="selectHcpzCount" resultType="java.lang.Integer">
+        select count(skbh)
+        from t_jdwhhc_jl
+        where id>0 and hcjhzt = '0' and hcshr is not null
+        <if test="map.sbmc!=null and map.sbmc!=''">
+            and sbmc = #{map.sbmc}
+        </if>
+        <if test="map.skbh!=null and map.skbh!=''">
+            and skbh = #{map.skbh}
+        </if>
+    </select>
+    <!--审核人审批-->
+    <update id="hcshrsp">
+        update t_jdwhhc_jl set hcshr = #{map.zydm} where skbh = #{map.skbh}
+    </update>
+    <!--审核人退回-->
+    <update id="hcshrth">
+        update t_jdwhhc_jl set hcshr = #{map.zydm},hcjhzt = '2' where skbh = #{map.skbh}
+    </update>
+    <!--批准人审批-->
+    <update id="hcpzrsp">
+        update t_jdwhhc_jl set hcpzr = #{map.zydm},hcjhzt = '1' where skbh = #{map.skbh}
+    </update>
+    <update id="hcpzrth">
+        update t_jdwhhc_jl set hcpzr = #{map.zydm},hcjhzt = '2' where skbh = #{map.skbh}
+    </update>
+</mapper>

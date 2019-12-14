@@ -1,0 +1,230 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.xinhai.security.dao.SecurityMapper">
+    <resultMap id="userMap" type="com.xinhai.usermanager.entity.User">
+        <id property="id" column="id"/>
+        <result property="userAccount" column="user_account"/>
+        <result property="password" column="password"/>
+        <result property="name" column="name"/>
+        <result property="enabled" column="is_enabled"/>
+        <result property="email" column="email"/>
+        <result property="customerId" column="customer_id"/>
+        <result property="orgId" column="org_id"/>
+        <result property="lastLoginDate" column="last_login_date"/>
+        <result property="createDate" column="create_date"/>
+        <result property="remark" column="remark"/>
+        <result property="isSync" column="is_sync"/>
+    </resultMap>
+    <resultMap id="orgMap" type="com.xinhai.organization.api.Organization">
+        <id property="id" column="id"/>
+        <result property="code" column="code"/>
+        <result property="name" column="name"/>
+        <result property="parentId" column="parent_id"/>
+        <result property="independent" column="is_independent"/>
+        <result property="orgType" column="org_type"/>
+        <result property="path" column="path"/>
+        <result property="remark" column="remark"/>
+        <result property="orderNo" column="order_no"/>
+    </resultMap>
+    <resultMap id="resMap" type="com.xinhai.resourcemanager.entity.Resource">
+        <id property="id" column="id"/>
+        <result property="funcId" column="func_id"/>
+        <result property="customerId" column="customer_id"/>
+        <result property="name" column="name"/>
+        <result property="description" column="description"/>
+        <result property="identifier" column="identifier"/>
+        <result property="menuIcon" column="menu_icon"/>
+        <result property="url" column="url"/>
+        <result property="category" column="category"/>
+        <result property="parentId" column="parent_id"/>
+        <result property="orderNo" column="order_no"/>
+        <result property="enabled" column="enabled"/>
+    </resultMap>
+    <resultMap id="customer" type="com.xinhai.security.api.Customer">
+        <id column="id" property="id"/>
+        <result column="name" property="name"/>
+        <result column="code" property="code"/>
+        <result column="create_date" property="createdate"/>
+        <result column="state" property="state"/>
+        <result column="ext_atrr" property="extAtrr"/>
+    </resultMap>
+
+    <select id="findUser" resultMap="userMap">
+        SELECT *
+        FROM "user"
+        WHERE user_account = #{userAccount} AND is_delete = 0
+    </select>
+    <select id="findOrganization" resultMap="orgMap">
+        SELECT *
+        FROM organization
+        WHERE id = #{orgId} AND is_delete = 0
+    </select>
+    <select id="findCustomer" resultMap="customer">
+        SELECT *
+        FROM customer
+        WHERE id = #{customerId}
+    </select>
+    <select id="findUserAuth" resultMap="resMap">
+        SELECT DISTINCT *
+        FROM
+            (
+                SELECT r.*
+                FROM "user" u
+                    INNER JOIN user_auth ua ON u.id = ua.user_id
+                    INNER JOIN "resource" r ON r.id = ua.resource_id
+                WHERE u.user_account = #{userAccount}
+                      AND u.is_delete = 0
+                      AND enabled = 1
+                      AND r.category = #{type}
+                UNION ALL
+                SELECT r.*
+                FROM "user" u
+                    INNER JOIN user_role ur ON u.id = ur.user_id
+                    INNER JOIN role_auth ra ON ur.role_id = ra.role_id
+                    INNER JOIN "resource" r ON r.id = ra.resource_id
+                WHERE u.user_account = #{userAccount}
+                      AND u.is_delete = 0
+                      AND enabled = 1
+                      AND r.category = #{type}
+            ) auth
+        ORDER BY order_no, update_date DESC
+    </select>
+    <select id="findUserIndependentOrg" resultMap="orgMap">
+        SELECT
+            org.*,
+            u.org_id
+        FROM "user" u
+            INNER JOIN organization org
+                ON u.customer_id = org.customer_id
+        WHERE u.user_account = #{userAccount}
+              AND org.is_delete = 0
+              AND org.is_independent = 1
+              AND (SELECT path
+                   FROM organization
+                   WHERE id = u.org_id) LIKE path || '%'
+              AND org.path IS NOT NULL
+              AND ROWNUM = 1
+        ORDER BY LENGTH(path) DESC
+    </select>
+    <select id="findOrgAuthByOrgId" resultType="com.xinhai.security.api.OrgUrlAuthority">
+        SELECT
+            org.id AS orgId,
+            r.id,
+            r.name,
+            r.url
+        FROM organization org
+            INNER JOIN organization_auth oa ON org.id = oa.org_id
+            INNER JOIN "resource" r ON r.id = oa.resource_id
+        WHERE org.is_delete = 0 AND r.category = #{type} AND org.id = #{orgId}
+    </select>
+    <select id="findUserRoles" resultType="java.lang.String">
+        SELECT r.name
+        FROM role r
+            LEFT JOIN user_role ur ON r.id = ur.role_id
+            LEFT JOIN "user" u ON ur.user_id = u.id
+        WHERE u.user_account = #{userAccount}
+    </select>
+
+    <select id="userIsExist" resultType="java.lang.String">
+        SELECT id
+        FROM "user"
+        WHERE id = #{id}
+    </select>
+
+    <select id="orgIsExist" resultType="java.lang.String">
+        SELECT id
+        FROM organization
+        WHERE id = #{id}
+    </select>
+
+    <insert id="addUser">
+        INSERT INTO "user" (id, user_account, name, password, is_enabled, tel, email,
+                            customer_id, org_id, create_date, remark, is_delete, is_sync)
+        VALUES (
+            #{id},
+            #{userAccount},
+            #{name, jdbcType=VARCHAR},
+            #{password, jdbcType=VARCHAR},
+            #{enabled},
+            #{tel, jdbcType=VARCHAR},
+            #{email, jdbcType=VARCHAR},
+            #{customerId, jdbcType=VARCHAR},
+            #{orgId, jdbcType=VARCHAR},
+            #{createDate},
+            #{remark, jdbcType=VARCHAR}, 0, 1)
+    </insert>
+
+    <insert id="addOrg">
+        INSERT INTO organization (
+            id,
+            customer_id,
+            code,
+            name,
+            parent_id,
+            is_independent,
+            org_type,
+            path,
+            remark,
+            order_no,
+            update_date, is_delete, is_sync)
+        VALUES
+            (
+                #{id},
+                #{customerId, jdbcType=VARCHAR},
+                #{code, jdbcType=VARCHAR},
+                #{name, jdbcType=VARCHAR},
+                #{parentId, jdbcType=VARCHAR},
+                #{independent, jdbcType=VARCHAR},
+                #{orgType, jdbcType=VARCHAR},
+                #{path, jdbcType=VARCHAR},
+                #{remark, jdbcType=VARCHAR},
+                #{orderNo, jdbcType=VARCHAR},
+                sysdate, 0, 1)
+    </insert>
+
+    <update id="updateUser">
+        UPDATE "user"
+        SET name   = #{name},
+            tel    = #{tel, jdbcType=VARCHAR},
+            email  = #{email, jdbcType=VARCHAR},
+            org_id = #{orgId, jdbcType=VARCHAR},
+            remark = #{remark, jdbcType=VARCHAR}
+        WHERE id = #{id}
+    </update>
+
+    <update id="updateOrg">
+        UPDATE organization
+        SET
+            name           = #{name, jdbcType=VARCHAR},
+            org_type       = #{orgType, jdbcType=VARCHAR},
+            remark         = #{remark, jdbcType=VARCHAR},
+            update_date    = sysdate
+        WHERE id = #{id}
+    </update>
+
+    <select id="getAllSyncUsers" resultType="java.lang.String">
+        SELECT ID FROM "user" WHERE is_sync = 1
+    </select>
+
+    <select id="getAllSyncOrgs" resultType="java.lang.String">
+        SELECT ID FROM organization WHERE is_sync = 1
+    </select>
+
+    <delete id="deleteSyncUser">
+        UPDATE "user" SET is_delete = 1 WHERE id IN
+        <foreach item="id" collection="allUsers" open="(" separator=","
+                 close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+    <delete id="deleteSyncOrg">
+        UPDATE organization SET is_delete = 1 WHERE id IN
+        <foreach item="id" collection="allOrgs" open="(" separator=","
+                 close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

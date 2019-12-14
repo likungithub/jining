@@ -1,0 +1,221 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xinhai.caiyun.customermanage.dao.BgglFeiChengMapper">
+
+    <select id="getCyhzb" resultType="map">
+        <!--/* SELECT-->
+        <!--a.id,-->
+        <!--a.ypbm as bgbh,-->
+        <!--a.ypbm as cybh,-->
+        <!--a.ypmc,-->
+        <!--IF (ifnull( sb, '/')='', '/', sb ) as sb,-->
+        <!--IF (ifnull(ifnull( scrq, YPPHHBH ),'/')='','/',ifnull( scrq, YPPHHBH )) as scrq ,-->
+        <!--IF (ifnull( ggxh, '/')='', '/', ggxh ) as ggxh,-->
+        <!--IF (ifnull( b.sjdw, '/')='', '/', b.sjdw ) as bcydw,-->
+        <!--IF (ifnull( b.bcjdwdz, '/')='','/',b.bcjdwdz) as bcydwdz,-->
+        <!--IF (ifnull( scdw, '/')='', '/', scdw ) as scqymc,-->
+        <!--IF (ifnull( scdz, '/')='', '/', scdz ) as scqydz,-->
+        <!--t.jyxm,-->
+        <!--t.bg_dxpd,-->
+        <!--ifnull(t.bhgxm,'/') as bhgxm,-->
+        <!--ifnull(t.xlz,'/') as xlz,-->
+        <!--ifnull(t.jcz,'/') as jcz-->
+        <!--FROM-->
+        <!--t_ypgl_jbxx a,-->
+        <!--t_wt_jbxx b ,-->
+        <!--(-->
+        <!--SELECT x.ypid,-->
+        <!--GROUP_CONCAT(y.zwmc_bm) as jyxm,-->
+        <!--GROUP_CONCAT(if(bg_dxpd='合格' or bg_dxpd='不判定',null,y.zwmc_bm)) as bhgxm,-->
+        <!--GROUP_CONCAT(if(bg_dxpd='合格' or bg_dxpd='不判定',null,x.bg_jsyq)) as xlz,-->
+        <!--GROUP_CONCAT(if(bg_dxpd='合格' or bg_dxpd='不判定',null,x.bg_jyjg)) as jcz,-->
+        <!--min(case when bg_dxpd='不判定' then '合格' else bg_dxpd end ) as bg_dxpd-->
+        <!--FROM-->
+        <!--t_yp_jcxm x,-->
+        <!--t_jcxm_jbxx y-->
+        <!--WHERE-->
+        <!--x.jcxmid = y.id-->
+        <!--and bg_dxpd is not null-->
+        <!--group by x.ypid-->
+        <!--) T-->
+        <!--WHERE-->
+        <!--a.wtid = b.wtid-->
+        <!--and  a.scbz=0  /*#删除标志*/-->
+        <!--and a.BGBZZT='002'  /*#报告编制状态 002通过*/-->
+        <!--and a.bgzjsp in ('002','000')   /*#报告主检审批 4,000未分配，001已分配，002通过，*/-->
+        <!--and a.BGSHZT='002' /*#报告审核 1,000未分配，001已分配，002通过*/-->
+        <!--and BGPZZT='002'  /*#报告批准 2,000未分配，001已分配，002通过*/-->
+        <!--AND IFNULL(b.zfbs,'0') != '1' /*#是否作废 1 是作废*/-->
+        <!--and a.id = t.ypid*/-->
+        SELECT
+        a.id,
+        a.ypbm AS bgbh,
+        a.ypbm AS cybh,
+        a.ypmc,
+        b.yzjl,
+        b.rwly,
+        IFNULL(bz, '/') bz
+
+        FROM
+        t_ypgl_jbxx a,
+        t_wt_jbxx b
+
+        WHERE
+        a.wtid = b.wtid
+        AND a.scbz = 0 /*#删除标志*/
+        AND a.BGBZZT = '002' /*#报告编制状态 002通过*/
+        AND a.bgzjsp IN ('002', '000') /*#报告主检审批 4,000未分配，001已分配，002通过，*/
+        AND a.BGSHZT = '002' /*#报告审核 1,000未分配，001已分配，002通过*/
+        AND BGPZZT = '002' /*#报告批准 2,000未分配，001已分配，002通过*/
+        AND IFNULL(b.zfbs, '0') != '1' /*#是否作废 1 是作废*/
+    <if test="cxtj.ypmc!=null">
+            and a.YPMC like concat('%',#{cxtj.ypmc}, '%')
+        </if>
+        <if test="cxtj.ypbm!=null">
+            and a.ypbm like concat('%',#{cxtj.ypbm}, '%')
+        </if>
+        <if test="cxtj.ny!=null">
+            and date_format(A.BGZJSPSJ,'%Y-%m') = #{cxtj.ny}
+        </if>
+        AND FuncAuthorityBG(a.id, #{cxtj.zydm}, '3') = 1
+        order by a.ypbm desc
+</select>
+
+<select  id="getZfCyWtdList" resultType="map">
+       /* SELECT
+            WT.WTID,
+            WT.RWLY,
+            ifnull((select rwlxmc from t_rwlx_jbxx where WT.RWLX = rwlx),'/') as RWLX,
+            WT.SJDW,
+            WT.BCJDWDZ,
+            WT.FRDB,
+            WT.BCJDWLXR,
+            WT.BCJDWYDDH,
+            WT.CZ,
+            WT.BCJDWYB,
+            if(WT.QYLX='null','/',WT.QYLX) as QYLX,
+            WT.NXSE,
+            WT.YYZZH,
+            ifnull(WT.CYDDSSHJ, '/') as CYDDSSHJ,
+            '/' AS LTHJ,
+            '/' AS CYHJ,
+            ifnull(WT.WD, '/') as WD,
+            YPGL.YPMC,
+            FuncDmZh('YPLY',YPGL.YPLAIYUAN) as YPLAIYUAN,
+            FuncDmZh('YPSX',YPGL.YPSHUXING) as YPSHUXING ,
+            FuncDmZh('YPLX',YPGL.YPLEIXIN) as YPLEIXIN,
+            FuncDmZh('RQLX',YPGL.RQLXXZ) AS RQLXXZ,
+            DATE_FORMAT(YPGL.RQLXXZRQ,'%Y-%m-%d') AS RQLXXZRQ,
+            YPGL.SB,
+            YPGL.GGXH,
+            YPGL.BZQ,
+            YPGL.YPDJ,
+            YPGL.SCXKBH,
+            YPGL.YPZXBZ,
+            YPGL.YPDANJIA,
+            YPGL.YBJS,
+            YPGL.YPSL,
+            YPGL.BYSL,
+            FuncDmZh('YPXT',YPGL.YPXT) as YPXT,
+            FuncDmZh('YPBZFL',YPGL.YPBGFL) as YPBGFL,
+            YPGL.SCDW,
+            YPGL.SCDZ,
+            ifnull(YPGL.SCDWLXR,'') as SCDWLXR,
+            YPGL.SCDWLXDH,
+            FuncDmZh('YPBCTJ',YPGL.YPBCTJ) as YPBCTJ,
+            FuncDmZh('CYYPBZ',YPGL.CYYPBZ) as CYYPBZ,
+            FuncDmZh('CYFS',YPGL.CYFANGSHI) as CYFANGSHI,
+            ifnull(YPGL.CPDLMC,'') as CPDLMC,
+            ifnull(YPGL.CPYLMC,'') as CPYLMC,
+            ifnull(YPGL.CPCYLMC,'') as CPCYLMC,
+            ifnull(YPGL.CPXLMC ,'') as CPXLMC
+        FROM T_WT_JBXX WT,T_YPGL_JBXX YPGL
+        WHERE WT.WTID = YPGL.WTID
+        AND WT.ID IN (${map.ids})*/
+        SELECT
+	YPGL.YPBM,
+	YPGL.YPMC,
+	WT.SYRQ,
+	ifnull (YPGL.RKRQ , '/') AS RKRQ,
+	YPGL.YPSL,
+	ifnull (YPGL.YPBCTJ , '/') AS YPBCTJ,
+	ifnull (YPGL.THL , '/') AS THL,
+	ifnull (YPCL.QRSJ,'/') AS QRSJ,
+	ifnull (CONCAT(YPCL.WTID," ",YPCL.ID) , '/') AS CLDH,
+	ifnull(YPCL.BZ, '') AS BZ
+FROM
+	T_WT_JBXX WT
+	LEFT JOIN T_YPCL_JBXX YPCL ON WT.WTID = YPCL.WTID
+	LEFT JOIN T_YPGL_JBXX YPGL ON WT.WTID = YPGL.WTID
+WHERE
+	WT.WTID = YPGL.WTID
+AND WT.ID IN (${map.ids})
+</select>
+
+<select  id="getZfDcCydList" resultType="map">
+ SELECT
+        YP.YPBM,
+        FuncDmZh('JYLB',WT.JYLB) as JYLB,
+        if(cyddLevel1 is not null and cyddLevel1!='','食品生产','食品流通') as CYHJ,
+        <!--IF ( cyddLevel1 IS NOT NULL AND cyddLevel1 != '', FuncDmZh ( 'HJSPSC', cyddLevel1 ), FuncDmZh ( 'HJSPLT', cyddLevel2 ) ) CYDD,-->
+            WT.CYDD,
+            FuncDmZh('SFBY',yp.IF_BY) as IF_BY,
+            WT.CYRY,
+            DATE_FORMAT(WT.CYRQ,'%Y-%m-%d') as CYRQ,
+            WT.SJDW,
+            WT.BCJDWDZ,
+            FuncDmZh('QYLX',WT.QYLX) as QYLX,
+            WT.FRDB,
+            WT.NXSE,
+            WT.BCJDWLXR,
+            WT.BCJDWYDDH,
+            WT.BCJDWCZ,
+            WT.BCJDWYB,
+            YP.YPMC,
+            FuncDmZh('YPLY',YP.YPLAIYUAN) as YPLAIYUAN,
+            FuncDmZh('CYFSZM',YP.CYFANGSHI) as CYFANGSHI,
+            FuncDmZh('YPSX',YP.YPSHUXING) as YPSHUXING,
+            FuncDmZh('YPLX',YP.YPLEIXIN) as YPLEIXIN,
+            YP.SB,
+            YP.YPPHHBH,
+            FuncDmZh('RQLX',YP.RQLXXZ) as RQLXXZ,
+            DATE_FORMAT(YP.RQLXXZRQ,'%Y-%m-%d') as RQLXXZRQ,
+            YP.BZQ,
+            YP.YPZXBZ,
+            YP.GGXH,
+            YP.YPDJ,
+            YP.SCXKBH,
+            YP.YPDANJIA,
+            FuncDmZh('SFCK',YP.IF_CK) as IF_CK,
+            YP.YBJS,
+            YP.YPSL,
+            YP.BYSL,
+            FuncDmZh('YPBZFL',YP.YPBGFL) as YPBGFL,
+            FuncDmZh('YPXT',YP.YPXT) as YPXT,
+            FuncDmZh('YPBCTJSZ',YP.YPBCTJ) as YPBCTJ,
+            YP.CCWD,
+            YP.CCSD,
+            FuncDmZh('CYYPBZ',YP.CYYPBZ) as CYYPBZ,
+            YP.JSYPJZRQ,
+            YP.SCDW,
+            YP.SCDZ,
+            YP.SCDWLXDH,
+            WT.CYDW,
+            WT.CYDWXXDZ,
+            WT.CYDWLXR,
+            WT.CYDWLXDH,
+            WT.EMAIL,
+            WT.CZ,
+            WT.CYDWYB,
+            WT.YYZZH,
+            WT.cydwlxdh,
+            if(WT.if_ztc='0','否','是') as if_ztc,
+            WT.cydwjb,
+            WT.cydwlxdh
+    FROM T_WT_JBXX WT,T_YPGL_JBXX YP
+        WHERE WT.WTID = YP.WTID
+                AND WT.ID IN (${map.ids})
+    </select>
+
+</mapper>

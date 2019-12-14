@@ -1,0 +1,220 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xinhai.caiyun.systemmanager.dao.YqsbwxbfMapper">
+    <!--查看仪器设备信息-->
+    <select id="selectYqsbtzwxbf" resultType="Map">
+        select skbh,sbmc,ggxh,sccs,sbyz,sbzk,wxyy,bfyy,wxbz,bfbz,sqzt from t_yqsbtz
+        where id>0
+        <if test="map.skbh!=null and map.skbh!= ''">
+            and skbh = #{map.skbh}
+        </if>
+        <if test="map.sbmc!=null and map.sbmc!= ''">
+            and sbmc = #{map.sbmc}
+        </if>
+        limit #{map.start},#{map.length};
+    </select>
+    <select id="selectYqtzCountwxbf" resultType="java.lang.Integer">
+        select count(skbh) from t_yqsbtz
+        where id>0
+        <if test="map.skbh!=null and map.skbh!= ''">
+            and skbh = #{map.skbh}
+        </if>
+        <if test="map.sbmc!=null and map.sbmc!= ''">
+            and sbmc = #{map.sbmc}
+        </if>
+    </select>
+    <!--保存维修原因-->
+    <!--map2.put("sbzk",((String[])map.get("sbzk"))[0]);
+        map2.put("wxyy",((String[])map.get("wxyy"))[0]);
+        map2.put("wxbz",((String[])map.get("wxbz"))[0]);-->
+    <update id="updateWxyy">
+        update t_yqsbtz set sbzk = #{map.sbzk},wxyy = #{map.wxyy},wxbz = #{map.wxbz},sqzt = '1' where skbh = #{map.skbh}
+    </update>
+    <!--保存报废原因-->
+    <update id="updateBfyy">
+        update t_yqsbtz set sbzk = #{map.sbzk},bfyy = #{map.bfyy},bfbz = #{map.bfbz},sqzt = '2' where skbh = #{map.skbh}
+    </update>
+    <!--查看报废申请审批信息-->
+    <select id="selectYqsbtzwxbfsp" resultType="Map">
+        select skbh,sbmc,ggxh,sccs,sbyz,sbzk,wxyy,bfyy,wxbz,bfbz,sqzt,spzt from t_yqsbtz
+        where sqzt in('2') and spzt = '0'
+        <if test="map.skbh!=null and map.skbh!= ''">
+            and skbh = #{map.skbh}
+        </if>
+        <if test="map.sbmc!=null and map.sbmc!= ''">
+            and sbmc = #{map.sbmc}
+        </if>
+        order by spzt
+        limit #{map.start},#{map.length};
+    </select>
+    <select id="selectYqtzCountwxbfsp" resultType="java.lang.Integer">
+        select count(skbh) from t_yqsbtz
+        where sqzt in('2') and spzt = '0'
+        <if test="map.skbh!=null and map.skbh!= ''">
+            and skbh = #{map.skbh}
+        </if>
+        <if test="map.sbmc!=null and map.sbmc!= ''">
+            and sbmc = #{map.sbmc}
+        </if>
+    </select>
+    <!--一级维修审批-->
+    <select id="selectYqsbtzwxspyj" resultType="Map">
+        select skbh,sbmc,ggxh,sccs,sbyz,sbzk,wxyy,bfyy,wxbz,bfbz,sqzt,spzt from t_yqsbtz
+        where sqzt in('1') and wxspzt = '0'
+        <if test="map.skbh!=null and map.skbh!= ''">
+            and skbh = #{map.skbh}
+        </if>
+        <if test="map.sbmc!=null and map.sbmc!= ''">
+            and sbmc = #{map.sbmc}
+        </if>
+        order by spzt
+        limit #{map.start},#{map.length};
+    </select>
+    <select id="selectYqtzCountwxspyj" resultType="java.lang.Integer">
+        select count(skbh) from t_yqsbtz
+        where sqzt in('1') and wxspzt = '0'
+        <if test="map.skbh!=null and map.skbh!= ''">
+            and skbh = #{map.skbh}
+        </if>
+        <if test="map.sbmc!=null and map.sbmc!= ''">
+            and sbmc = #{map.sbmc}
+        </if>
+    </select>
+    <!--一级维修申请通过-->
+    <update id="updateWxSpztyj">
+        update t_yqsbtz set wxspzt = '2' where skbh = #{map.skbh}
+    </update>
+    <!--一级维修申请退回-->
+    <update id="updateWxSpztThyj">
+        update t_yqsbtz set wxspzt = '5',sqzt = '0' where skbh = #{map.skbh}
+    </update>
+    <!--二级维修审批-->
+    <select id="selectYqsbtzwxspej" resultType="Map">
+        select skbh,sbmc,ggxh,sccs,sbyz,sbzk,wxyy,bfyy,wxbz,bfbz,sqzt,spzt from t_yqsbtz
+        where sqzt in('1') and wxspzt = '2'
+        <if test="map.skbh!=null and map.skbh!= ''">
+            and skbh = #{map.skbh}
+        </if>
+        <if test="map.sbmc!=null and map.sbmc!= ''">
+            and sbmc = #{map.sbmc}
+        </if>
+        order by spzt
+        limit #{map.start},#{map.length};
+    </select>
+    <select id="selectYqtzCountwxspej" resultType="java.lang.Integer">
+        select count(skbh) from t_yqsbtz
+        where sqzt in('1') and wxspzt = '2'
+        <if test="map.skbh!=null and map.skbh!= ''">
+            and skbh = #{map.skbh}
+        </if>
+        <if test="map.sbmc!=null and map.sbmc!= ''">
+            and sbmc = #{map.sbmc}
+        </if>
+    </select>
+    <!--二级维修申请通过-->
+    <update id="updateWxSpztej">
+        update t_yqsbtz set wxspzt = '3' where skbh = #{map.skbh}
+    </update>
+    <!--二级维修申请退回-->
+    <update id="updateWxSpztThej">
+        update t_yqsbtz set wxspzt = '5',sqzt = '0' where skbh = #{map.skbh}
+    </update>
+    <!--三级维修审批-->
+    <select id="selectYqsbtzwxspsj" resultType="Map">
+        select skbh,sbmc,ggxh,sccs,sbyz,sbzk,wxyy,bfyy,wxbz,bfbz,sqzt,spzt from t_yqsbtz
+        where sqzt in('1') and wxspzt = '3'
+        <if test="map.skbh!=null and map.skbh!= ''">
+            and skbh = #{map.skbh}
+        </if>
+        <if test="map.sbmc!=null and map.sbmc!= ''">
+            and sbmc = #{map.sbmc}
+        </if>
+        order by spzt
+        limit #{map.start},#{map.length};
+    </select>
+    <select id="selectYqtzCountwxspsj" resultType="java.lang.Integer">
+        select count(skbh) from t_yqsbtz
+        where sqzt in('1') and wxspzt = '3'
+        <if test="map.skbh!=null and map.skbh!= ''">
+            and skbh = #{map.skbh}
+        </if>
+        <if test="map.sbmc!=null and map.sbmc!= ''">
+            and sbmc = #{map.sbmc}
+        </if>
+    </select>
+    <!--三级维修申请通过-->
+    <update id="updateWxSpztsj">
+        update t_yqsbtz set wxspzt = '4' where skbh = #{map.skbh}
+    </update>
+    <!--三级维修申请退回-->
+    <update id="updateWxSpztThsj">
+        update t_yqsbtz set wxspzt = '5',sqzt = '0' where skbh = #{map.skbh}
+    </update>
+    <!--四级维修审批-->
+    <select id="selectYqsbtzwxspsij" resultType="Map">
+        select skbh,sbmc,ggxh,sccs,sbyz,sbzk,wxyy,bfyy,wxbz,bfbz,sqzt,spzt from t_yqsbtz
+        where sqzt in('1') and wxspzt = '4'
+        <if test="map.skbh!=null and map.skbh!= ''">
+            and skbh = #{map.skbh}
+        </if>
+        <if test="map.sbmc!=null and map.sbmc!= ''">
+            and sbmc = #{map.sbmc}
+        </if>
+        order by spzt
+        limit #{map.start},#{map.length};
+    </select>
+    <select id="selectYqtzCountwxspsij" resultType="java.lang.Integer">
+        select count(skbh) from t_yqsbtz
+        where sqzt in('1') and wxspzt = '4'
+        <if test="map.skbh!=null and map.skbh!= ''">
+            and skbh = #{map.skbh}
+        </if>
+        <if test="map.sbmc!=null and map.sbmc!= ''">
+            and sbmc = #{map.sbmc}
+        </if>
+    </select>
+    <!--四级维修申请通过-->
+    <update id="updateWxSpztsij">
+        update t_yqsbtz set wxspzt = '1' where skbh = #{map.skbh}
+    </update>
+    <!--四级维修申请退回-->
+    <update id="updateWxSpztThsij">
+        update t_yqsbtz set wxspzt = '5',sqzt = '0' where skbh = #{map.skbh}
+    </update>
+    <!--审批通过报废申请-->
+    <update id="updateWbSpzt">
+        update t_yqsbtz set spzt = '1' where skbh = #{map.skbh}
+    </update>
+    <!--审批退回-->
+    <update id="updateWbSpztTh">
+        update t_yqsbtz set spzt = '2',sqzt = '0' where skbh = #{map.skbh}
+    </update>
+    <!--查看需要维修的设备-->
+    <select id="selectYqsbtzwxbfWx" resultType="Map">
+        select skbh,sbmc,ggxh,sccs,sbyz,sbzk,wxyy,bfyy,wxbz,bfbz,sqzt,spzt from t_yqsbtz
+        where sqzt = '1' and wxspzt = '1'
+        <if test="map.skbh!=null and map.skbh!= ''">
+            and skbh = #{map.skbh}
+        </if>
+        <if test="map.sbmc!=null and map.sbmc!= ''">
+            and sbmc = #{map.sbmc}
+        </if>
+        order by spzt
+        limit #{map.start},#{map.length};
+    </select>
+    <select id="selectYqtzCountwxbfWx" resultType="java.lang.Integer">
+        select count(skbh) from t_yqsbtz
+        where sqzt = '1' and wxspzt = '1'
+        <if test="map.skbh!=null and map.skbh!= ''">
+            and skbh = #{map.skbh}
+        </if>
+        <if test="map.sbmc!=null and map.sbmc!= ''">
+            and sbmc = #{map.sbmc}
+        </if>
+    </select>
+    <!--设备维修记录-->
+    <update id="updateSbWx">
+        update t_yqsbtz set sqzt = '0', spzt = '0' where skbh = #{map.skbh}
+    </update>
+</mapper>

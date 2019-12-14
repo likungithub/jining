@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!-- namespace必须和接口名称一一对应 -->
+<mapper namespace="com.xinhai.reportmanager.dao.QuantitationReportMapper">
+    <!-- 插入employee记录 -->
+    <insert id="createEmployee" parameterType="com.xinhai.paymanager.api.Employee"
+            keyProperty="id" useGeneratedKeys="true">
+		INSERT INTO Employee (name, code, sex, age, birthday, nationality, interest)
+			VALUES (#{name}, #{code},#{sex}, #{age}, #{birthday}, #{nationality}, #{interest});
+	</insert>
+    <!--通过id,更新一条employee数据 -->
+    <update id="updateEmployee" parameterType="com.xinhai.paymanager.api.Employee">
+        UPDATE Employee
+        <set>
+            <if test="employee.name != null">
+                name = #{employee.name},
+            </if>
+            <if test="employee.code != null">
+                code = #{employee.code},
+            </if>
+            <if test="employee.sex != null">
+                sex = #{employee.sex},
+            </if>
+            <if test="employee.age != null">
+                age = #{employee.age},
+            </if>
+            <if test="employee.birthday != null">
+                birthday = #{employee.birthday},
+            </if>
+            <if test="employee.nationality != null">
+                nationality = #{employee.nationality},
+            </if>
+            <if test="employee.interest != null">
+                interest = #{employee.interest}
+            </if>
+        </set>
+        WHERE id = #{id};
+    </update>
+    <!--同时删除多条额employee数据  -->
+    <delete id="deleteEmployeeList" parameterType="List">
+        DELETE FROM Employee
+        WHERE id in
+        <foreach item="id" collection="list" open="(" separator=","
+                 close=")">
+            #{id}
+        </foreach>
+    </delete>
+    <!--通过id删除一条employee数据  -->
+    <delete id="deleteEmployee" parameterType="String">
+		DELETE FROM employee
+			WHERE id = #{id}
+	</delete>
+    <!--获取一个employee数据  -->
+    <select id="getEmployee" resultType="com.xinhai.paymanager.api.Employee"
+            parameterType="String">
+		SELECT *FROM employee WHERE id = #{id};
+	</select>
+    <!--获取所有employee数据  -->
+    <select id="getEmployeeList" resultType="com.xinhai.paymanager.api.Employee">
+		SELECT * FROM [employee];
+	</select>
+    <!--模糊查询  -->
+    <select id="getEmployeeListByKeyword" resultType="com.xinhai.paymanager.api.Employee">
+        SELECT * FROM employee WHERE
+        <if test="keyword != null and keyword != ''">
+            WHERE CONCAT(name, code, sex, age, nationality, interest) LIKE
+            CONCAT('%',#{keyword},'%')
+        </if>
+    </select>
+    <select id="getAllEmployee" resultType="com.alibaba.fastjson.JSONObject"
+            statementType="CALLABLE">
+         <![CDATA[
+
+           {call testProc(
+              #{id,mode=IN,jdbcType=INTEGER}
+           )}
+
+        ]]>
+    </select>
+</mapper>

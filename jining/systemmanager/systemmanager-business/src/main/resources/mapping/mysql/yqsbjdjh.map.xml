@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xinhai.caiyun.systemmanager.dao.YqsbjdjhMapper">
+    <select id="selectYqsbjdjh" resultType="Map">
+        select skbh,sbmc,ggxh,zqddj,fbl,sccs,jhjdjg,jhjdrq,jhxcjdrq,jdbz,nbbh,bypc,jhwhrq,jhxcwhrq,whbz,hcpc,jhhcrq,hcbz
+        from t_jdwhhc_jl
+        where id>0
+        <if test="map.sbmc!=null and map.sbmc!=''">
+            and sbmc = #{map.sbmc}
+        </if>
+        <if test="map.skbh!=null and map.skbh!=''">
+            and skbh = #{map.skbh}
+        </if>
+        limit #{map.start},#{map.length};
+    </select>
+    <select id="selectJdjhCount" resultType="java.lang.Integer">
+        select count(skbh)
+        from t_jdwhhc_jl
+        where id>0
+        <if test="map.sbmc!=null and map.sbmc!=''">
+            and sbmc = #{map.sbmc}
+        </if>
+        <if test="map.skbh!=null and map.skbh!=''">
+            and skbh = #{map.skbh}
+        </if>
+    </select>
+    <!--制定检定计划-->
+    <update id="updateJdjh">
+        update t_jdwhhc_jl set jhjdrq = #{map.jhjdrq},jhxcjdrq = #{map.jhxcjdrq},jdbzr=#{map.zydm} where skbh = #{map.skbh}
+    </update>
+    <!--制定维护计划-->
+    <update id="updateWhjh">
+        update t_jdwhhc_jl set jhwhrq = #{map.jhwhrq},jhxcwhrq = #{map.jhxcwhrq},bypc = #{map.bypc},whbzr = #{map.zydm} where skbh = #{map.skbh}
+    </update>
+    <!--制定核查计划-->
+    <update id="updateHcjh">
+        update t_jdwhhc_jl set jhhcrq = #{map.jhhcrq},hcpc = #{map.hcpc},hcbzr = #{map.zydm} where skbh = #{map.skbh}
+    </update>
+</mapper>

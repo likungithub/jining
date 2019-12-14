@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+																																																												<!-- namespace必须和接口名称一一对应 -->
+<mapper namespace="com.xinhai.caiyun.commonmanager.dao.XzqyMapper">
+
+    <resultMap id="_xzqy" type="com.xinhai.caiyun.commonmanager.api.Xzqy">
+        <result column="xzqh_dm" property="xzqhDm"/>
+        <result column="xzqh_mc" property="xzqhMc"/>
+        <result column="sjdm" property="sjdm"/>
+        <result column="xzjb" property="xzjb"/>
+        <result column="scbz" property="scbz"/>
+        <result column="lrry" property="lrry"/>
+        <result column="gxry" property="gxry"/>
+        <result column="lrrq" property="lrrq"/>
+        <result column="gxrq" property="gxrq"/>
+        <result column="scrq" property="scrq"/>
+    </resultMap>
+    
+	<!-- 插入Xzqy记录
+	<insert id="createXzqy" parameterType="com.xinhai.caiyun.commonmanager.api.Xzqy"
+		keyProperty="id" useGeneratedKeys="true">
+		INSERT INTO Xzqy (xzqhMc,sjdm,xzjb,scbz,lrry,gxry,scry,lrrq,gxrq,scrq)
+			VALUES (#{xzqhMc},#{sjdm},#{xzjb},#{scbz},#{lrry},#{gxry},#{scry},#{lrrq},#{gxrq},#{scrq});
+	</insert>-->
+	<!--通过id,更新一条Xzqy数据 -->
+	<!--<update id="updateXzqy" parameterType="com.xinhai.caiyun.commonmanager.api.Xzqy">
+		UPDATE Xzqy
+			<set>
+											<if test="xzqy.xzqhMc != null">
+					xzqhMc = #{xzqy.xzqhMc},
+				</if>
+															<if test="xzqy.sjdm != null">
+					sjdm = #{xzqy.sjdm},
+				</if>
+															<if test="xzqy.xzjb != null">
+					xzjb = #{xzqy.xzjb},
+				</if>
+															<if test="xzqy.scbz != null">
+					scbz = #{xzqy.scbz},
+				</if>
+															<if test="xzqy.lrry != null">
+					lrry = #{xzqy.lrry},
+				</if>
+															<if test="xzqy.gxry != null">
+					gxry = #{xzqy.gxry},
+				</if>
+															<if test="xzqy.scry != null">
+					scry = #{xzqy.scry},
+				</if>
+															<if test="xzqy.lrrq != null">
+					lrrq = #{xzqy.lrrq},
+				</if>
+															<if test="xzqy.gxrq != null">
+					gxrq = #{xzqy.gxrq},
+				</if>
+															<if test="xzqy.scrq != null">
+					scrq = #{xzqy.scrq},
+				</if>
+											
+			</set>
+		WHERE  xzqhDm = #{xzqhDm};
+	</update>-->
+	<!--同时删除多条额Xzqy数据  -->
+	<!--<delete id="deleteXzqyList" parameterType="List">
+		DELETE FROM dm_xzqh
+			WHERE id in
+				<foreach item="id" collection="list" open="(" separator=","
+					close=")">
+					#{xzqhDm}
+				</foreach>
+	</delete>
+	&lt;!&ndash;通过id删除一条Xzqy数据  &ndash;&gt;
+	<delete id="deleteXzqy" parameterType="Integer">
+		DELETE FROM dm_xzqh
+			WHERE xzqhDm = #{xzqhDm}
+	</delete>
+	&lt;!&ndash;获取一个Xzqy数据  &ndash;&gt;
+	<select id="getXzqy" resultType="com.xinhai.caiyun.commonmanager.api.Xzqy"
+		parameterType="Integer">
+		SELECT *FROM dm_xzqh WHERE xzqhDm = #{xzqhDm};
+	</select>-->
+	<!--获取所有Xzqy数据  -->
+	<select id="getXzqyList" resultMap="_xzqy">
+		SELECT xzqh_dm,xzqh_mc,sjdm,xzjb,scbz,lrry,gxry,scry,lrrq,gxrq,scrq FROM dm_xzqh where xzjb=1;
+	</select>
+	
+	<!--根据上级代码获取所有Xzqy数据  -->
+    <select id="findNext" resultMap="_xzqy" parameterType="java.lang.String">
+        SELECT xzqh_dm,xzqh_mc,sjdm,xzjb,scbz,lrry,gxry,scry,lrrq,gxrq,scrq FROM dm_xzqh where sjdm=#{sjdm} and xzqh_dm != #{sjdm};
+    </select>
+    
+    <select id="getAllXzqyList" resultMap="_xzqy">
+        SELECT xzqh_dm,xzqh_mc,sjdm,xzjb,scbz,lrry,gxry,scry,lrrq,gxrq,scrq FROM dm_xzqh;
+    </select>
+	<!--模糊查询
+	<select id="getXzqyListByKeyword" resultType="com.xinhai.caiyun.commonmanager.api.Xzqy">
+		SELECT * FROM dm_xzqh WHERE 
+		<if test="keyword != null and keyword != ''">
+			WHERE CONCAT(xzqhMc,sjdm,xzjb,scbz,lrry,gxry,scry,lrrq,gxrq,scrq) LIKE CONCAT('%',#{keyword},'%')
+		</if>
+	</select>-->
+	
+	<!--<select id="getAllXzqy" resultType="com.alibaba.fastjson.JSONObject"
+            statementType="CALLABLE">
+         <![CDATA[
+
+           {call testProc(
+              #{id,mode=IN,jdbcType=INTEGER}
+           )}
+
+        ]]>
+    </select>-->
+</mapper>

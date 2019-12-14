@@ -1,0 +1,17 @@
+@CHARSET "UTF-8";
+/*控制datepicker插件input框的宽高位置*/
+#appicon-manager-content  .dateinput{
+    width: 110px;
+    height: 33px;
+    position: relative;
+    top: 1px;
+}
+#appicon-manager-content  .datelabel{
+    width: 70px;
+}
+#appicon-manager-content .datebtn{
+    height: 33px;
+    position: relative;
+    top: 1px;
+    border-radius: 0 4px 4px 0!important;
+}

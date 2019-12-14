@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+																																																																																																																																																												<!-- namespace必须和接口名称一一对应 -->
+<mapper namespace="com.xinhai.caiyun.customermanage.dao.CustomerMapper">
+	<!-- 插入Customer记录 -->
+	<insert id="createCustomer" parameterType="com.xinhai.caiyun.customermanage.api.Customer"
+		keyProperty="id" useGeneratedKeys="true">
+		INSERT INTO Customer (code,name,createDate,state,extAtrr,dljgBm,yhzh,yhmm,qylxDm,sjhm,nsrmc,nsrsbh,zydm,szsf,szcs,email,bzxx,yhztDm,logo,scbz,lrry,gxry,scry,zcrq,gxrq,scrq)
+			VALUES (#{code},#{name},#{createDate},#{state},#{extAtrr},#{dljgBm},#{yhzh},#{yhmm},#{qylxDm},#{sjhm},#{nsrmc},#{nsrsbh},#{zydm},#{szsf},#{szcs},#{email},#{bzxx},#{yhztDm},#{logo},#{scbz},#{lrry},#{gxry},#{scry},#{zcrq},#{gxrq},#{scrq});
+	</insert>
+	<!--通过id,更新一条Customer数据 -->
+	<update id="updateCustomer" parameterType="com.xinhai.caiyun.customermanage.api.Customer">
+		UPDATE Customer
+			<set>
+											<if test="customer.code != null">
+					code = #{customer.code},
+				</if>
+															<if test="customer.name != null">
+					name = #{customer.name},
+				</if>
+															<if test="customer.createDate != null">
+					createDate = #{customer.createDate},
+				</if>
+															<if test="customer.state != null">
+					state = #{customer.state},
+				</if>
+															<if test="customer.extAtrr != null">
+					extAtrr = #{customer.extAtrr},
+				</if>
+															<if test="customer.dljgBm != null">
+					dljgBm = #{customer.dljgBm},
+				</if>
+															<if test="customer.yhzh != null">
+					yhzh = #{customer.yhzh},
+				</if>
+															<if test="customer.yhmm != null">
+					yhmm = #{customer.yhmm},
+				</if>
+															<if test="customer.qylxDm != null">
+					qylxDm = #{customer.qylxDm},
+				</if>
+															<if test="customer.sjhm != null">
+					sjhm = #{customer.sjhm},
+				</if>
+															<if test="customer.nsrmc != null">
+					nsrmc = #{customer.nsrmc},
+				</if>
+															<if test="customer.nsrsbh != null">
+					nsrsbh = #{customer.nsrsbh},
+				</if>
+															<if test="customer.zydm != null">
+					zydm = #{customer.zydm},
+				</if>
+															<if test="customer.szsf != null">
+					szsf = #{customer.szsf},
+				</if>
+															<if test="customer.szcs != null">
+					szcs = #{customer.szcs},
+				</if>
+															<if test="customer.email != null">
+					email = #{customer.email},
+				</if>
+															<if test="customer.bzxx != null">
+					bzxx = #{customer.bzxx},
+				</if>
+															<if test="customer.yhztDm != null">
+					yhztDm = #{customer.yhztDm},
+				</if>
+															<if test="customer.logo != null">
+					logo = #{customer.logo},
+				</if>
+															<if test="customer.scbz != null">
+					scbz = #{customer.scbz},
+				</if>
+															<if test="customer.lrry != null">
+					lrry = #{customer.lrry},
+				</if>
+															<if test="customer.gxry != null">
+					gxry = #{customer.gxry},
+				</if>
+															<if test="customer.scry != null">
+					scry = #{customer.scry},
+				</if>
+															<if test="customer.zcrq != null">
+					zcrq = #{customer.zcrq},
+				</if>
+															<if test="customer.gxrq != null">
+					gxrq = #{customer.gxrq},
+				</if>
+															<if test="customer.scrq != null">
+					scrq = #{customer.scrq},
+				</if>
+											
+			</set>
+		WHERE  yhid = #{yhid};
+	</update>
+	<!--同时删除多条额Customer数据  -->
+	<delete id="deleteCustomerList" parameterType="List">
+		DELETE FROM Customer
+			WHERE id in
+				<foreach item="id" collection="list" open="(" separator=","
+					close=")">
+					#{yhid}
+				</foreach>
+	</delete>
+	<!--通过id删除一条Customer数据  -->
+	<delete id="deleteCustomer" parameterType="java.lang.Long">
+		DELETE FROM Customer
+			WHERE yhid = #{yhid}
+	</delete>
+	<!--获取一个Customer数据  -->
+	<select id="getCustomer" resultType="com.xinhai.caiyun.customermanage.api.Customer"
+		parameterType="java.lang.Long">
+		SELECT *FROM Customer WHERE yhid = #{yhid};
+	</select>
+	<!--获取所有Customer数据  -->
+	<select id="getCustomerList" resultType="com.xinhai.caiyun.customermanage.api.Customer">
+		SELECT * FROM [Customer];
+	</select>
+	<!--模糊查询  -->
+	<select id="getCustomerListByKeyword" resultType="com.xinhai.caiyun.customermanage.api.Customer">
+		SELECT * FROM Customer WHERE 
+		<if test="keyword != null and keyword != ''">
+			WHERE CONCAT(code,name,createDate,state,extAtrr,dljgBm,yhzh,yhmm,qylxDm,sjhm,nsrmc,nsrsbh,zydm,szsf,szcs,email,bzxx,yhztDm,logo,scbz,lrry,gxry,scry,zcrq,gxrq,scrq) LIKE CONCAT('%',#{keyword},'%')
+		</if>
+	</select>
+	
+	<select id="getAllCustomer" resultType="com.alibaba.fastjson.JSONObject"
+            statementType="CALLABLE">
+         <![CDATA[
+
+           {call testProc(
+              #{id,mode=IN,jdbcType=INTEGER}
+           )}
+
+        ]]>
+    </select>
+</mapper>

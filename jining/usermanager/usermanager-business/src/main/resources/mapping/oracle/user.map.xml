@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.xinhai.usermanager.dao.UserMapper">
+    <resultMap id="userResultMap" type="com.xinhai.usermanager.entity.User">
+        <id property="id" column="id"/>
+        <result property="userAccount" column="user_account"/>
+        <result property="password" column="password"/>
+        <result property="name" column="name"/>
+        <result property="enabled" column="is_enabled"/>
+        <result property="tel" column="tel"/>
+        <result property="email" column="email"/>
+        <result property="customerId" column="customer_id"/>
+        <result property="orgId" column="org_id"/>
+        <result property="lastLoginDate" column="last_login_date"/>
+        <result property="createDate" column="create_date"/>
+        <result property="remark" column="remark"/>
+    </resultMap>
+
+    <insert id="addUser" parameterType="com.xinhai.usermanager.entity.User" keyProperty="id"
+            useGeneratedKeys="true">
+		INSERT INTO "user" (id, user_account, name, password, is_enabled, tel, email,
+                            customer_id, org_id, create_date, remark, is_delete)
+        VALUES (
+            #{id},
+            #{userAccount},
+            #{name, jdbcType=VARCHAR},
+            #{password, jdbcType=VARCHAR},
+            #{enabled},
+            #{tel, jdbcType=VARCHAR},
+            #{email, jdbcType=VARCHAR},
+            #{customerId, jdbcType=VARCHAR},
+            #{orgId, jdbcType=VARCHAR},
+            #{createDate},
+            #{remark, jdbcType=VARCHAR}, 0)
+	</insert>
+    <insert id="setUserRole">
+        INSERT INTO user_role (user_id, role_id)
+        SELECT * FROM (
+        <foreach collection="roleIds" item="roleId" index="index" separator="union all">
+            SELECT #{id}, #{roleId} FROM dual
+        </foreach>
+        )
+    </insert>
+    <insert id="setUserAuth">
+        INSERT INTO user_auth (user_id, resource_id)
+        SELECT * FROM (
+        <foreach collection="authIds" item="authId" index="index" separator="union all">
+            SELECT #{id}, #{authId} FROM dual
+        </foreach>
+        )
+    </insert>
+    <update id="deleteUser">
+		UPDATE "user"
+		SET is_delete = 1
+		WHERE id = #{id}
+	</update>
+    <update id="updateUser">
+		UPDATE "user"
+        SET name   = #{user.name},
+            tel    = #{user.tel, jdbcType=VARCHAR},
+            email  = #{user.email, jdbcType=VARCHAR},
+            org_id = #{user.orgId, jdbcType=VARCHAR},
+            remark = #{user.remark, jdbcType=VARCHAR}
+        WHERE id = #{id}
+	</update>
+    <update id="resetUserPwd">
+		UPDATE "user"
+		SET password = #{pwd}
+		WHERE id = #{id}
+	</update>
+    <update id="setUserStatus">
+		UPDATE "user"
+		SET is_enabled = #{status}
+		WHERE id = #{id}
+	</update>
+    <update id="changeOrg">
+		UPDATE "user"
+		SET org_id = #{orgId}
+		WHERE id = #{id}
+	</update>
+    <update id="updateUserPwd">
+		UPDATE "user"
+		SET password = #{newPwd}
+		WHERE user_account = #{currentAccount}
+	</update>
+    <delete id="deleteUserRole">
+		DELETE FROM user_role
+		WHERE user_id = #{id}
+	</delete>
+    <delete id="deleteUserAuth">
+		DELETE FROM user_auth
+		WHERE user_id = #{id}
+	</delete>
+    <select id="getUser" resultMap="userResultMap">
+		SELECT *
+		FROM "user"
+		WHERE id = #{id} AND is_delete = 0
+	</select>
+    <select id="getUsers" resultMap="userResultMap">
+		SELECT *
+		FROM "user"
+		WHERE is_delete = 0 AND customer_id = #{customerId}
+	</select>
+    <select id="hasAccountExist" resultType="java.lang.Integer">
+		SELECT COUNT(0)
+		FROM "user"
+		WHERE user_account = #{account} AND is_delete = 0
+	</select>
+    <select id="getUserAuth" resultType="java.lang.String">
+		SELECT resource_id
+		FROM user_auth
+		WHERE user_id = #{id}
+	</select>
+    <select id="getUserOrg" resultType="java.lang.String">
+		SELECT org_id
+		FROM "user"
+		WHERE id = #{id}
+	</select>
+    <select id="getUserRole" resultType="java.lang.String">
+		SELECT role_id
+		FROM user_role
+		WHERE user_id = #{id}
+	</select>
+    <select id="getUsersByOrg" resultMap="userResultMap">
+        SELECT * FROM "user" WHERE is_delete = 0
+        AND customer_id = #{customerId}
+        AND org_id in
+        <foreach item="id" collection="orgIds" open="(" separator=","
+                 close=")">
+            #{id}
+        </foreach>
+    </select>
+    <select id="getUsersByRoleId" resultMap="userResultMap">
+		SELECT u.* FROM "user" u
+		LEFT JOIN user_role ur ON u.id = ur.user_id
+		WHERE is_delete = 0 AND ur.role_id = #{roleId}
+	</select>
+    <select id="getUserByAccount" resultMap="userResultMap">
+		SELECT *
+		FROM "user"
+		WHERE is_delete = 0 AND user_account = #{userAccount}
+	</select>
+    <select id="verifyPwd" resultType="java.lang.Integer">
+		SELECT COUNT(0)
+		FROM "user"
+		WHERE is_delete = 0 AND user_account = #{currentAccount} AND password = #{originPwd}
+	</select>
+</mapper>

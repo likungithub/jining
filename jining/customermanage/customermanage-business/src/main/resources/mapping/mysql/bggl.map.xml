@@ -1,0 +1,1759 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xinhai.caiyun.customermanage.dao.BgglMapper">
+
+    <sql id="queryCommon">
+
+    </sql>
+
+    <select id="sjxg_queryList" resultType="map">
+     select ypid,jcxmid,ZWMC_BM as YPMC,ifnull(jcz,'') as jcz,ifnull(wd,'') as wd,ifnull(sd,'') as sd from t_yp_jcxm a LEFT JOIN t_jcxm_jbxx b ON a.jcxmid=b.id  where ypid=#{cxtj.id}
+  </select>
+
+    <update id="sjxg_update">
+
+        <foreach collection="cxtj" item="item" index="index" separator=";">
+            update t_yp_jcxm set jcz=#{item.jcz},wd=#{item.wd},sd=#{item.sd} where ypid=#{item.ypid} and jcxmid=#{item.xmid}
+        </foreach>
+
+
+    </update>
+
+    <select id="findMrCzry" resultType="map">
+        select a.zydm,b.name from mr_czry a,user b where a.mrfl_bz=#{mrfl_bz} and a.zydm = b.zydm
+    </select>
+    <select id="findAll" resultType="map">
+
+        <!-- <if test="cxtj.bs=='queryBgsj'.toString()">
+           SELECT a.id,ifnull(a.ypmc,'') as spmc,ifnull(a.ypdw,'') as ypdw,ifnull(a.SCZMC,'')  as BCSCZ,ifnull(b.DWMC,'') as WTDW,'' as JYLB,ifnull(a.jydd,'') as JCZXMC,ifnull(b.ZDDWDZ,'') as BBDZ,ifnull(a.jydd,'') as SPYJDZ,ifnull(b.BGDH,'') as BBYWSLDH,ifnull(a.SYRDH,'') as SPDH,ifnull(a.SYRYB,'') as YZBM,ifnull(b.EMAIL,'') as DZYX,'' as WZ,ifnull(a.SYRDH,'') as CZ,ifnull(a.sb,'') as SB,ifnull(a.GGXH,'') as XHGG,ifnull(a.rq,'') as SCRQ,ifnull(a.ZLDJ,'') as ZLDJ,ifnull(a.SYRDH,'') as BCYDWDH,ifnull(b.SJHM,'') as BCSCZDH,ifnull(b.dwmc,'') as RWLY, ifnull((select GROUP_CONCAT(u.name) from t_jcgl_rydm ry LEFT JOIN `user` u on ry.ZXRY_DM=u.zydm where YPID=a.id),'') as CYRY,ifnull(b.CYKSSJ,'') as CYRQ,ifnull(a.dysj,'') as YPDDRQ,ifnull(a.ypsl,'') as YPSL,ifnull(a.CYJS,'') as CYJS,'' as CYDBH,ifnull(a.JCFCRY,'') as JCFYRY,'' as CYDD,ifnull(a.FYZT,'') as FYZT,ifnull(a.jcxm,'') as JYXM,ifnull((select  GROUP_CONCAT(jcxmjbxx.JCYJ) from t_jcxm_jbxx jcxmjbxx  where jcxmjbxx.id in (SELECT jcxmid from t_yp_jcxm jcxm where jcxm.ypid=a.ID)),'') as JYYJ,'' as JYJL,ifnull(a.YCBGRQ,'') as QFRQ,ifnull(a.bzxx,'') as BZ from t_ypgl_jbxx a LEFT JOIN t_wt_jbxx b ON a.WTID=b.WTID where a.id=#{cxtj.id}
+         </if>-->
+
+        <if test="cxtj.bs=='queryBgsj'.toString()">
+            SELECT a.id,ifnull(a.wtid,'') as wtid,ifnull(a.ypmc,'') as ypmc,ifnull(a.ggxh,'') as ggxh,ifnull(a.jylb,'')  as jylb,ifnull(a.sb,'') as sb,ifnull(a.ypdj,'') as ypdj,ifnull(a.ypzt,'') as ypxt,ifnull(a.scrq1,'') as scrq,ifnull(a.ypsl,'') as ypsl,ifnull(a.ypdw,'') as ypdw,ifnull(b.lrrq,'') as syrq,ifnull(b.dwmc,'') as ssjdw, ifnull(b.dwmc,'') as dwmc, ifnull(b.jyyjbz,'') as jcyj, ifnull(b.sfmc,'') as sfmc,ifnull(b.csmc,'') as csmc,ifnull(b.xjmc,'') as xjmc,ifnull(b.jdmc,'') as jdmc,ifnull(b.syr,'') as syr,ifnull(b.ypphhbh,'') as ypphhbh,ifnull(c.CYRQ,'') as cyrq,ifnull(a.ypbm,'') as cybh,ifnull(c.CYDW,'') as cydw,ifnull(c.CYDD,'') as cydd,ifnull(c.CYLXR,'') as cylxr,ifnull(c.cyjs,'') as cyjs from (t_ypgl_jbxx a LEFT JOIN t_wt_jbxx b ON a.WTID=b.WTID) LEFT JOIN t_rwgl_jbxx c ON a.wtid=c.wtid where a.id=#{cxtj.id}
+        </if>
+
+        <if test="cxtj.bs=='queryBgxm'.toString()">
+            select (@rowNO := @rowNo+1) AS xh,ifnull(jcxm.ZWMC_BM,'') as jyxm,ifnull(jcxm.jldw,'') as dw,ifnull(jcxm.JCYJ,'') as bzyq,'' as jyjg,'' as dxpd from t_jcxm_jbxx jcxm,(select @rowNO :=0) b where jcxm.ID in (SELECT jcxmid from t_yp_jcxm a where a.ypid=#{cxtj.id})
+        </if>
+
+        <if test="cxtj.bs=='queryry'.toString()">
+            select GROUP_CONCAT(b.`name`)as rymc,lx from t_bggl_rydm a LEFT JOIN user b on a.ZXRY_DM=b.zydm where YPID=#{cxtj.id}
+            and a.SCBZ=false group by lx order by lx
+        </if>
+
+        <!--and ((a.ypjczt='000') or (a.sjjyzt='000') or (a.sjsczt='000'))-->
+        <if test="cxtj.bs=='bgfp'.toString()">
+            select a.ID,a.BGLJ, a.BGBZZT,CASE BGLJ WHEN '' THEN b.HTMC ELSE CONCAT(b.HTMC,'(有报告)') END as HTMC,a.YPBM,a.YPMC,
+            (SELECT GROUP_CONCAT(xm.ZWMC_BM) from t_yp_jcxm ypxm LEFT JOIN t_jcxm_jbxx xm ON xm.id=ypxm.jcxmid where ypxm.ypid=a.id) as JCXM,
+            a.SJCJRQ,b.DWMC,b.SFMC,b.CSMC,b.XJMC,a.BGSHZT,a.BGPZZT,a.BGDYZT,a.bgzjsp,a.if_sgr from t_ypgl_jbxx a LEFT JOIN t_wt_jbxx b on a.WTID=b.WTID
+            where  a.scbz=0    and  a.BGBZZT='002'
+            <!--yuanao 0828  -->
+           <!-- and  a.SJSCZT='002' -->
+            <if test="cxtj.ypmc!=null ">
+                and a.YPMC like concat('%',#{cxtj.ypmc,jdbcType=VARCHAR}, '%')
+            </if>
+            <if test="cxtj.ypbm!=null ">
+                and a.YPBM like concat('%',#{cxtj.ypbm,jdbcType=VARCHAR}, '%')
+            </if>
+            <if test="cxtj.ifsgr!=null and cxtj.ifsgr!=''">
+                and  a.if_sgr =#{cxtj.ifsgr}
+            </if>
+            <!-- <include refid="queryCommon"/>-->
+            <!--AND FuncAuthorityWt(#{cxtj.zydm},a.wtid) = 1-->
+            order by a.lrrq  desc  limit ${cxtj.start},${cxtj.length}
+        </if>
+
+        <if test="cxtj.bs=='bgbz'.toString()">
+            select b.wtid as wtdbm,b.wtslr, a.BGLJ, a.BGBZZT,a.BGSHZT ,a.BGPZZT ,a.BGDYZT  ,b.ID,b.wtdw,a.id ypid,CASE BGLJ WHEN '' THEN b.HTMC ELSE CONCAT(b.HTMC,'(有报告)') END as HTMC,a.YPBM,a.YPMC,
+            (SELECT GROUP_CONCAT(xm.ZWMC_BM) from t_yp_jcxm ypxm LEFT JOIN t_jcxm_jbxx xm ON xm.id=ypxm.jcxmid where ypxm.ypid=a.id) as JCXM,b.readonly,b.cydbm,
+            b.DWMC,b.SFMC,b.CSMC,b.XJMC
+            from t_ypgl_jbxx a
+            LEFT JOIN t_wt_jbxx b on a.WTID=b.WTID
+            where a.scbz=0 and a.BGBZZT in('001','003','002','004')
+            and b.cxzt in('001','002','004','005')
+            AND a.YPJCZT in('000','002')
+            AND a.SJSCZT in('002')
+            AND IFNULL(b.zfbs,'0') != '1'
+            <!-- and a.id in(select YPID from T_BGGL_RYDM where scbz=false and lx=0 and ZXRY_DM=#{cxtj.zydm}) -->
+            <if test="cxtj.ypmc!=null">
+                and a.YPMC like concat('%',#{cxtj.ypmc}, '%')
+            </if>
+            <if test="cxtj.ypbm!=null">
+                and a.ypbm like concat('%',#{cxtj.ypbm}, '%')
+            </if>
+            <if test="cxtj.wtdw!=null">
+                and b.wtdw like concat('%',#{cxtj.wtdw}, '%')
+            </if>
+            <if test="cxtj.htmc!=null">
+                and a.HTMC like concat('%',#{cxtj.htmc}, '%')
+            </if>
+            <if test="cxtj.bgzt!=null and cxtj.bgzt != ''">
+                and a.bgbzzt= #{cxtj.bgzt}
+            </if>
+            <choose>
+                <when test="cxtj.startDate!=null and cxtj.endDate!=null">
+                    and a.SJCJRQ between #{cxtj.startDate} and #{cxtj.endDate}
+                </when>
+                <otherwise>
+                    <choose>
+                        <when test="cxtj.startDate!=null and cxtj.endDate==null">
+                            and a.SJCJRQ  &gt; #{cxtj.startDate}
+                        </when>
+                        <otherwise>
+                            <choose>
+                                <when test="cxtj.startDate==null and cxtj.endDate!=null">
+                                    and a.SJCJRQ  &lt; #{cxtj.endDate}
+                                </when>
+                            </choose>
+                        </otherwise>
+                    </choose>
+                </otherwise>
+            </choose>
+            AND FuncAuthorityBG(a.id, #{cxtj.zydm}, '0') = 1
+            ORDER BY BGLJ asc,ypjcsj desc,FIELD(BGBZZT,  '000','001','002', '003', '004'),readonly asc limit  ${cxtj.start},${cxtj.length}
+            <!--order by case when a.BGBZZT = '002' then 1 else 0 end desc,b.readonly, b.id desc  limit  ${cxtj.start},${cxtj.length}-->
+        </if>
+
+        <!--  报告制表-->
+        <if test="cxtj.bs=='bgzb'.toString()">
+            select b.id as ID, b.cydd, b.cydwlxr, b.cyfs, b.cyrq,b.sjdw,count(b.id) as YPSL
+            from t_ypgl_jbxx a LEFT JOIN t_wt_jbxx b
+            on a.WTID=b.WTID where a.scbz=0 and b.cxzt = '003' or b.cxzt = '006'
+            AND IFNULL(b.zfbs,'0') != '1'
+            <!-- and a.id in(select YPID from T_BGGL_RYDM where scbz=false and lx=1 and ZXRY_DM=#{cxtj.zydm}) -->
+            <if test="cxtj.ypmc!=null">
+                and a.YPMC like concat('%',#{cxtj.ypmc}, '%')
+            </if>
+            <if test="cxtj.htmc!=null">
+                and a.HTMC like concat('%',#{cxtj.htmc}, '%')
+            </if>
+            <choose>
+                <when test="cxtj.startDate!=null and cxtj.endDate!=null">
+                    and a.SJCJRQ between #{cxtj.startDate} and #{cxtj.endDate}
+                </when>
+                <otherwise>
+                    <choose>
+                        <when test="cxtj.startDate!=null and cxtj.endDate==null">
+                            and a.SJCJRQ  &gt; #{cxtj.startDate}
+                        </when>
+                        <otherwise>
+                            <choose>
+                                <when test="cxtj.startDate==null and cxtj.endDate!=null">
+                                    and a.SJCJRQ  &lt; #{cxtj.endDate}
+                                </when>
+                            </choose>
+                        </otherwise>
+                    </choose>
+                </otherwise>
+            </choose>
+            AND FuncAuthorityBG(a.id, #{cxtj.zydm}, '1') = 1
+            GROUP BY b.id
+            order by a.lrrq
+            desc  limit  ${cxtj.start},${cxtj.length}
+        </if>
+
+        <!--  报告主检审批-->
+        <if test="cxtj.bs=='bgzjsp'.toString()">
+            select  b.wtid,a.scdw,a.scdwlxdh,a.scdz,a.BGLJ,a.BGBZZT,a.BGSHZT ,a.BGPZZT ,a.BGDYZT,a.bgzjsp,b.ID, CASE BGLJ WHEN '' THEN b.HTMC ELSE CONCAT(b.HTMC,'(有报告)') END as HTMC,a.YPBM,a.YPMC,
+            (SELECT GROUP_CONCAT(xm.ZWMC_BM) from t_yp_jcxm ypxm LEFT JOIN t_jcxm_jbxx xm ON xm.id=ypxm.jcxmid where ypxm.ypid=a.id) as JCXM,
+            b.DWMC,b.SFMC,b.CSMC,b.XJMC from t_ypgl_jbxx a LEFT JOIN t_wt_jbxx b
+            on a.WTID=b.WTID where a.scbz=0 and a.BGBZZT in ('002','003')  and a.bgzjsp IN ( '001', '002','003') and a.bgpzzt in ('002','003')
+            AND IFNULL(b.zfbs,'0') != '1'
+            AND BGLJ IS NOT NULL
+            <!-- and a.id in(select YPID from T_BGGL_RYDM where scbz=false and lx=4 and ZXRY_DM=#{cxtj.zydm})-->
+        <if test="cxtj.ypmc!=null">
+            and a.YPMC like concat('%',#{cxtj.ypmc}, '%')
+        </if>
+        <if test="cxtj.ypbm!=null">
+            and a.ypbm like concat('%',#{cxtj.ypbm}, '%')
+        </if>
+        <if test="cxtj.htmc!=null">
+            and a.HTMC like concat('%',#{cxtj.htmc}, '%')
+        </if>
+        <choose>
+            <when test="cxtj.startDate!=null and cxtj.endDate!=null">
+                and a.SJCJRQ between #{cxtj.startDate} and #{cxtj.endDate}
+            </when>
+            <otherwise>
+                <choose>
+                    <when test="cxtj.startDate!=null and cxtj.endDate==null">
+                        and a.SJCJRQ  &gt; #{cxtj.startDate}
+                    </when>
+                    <otherwise>
+                        <choose>
+                            <when test="cxtj.startDate==null and cxtj.endDate!=null">
+                                and a.SJCJRQ  &lt; #{cxtj.endDate}
+                            </when>
+                        </choose>
+                    </otherwise>
+                </choose>
+            </otherwise>
+        </choose>
+        AND FuncAuthorityBG(a.id, #{cxtj.zydm}, '4') = 1
+        order by a.lrrq desc  limit  ${cxtj.start},${cxtj.length}
+    </if>
+
+    <!--  and a.BGSHZT='001' -->
+        <if test="cxtj.bs=='bgsh'.toString()">
+            select b.wtid,a.scdw,a.scdwlxdh,a.scdz,a.BGLJ,a.BGBZZT,a.BGSHZT ,a.BGPZZT ,a.BGDYZT  ,b.ID, CASE BGLJ WHEN '' THEN b.HTMC ELSE CONCAT(b.HTMC,'(有报告)') END as HTMC,a.YPBM,a.YPMC,
+            (SELECT GROUP_CONCAT(xm.ZWMC_BM) from t_yp_jcxm ypxm LEFT JOIN t_jcxm_jbxx xm ON xm.id=ypxm.jcxmid where ypxm.ypid=a.id) as JCXM,
+            b.DWMC,b.SFMC,b.CSMC,b.XJMC from t_ypgl_jbxx a LEFT JOIN t_wt_jbxx b
+            on a.WTID=b.WTID where a.scbz=0  and a.BGBZZT in ('002','003') and a.bgshzt in ('002','001','003')
+            AND IFNULL(b.zfbs,'0') != '1'
+            AND BGLJ IS NOT NULL
+            <!--a.bgzjsp in ('002','000')-->
+            <!-- and a.id in(select YPID from T_BGGL_RYDM where scbz=false and lx=1 and ZXRY_DM=#{cxtj.zydm})-->
+            <if test="cxtj.ypmc!=null">
+                and a.YPMC like concat('%',#{cxtj.ypmc}, '%')
+            </if>
+            <if test="cxtj.ypbm!=null">
+                and a.ypbm like concat('%',#{cxtj.ypbm}, '%')
+            </if>
+            <if test="cxtj.htmc!=null">
+                and a.HTMC like concat('%',#{cxtj.htmc}, '%')
+            </if>
+            <if test="cxtj.bgzt!=null and cxtj.bgzt != ''">
+                and a.bgshzt= #{cxtj.bgzt}
+            </if>
+            <choose>
+                <when test="cxtj.startDate!=null and cxtj.endDate!=null">
+                    and a.SJCJRQ between #{cxtj.startDate} and #{cxtj.endDate}
+                </when>
+                <otherwise>
+                    <choose>
+                        <when test="cxtj.startDate!=null and cxtj.endDate==null">
+                            and a.SJCJRQ  &gt; #{cxtj.startDate}
+                        </when>
+                        <otherwise>
+                            <choose>
+                                <when test="cxtj.startDate==null and cxtj.endDate!=null">
+                                    and a.SJCJRQ  &lt; #{cxtj.endDate}
+                                </when>
+                            </choose>
+                        </otherwise>
+                    </choose>
+                </otherwise>
+            </choose>
+            AND FuncAuthorityBG(a.id, #{cxtj.zydm}, '1') = 1
+            order by a.lrrq desc  limit  ${cxtj.start},${cxtj.length}
+        </if>
+
+        <if test="cxtj.bs=='bgpz'.toString()">
+            select b.wtid,a.scdw,a.scdwlxdh,a.scdz, a.BGLJ,a.BGBZZT,a.BGSHZT ,a.BGPZZT ,a.BGDYZT ,b.ID, CASE BGLJ WHEN '' THEN b.HTMC ELSE CONCAT(b.HTMC,'(有报告)') END as HTMC,a.YPBM,a.YPMC,
+            (SELECT GROUP_CONCAT(xm.ZWMC_BM) from t_yp_jcxm ypxm LEFT JOIN t_jcxm_jbxx xm ON xm.id=ypxm.jcxmid where ypxm.ypid=a.id) as JCXM,
+            b.DWMC,b.SFMC,b.CSMC,b.XJMC from t_ypgl_jbxx a LEFT JOIN t_wt_jbxx b
+            on a.WTID=b.WTID where a.scbz=0
+            and a.BGPZZT in ('001','002','003')  <!--and a.bgzjsp in ('002','000')  and a.BGSHZT in('002','000')  AND a.bgzjsp IN ( '002', '001', '003' )-->
+            AND a.BGSHZT IN ( '002', '001', '003' )
+            AND IFNULL(b.zfbs,'0') != '1'
+            AND BGLJ IS NOT NULL
+            <!-- and a.id in(select YPID from T_BGGL_RYDM where scbz=false and lx=2 and ZXRY_DM=#{cxtj.zydm})-->
+            <if test="cxtj.ypmc!=null">
+                and a.YPMC like concat('%',#{cxtj.ypmc}, '%')
+            </if>
+            <if test="cxtj.ypbm!=null">
+                and a.ypbm like concat('%',#{cxtj.ypbm}, '%')
+            </if>
+            <if test="cxtj.ypzt!=null">
+                and a.BGPZZT  =  #{cxtj.ypzt}
+            </if>
+            <if test="cxtj.htmc!=null">
+                and a.HTMC like concat('%',#{cxtj.htmc}, '%')
+            </if>
+            <choose>
+                <when test="cxtj.startDate!=null and cxtj.endDate!=null">
+                    and a.SJCJRQ between #{cxtj.startDate} and #{cxtj.endDate}
+                </when>
+                <otherwise>
+                    <choose>
+                        <when test="cxtj.startDate!=null and cxtj.endDate==null">
+                            and a.SJCJRQ  &gt; #{cxtj.startDate}
+                        </when>
+                        <otherwise>
+                            <choose>
+                                <when test="cxtj.startDate==null and cxtj.endDate!=null">
+                                    and a.SJCJRQ  &lt; #{cxtj.endDate}
+                                </when>
+                            </choose>
+                        </otherwise>
+                    </choose>
+                </otherwise>
+            </choose>
+            AND FuncAuthorityBG(a.id, #{cxtj.zydm}, '2') = 1
+            order by b.wtid asc  limit  ${cxtj.start},${cxtj.length}
+        </if>
+        <!-- 报告打印查询 -->
+        <if test="cxtj.bs=='bgdy'.toString()">
+            select a.BGLJ,a.BGBZZT,a.BGSHZT ,a.BGPZZT ,a.BGDYZT ,b.ID,CASE BGLJ WHEN '' THEN b.HTMC ELSE CONCAT(b.HTMC,'(有报告)') END as HTMC,a.YPBM,a.YPMC,
+            (SELECT GROUP_CONCAT(xm.ZWMC_BM) from t_yp_jcxm ypxm LEFT JOIN t_jcxm_jbxx xm ON xm.id=ypxm.jcxmid where ypxm.ypid=a.id) as JCXM,
+            b.DWMC,b.SFMC,b.CSMC,b.XJMC,DATE_FORMAT(A.BGZJSPSJ,'%Y-%m-%d') as BGZJSPSJ
+             from t_ypgl_jbxx a LEFT JOIN t_wt_jbxx b
+            on a.WTID=b.WTID where a.scbz=0 and a.BGBZZT='002'  and a.bgzjsp in ('002','000')  and a.BGSHZT='002' and BGPZZT='002'
+            AND IFNULL(b.zfbs,'0') != '1'
+            AND BGLJ IS NOT NULL
+            <!-- and a.id in(select YPID from T_BGGL_RYDM where scbz=false and lx=3 and ZXRY_DM=#{cxtj.zydm}) -->
+            <if test="cxtj.ypmc!=null">
+                and a.YPMC like concat('%',#{cxtj.ypmc}, '%')
+            </if>
+            <if test="cxtj.ypbm!=null">
+                and a.ypbm like concat('%',#{cxtj.ypbm}, '%')
+            </if>
+            <if test="cxtj.ny!=null">
+                and date_format(A.BGZJSPSJ,'%Y-%m') = #{cxtj.ny}
+            </if>
+            <if test="cxtj.wtdw!=null">
+                and b.DWMC like concat('%',#{cxtj.wtdw}, '%')
+            </if>
+            AND FuncAuthorityBG(a.id, #{cxtj.zydm}, '3') = 1
+            order by a.ypbm desc  limit  ${cxtj.start},${cxtj.length}
+        </if>
+        <!-- 报告交接单打印查询 -->
+        <if test="cxtj.bs=='bgdyjjd'.toString()">
+            select a.BGLJ,a.BGBZZT,a.BGSHZT ,a.BGPZZT ,a.BGDYZT ,b.ID,a.YPBM,a.YPMC,ifnull(b.bgjyjlbz,'') as bgjyjlbz,ifnull(b.jylb,'') as jylb,
+            DATE_FORMAT(ifnull(a.SJCJRQ,''),'%Y-%m-%d') as bgscsj,ifnull(b.sjdw,'') as sjdw,
+            ifnull(b.bcjdwdz,'') as bcjdwdz,ifnull(b.bcjdwlxr,'') as bcjdwlxr,ifnull(b.bcjdwyddh,'') as bcjdwyddh,
+            <!--(SELECT GROUP_CONCAT(xm.ZWMC_BM) from t_yp_jcxm ypxm LEFT JOIN t_jcxm_jbxx xm ON xm.id=ypxm.jcxmid where ypxm.ypid=a.id) as JCXM,-->
+            b.DWMC,b.SFMC,b.CSMC,b.XJMC,b.bz as SSD,
+            (SELECT
+                    max(xm.ZWMC_BM)
+                    from t_yp_jcxm ypxm
+                    LEFT JOIN t_jcxm_jbxx xm ON xm.id=ypxm.jcxmid where ypxm.ypid=a.id) AS JCXM,
+            (SELECT
+                    count(*) sl
+                    from t_yp_jcxm ypxm
+                    LEFT JOIN t_jcxm_jbxx xm ON xm.id=ypxm.jcxmid where ypxm.ypid=a.id) AS SL,
+            (SELECT
+                    min(case when  bg_dxpd='不判定' then '合格' else bg_dxpd end ) bgjl
+                    from t_yp_jcxm ypxm
+                    LEFT JOIN t_jcxm_jbxx xm ON xm.id=ypxm.jcxmid where ypxm.ypid=a.id) AS bgjl,
+            (SELECT
+                    max(case when jcxmjl is null
+                    then (case when (ypxm.jcz+0)>(ypxm.xlz+0) then xm.ZWMC_BM else '' end)
+                    when jcxmjl='0' then xm.ZWMC_BM else ''
+                    end ) bz
+            from t_yp_jcxm ypxm
+            LEFT JOIN t_jcxm_jbxx xm ON xm.id=ypxm.jcxmid where ypxm.ypid=a.id) AS BZ
+
+            from t_ypgl_jbxx a LEFT JOIN t_wt_jbxx b
+            on a.WTID=b.WTID where a.scbz=0
+            and a.BGBZZT='002'  and a.bgzjsp in ('002','000')  and a.BGSHZT='002' and BGPZZT='002'
+            AND IFNULL(b.zfbs,'0') != '1'
+            <!-- and a.id in(select YPID from T_BGGL_RYDM where scbz=false and lx=3 and ZXRY_DM=#{cxtj.zydm}) -->
+            <if test="cxtj.ypmc!=null">
+                and a.YPMC like concat('%',#{cxtj.ypmc}, '%')
+            </if>
+            <if test="cxtj.ypbm!=null">
+                and a.ypbm like concat('%',#{cxtj.ypbm}, '%')
+            </if>
+            <if test="cxtj.ny!=null">
+                and date_format(b.LRRQ,'%Y-%m') = #{cxtj.ny}
+            </if>
+            AND FuncAuthorityBG(a.id, #{cxtj.zydm}, '3') = 1
+            order by a.ypbm asc
+        </if>
+    </select>
+
+    <select id="findCount" resultType="long">               <!--   yuanao   0818  -->
+
+        <if test="cxtj.bs=='bgfp'.toString()">
+            select  count(1) from t_ypgl_jbxx a LEFT JOIN t_wt_jbxx b on a.WTID=b.WTID
+            where  a.scbz=0 and a.SJSCZT='002' AND IFNULL(b.zfbs,'0') != '1'
+            <if test="cxtj.ypmc!=null ">
+                and a.YPMC like concat('%',#{cxtj.ypmc,jdbcType=VARCHAR}, '%')
+            </if>
+            <if test="cxtj.ypbm!=null ">
+                and a.YPBM like concat('%',#{cxtj.ypbm,jdbcType=VARCHAR}, '%')
+            </if>
+            <if test="cxtj.ifsgr!=null and cxtj.ifsgr!=''">
+                and  a.if_sgr =#{cxtj.ifsgr}
+            </if>
+            <!--    <include refid="queryCommon"/>
+                AND FuncAuthorityWt(#{cxtj.zydm},a.wtid) = 1-->
+            <!-- order by a.lrrq  desc  limit ${cxtj.start},${cxtj.length} -->
+        </if>
+
+        <if test="cxtj.bs=='bgbz'.toString()">
+            select  count(1) from t_ypgl_jbxx a LEFT JOIN t_wt_jbxx b on a.WTID=b.WTID
+            where a.scbz=0 and a.BGBZZT in('001','003','002','004') and b.cxzt in('001','002','004','005')
+            AND a.YPJCZT in('000','002')
+            AND a.SJSCZT in('002')
+            AND IFNULL(b.zfbs,'0') != '1'
+            <!--and ((a.ypjczt='000') or (a.sjjyzt='000') or (a.sjsczt='000')) -->
+            <!-- and a.id in(select YPID from T_BGGL_RYDM where scbz=false and lx=0 and ZXRY_DM=#{cxtj.zydm}) -->
+            <if test="cxtj.ypmc!=null">
+                and a.YPMC like concat('%',#{cxtj.ypmc}, '%')
+            </if>
+            <if test="cxtj.ypbm!=null">
+                and a.ypbm like concat('%',#{cxtj.ypbm}, '%')
+            </if>
+            <if test="cxtj.htmc!=null">
+                and a.HTMC like concat('%',#{cxtj.htmc}, '%')
+            </if>
+            <if test="cxtj.wtdw!=null">
+                and b.wtdw like concat('%',#{cxtj.wtdw}, '%')
+            </if>
+            <if test="cxtj.bgzt!=null and cxtj.bgzt != ''">
+                and a.bgbzzt= #{cxtj.bgzt}
+            </if>
+            <choose>
+                <when test="cxtj.startDate!=null and cxtj.endDate!=null">
+                    and a.SJCJRQ between #{cxtj.startDate} and #{cxtj.endDate}
+                </when>
+                <otherwise>
+                    <choose>
+                        <when test="cxtj.startDate!=null and cxtj.endDate==null">
+                            and a.SJCJRQ  &gt; #{cxtj.startDate}
+                        </when>
+                        <otherwise>
+                            <choose>
+                                <when test="cxtj.startDate==null and cxtj.endDate!=null">
+                                    and a.SJCJRQ  &lt; #{cxtj.endDate}
+                                </when>
+                            </choose>
+                        </otherwise>
+                    </choose>
+                </otherwise>
+            </choose>
+            <!-- <include refid="queryCommon"/>-->
+            AND FuncAuthorityBG(a.id, #{cxtj.zydm}, '0') = 1
+        </if>
+
+        <if test="cxtj.bs=='bgzb'.toString()">
+            select count(1) from (select  a.ID FROM  t_ypgl_jbxx a LEFT JOIN t_wt_jbxx b
+            on a.WTID=b.WTID where a.scbz=0 and (b.cxzt = '003' or b.cxzt = '006')
+            AND IFNULL(b.zfbs,'0') != '1'
+            <!--   and a.id in(select YPID from T_BGGL_RYDM where scbz=false and lx=1 and ZXRY_DM=#{cxtj.zydm}) -->
+            <if test="cxtj.ypmc!=null">
+                and a.YPMC like concat('%',#{cxtj.ypmc}, '%')
+            </if>
+            <if test="cxtj.htmc!=null">
+                and a.HTMC like concat('%',#{cxtj.htmc}, '%')
+            </if>
+            <choose>
+                <when test="cxtj.startDate!=null and cxtj.endDate!=null">
+                    and a.SJCJRQ between #{cxtj.startDate} and #{cxtj.endDate}
+                </when>
+                <otherwise>
+                    <choose>
+                        <when test="cxtj.startDate!=null and cxtj.endDate==null">
+                            and a.SJCJRQ &gt; #{cxtj.startDate}
+                        </when>
+                        <otherwise>
+                            <choose>
+                                <when test="cxtj.startDate==null and cxtj.endDate!=null">
+                                    and a.SJCJRQ &lt; #{cxtj.endDate}
+                                </when>
+                            </choose>
+                        </otherwise>
+                    </choose>
+                </otherwise>
+            </choose>
+            AND FuncAuthorityBG(a.id, #{cxtj.zydm}, '1') = 1
+            GROUP BY b.ID) emp
+        </if>
+
+
+        <if test="cxtj.bs=='bgzjsp'.toString()">
+            select count(1) from t_ypgl_jbxx a LEFT JOIN t_wt_jbxx b
+            on a.WTID=b.WTID where a.scbz=0
+            <!--and a.BGBZZT='002' and a.bgzjsp in ('001','002')
+               and a.id in(select YPID from T_BGGL_RYDM where scbz=false and lx=4 and ZXRY_DM=#{cxtj.zydm})-->
+            and a.BGBZZT in ('002','003')
+            and a.bgzjsp IN ( '001', '002','003')
+            AND a.bgpzzt IN ( '002', '003' )
+            AND IFNULL(b.zfbs,'0') != '1'
+            AND BGLJ IS NOT NULL
+            <if test="cxtj.ypmc!=null">
+                and a.YPMC like concat('%',#{cxtj.ypmc}, '%')
+            </if>
+            <if test="cxtj.ypbm!=null">
+                and a.ypbm like concat('%',#{cxtj.ypbm}, '%')
+            </if>
+            <if test="cxtj.htmc!=null">
+                and a.HTMC like concat('%',#{cxtj.htmc}, '%')
+            </if>
+            <choose>
+                <when test="cxtj.startDate!=null and cxtj.endDate!=null">
+                    and a.SJCJRQ between #{cxtj.startDate} and #{cxtj.endDate}
+                </when>
+                <otherwise>
+                    <choose>
+                        <when test="cxtj.startDate!=null and cxtj.endDate==null">
+                            and a.SJCJRQ  &gt; #{cxtj.startDate}
+                        </when>
+                        <otherwise>
+                            <choose>
+                                <when test="cxtj.startDate==null and cxtj.endDate!=null">
+                                    and a.SJCJRQ  &lt; #{cxtj.endDate}
+                                </when>
+                            </choose>
+                        </otherwise>
+                    </choose>
+                </otherwise>
+            </choose>
+            AND FuncAuthorityBG(a.id, #{cxtj.zydm}, '4') = 1
+        </if>
+
+        <if test="cxtj.bs=='bgsh'.toString()">
+            select count(1) from t_ypgl_jbxx a LEFT JOIN t_wt_jbxx b
+            on a.WTID=b.WTID where a.scbz=0
+            <!--and a.BGBZZT='002' and a.bgzjsp in ('002','000') and a.id in(select YPID from T_BGGL_RYDM where scbz=false and lx=1 and ZXRY_DM=#{cxtj.zydm})-->
+            and a.BGBZZT in ('002','003') and a.bgshzt in ('002','001','003')
+            AND IFNULL(b.zfbs,'0') != '1'
+            AND BGLJ IS NOT NULL
+            <if test="cxtj.ypmc!=null">
+                and a.YPMC like concat('%',#{cxtj.ypmc}, '%')
+            </if>
+            <if test="cxtj.ypbm!=null">
+                and a.ypbm like concat('%',#{cxtj.ypbm}, '%')
+            </if>
+            <if test="cxtj.htmc!=null">
+                and a.HTMC like concat('%',#{cxtj.htmc}, '%')
+            </if>
+            <if test="cxtj.bgzt!=null and cxtj.bgzt != ''">
+                and a.bgshzt= #{cxtj.bgzt}
+            </if>
+            <choose>
+                <when test="cxtj.startDate!=null and cxtj.endDate!=null">
+                    and a.SJCJRQ between #{cxtj.startDate} and #{cxtj.endDate}
+                </when>
+                <otherwise>
+                    <choose>
+                        <when test="cxtj.startDate!=null and cxtj.endDate==null">
+                            and a.SJCJRQ  &gt; #{cxtj.startDate}
+                        </when>
+                        <otherwise>
+                            <choose>
+                                <when test="cxtj.startDate==null and cxtj.endDate!=null">
+                                    and a.SJCJRQ  &lt; #{cxtj.endDate}
+                                </when>
+                            </choose>
+                        </otherwise>
+                    </choose>
+                </otherwise>
+            </choose>
+            AND FuncAuthorityBG(a.id, #{cxtj.zydm}, '1') = 1
+        </if>
+
+        <if test="cxtj.bs=='bgpz'.toString()">
+            select count(1) from t_ypgl_jbxx a LEFT JOIN t_wt_jbxx b
+            on a.WTID=b.WTID where a.scbz=0
+            <!--and a.BGBZZT='002'  and a.bgzjsp in ('002','000')  and a.BGSHZT='002'and a.id in(select YPID from T_BGGL_RYDM where scbz=false and lx=2 and ZXRY_DM=#{cxtj.zydm})-->
+            and a.BGPZZT in ('001','002','003')
+            AND a.BGSHZT IN ( '002', '001', '003' )
+            AND IFNULL(b.zfbs,'0') != '1'
+            AND BGLJ IS NOT NULL
+            <if test="cxtj.ypmc!=null">
+                and a.YPMC like concat('%',#{cxtj.ypmc},'%')
+            </if>
+            <if test="cxtj.ypzt!=null">
+                and a.BGPZZT  =  #{cxtj.ypzt}
+            </if>
+            <if test="cxtj.ypbm!=null">
+                and a.ypbm like concat('%',#{cxtj.ypbm}, '%')
+            </if>
+            <if test="cxtj.htmc!=null">
+                and a.HTMC like concat('%',#{cxtj.htmc}, '%')
+            </if>
+            <choose>
+                <when test="cxtj.startDate!=null and cxtj.endDate!=null">
+                    and a.SJCJRQ between #{cxtj.startDate} and #{cxtj.endDate}
+                </when>
+                <otherwise>
+                    <choose>
+                        <when test="cxtj.startDate!=null and cxtj.endDate==null">
+                            and a.SJCJRQ  &gt; #{cxtj.startDate}
+                        </when>
+                        <otherwise>
+                            <choose>
+                                <when test="cxtj.startDate==null and cxtj.endDate!=null">
+                                    and a.SJCJRQ  &lt; #{cxtj.endDate}
+                                </when>
+                            </choose>
+                        </otherwise>
+                    </choose>
+                </otherwise>
+            </choose>
+            AND FuncAuthorityBG(a.id, #{cxtj.zydm}, '2') = 1
+            <!-- order by a.lrrq desc  limit  ${cxtj.start},${cxtj.length}  -->
+        </if>
+
+        <if test="cxtj.bs=='bgdy'.toString()">
+            select  count(1) from t_ypgl_jbxx a LEFT JOIN t_wt_jbxx b
+            on a.WTID=b.WTID where a.scbz=0 and a.BGBZZT='002' and a.bgzjsp in ('002','000')  and a.BGSHZT='002' and BGPZZT='002'
+            AND IFNULL(b.zfbs,'0') != '1'
+            AND BGLJ IS NOT NULL
+            <!-- and a.id in(select YPID from T_BGGL_RYDM where scbz=false and lx=3 and ZXRY_DM=#{cxtj.zydm}) -->
+            <if test="cxtj.ypmc!=null">
+                and a.YPMC like concat('%',#{cxtj.ypmc}, '%')
+            </if>
+            <if test="cxtj.ypbm!=null">
+                and a.ypbm like concat('%',#{cxtj.ypbm}, '%')
+            </if>
+            AND FuncAuthorityBG(a.id, #{cxtj.zydm}, '3') = 1
+            <!--  order by a.lrrq desc  limit  ${cxtj.start},${cxtj.length}   -->
+        </if>
+
+    </select>
+
+    <insert id="insert">
+        insert into t_bggl_rydm(ypid,zxry_dm,lx,lrry,lrrq)
+        VALUES
+        <foreach collection="data" item="item" index="index" separator=",">
+            (#{item.id},#{item.zydm},#{item.lx},#{item.lrry},now())
+        </foreach>
+
+        <foreach collection="data" item="item" index="index" separator=";" open=";">
+            <if test="index==0">
+                <if test="item.lx==0">
+                    update t_ypgl_jbxx set BGBZZT='001' where id =#{item.id}
+                </if>
+                <if test="item.lx==1">
+                    update t_ypgl_jbxx set BGSHZT='001' where id =#{item.id}
+                </if>
+                <if test="item.lx==2">
+                    update t_ypgl_jbxx set BGPZZT='001' where id =#{item.id}
+                </if>
+                <if test="item.lx==3">
+                    update t_ypgl_jbxx set BGDYZT='001' where id =#{item.id}
+                </if>
+            </if>
+        </foreach>
+    </insert>
+
+
+    <select id="findCyrwAll" resultType="map">
+        <if test="cxtj.bs=='rwfp'.toString()">
+            select a.ID, b.HTMC,a.YPBM,a.YPMC,a.JCXM,a.SJCJRQ,b.DWMC,b.SFMC,b.CSMC,b.XJMC from t_ypgl_jbxx a LEFT JOIN t_wt_jbxx b on a.WTID=b.WTID
+            where  a.scbz=0 AND b.if_cy = TRUE and ((a.ypjczt='000') or (a.sjjyzt='000') or (a.sjsczt='000'))
+            <if test="cxtj.ypmc!=null">
+                and a.YPMC like concat('%',#{cxtj.ypmc}, '%')
+            </if>
+            <include refid="queryCommon"/>
+            order by a.lrrq  desc  limit ${cxtj.start},${cxtj.length}
+        </if>
+
+        <if test="cxtj.bs=='ypjc'.toString()">
+            select a.ID, b.HTMC,a.YPBM,a.YPMC,a.JCXM,a.SJCJRQ,b.DWMC,b.SFMC,b.CSMC,b.XJMC from t_ypgl_jbxx a LEFT JOIN t_wt_jbxx b
+            on a.WTID=b.WTID where a.scbz=0 AND b.if_cy = TRUE and a.ypjczt='001' and a.id in(select YPID from T_JCGL_RYDM where lx=1 and ZXRY_DM=#{cxtj.zydm})
+            <if test="cxtj.ypmc!=null">
+                and a.YPMC like concat('%',#{cxtj.ypmc}, '%')
+            </if>
+            <include refid="queryCommon"/>
+            order by a.lrrq  desc  limit ${cxtj.start},${cxtj.length}
+        </if>
+    </select>
+
+    <select id="findCyrwCount" resultType="long">
+        <if test="cxtj.bs=='rwfp'.toString()">
+            select  count(1) from t_ypgl_jbxx a LEFT JOIN t_wt_jbxx b on a.WTID=b.WTID
+            where  a.scbz=0 AND b.if_cy = TRUE and ((a.ypjczt='000') or (a.sjjyzt='000') or (a.sjsczt='000'))
+            <if test="cxtj.ypmc!=null">
+                and a.YPMC like concat('%',#{cxtj.ypmc}, '%')
+            </if>
+            <include refid="queryCommon"/>
+        </if>
+
+        <if test="cxtj.bs=='ypjc'.toString()">
+            select count(1) from t_ypgl_jbxx a LEFT JOIN t_wt_jbxx b
+            on a.WTID=b.WTID where a.scbz=0 AND b.if_cy = TRUE and a.ypjczt='001' and a.id in(select YPID from T_JCGL_RYDM where lx=1 and ZXRY_DM=#{cxtj.zydm})
+            <if test="cxtj.ypmc!=null">
+                and a.YPMC like concat('%',#{cxtj.ypmc}, '%')
+            </if>
+            <include refid="queryCommon"/>
+            order by a.lrrq  desc  limit ${cxtj.start},${cxtj.length}
+        </if>
+
+    </select>
+
+    <update id="updatebg">
+        <foreach collection="data" item="item" index="index">
+            <if test="item.zt=='006'.toString()">
+                update t_ypgl_jbxx set BGLJ=#{item.BGLJ} where id=#{item.id};
+            </if>
+        </foreach>
+    </update>
+
+    <update id="updatezt">
+        <!-- 通过操作-->
+        <foreach collection="data" item="item" index="index">
+            <if test="item.zt=='002'.toString()">
+                <if test="item.lx=='0'.toString()">
+                    update t_ypgl_jbxx set BGBZZT=#{item.zt},bgshzt=#{item.bgshzt} where id=#{item.id};
+                    insert into t_bggl_rydm(ypid,zxry_dm,lx,zxsj)  VALUES (#{item.id},#{item.zydm},#{item.lx},now());
+                </if>
+                <if test="item.lx=='5'.toString()">
+                    update t_ypgl_jbxx set BGZBZT=#{item.zt} where id=#{item.id};
+                    insert into t_bggl_rydm(ypid,zxry_dm,lx,zxsj)  VALUES (#{item.id},#{item.zydm},#{item.lx},now());
+                </if>
+                <if test="item.lx=='4'.toString()">
+                    update t_ypgl_jbxx set bgzjsp=#{item.zt} where id=#{item.id};
+                    insert into t_bggl_rydm(ypid,zxry_dm,lx,zxsj)  VALUES (#{item.id},#{item.zydm},#{item.lx},now());
+                    update t_ypgl_jbxx set bgzjspr = #{item.zydm},bgzjspsj = now() where id=#{item.id};
+                </if>
+                <if test="item.lx=='1'.toString()">
+                    update t_ypgl_jbxx set BGSHZT=#{item.zt},bgpzzt = '001' where id=#{item.id};
+                    insert into t_bggl_rydm(ypid,zxry_dm,lx,zxsj)  VALUES (#{item.id},#{item.zydm},#{item.lx},now());
+                    update t_ypgl_jbxx set bgshr = #{item.zydm},bgshsj = now() where id=#{item.id};
+
+                </if>
+                <if test="item.lx=='2'.toString()">
+                    update t_ypgl_jbxx set BGPZZT=#{item.zt},bgzjsp='001' where id=#{item.id};
+                    insert into t_bggl_rydm(ypid,zxry_dm,lx,zxsj)  VALUES (#{item.id},#{item.zydm},#{item.lx},now());
+                    update t_ypgl_jbxx set bgpzr = #{item.zydm},bgpzsj = now() where id=#{item.id};
+
+                </if>
+                <if test="item.lx=='3'.toString()">
+                    update t_ypgl_jbxx set BGDYZT=#{item.zt} where id=#{item.id};
+                    insert into t_bggl_rydm(ypid,zxry_dm,lx,zxsj)  VALUES (#{item.id},#{item.zydm},#{item.lx},now());
+                </if>
+            </if>
+            <if test="item.zt=='001'.toString()">
+                <if test="item.lx=='2'.toString()">
+                    update t_ypgl_jbxx set BGPZZT=#{item.zt},bgzjsp='001' where id=#{item.id};
+                    insert into t_bggl_rydm(ypid,zxry_dm,lx,zxsj)  VALUES (#{item.id},#{item.zydm},#{item.lx},now());
+                    update t_ypgl_jbxx set bgpzr = #{item.zydm},bgpzsj = now() where id=#{item.id};
+                </if>
+            </if>
+        </foreach>
+
+
+        <!-- 退回操作  原先update t_ypgl_jbxx set BGBZZT='003',bgzjsp='000',BGSHZT='000',BGPZZT='000' where id=#{item.id};-->
+        <foreach collection="data" item="item" index="index">
+            <if test="item.zt=='004'.toString()">
+                <if test="item.lx=='4'.toString()">
+                    update t_ypgl_jbxx set BGPZZT='003',bgzjsp='000' where id=#{item.id};
+                    insert into t_bggl_rydm(ypid,zxry_dm,lx,zxsj,th) VALUES  (#{item.id},#{item.zydm},#{item.lx},now(),'1');
+                </if>
+                <if test="item.lx=='1'.toString()">
+                    update t_ypgl_jbxx set BGBZZT='003',BGSHZT='000' where id=#{item.id};
+                    insert into t_bggl_rydm(ypid,zxry_dm,lx,zxsj,th)  VALUES  (#{item.id},#{item.zydm},#{item.lx},now(),'1');
+                </if>
+                <if test="item.lx=='2'.toString()">
+                    update t_ypgl_jbxx set BGSHZT='003',BGPZZT='000',BGBZZT='003' where id=#{item.id};
+                    insert into t_bggl_rydm(ypid,zxry_dm,lx,zxsj,th)  VALUES   (#{item.id},#{item.zydm},#{item.lx},now(),'1');
+                </if>
+            </if>
+        </foreach>
+    </update>
+
+    <resultMap id="getAllSetDaysResult" type="java.util.HashMap">
+        <result property="ypmc" column="ypmc"></result>
+        <result property="ypzt" column="ypzt"></result>
+        <result property="ypbm" column="ypbm"></result>
+        <result property="ypsl" column="ypsl"></result>
+        <result property="ajssj" column="ajssj"></result>
+        <result property="ggxh" column="ggxh"></result>
+        <result property="ypdj" column="ypdj"></result>
+        <result property="if_fb" column="if_fb"></result>
+        <result property="bzq" column="bzq"></result>
+        <result property="zxzb" column="zxzb"></result>
+        <result property="jylb" column="jylb"></result>
+        <result property="YPPHHBH" column="YPPHHBH"></result>
+        <result property="ypsllrrq" column="ypsllrrq"></result>
+        <result property="ypsllrry" column="ypsllrry"></result>
+        <result property="cyjs" column="cyjs"></result>
+        <result property="cylrrq" column="cylrrq"></result>
+        <result property="cylrry" column="cylrry"></result>
+        <result property="zblrrq" column="zblrrq"></result>
+    </resultMap>
+    <select id="getYplzd" resultMap="getAllSetDaysResult">
+        select IFNULL(a.ypmc,"") as ypmc,IFNULL(a.ypzt,"") as ypzt,IFNULL(a.ypbm,"") as ypbm,IFNULL(a.ypsl,"") AS ypsl,IFNULL(a.ajssj,"") AS ajssj,IFNULL(a.ggxh,"") as ggxh,IFNULL(a.ypdj,"") AS ypdj,IFNULL(a.if_fb,"") as if_fb,IFNULL(a.bzq,"") as bzq,IFNULL(a.zxbz,"") AS zxzb,IFNULL(b.JYLB,"") as jylb,IFNULL(a.YPPHHBH,"") AS YPPHHBH,IFNULL(c.lrrq,"") AS ypsllrrq,IFNULL(c.lrry,"") AS
+                                    ypsllrry,IFNULL(d.cyjs,"") AS cyjs,IFNULL(e.lrrq,"") AS cylrrq,IFNULL(e.LRRY,"") AS cylrry,IFNULL(f.LRRQ,"") AS zblrrq,IFNULL(f.LRRY,"") AS zblrry，IFNULL(a.ypzt,"") as ypzt
+        FROM
+            t_ypgl_jbxx a LEFT JOIN t_wt_jbxx b on a.ypbm=b.WTID
+            LEFT JOIN (SELECT t_ypgl_rydm.LRRQ,t_ypgl_rydm.LRRY ,t_ypgl_rydm.YPBM FROM t_ypgl_rydm WHERE t_ypgl_rydm.LX='1' ) c on c.YPBM = a.YPBM
+            LEFT JOIN (SELECT t_rwgl_jbxx.cyjs,t_rwgl_jbxx.WTID FROM t_rwgl_jbxx) d ON d.WTID=a.YPBM
+            LEFT JOIN (SELECT t_ypgl_rydm.LRRQ,t_ypgl_rydm.LRRY ,t_ypgl_rydm.YPBM FROM t_ypgl_rydm WHERE t_ypgl_rydm.LX='3' ) e on e.YPBM = a.YPBM
+            LEFT JOIN (SELECT t_ypgl_rydm.LRRQ,t_ypgl_rydm.LRRY ,t_ypgl_rydm.YPBM FROM t_ypgl_rydm WHERE t_ypgl_rydm.LX='4' ) f on f.YPBM = a.YPBM
+        where a.ypbm = #{ypbm}
+    </select>
+
+    <select id="getYplzdjcxm" resultType="com.xinhai.caiyun.customermanage.api.Jcx">
+        select IFNULL(a.zxry_dm,"") as jczxry,IFNULL(a.sd,"") as sd,IFNULL(a.wd,"") as wd,
+        IFNULL(a.jcz,"") as jcz,IFNULL(b.lrrq,"") as lrrq,IFNULL(c.zwmc_bm,"") as jcxmc,IFNULL(d.name,"") as name
+        from t_ypgl_jbxx b
+        LEFT JOIN t_yp_jcxm a on b.ID=a.ypid
+        LEFT JOIN t_jcxm_jbxx c on c.id=a.jcxmid
+        LEFT JOIN user d on d.zydm=a.ZXRY_DM
+        where b.ypbm=#{ypbm}
+    </select>
+    <!--报告编制-->
+    <select id="getbgbz" resultType="map">
+        select IFNULL(b.ZXRY_DM,'1') as bgbzr,IFNULL(b.LRRQ,'1') as bgbzrq from
+          t_ypgl_jbxx a
+          LEFT JOIN t_bggl_rydm b on a.id=b.YPID
+          LEFT JOIN user c on c.zydm=b.ZXRY_DM where b.LX ='0' and a.id = #{id}
+          and b.if_zx = '001';
+    </select>
+    <!--报告打印-->
+    <select id="getbgdy" resultType="map">
+        select IFNULL(b.ZXRY_DM,'1') as bgdyr,IFNULL(b.LRRQ,'1') as bgdyrq from
+          t_ypgl_jbxx a
+          LEFT JOIN t_bggl_rydm b on a.id=b.YPID
+          LEFT JOIN user c on c.zydm=b.ZXRY_DM where b.LX ='3' and a.id = #{id}
+          and b.if_zx = '001';
+    </select>
+    <!--报告审核-->
+    <select id="getbgsh" resultType="map">
+        select IFNULL(b.ZXRY_DM,'1') as bgshr,IFNULL(b.LRRQ,'1') as bgshrq from
+          t_ypgl_jbxx a
+          LEFT JOIN t_bggl_rydm b on a.id=b.YPID
+          LEFT JOIN user c on c.zydm=b.ZXRY_DM where b.LX ='1' and a.id = #{id}
+          and b.if_zx = '001';
+    </select>
+    <!--报告批准-->
+    <select id="getbgpz" resultType="map">
+        select IFNULL(b.ZXRY_DM,'1') as bgpzr,IFNULL(b.LRRQ,'1') as bgpzrq from
+          t_ypgl_jbxx a
+          LEFT JOIN t_bggl_rydm b on a.id=b.YPID
+          LEFT JOIN user c on c.zydm=b.ZXRY_DM where b.LX ='2' and a.id = #{id}
+          and b.if_zx = '001';
+    </select>
+    <select id="getypdj" resultType="map">
+        select IFNULL(b.lrry,'1') AS ypdjr,ifnull(b.lrrq,'1') as ypdjrq fROm t_ypgl_rydm b ,user a
+        where a.zydm=b.lrry and b.lx='1' and b.ypbm = #{ypbm}
+    </select>
+    <select id="getyply" resultType="map">
+       select lqry,lqsj,min (lqsj)
+       from t_yp_zbwc
+       where lqzt='002' and ypbm=#{ypbm}
+    </select>
+    <select id="getypzb" resultType="map">
+           select IFNULL(b.LRRY,'1') AS zbr ,IFNULL(b.lrrq,'1') AS zbrq FROM t_ypgl_rydm b ,user a
+        where a.zydm=b.zxry_DM and b.lx='4' and b.ypbm = #{ypbm}
+    </select>
+
+    <update id="updateLZLJ">
+            update t_ypgl_jbxx
+            set LZLJ = #{lzlj}
+            where  ypbm = #{ypbm}
+        </update>
+
+    <select id="selectLZLJ" resultType="STRING">
+        select LZLJ
+        from t_ypgl_jbxx
+        where id = #{ypbm}
+    </select>
+
+    <select id="selectBGLJ" resultType="STRING">
+        select BGLJ
+        from t_ypgl_jbxx
+        where id = #{ypbm}
+    </select>
+
+    <select id="getlzinfo" resultType="map">
+             SELECT IFNULL(a.YPMC,'') as ypmc,IFNULL(a.GGXH,'') as ggxh, IFNULL(a.DWMC,'') as dwmc,IFNULL(b.YPBM,'') AS ypbm ,IFNULL(a.SCDW,'') as scdw,IFNULL(a.JYLB,'') as jylb, IFNULL(b.YPSL,'') as ypsl,IFNULL(b.LRRY,'') as cylrr ,IFNULL(a.ypzt,'') AS ypzt,IFNULL(b.lrrq,'') AS ajssj ,IFNULL(a.YPPHHBH,'') AS YPPHHBH ,
+             IFNULL(b.ypdj,'') AS ypdj,IFNULL(a.bzq,'') as bzq,IFNULL(b.if_fb,"") as if_fb,IFNULL(a.syrq,'') as syrq,IFNULL(a.pdyj,'') as zxbz
+             FROM t_wt_jbxx a
+        LEFT JOIN t_ypgl_jbxx b ON a.WTID = b.YPBM where b.ypbm = #{ypbm}
+    </select>
+    <select id="getjcyj" resultType="map">
+        SELECT  ifnull(b.jcyj,'') as jyyj FROM t_jcxm_jbxx b WHERE id in (SELECT jcxmid from t_yp_jcxm a WHERE a.ypid = #{id})
+    </select>
+
+    <select id="findJcx" resultType="Map">
+        SELECT ifnull(b.zwmc_bm,'') as Jcx FROM t_jcxm_jbxx b WHERE id in (SELECT jcxmid from t_yp_jcxm a WHERE a.ypid = #{id})
+    </select>
+
+    <select id="findFfbz" resultType="Map">
+        SELECT ifnull(b.jcyj,'') as jyyj FROM t_jcxm_jbxx b WHERE id in (SELECT jcxmid from t_yp_jcxm a WHERE a.ypid = #{id})
+    </select>
+
+    <select id="findById" resultType="Map">
+      SELECT ifnull(id,'') as id, ifnull(zwmc_bm,'') as jyxm,ifnull(JLDW,'') as dw,ifnull(jcx,'') as jcx,ifnull(JCYJ,'') as bzyq, '' as jyjg,'' as dxpd FROM t_jcxm_jbxx WHERE id in (SELECT jcxmid from t_yp_jcxm a WHERE a.ypid = #{id})
+  </select>
+
+    <select id="findjcz" resultType="Map">
+        select ifnull(jcxmid,'') as jcxmid, ifnull(jcz,'') as jcz from t_yp_jcxm where ypid = #{id}
+    </select>
+
+    <select id="findjcrq" resultType="Map">
+        SELECT ifnull(lrrq,'') as jcrq FROM t_yp_jcxm WHERE ypid = #{id}
+    </select>
+
+    <select id="findjyyq" resultType="Map">
+        SELECT distinct ifnull(b.`name`,'') as jyyq FROM yqsbtz b WHERE id in (SELECT YQID from t_jcxm_yq a WHERE a.ypid = #{id})
+    </select>
+    <!--查询电子签章路径-->
+    <select id="getDzqz" resultType="string">
+        select qzlj
+        FROM t_dzqz_jbxx
+        where zydm=#{zydm}
+    </select>
+    <select id="findJcxByYpbm" resultType="map" parameterType="String">
+        select
+    </select>
+    <!--查询制备样品数量-->
+    <select id="findZbsl" resultType="Integer">
+        select count(*)
+        from  t_yp_zbwc
+        where ypbm = #{ypbm}
+    </select>
+    <!--抽样执行人员-->
+    <select id="findCyzxry" resultType="String">
+        select zxry
+        from t_rwgl_jbxx
+        where wtid=#{ypbm}
+    </select>
+    <!--检测报告数据-->
+    <select id="findJcxsj" resultType="map">
+        SELECT ifnull(b.zwmc_bm,'') as jyxm,ifnull(b.jcdw,'') as dw ,ifnull(b.jcx,'') as jcx,ifnull(a.jcz,'') as jcz FROM t_jcxm_jbxx b WHERE id in (SELECT jcxmid from t_yp_jcxm a WHERE a.ypid = #{id})
+    </select>
+    <!--销毁报告信息-->
+    <select id="findxhbg" resultType="map">
+        select ifnull(t.ypbm,'') as ypbm,ifnull(t.ypmc,'') as ypmc,ifnull(w.DWMC,"") as dwmc,ifnull(t.YPZT,"") as ypzt,ifnull(t.xhsj,'') as xhsj,ifnull(t.ypsl,'') as ypsl
+        ,ifnull(t.xhfs,'') as xhfs,ifnull(t.xhyy,'') as xhyy,ifnull(t.xhdd,'') as xhdd
+        from t_ypgl_jbxx t,t_wt_jbxx w where t.WTID = w.WTID and t.ypbm =#{ypbm} and xhhybz = '002' and jbrsp = '1'
+
+    </select>
+
+    <select id="findById1" resultType="Map">
+			  SELECT ifnull(b.zwmc_bm,'') as jyxm,ifnull(b.jldw,'') as dw ,ifnull(b.jcx,'') as jcx,ifnull(b.id,"") as jcxmid,ifnull(b.xlz,'') as xlz,ifnull(b.jcfa,'') as jcfa,ifnull(b.pdyj,'') as pdyj	FROM t_jcxm_jbxx b WHERE b.id in (SELECT jcxmid from t_yp_jcxm a WHERE a.ypid = #{id})
+    </select>
+
+    <select id="findjczz" resultType="Map">
+    select ifnull(jcxmid,'') as jcxmid, ifnull(jcz,'') as jcz,if_fb from t_yp_jcxm where ypid = #{id}
+    </select>
+    <!--更新样品销毁报告-->
+    <update id="ypxhbg">
+        update t_ypgl_jbxx
+        set xhbglj=#{yplj}
+        where ypbm=#{ypbm};
+    </update>
+    <!--查询路径-->
+    <select id="findypxhbg" resultType="string">
+        select xhbglj
+        from  t_ypgl_jbxx
+        where ypbm = #{ypbm}
+    </select>
+    <!---->
+    <select id="findJs" resultType="map">
+        select t.jsfzr,t.jsspsj
+        from t_ypgl_jbxx t,t_wt_jbxx w where t.WTID = w.WTID and t.ypbm = #{ypbm} and xhhybz = '002' and jbrsp = '1'
+    </select>
+    <select id="findJbr" resultType="map">
+        select t.jbr,t.jbrspsj
+from t_ypgl_jbxx t,t_wt_jbxx w where t.WTID = w.WTID and t.ypbm = #{ypbm} and xhhybz = '002' and jbrsp = '1'
+
+    </select>
+    <select id="getjyyj" resultType="map">
+        SELECT distinct ifnull(b.pdyj,'') as jyyj FROM t_jcxm_jbxx b WHERE id in (SELECT jcxmid from t_yp_jcxm a WHERE a.ypid = #{id})
+    </select>
+    <!--更新报告操作人员-->
+    <update id="updateIF_ZX">
+        update t_bggl_rydm
+        set IF_ZX = #{map.if_zx}
+        where ypid= #{map.ypid}
+        and zxry_dm = #{map.zxry_dm}
+        and lx = #{lx}
+    </update>
+    <!--更新检测是否可看状态-->
+    <update id="updateIF_JC">
+          update t_wt_jbxx
+          set  if_jc = '1'
+          where wtid = #{id}
+    </update>
+    <!--获取抽样任务信息-->
+    <select id="findCyinfo" resultType="map">
+        select ifnull(cyjs,'') as cyjs,ifnull(cyrq,'') as ypslrq,ifnull(zxry,'') as zxry
+        from t_rwgl_jbxx
+        where wtid = #{id}
+    </select>
+    <select id="ifZy" resultType="String">
+        select if_zy
+        from t_wt_jbxx
+        where wtid = #{id}
+    </select>
+    <!--查询领用信息-->
+    <select id="getlyinfo" resultType="map">
+        SELECT ZBZL,LQRY,LQSJ,min(lqsj)
+FROM t_yp_zbwc
+WHERE YPBM = #{ypbm} AND LQZT = '002'
+    </select>
+    <!--查找人员信息-->
+    <select id="rydm" resultType="map">
+        select name,zydm from user
+        where bmdm  in (select code from  organization where name= #{bmmc});
+    </select>
+    <!--报告分配的审核人-->
+    <select id="shrydm" resultType="map">
+    select name,zydm from user where name in('路风军','袁保证','庞春燕','李蕙','张雪')
+    </select>
+    <!--报告分配的批准人-->
+    <select id="pzrydm" resultType="map">
+    select name,zydm from user where name in('李嘉业','史晓华','庞春燕','李蕙','张雪')
+    </select>
+    <!--报告分配的主检人-->
+    <select id="zjrydm" resultType="map">
+    select name,zydm from user where name in('庞春燕','刘霞','李蕙','张雪','刘寅','李欣芳','朱玉艳','许玲丽',
+    '孙敏','张新刚','张慧敏','李盼盼','宗英')
+    </select>
+    <!--增加bgbl_rydm-->
+    <insert id="addBgfpAll">
+          insert into t_bggl_rydm(ypid,zxry_dm,lx,lrry,lrrq)
+          values
+          (#{map.ypid},#{map.zxry_dm},#{map.lx},#{map.lrry},now());
+    </insert>
+
+
+    <!-- 修改报告编制状态    主检人-->
+    <update id="updateBgbzzt">
+        update t_ypgl_jbxx set bgzjsp='001' where id=#{map.ypid};
+    </update>
+    <!-- 修改报告审核状态-->
+    <update id="updateBgshzt">
+        update t_ypgl_jbxx set bgshzt='001' where id=#{map.ypid};
+    </update>
+    <!-- 修改报告批准状态-->
+    <update id="updateBgpzzt">
+        update t_ypgl_jbxx set bgpzzt='001' where id=#{map.ypid};
+    </update>
+    <!-- 修改报告打印状态-->
+    <update id="updateBgdyzt">
+        update t_ypgl_jbxx set bgdyzt='001' where id=#{map.ypid};
+    </update>
+
+    <!--获取封面信息-->
+    <select id="findfmInfo" resultType="map">
+     select ifnull(a.ypmc,'') as ypmc,ifnull(b.wtid,'') as wtid ,ifnull(b.ggxh,'') as ggxh,ifnull(b.scdw,'') as ssjdw
+     ,ifnull(b.jylb,'') as jylb
+        from t_wt_jbxx b
+        left join t_ypgl_jbxx a
+        on a.wtid = b.wtid
+				where a.ypbm = #{ypbm}
+    </select>
+    <!--获取样品信息-->
+    <select id="getypinfo" resultType="map">
+        select ypsl,ypdw
+        from t_ypgl_jbxx
+        where ypbm=#{ypbm}
+    </select>
+    <!--获取最晚的检测时间-->
+    <select id="getMaxTime" resultType="String">
+      SELECT STR_TO_DATE((select max(lrrq) from t_yp_jcxm
+        where ypid=#{ypid}), '%Y-%m-%d')
+    </select>
+
+    <!--报告退回原因-->
+    <update id="updatethyy">
+         update t_bggl_rydm set thyy=#{map.thyy} where ypid=#{map.id} and lx=#{map.lx} and th='1';
+    <!--update t_bggl_rydm set thyy=#{map.thyy} where ypid =(select a.id from t_ypgl_jbxx a LEFT JOIN  t_wt_jbxx b
+                 on a.wtid=b.wtid where b.id=#{map.id}) and lx=#{map.lx} and th='1';-->
+</update>
+
+<!-- 获得退回记录信息 -->
+    <select id="findThjlList" resultType="map">
+        select a.id,a.ypid,a.zxry_dm,a.zxsj,a.lx,a.thyy,b.ypmc,b.ypbm,
+        (select name from user where zydm=a.zxry_dm) zxr from
+        t_bggl_rydm a LEFT JOIN t_ypgl_jbxx b on a.ypid=b.id
+        where a.th='1' and a.scbz='0'
+        <if test="map.ypmc!=null and map.ypmc!=''">
+            and b.ypmc like concat('%',#{map.ypmc},'%')
+        </if>
+        order by a.zxsj desc
+        limit ${map.start},${map.length};
+    </select>
+    <!-- 获得退回记录信息的数量 -->
+    <select id="findThjlListNum" resultType="java.lang.Integer">
+        select count(1)
+        from t_bggl_rydm a LEFT JOIN t_ypgl_jbxx b on a.ypid=b.id
+        where a.th='1' and a.scbz='0'
+        <if test="map.ypmc!=null and map.ypmc!=''">
+            and b.ypmc like concat('%',#{map.ypmc},'%')
+        </if>
+        order by a.zxsj desc
+    </select>
+    <!-- 删除退回记录信息 -->
+    <delete id="delThjlByIds">
+        delete from t_bggl_rydm where id  in
+        <foreach collection="list" item="it" index="index" open="(" separator="," close=")">
+            #{it}
+        </foreach>
+    </delete>
+
+    <!--查询报告基本信息  生成委托报告-->
+    <select id="findBgsj" resultType="map">
+    SELECT
+        ifnull(a.WTID,"") as wtid, ifnull(b.YPMC,"") as ypmc, ifnull(b.GGXH,"") as ggxh, ifnull(a.dwmc,"") as dwmc, ifnull(a.sjdw,"") as sjdw, ifnull(a.jylb,"") as jylb,
+        ifnull(b.YPDJ,"") as ypdj, ifnull(b.SB,"") as sb, ifnull(a.sfmc,"") as sfmc, ifnull(a.csmc,"") as csmc, ifnull(a.xjmc,"") as xjmc, ifnull(a.xxdz,"") as xxdz,
+        ifnull(a.syry,"") as syry, ifnull(b.ybjs,"") as ybjs, ifnull(a.syrq,"") as syrq, ifnull(b.YPSL,"") as ypsl,ifnull(b.YPDW,"") as ypdw, ifnull(b.SCRQ,"") as scrq,
+        ifnull(b.ypzt,"") as ypzt, ifnull(b.YPPHHBH,"") as ypphhbh, ifnull(a.bgscsj,"") as bgscsj,ifnull(a.wtdw,"") as wtdw,ifnull(b.IF_SGR,"") as ifsgr,
+				CONCAT(MIN(c.wd),'-',MAX(c.wd)) as wd,CONCAT(MIN(c.sd),'-',MAX(c.sd)) as sd
+        FROM t_wt_jbxx a left join t_ypgl_jbxx b on
+				a.wtid = b.wtid
+				LEFT JOIN t_yp_jcxm c
+				ON c.ypid = b.ID
+        WHERE b.ID = #{id};
+    </select>
+    <!--查询报告基本信息  生成一对多报告-->
+    <select id="findBgsjydd" resultType="map">
+        SELECT
+        ifnull(a.sjdw,"") as sjdw, ifnull(a.jylb,"") as jylb, ifnull(b.YPMC,"") as ypmc, ifnull(b.GGXH,"") as ggxh, ifnull(a.dwmc,"") as dwmc, ifnull(a.sjdw,"") as sjdw,
+        ifnull(b.YPDJ,"") as ypdj, ifnull(b.SB,"") as sb, ifnull(a.sfmc,"") as sfmc, ifnull(a.csmc,"") as csmc, ifnull(a.xjmc,"") as xjmc, ifnull(a.xxdz,"") as xxdz,
+        ifnull(a.syry,"") as syry, ifnull(b.ybjs,"") as ybjs, ifnull(a.syrq,"") as syrq, ifnull(b.YPSL,"") as ypsl,ifnull(b.YPDW,"") as ypdw, ifnull(b.SCRQ,"") as scrq,
+        ifnull(b.ypzt,"") as ypzt, ifnull(b.YPPHHBH,"") as ypphhbh, ifnull(a.bgscsj,"") as bgscsj, ifnull(a.wd,"") as wd, ifnull(a.sd,"") as sd
+        FROM t_wt_jbxx a left join t_ypgl_jbxx b on a.wtid = b.wtid
+        WHERE a.ID = #{id};
+    </select>
+
+    <!--更新委托报告生成路径-->
+    <update id="updateWtbglj">
+        update t_ypgl_jbxx
+        set BGLJ = #{wtbglj}
+        where id = #{id1}
+    </update>
+
+    <!--获取温度最大值最小值-->
+    <select id="selectwd" resultType="map">
+        select min(wd) as swd,max(wd) as mwd
+        from t_yp_jcxm
+        where ypid = #{id}
+    </select>
+    <!--获取湿度最大最小值-->
+    <select id="selectsd" resultType="map">
+        select min(sd) as ssd,max(sd) as msd
+        from t_yp_jcxm
+        where ypid = #{id}
+    </select>
+    <!--获取检测日期最大最小值-->
+    <select id="selectjcrq" resultType="map">
+        select min(s_date) as sjcrq,max(e_date) as mjcrq
+        from t_yp_jcxm
+        where ypid = #{id}
+    </select>
+    <!--通过样品ID获取检测依据-->
+    <select id="getlzjcyj" resultType="String">
+        SELECT  ifnull(b.pdyj,'') as jyyj FROM t_jcxm_jbxx b WHERE id in (SELECT jcxmid from t_yp_jcxm a WHERE a.ypid = #{id})
+    </select>
+    <!--通过委托ID更新报告生成时间-->
+    <update id="updateBgscsj">
+        update t_wt_jbxx
+        set bgscsj = #{bgscsj},
+        bgjyjl = #{bgjyjl},
+        bgjyjlbz = #{bgjyjlbz}
+        where id = #{id}
+    </update>
+    <!--查询报告基本信息  生成一对一抽样报告-->
+    <select id="findYdybgsj" resultType="map">
+        SELECT
+        ifnull(a.wtid,"") as wtid, ifnull(b.ypbm,"") as ypbm, ifnull(b.YPMC,"") as ypmc, ifnull(b.GGXH,"") as ggxh, ifnull(a.sjdw,"") as sjdw, ifnull(b.scdw,"") as scdw, ifnull(a.cxzt,"") as jylb,
+        ifnull(b.SCRQ,"") as scrq, ifnull(a.sjdwlxdh,"") as sjdwlxdh, ifnull(b.scdwlxdh,"") as scdwlxdh, ifnull(a.rwly,"") as rwly, ifnull(a.cyrq,"") as cyrq, ifnull(a.cyry,"") as cyry,
+        ifnull(b.ypddrq,"") as ypddrq, ifnull(b.SB,"") as sb, ifnull(b.YPSL,"") as ypsl,ifnull(b.YPDW,"") as ypdw, ifnull(a.cyjs,"") as cyjs, ifnull(b.fyry,"") as fyry,
+        ifnull(b.YPDJ,"") as ypdj, ifnull(b.fyzt,"") as fyzt,ifnull(a.bgscsj,"") as bgscsj, ifnull(a.wd,"") as wd, ifnull(a.sd,"") as sd
+        FROM t_wt_jbxx a left join t_ypgl_jbxx b on a.wtid = b.wtid
+        WHERE a.ID = #{id};
+    </select>
+
+    <select id="findjcff" resultType="String">
+        SELECT ifnull(b.jcfa,'') as jyyj FROM t_jcxm_jbxx b WHERE id in (SELECT jcxmid from t_yp_jcxm a WHERE a.ypid = #{id})
+    </select>
+    <!--更新一对多抽样报告生成路径-->
+    <update id="updateYddcybglj">
+        update t_wt_jbxx
+        set yddbglj = #{yddcybglj}
+        where id = #{id}
+    </update>
+    <!--获取样品编码最大值最小值-->
+    <select id="selectYpid" resultType="map">
+        select min(ypbm) as sypbm,max(ypbm) as mypbm
+        from t_ypgl_jbxx
+        where wtid = #{id}
+    </select>
+    <select id="selectGgxh" resultType="String">
+        select ggxh
+        from t_ypgl_jbxx
+        where wtid = #{id}
+    </select>
+    <select id="selectYpdj" resultType="String">
+        select ypdj
+        from t_ypgl_jbxx
+        where wtid = #{id}
+    </select>
+    <select id="findWdsd" resultType="com.xinhai.caiyun.customermanage.api.Tqywt" parameterType="java.lang.String">
+        select
+        id,wd,sd
+        from t_wt_jbxx
+        where id = #{id};
+    </select>
+    <update id="updateWdsd" parameterType="com.xinhai.caiyun.customermanage.api.Tqywt">
+        update t_wt_jbxx
+        <set>
+            <if test="wd != null">
+                wd = #{wd},
+            </if>
+            <if test="sd != null">
+                sd = #{sd}
+            </if>
+            WHERE ID = #{id};
+        </set>
+    </update>
+    <!--抽样报告获取基本信息-->
+    <select id="findCyjbInfo" resultType="map">
+        				SELECT a.WTID as CYBH,a.SJDW,a.RWLY,a.CYRQ,a.CYJS,b.YPBM,b.YPMC,b.SB,b.GGXH,b.YPDJ,CONCAT(b.YPSL,
+        b.YPDW) as YPSL,b.SCRQ,b.SCDW,CONCAT(b.SCDW,';',b.SCDWLXDH) as SJDWJLXDH,b.FYRY,b.FYZT,b.YPDDRQ,
+        CONCAT(a.SJDW,a.SJDWLXDH) as SCDWJLXDH,a.CYRY,
+				IF(a.CXZT='001','委托检验',IF(a.CXZT='002','食品检验',IF(a.CXZT='003','果品检验',IF(a.CXZT='004','畜产品检验',IF(a.CXZT='005','农产品质检检验','农产品农残检验'))))) as JYLB,CONCAT(MIN(c.wd),'-',MAX(c.wd)) as WD,CONCAT(MIN(c.sd),'-',MAX(c.sd)) as SD
+        FROM t_wt_jbxx a
+        LEFT JOIN t_ypgl_jbxx b
+        ON a.WTID = b.WTID
+				LEFT JOIN t_yp_jcxm c
+				ON b.ID = c.ypid
+        WHERE a.ID = #{wtid}
+    </select>
+    <!--获取判断依据-->
+    <select id="findPdyj" resultType="map">
+        SELECT GROUP_CONCAT(DISTINCT b.PDYJ) as PDYJ,GROUP_CONCAT(DISTINCT b.JCFA) AS JCFA
+        FROM t_yp_jcxm a
+        LEFT JOIN t_jcxm_jbxx b
+        ON a.jcxmid = b.ID
+        WHERE a.YPID = #{ypid}
+    </select>
+    <!--检测项目表格-->
+    <select id="findJcxmTable" resultType="map">
+        SELECT  b.ZWMC_BM,CONCAT('mg/L') AS DW,CONCAT('≤',b.XLZ)  as XLZ,
+        IF(a.JCZ>b.JCX,a.JCZ,CONCAT('未检出(<![CDATA[<]]>',b.JCX,')')) as JCJG,
+        IF(b.XLZ='','不做判定',IF(b.XLZ>a.JCZ,'合格','不合格')) as JYJG
+        FROM t_yp_jcxm a
+        LEFT JOIN t_jcxm_jbxx b
+        ON a.jcxmid = b.id
+        WHERE  a.ypid =#{ypid}
+    </select>
+    <!--通过委托id获取样品id-->
+    <select id="findYpidByWtid" resultType="String">
+        SELECT b.ID
+				FROM t_wt_jbxx a
+				LEFT JOIN t_ypgl_jbxx b
+				ON a.WTID = b.WTID
+				WHERE a.ID=#{wtid} LIMIT 1
+    </select>
+    <!--获取主检审批通过时间与人员-->
+    <select id="findZJSP" resultType="map">
+        SELECT ZXRY_DM,ZXSJ
+        FROM t_bggl_rydm a
+        WHERE a.zxsj <![CDATA[<>]]> ''
+        AND a.YPID = #{ypid}
+        AND a.LX = '4'
+    </select>
+    <!--获取报告批准人员与时间-->
+    <select id="findBGPZ" resultType="map">
+              SELECT max(ZXRY_DM),max(ZXSJ)
+        FROM t_bggl_rydm a
+        WHERE a.zxsj <![CDATA[<>]]> ''
+        AND a.YPID = #{ypid}
+        AND a.LX = '2'
+    </select>
+    <!--获取报告审核-->
+    <select id="findBGSH" resultType="map">
+        SELECT ZXRY_DM,ZXSJ
+        FROM t_bggl_rydm a
+        WHERE a.zxsj <![CDATA[<>]]> ''
+        AND a.YPID = #{ypid}
+        AND a.LX = '1'
+    </select>
+    <!--获取报告编制-->
+    <select id="findBGBZ" resultType="map">
+        SELECT ZXRY_DM,ZXSJ
+        FROM t_bggl_rydm a
+        WHERE a.zxsj <![CDATA[<>]]> ''
+        AND a.YPID = #{ypid}
+        AND a.LX = '0'
+    </select>
+    <!--打印委托报告-->
+    <select id="dywtbg" resultType="map">
+        SELECT IFNULL(a.cydw ,'/') as fccydw,
+            IFNULL(a.CYDWXXDZ, '/') AS cydwxxdz,
+            IFNULL(a.cydwdh, '/') AS cydwdh,
+            IFNULL(a.CYDWLXDH, '/') AS cydwlxdh, IFNULL(DATE_FORMAT(a.SLRQ, '%Y-%m-%d'), '/') AS slrq,IFNULL(b.scdz, '/') AS scdz,IFNULL(b.ypzxbz, '') AS ypzxbz,
+            IFNULL(a.WTID, '/') AS wtid,
+            IFNULL(a.cydbm, '/') AS cydbm,
+            IFNULL(b.YPMC, '/') AS ypmc,
+            IFNULL(b.GGXH, '/') AS ggxh,
+            IFNULL(a.dwmc, '/') AS dwmc,
+            IFNULL(jylb.JYLB_MC, '/') AS jylb,
+            IFNULL(a.wtdwdz, '/') AS wtdwdz,
+            IFNULL(a.wtdwyzbm, '/') AS wtdwyzbm,
+            IFNULL(a.wtdwdh, '') AS wtdwdh,
+            'Fax' AS wtdwcz,
+            IFNULL(b.sb, '/') AS sb,
+            IFNULL(b.ypdj, '/') AS ypdj,
+            (case when b.scdw='' then '/' else IFNULL(b.scdw, '/') end) AS scdw,
+        IFNULL(b.scdwlxdh, '/') AS scdwlxdh,
+        CONCAT(IFNULL(a.dwmc, '/'),IFNULL(a.wtdwdz, ' '),
+        IFNULL(a.wtdwdh, '/')) AS wtdwanddh,
+            IFNULL(a.wtdw, '/') AS wtdw,
+            IFNULL(b.ypsl, '/') AS ypsl,
+            IFNULL(b.ypbm, '/') AS ypbm,
+            IFNULL(a.SYRQ, '/') AS syrq,
+            b.rqlxxz,
+            IFNULL(b.SCRQ, '/') AS scrq,
+            IFNULL(a.SYRY, '/') AS syry,
+            IFNULL(a.cydd, '/') AS shouydz,
+            IFNULL(a.jywcrq, '/') jywcrq,
+            IFNULL(b.ypzt, '/') ypzt,
+            IFNULL(b.ypxt, '/') AS ypxt,
+            IFNULL(a.jyyj, '/') jyyj,
+            IFNULL(a.jyyjbzqt, '/') jyyjbzqt,
+            IFNULL(a.yzjl, '/') jyjl,
+            IFNULL(b.bzxx, '/') bz,
+            IFNULL(b.bbbzrq, DATE_FORMAT(NOW(), '%Y-%m-%d')) as bbbzrq,
+            IFNULL(DATE_FORMAT(b.bgpzsj, '%Y-%m-%d'), '/') AS bbpzrq,
+            IFNULL(DATE_FORMAT(b.bgshsj, '%Y-%m-%d'), '/') AS bbzsrq,
+            t.jcxm,t.jcxmsl,
+            (case when a.SJDW='' then '/' else IFNULL(a.SJDW, '/') end)  AS sjdw,
+            IFNULL(a.SJDWLXR, '') AS sjdwlxr,
+            IFNULL(a.bcjdwlxr, '') AS bcjdwlxr,
+            IFNULL(a.bcjdwdz, '/') AS bcjdwdz,
+            IFNULL(a.frdb, '/') AS frdb,
+            IFNULL(a.bcjdwyddh, '/') AS sjdwlxdh,
+            IFNULL(a.SJDWXXDZ, '/') AS sjdwxxdz,
+            IFNULL(a.cyrq, DATE_FORMAT(NOW(), '%Y-%m-%d')) cyrq,
+            IFNULL(a.rwly, '/') AS rwly,
+            IFNULL(a.rwlx, '/') AS rwlx,
+            trwlx.dwmc as rwdwmc,
+            trwlx.lxdh as rwlxdh,
+           (case when a.CYRY='' then '/' else IFNULL(a.CYRY, '/') end)  AS cyry,
+            IFNULL(a.WTDW, '/') AS cydw,
+            IFNULL(a.CYJS, '/') AS cyjs,
+            IFNULL(b.YBJS, '/') AS ybjs,
+            IFNULL(b.YPDDRQ, '/') AS ypddrq,
+            IFNULL(a.jyyj, '/') AS jyyj,
+            IFNULL(DATE_FORMAT(b.YPJCSJ,'%Y-%m-%d'), '/') AS ypjcsj,
+            ifnull(b.bgzbr,'') as bgzbr,
+            ifnull(b.bbbzrq,'/') as bbbzrq,
+            IFNULL(b.bgpzr, '') AS bgpzr,
+            IFNULL(b.bgshr, '') AS bgshr
+        FROM
+            t_wt_jbxx a
+                LEFT JOIN   t_ypgl_jbxx b ON a.wtid = b.wtid
+                LEFT JOIN   dm_jylb jylb ON a.jylb = jylb.jylb_dm
+                left join   t_rwlx_jbxx trwlx on a.rwlx = trwlx.rwlx
+                LEFT JOIN
+                (SELECT
+                        ifnull(max(b.ZWMC_BM),'') jcxm,count(1) jcxmsl
+                FROM
+                    t_yp_jcxm a
+                LEFT JOIN t_jcxm_jbxx b ON a.jcxmid = b.id
+                WHERE
+                    a.ypid IN (SELECT
+                            id
+                        FROM
+                            t_ypgl_jbxx
+                        WHERE
+                            ypbm = #{map.ypbm})) t ON 1 = 1
+        WHERE
+            b.ypbm = #{map.ypbm};
+
+    </select>
+
+    <!--插入编制日期-->
+    <update id="insertBzrq" parameterType="Map">
+        update t_ypgl_jbxx set bbbzrq = date_format(now(),'%Y-%m-%d'),bgzbr = #{map.bgzbr},bgzbsj = date_format(now(),'%Y-%m-%d') where ypbm = #{map.ypbm};
+    </update>
+
+    <!--获取检验报告类型-->
+    <select id="bglx" resultType="java.lang.String">
+        select type from t_wt_jbxx where id = #{map.wtid}
+    </select>
+    <!--查询检测项-->
+    <select id="cxJcxm" resultType="java.util.Map">
+        SELECT
+            ifnull(b.zwmc_bm,'') zwmc_bm,
+            ifnull(b.if_pd,'') if_pd,
+    <!--CONCAT(ifnull(b.jcx,'0'),ifnull(b.JLDW,''), '～', ifnull(b.xlz,'0'),ifnull(b.JLDW,'')) jsyq,-->
+        CONCAT((CASE b.JCX WHEN ISNULL(b.JCX ) then '' else '≤' END),ifnull(a.xlz,'0'),
+        (CASE a.xlz WHEN ISNULL(a.xlz) then '' else ifnull(a.JLDW,'') END)) jsyq,
+    ifnull(a.jcz,0) jcz,
+    ifnull(a.jcxmbz,'/') bz,
+    ifnull(a.xlz,0) xlz,
+    ifnull(a.JLDW,'') jldw,
+    ifnull(a.xlzdw,'') xlzdw,
+    a.jcxmjl,
+    ifnull(b.jcfa,'/') jcfa,
+    ifnull(b.pdyj,'/') pdyj,
+    ifnull(a.jcff,'/') jcff,
+    ifnull(b.jcyj,'/') jcyj,
+    ifnull(a.JCX,'')  jcx,
+    ifnull(b.BJF,'')  jcx_bjf,
+    a.id as ypjcxid
+FROM
+    t_yp_jcxm a
+        LEFT JOIN
+    t_jcxm_jbxx b ON a.jcxmid = b.id
+WHERE
+    a.ypid IN (SELECT
+            id
+        FROM
+            t_ypgl_jbxx
+        WHERE
+            ypbm = #{map.ypbm})
+</select>
+<select id="yqsb" resultType="java.util.Map">
+SELECT
+b.sbmc,b.skbh,b.ggxh,'/' as cybh
+FROM
+(SELECT
+    yqid
+FROM
+    t_yp_jcxm
+WHERE
+    ypid = (select id from t_ypgl_jbxx where ypbm =#{map.ypbm})) a
+    JOIN
+t_yqsbtz b ON FIND_IN_SET(b.id, a.yqid)
+group by b.sbmc,b.skbh,b.ggxh,cybh
+</select>
+<select id="yqsbz" resultType="java.util.Map">
+SELECT
+b.sbmc,b.skbh,b.ggxh,'/' as cybh
+FROM
+(SELECT
+    yqid
+FROM
+    t_bgbz_yqsb
+WHERE
+    ypid = (select id from t_ypgl_jbxx where ypbm =#{map.ypbm})) a
+    JOIN
+t_yqsbtz b ON FIND_IN_SET(b.id, a.yqid)
+group by b.sbmc,b.skbh,b.ggxh,cybh
+</select>
+<!--通过样品编码查询样品id-->
+    <select id="selectid" resultType="java.lang.String">
+        select id from t_ypgl_jbxx where ypbm = #{map.ypbm}
+    </select>
+
+    <!--插入委托表readonly状态，不可修改-->
+    <update id="upReadonly">
+        update t_wt_jbxx set readonly = '1' where id = #{map.wtid}
+    </update>
+    <update id="upThbg">
+        update t_wt_jbxx set readonly = '0' where id = #{wtid}
+    </update>
+    <update id="upThYPbg">
+        update t_ypgl_jbxx set ypjczt = '000',sjjyzt = '001', sjsczt ='001', bgbzzt = '004',bglj = null where id = #{ypid}
+    </update>
+    <select id="findWtinfo" resultType="java.util.Map">
+      select * from t_wt_jbxx where id = #{wtid}
+    </select>
+    <!--查询打印流转单内容-->
+    <select id="seLzd" resultType="java.util.Map">
+       /* SELECT
+            IFNULL(b.name, '') AS lrry,
+            IFNULL(c.wtid, '') AS wtid,
+            IFNULL(DATE_FORMAT(a.lrrq, '%Y-%m-%d'), '') AS lrrq,
+            IFNULL(uzbry.name, '') AS bgzbr,
+            IFNULL(DATE_FORMAT(a.bgzbsj, '%Y-%m-%d'), '') AS bgzbsj,
+            d.zbypbm,
+            IFNULL(us.name, '') AS lqry,
+            IFNULL(DATE_FORMAT(d.lqsj, '%Y-%m-%d'), '') AS lqsj,
+            IFNULL(DATE_FORMAT(a.bbbzrq, '%Y-%m-%d'), '') AS bbbzrq,
+            IFNULL(ubgzbry.name, '') AS bbbzry,
+            IFNULL(DATE_FORMAT(a.bgshsj, '%Y-%m-%d'), '') AS bbshrq,
+            IFNULL(us1.name, '') AS bgshr,
+            IFNULL(DATE_FORMAT(a.bgpzsj, '%Y-%m-%d'), '') AS bbpzrq,
+            IFNULL(us2.name, '') AS bgpzr
+        FROM*/
+            SELECT
+	          IFNULL(b. NAME, '/') AS lrry,
+	          IFNULL(c.wtid, '/') AS wtid,
+	          IFNULL(c.wtid, '/') AS wtid1,
+          	  IFNULL(d.zbzl, '/') AS zbzl1,
+	          IFNULL(d.zbzl, '/') AS zbzl2,
+	          IFNULL(d.zbzl, '/') AS zbzl3,
+	          IFNULL(d.zbzl, '/') AS zbzl4,
+	          IFNULL(a.ypmc, '/') AS ypmc,
+	          IFNULL(a.bzxx, '/') AS bzxx,
+	          IFNULL( DATE_FORMAT(a.lrrq, '%Y-%m-%d'),'') AS lrrq,
+	          IFNULL( uzbry. NAME, '') AS bgzbr,
+	          IFNULL( DATE_FORMAT(a.bgzbsj, '%Y-%m-%d'),'') AS bgzbsj,
+	          d.zbypbm,
+	          IFNULL(us. NAME, '/') AS lqry1,
+	          IFNULL(us. NAME, '/') AS lqry2,
+	          IFNULL(us. NAME, '/') AS lqry3,
+	          IFNULL(us. NAME, '/') AS lqry4,
+	          IFNULL( DATE_FORMAT(d.lqsj, '%Y-%m-%d'),'/') AS lqsj1,
+	          IFNULL( DATE_FORMAT(d.lqsj, '%Y-%m-%d'),'') AS lqsj2,
+	          IFNULL( DATE_FORMAT(d.lqsj, '%Y-%m-%d'),'') AS lqsj3,
+	          IFNULL( DATE_FORMAT(d.lqsj, '%Y-%m-%d'),'') AS lqsj4,
+	          IFNULL( DATE_FORMAT(a.bbbzrq, '%Y-%m-%d'),'') AS bbbzrq,
+	            IFNULL(ubgzbry. NAME, '') AS bbbzry,
+	IFNULL(
+		DATE_FORMAT(a.bgshsj, '%Y-%m-%d'),
+		''
+	) AS bbshrq,
+	IFNULL(us1. NAME, '') AS bgshr,
+	IFNULL(
+		DATE_FORMAT(a.bgpzsj, '%Y-%m-%d'),
+		''
+	) AS bbpzrq,
+	IFNULL(us2. NAME, '') AS bgpzr
+        FROM
+            t_ypgl_jbxx a
+						LEFT JOIN t_wt_jbxx wt ON a.ypbm = wt.WTID
+                LEFT JOIN user b ON wt.lrry = b.zydm
+                LEFT JOIN
+            t_wt_jbxx c ON a.wtid = c.wtid
+                LEFT JOIN
+            t_yp_zbwc d ON a.ypbm = d.ypbm AND a.ypbm != d.zbypbm
+						LEFT JOIN user uzbry ON d.zbrydm = uzbry.zydm
+						LEFT JOIN user ubgzbry ON a.bgzbr = ubgzbry.zydm
+                LEFT JOIN
+            user us ON d.lqry = us.zydm
+            left join user us1
+            on us1.zydm = a.bgshr
+            left join user us2
+            on us2.zydm = a.bgpzr
+        WHERE
+            a.ypbm = #{map.ypbm}
+        ORDER BY d.zbdate DESC
+    </select>
+    <select id="seLzdJcxm" resultType="java.util.Map">
+        SELECT
+            IFNULL( d.ZWMC_BM, '' ) AS xmmc,
+            IFNULL( CONCAT_WS(' ',d.jcyj,d.jcfa), '' ) AS jcff,
+            a.ypid,
+            us.NAME AS cjr,
+            ifnull((SELECT
+                        max(u.NAME)
+                    FROM
+                        t_yp_zbwc zbwc
+                        LEFT JOIN USER u ON zbwc.rwfprybm = u.zydm
+                    WHERE
+                        zbwc.ypbm = #{map.ypbm}
+            ),'') AS rwfpry
+        FROM
+            t_yp_jcxm a
+            LEFT JOIN t_jcxm_jbxx d ON d.id = a.jcxmid
+            LEFT JOIN USER us ON us.zydm = a.ZXRY_DM
+
+        WHERE
+            a.ypid = ( SELECT id FROM t_ypgl_jbxx WHERE ypbm = #{map.ypbm} )
+    </select>
+    <!--查询检测项目温度和湿度-->
+    <select id="wdAndSd" resultType="java.util.Map">
+        SELECT
+            MAX(SUBSTRING_INDEX(wd,'-',-1)) AS maxwd,
+            MIN(SUBSTRING_INDEX(wd,'-',1)) AS minwd,
+            MAX(SUBSTRING_INDEX(sd,'-',-1)) AS maxsd,
+            MIN(SUBSTRING_INDEX(sd,'-',1)) AS minsd
+        FROM
+            t_yp_jcxm
+        WHERE
+            ypid = (SELECT
+                    id
+                FROM
+                    t_ypgl_jbxx
+                WHERE
+                    ypbm = #{map.ypbm})
+    </select>
+    <!--插入报告打印人和日期-->
+    <insert id="insertBgdyry">
+        update t_ypgl_jbxx set bgdyry = #{map.bgdyr},bgdyrq = now() where ypbm = #{map.ypbm}
+    </insert>
+
+    <!--更新样品信息报告路径-->
+    <update id="updateBgLj">
+        update t_ypgl_jbxx
+        <set>
+            <if test="map.bglj!=null">
+              BGLJ = #{map.bglj}
+            </if>
+            <if test="map.bgfplj!=null">
+                BGFPLJ = #{map.bgfplj}
+            </if>
+            <if test="map.bgnrlj!=null">
+                BGNRLJ = #{map.bgnrlj}
+            </if>
+            <if test="map.wzbg_doclj != '' and map.wzbg_doclj!=null">
+                ,wzbg_doclj = #{map.wzbg_doclj}
+            </if>
+            <if test="map.fp_doclj != '' and map.fp_doclj!=null">
+                ,fp_doclj = #{map.fp_doclj}
+            </if>
+            <if test="map.nr_doclj != '' and map.nr_doclj!=null">
+                ,nr_doclj = #{map.nr_doclj}
+            </if>
+            where ypbm = #{map.ypbm}
+        </set>
+    </update>
+
+    <!--批量打印时查询所选样品的报告路径-->
+    <select id="findBgLjForPldy" resultType="java.util.Map">
+        SELECT
+            *
+        FROM
+            t_ypgl_jbxx
+        WHERE ifnull(BGLJ,'0') != '0'
+        and ypbm in
+        <foreach collection="list" index="index" item="ypbm" open="(" separator="," close=")">
+          #{ypbm}
+        </foreach>
+    </select>
+
+
+    <!--通过样品编码查询报告路径-->
+    <select id="getBgljByYpbm" resultType="String">
+        select BGLJ from t_ypgl_jbxx where ypbm = #{ypbm} LIMIT 1
+    </select>
+
+    <!--更新样品信息报告路径-->
+    <update id="updateByljByYpbm">
+        update t_ypgl_jbxx set BGLJ = #{bglj} where ypbm = #{ypbm}
+    </update>
+
+    <select id="findFhry" resultType="String">
+            select distinct a.fhry_dm  from t_jcgl_rydm a,t_yp_zbwc b
+            where  a.ypid = b.id and  b.ypid=#{ypid} and a.fhry_dm is not null
+    </select>
+
+    <update id="bgbzJcxUpdate">
+        <foreach collection="jcxList" item="item" index="index" separator=";">
+            update t_yp_jcxm set bg_jsyq=#{item.bg_jsyq},bg_jyjg=#{item.bg_jyjg},bg_dxpd=#{item.bg_dxpd} where id=#{item.ypjcxid}
+        </foreach>
+    </update>
+
+    <select id="getBhgBg" resultType="map">
+            SELECT
+                a.id,
+                ypbm,
+                ypmc,
+                ifnull(b.sjdw,'/') as cydd,
+                IF (ifnull( scdw, '/')='', '/', scdw ) as scdw,
+                IF (ifnull( sb, '/')='', '/', sb ) as sb,
+                IF (ifnull( ggxh, '/')='', '/', ggxh ) as ggxh,
+                ifnull(ifnull( scrq, YPPHHBH ),'/') as scrq ,
+                t.bhgxm,
+                t.bg_jyjg,
+                t.bg_jsyq,
+                t.bg_dxpd
+            FROM
+                t_ypgl_jbxx a,
+                t_wt_jbxx b ,
+                (
+                    SELECT x.ypid,
+                        GROUP_CONCAT(y.zwmc_bm) as bhgxm,
+                        GROUP_CONCAT(bg_jyjg) as bg_jyjg,
+                        GROUP_CONCAT(bg_jsyq) as bg_jsyq,
+                        GROUP_CONCAT(bg_dxpd) as bg_dxpd
+                    FROM
+                        t_yp_jcxm x,
+                        t_jcxm_jbxx y
+                    WHERE
+                          x.jcxmid = y.id
+                        and bg_dxpd is not null
+                        and bg_dxpd='不合格'
+                        group by x.ypid
+                ) T
+            WHERE
+                 a.wtid = b.wtid
+                and  a.scbz=0  /*#删除标志*/
+                and a.BGBZZT='002'  /*#报告编制状态 002通过*/
+                and a.bgzjsp in ('002','000')   /*#报告主检审批 4,000未分配，001已分配，002通过，*/
+                and a.BGSHZT='002' /*#报告审核 1,000未分配，001已分配，002通过*/
+                and BGPZZT='002'  /*#报告批准 2,000未分配，001已分配，002通过*/
+                AND IFNULL(b.zfbs,'0') != '1' /*#是否作废 1 是作废*/
+                and a.id = t.ypid
+            <if test="cxtj.ypmc!=null">
+                and a.YPMC like concat('%',#{cxtj.ypmc}, '%')
+            </if>
+            <if test="cxtj.ypbm!=null">
+                and a.ypbm like concat('%',#{cxtj.ypbm}, '%')
+            </if>
+            <if test="cxtj.ny!=null">
+                and date_format(b.LRRQ,'%Y-%m') = #{cxtj.ny}
+            </if>
+            AND FuncAuthorityBG(a.id, #{cxtj.zydm}, '3') = 1
+            order by a.ypbm asc
+    </select>
+    <!--  原始记录 肥城 需要取值内容  -->
+    <select id="ysjlInfo" resultType="map">
+        select ypgl.ypmc,ypgl.ypbm,GROUP_CONCAT(jcx.ZWMC_BM) jcxm,max(zb.lqsj) lqsj
+        from t_ypgl_jbxx ypgl
+        left join t_yp_jcxm ypjcx on ypjcx.ypid = #{map.ypid} and  ypgl.id= ypjcx.ypid
+        left join t_jcxm_jbxx jcx on ypjcx.jcxmid = jcx.id
+        left join t_yp_zbwc zb on zb.ypid =#{map.ypid} and  ypgl.id=zb.ypid
+        where ypgl.id = #{map.ypid}
+        group by ypgl.ypmc,ypgl.ypbm;
+    </select>
+
+    <update id="updateztNew">
+        <!-- 通过操作-->
+        <foreach collection="data" item="item" index="index">
+            <if test="item.zt=='002'.toString()">
+                <if test="item.lx=='0'.toString()">
+                    update t_ypgl_jbxx set BGBZZT=#{item.zt},bgshzt=#{item.bgshzt} where id=#{item.id};
+                    insert into t_bggl_rydm(ypid,zxry_dm,lx,zxsj)  VALUES (#{item.id},#{item.zydm},#{item.lx},now());
+                </if>
+                <if test="item.lx=='5'.toString()">
+                    update t_ypgl_jbxx set BGZBZT=#{item.zt} where id=#{item.id};
+                    insert into t_bggl_rydm(ypid,zxry_dm,lx,zxsj)  VALUES (#{item.id},#{item.zydm},#{item.lx},now());
+                </if>
+                <if test="item.lx=='4'.toString()">
+                    update t_ypgl_jbxx set bgzjsp=#{item.zt} where id=#{item.id};
+                    insert into t_bggl_rydm(ypid,zxry_dm,lx,zxsj)  VALUES (#{item.id},#{item.zydm},#{item.lx},now());
+                    update t_ypgl_jbxx set bgzjspr = #{item.zydm},bgzjspsj = now() where id=#{item.id};
+                </if>
+                <if test="item.lx=='1'.toString()">
+                    update t_ypgl_jbxx set BGSHZT=#{item.zt},bgpzzt = '001' where id=#{item.id};
+                    insert into t_bggl_rydm(ypid,zxry_dm,lx,zxsj)  VALUES (#{item.id},#{item.zydm},#{item.lx},now());
+                    update t_ypgl_jbxx set bgshr = #{item.zydm},bgshsj = now() where id=#{item.id};
+
+                </if>
+                <if test="item.lx=='2'.toString()">
+                    update t_ypgl_jbxx set BGPZZT=#{item.zt},bgzjsp='001' where id=#{item.id};
+                    insert into t_bggl_rydm(ypid,zxry_dm,lx,zxsj)  VALUES (#{item.id},#{item.zydm},#{item.lx},now());
+                    update t_ypgl_jbxx set bgpzr = #{item.zydm},bgpzsj = now() where id=#{item.id};
+
+                </if>
+                <if test="item.lx=='3'.toString()">
+                    update t_ypgl_jbxx set BGDYZT=#{item.zt} where id=#{item.id};
+                    insert into t_bggl_rydm(ypid,zxry_dm,lx,zxsj)  VALUES (#{item.id},#{item.zydm},#{item.lx},now());
+                </if>
+            </if>
+            <if test="item.zt=='001'.toString()">
+                <if test="item.lx=='2'.toString()">
+                    update t_ypgl_jbxx set BGPZZT=#{item.zt},bgzjsp='001' where id=#{item.id};
+                    insert into t_bggl_rydm(ypid,zxry_dm,lx,zxsj)  VALUES (#{item.id},#{item.zydm},#{item.lx},now());
+                    update t_ypgl_jbxx set bgpzr = #{item.zydm},bgpzsj = now() where id=#{item.id};
+                </if>
+            </if>
+        </foreach>
+
+
+        <!-- 退回操作  原先update t_ypgl_jbxx set BGBZZT='003',bgzjsp='000',BGSHZT='000',BGPZZT='000' where id=#{item.id};-->
+        <foreach collection="data" item="item" index="index">
+            <if test="item.zt=='004'.toString()">
+                <if test="item.lx=='4'.toString()">
+                    <!-- update t_ypgl_jbxx set BGPZZT='003',bgzjsp='000' where id=#{item.id};-->
+                    update t_ypgl_jbxx set bgzjsp = '000',BGPZZT = '000',BGSHZT = '003',BGBZZT = '003' where id=#{item.id};
+                    insert into t_bggl_rydm(ypid,zxry_dm,lx,zxsj,th) VALUES  (#{item.id},#{item.zydm},#{item.lx},now(),'1');
+                </if>
+                <if test="item.lx=='1'.toString()">
+                    update t_ypgl_jbxx set BGBZZT='003',BGSHZT='000' where id=#{item.id};
+                    insert into t_bggl_rydm(ypid,zxry_dm,lx,zxsj,th)  VALUES  (#{item.id},#{item.zydm},#{item.lx},now(),'1');
+                </if>
+                <if test="item.lx=='2'.toString()">
+                    update t_ypgl_jbxx set BGSHZT='003',BGPZZT='000',BGBZZT='003' where id=#{item.id};
+                    insert into t_bggl_rydm(ypid,zxry_dm,lx,zxsj,th)  VALUES   (#{item.id},#{item.zydm},#{item.lx},now(),'1');
+                </if>
+            </if>
+        </foreach>
+    </update>
+    <!--20190918添加新查询检测项目温度和湿度-->
+    <select id="wdAndSdNew" resultType="java.util.Map">
+        SELECT
+            MAX(WD+0) AS maxwd,
+            MIN(WD+0) AS minwd,
+            MAX(SD+0) AS maxsd,
+            MIN(SD+0) AS minsd
+        FROM
+            t_yp_jcxm
+        WHERE
+            ypid = (SELECT
+                    id
+                FROM
+                    t_ypgl_jbxx
+                WHERE
+                    ypbm = #{map.ypbm})
+    </select>
+</mapper>

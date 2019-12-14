@@ -1,0 +1,191 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xinhai.caiyun.systemmanager.dao.CgglMapper">
+    <!-- 获得采购管理信息  -->
+    <select id="selectCggl" resultType="Map">
+        select id,hcmc,gg,jb,sl,sccj,cgmd,
+        (select name from user where zydm = c.sqr)as sqr,
+        (select name from user where zydm = c.spr)as spr,
+        sqrq,dj,zj,bz,sqzt,hclx,sprq,yszt,bzzt
+        from t_cgsq_jbxx c
+        where shzt='002'
+        <if test="map.hclx==null or  map.hclx==''">
+            and hclx != '5'
+        </if>
+        <if test="map.hclx!=null and map.hclx!=''">
+            and hclx=#{map.hclx}
+        </if>
+        <if test="map.hcmc!=null and  map.hcmc!=''">
+            and hcmc like concat('%',#{map.hcmc},'%')
+        </if>
+        <if test="map.bzzt!=null and map.bzzt!=''">
+            and bzzt=#{map.bzzt}
+        </if>
+        <if test="map.sqzt!=null and map.sqzt!=''">
+            and sqzt=#{map.sqzt}
+        </if>
+        <if test="map.startDate!=null">
+            and sqrq >= #{map.startDate}
+        </if>
+        <if test="map.endDate!=null">
+            and #{map.endDate} >= sqrq
+        </if>
+        order by sqzt
+        limit #{map.start},#{map.length};
+    </select>
+    <!-- 获得采购管理信息数量  -->
+    <select id="selectCount" resultType="java.lang.Integer">
+        select count(id)
+        from t_cgsq_jbxx
+        where shzt='002'
+        <if test="map.hclx==null or map.hclx==''">
+            and hclx != '5'
+        </if>
+        <if test="map.hclx!=null and map.hclx!=''">
+            and hclx=#{map.hclx}
+        </if>
+        <if test="map.hcmc!=null and  map.hcmc!=''">
+            and hcmc like concat('%',#{map.hcmc},'%')
+        </if>
+        <if test="map.bzzt!=null and map.bzzt!=''">
+            and bzzt=#{map.bzzt}
+        </if>
+        <if test="map.sqzt!=null and map.sqzt!=''">
+            and sqzt=#{map.sqzt}
+        </if>
+        <if test="map.startDate!=null">
+            and sqrq >= #{map.startDate}
+        </if>
+        <if test="map.endDate!=null">
+            and #{map.endDate} >= sqrq
+        </if>
+        order by sqzt
+    </select>
+    <!-- 更新编制的通过和退回的状态 -->
+    <update id="saveBzzt">
+        update t_cgsq_jbxx set bzzt=#{map.bzzt},bzr=#{map.bzr},bzrq=now()
+        where id in
+        <foreach collection="map.ids" item="id" index="index" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </update>
+    <!-- 得到退回的消息内容 chen-->
+    <select id="queryMess" resultType="map">
+        select hcmc,sqr from t_cgsq_jbxx
+        where id in
+        <foreach collection="ids" item="id" index="index" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </select>
+    <!--修改单价与总价-->
+    <update id="updateCgsqhcbz">
+        update t_cgsq_jbxx
+        <set>
+            <if test="map.zj!=null">
+                zj=#{map.zj},
+            </if>
+            <if test="map.dj!=null">
+                dj=#{map.dj},
+            </if>
+        </set>
+        where
+        id=#{map.hcbzid}
+    </update>
+    <!-- 获得excel导出信息 -->
+    <select id="queryCcglExcel" resultType="com.xinhai.caiyun.systemmanager.api.Cggl">
+         select id,hcmc,gg,jb,sl,cgsx,zbqx,
+         (select name from user where zydm = c.sqr)as sqr,
+          (select name from user where zydm = c.spr)as spr,
+        sqrq,dj,zj,bz,sqzt,hclx,sprq
+        from t_cgsq_jbxx c
+        where id=#{id};
+    </select>
+    <!--采购验收的数据  -->
+    <select id="queryCgys" resultType="Map">
+        select id,hcmc,gg,jb,sl,sccj,cgmd,
+        (select name from user where zydm = c.sqr)as sqr,
+        (select name from user where zydm = c.spr)as spr,
+        sqrq,dj,zj,bz,sqzt,hclx,sprq,yszt
+        from t_cgsq_jbxx c
+        where sqzt in ('002','004','005')
+        <if test="map.hclx==null or map.hclx==''">
+            and hclx != '5'
+        </if>
+        <if test="map.hclx!=null and map.hclx!=''">
+            and hclx = #{map.hclx}
+        </if>
+        <if test="map.hcmc!=null and  map.hcmc!=''">
+            and hcmc like concat('%',#{map.hcmc},'%')
+        </if>
+        <if test="map.yszt!=null and map.yszt!=''">
+            and yszt = #{map.yszt}
+        </if>
+        <if test="map.startDate!=null">
+            and sqrq >= #{map.startDate}
+        </if>
+        <if test="map.endDate!=null">
+            and #{map.endDate} >= sqrq
+        </if>
+        order by id desc
+        limit #{map.start},#{map.length};
+    </select>
+    <!--采购验收的数据的数量  -->
+    <select id="queryCgysNum" resultType="java.lang.Integer">
+        select count(id)
+        from t_cgsq_jbxx
+        where sqzt in ('002','004','005')
+        <if test="map.hclx==null or map.hclx==''">
+            and hclx != '5'
+        </if>
+        <if test="map.hclx!=null and map.hclx!=''">
+            and hclx = #{map.hclx}
+        </if>
+        <if test="map.hcmc!=null and  map.hcmc!=''">
+            and hcmc like concat('%',#{map.hcmc},'%')
+        </if>
+        <if test="map.yszt!=null and  map.yszt!=''">
+            and yszt = #{map.yszt}
+        </if>
+        <if test="map.startDate!=null">
+            and sqrq >= #{map.startDate}
+        </if>
+        <if test="map.endDate!=null">
+            and #{map.endDate} >= sqrq
+        </if>
+        order by id desc
+    </select>
+    <!-- 采购验收  更改采购状态和申请状态 -->
+    <select id="saveCgysZt">
+        update t_cgsq_jbxx set yszt='002',sqzt='004'
+        where id in
+        <foreach collection="ids" item="id" index="index" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </select>
+    <!-- 通过ids  获得对应的采购验收的信息 -->
+    <select id="queryCgysByIds" resultType="map">
+        select id,hcmc,gg,jb,hcbm,sl,cgsx,bz,zbqx,sccj,dj,zj,cgmd,sqr,shr,bzr,spr
+        from t_cgsq_jbxx
+        where id in
+        <foreach collection="ids" item="id" index="index" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </select>
+    <!-- 更新采购管理中的总价 -->
+    <update id="saveZj">
+        update t_cgsq_jbxx
+        <set>
+            <if test="map.dj!=null">
+                dj=#{map.dj},
+            </if>
+            <if test="map.zj!=null">
+                zj=#{map.zj},
+            </if>
+            <if test="map.sccj!=null">
+                sccj=#{map.sccj}
+            </if>
+            where id=#{map.id};
+        </set>
+    </update>
+</mapper>

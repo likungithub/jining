@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.xinhai.caiyun.customermanage.dao.KhglMapper">
+    <!--插入一条数据-->
+    <insert id="createKhxxgl" parameterType="com.xinhai.caiyun.customermanage.api.Khxxgl" keyProperty="id" useGeneratedKeys="true">
+        insert into
+        t_wtkh_jbxx
+        (khmc,lxdh,sfdm,sfmc,csdm,csmc,xjdm,xjmc,xxdz,yzbm,yx,lxr,bz)
+        values
+        (#{khmc},#{lxdh},#{sfdm},#{sfmc},#{csdm},#{csmc},#{xjdm},#{xjmc},#{xxdz},#{yzbm},#{yx},#{lxr},#{bz});
+    </insert>
+
+    <select id="findKhglAll" resultType="com.xinhai.caiyun.customermanage.api.Khxxgl">
+        SELECT  ID, khmc, lxdh, SFDM, SFMC, CSDM, CSMC, XJDM, XJMC, xxdz, YZBM, yx, lxr, bz
+        FROM t_wtkh_jbxx
+        <where>
+            <if test="khmc != null">
+                and khmc like CONCAT('%',#{khmc},'%')
+            </if>
+        </where>
+        order by id desc
+        LIMIT #{start},#{len} ;
+    </select>
+
+    <select id="findkhglAllNums" resultType="java.lang.Integer">
+        SELECT  COUNT(id)
+        FROM t_wtkh_jbxx
+        <where>
+            <if test="khmc != null">
+                and khmc like CONCAT('%',#{khmc},'%')
+            </if>
+        </where>
+    </select>
+
+    <delete id="deleteById" parameterType="java.lang.String">
+        delete from t_wtkh_jbxx where id = #{id};
+    </delete>
+
+    <select id="findKhgl" resultType="com.xinhai.caiyun.customermanage.api.Khxxgl" parameterType="java.lang.String">
+        select
+        id,khmc,lxdh,sfdm,sfmc,csdm,csmc,xjdm,xjmc,xxdz,yzbm,yx,lxr,bz
+        from t_wtkh_jbxx
+        where id = #{id};
+    </select>
+
+    <select id="cxKhxxgl" resultType="com.xinhai.caiyun.customermanage.api.Khxxgl" parameterType="java.lang.String">
+        select
+        khmc,lxdh,sfdm,sfmc,csdm,csmc,xjdm,xjmc,xxdz,yzbm,yx,lxr,bz
+        from t_wtkh_jbxx
+        where khmc like CONCAT('%',#{name},'%');
+    </select>
+
+    <update id="updateKhxx" parameterType="com.xinhai.caiyun.customermanage.api.Khxxgl">
+        update t_wtkh_jbxx
+        <set>
+            <if test="khmc != null">
+                khmc = #{khmc},
+            </if>
+            <if test="lxdh != null">
+                lxdh = #{lxdh},
+            </if>
+            <if test="sfdm != null">
+                sfdm = #{sfdm},
+            </if>
+            <if test="sfmc != null">
+                sfmc = #{sfmc},
+            </if>
+            <if test="csdm != null">
+                csdm = #{csdm},
+            </if>
+            <if test="csmc != null">
+                csmc = #{csmc},
+            </if>
+            <if test="xjdm != null">
+                xjdm = #{xjdm},
+            </if>
+            <if test="xjmc != null">
+                xjmc = #{xjmc},
+            </if>
+            <if test="xxdz != null">
+                xxdz = #{xxdz},
+            </if>
+            <if test="yzbm != null">
+                yzbm = #{yzbm},
+            </if>
+            <if test="yx != null">
+                yx = #{yx},
+            </if>
+            <if test="lxr != null">
+                lxr = #{lxr},
+            </if>
+            <if test="bz != null">
+                bz = #{bz}
+            </if>
+            WHERE ID = #{id};
+        </set>
+    </update>
+    <insert id="importWtkhxxExcel" >
+        insert into t_wtkh_jbxx (KHMC,LXDH,SFDM,SFMC,CSDM,CSMC,XJDM,XJMC,XXDZ,YZBM,YX,LXR,BZ) values (#{map.KHMC},#{map.LXDH},#{map.SFDM},#{map.SFMC},#{map.CSDM},#{map.CSMC},#{map.XJDM},#{map.XJMC},#{map.XXDZ},#{map.YZBM},#{map.YX},#{map.LXR},#{map.BZ})
+    </insert>
+    <select id="findDm" resultType="Map">
+        SELECT xzqh_dm FROM dm_xzqh where xzqh_mc = #{map.SFMC}
+    </select>
+    <select id="findDmsh" resultType="Map">
+        SELECT xzqh_dm FROM dm_xzqh where xzqh_mc = #{map.CSMC}
+    </select>
+    <select id="findDmqu" resultType="Map">
+        SELECT xzqh_dm FROM dm_xzqh where xzqh_mc = #{map.XJMC}
+    </select>
+</mapper>

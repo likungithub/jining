@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xinhai.caiyun.systemmanager.dao.YqsbjdjlMapper">
+    <select id="selectYqsbjdjl" resultType="Map">
+        select skbh,sbmc,ggxh,zqddj,fbl,sccs,jdjg,jdrq,yxrq,jdyj,jdjl,zsbh,qryj,jdjig,whr,whrq,whjl,hcr,hcrq,hcyj,hcjl,hcjg
+        from t_jdwhhc_jl
+        where id>0
+        <if test="map.sbmc!=null and map.sbmc!=''">
+            and sbmc = #{map.sbmc}
+        </if>
+        <if test="map.skbh!=null and map.skbh!=''">
+            and skbh = #{map.skbh}
+        </if>
+        limit #{map.start},#{map.length};
+    </select>
+    <select id="selectJdjlCount" resultType="java.lang.Integer">
+        select count(skbh)
+        from t_jdwhhc_jl
+        where id>0
+        <if test="map.sbmc!=null and map.sbmc!=''">
+            and sbmc = #{map.sbmc}
+        </if>
+        <if test="map.skbh!=null and map.skbh!=''">
+            and skbh = #{map.skbh}
+        </if>
+    </select>
+    <update id="updateJdjl">
+        update t_jdwhhc_jl set
+        jdjg = #{map.jdjg},jdrq = #{map.jdrq},yxrq = #{map.yxrq},jdyj = #{map.jdyj},jdjl = #{map.jdjl},zsbh = #{map.zsbh},qryj = #{map.qryj},jdjig = #{map.jdjig} where skbh = #{map.skbh}
+    </update>
+    <insert id="insertJdjllsb">
+        insert into t_jdjllsb (skbh,jdrq,jdjg,jdyj,jdjl,zsbh,qryj,jdjig)
+        values(#{map.skbh},#{map.jdrq},#{map.jdjg},#{map.jdyj},#{map.jdjl},#{map.zsbh},#{map.qryj},#{map.jdjig})
+    </insert>
+    <!--维护记录-->
+    <update id="updateWhjl">
+        update t_jdwhhc_jl set
+        whrq = #{map.whrq},whjl = #{map.whjl},whr = #{map.whr} where skbh = #{map.skbh}
+    </update>
+    <insert id="insertWhjllsb">
+        insert into t_whjllsb (skbh,whrq,whjl,whr)
+        values(#{map.skbh},#{map.whrq},#{map.whjl},#{map.whr})
+    </insert>
+    <!--核查记录-->
+    <update id="updateHcjl">
+        update t_jdwhhc_jl set
+        hcr = #{map.hcr},hcrq = #{map.hcrq},hcyj = #{map.hcyj},hcjl = #{map.hcjl},hcjg = #{map.hcjg} where skbh = #{map.skbh}
+    </update>
+    <insert id="insertHcjllsb">
+        insert into t_hcjllsb (skbh,hcr,hcrq,hcyj,hcjl,hcjg)
+        values(#{map.skbh},#{map.hcr},#{map.hcrq},#{map.hcyj},#{map.hcjl},#{map.hcjg})
+    </insert>
+    <!--根据省市县导出检定记录-->
+    <select id="findOnedqByid" resultType="com.xinhai.caiyun.systemmanager.api.yqsbjdjldc">
+
+        select skbh,sbmc,ggxh,jdrq,jdjg,jdyj,jdjl,qryj,jdjig,jdbz from t_jdwhhc_jl where ((jdjg like concat('%',#{map.province},'%'))
+        or (jdjg like concat('%',#{map.city},'%')) or(jdjg like concat('%',#{map.village},'%')))
+        <if test="map.startDate!=null and map.startDate!=''">
+            and str_to_date(jdrq,'%Y-%m-%d')>=str_to_date(#{map.startDate},'%Y-%m-%d')
+        </if>
+        <if test="map.endDate!=null and map.startDate!=''">
+            and str_to_date(#{map.endDate},'%Y-%m-%d')>=str_to_date(jdrq,'%Y-%m-%d')
+        </if>
+    </select>
+    <select id="findOnedqAllByid" resultType="com.xinhai.caiyun.systemmanager.api.yqsbjdjldc">
+        select skbh,sbmc,ggxh,jdrq,jdjg,jdyj,jdjl,qryj,jdjig,jdbz from t_jdwhhc_jl
+    </select>
+    <!--检定记录导出-->
+    <select id="findOneByid" resultType="com.xinhai.caiyun.systemmanager.api.yqsbjdjldc">
+        select skbh,sbmc,ggxh,jdrq,jdjg,jdyj,jdjl,qryj,jdjig,jdbz from t_jdwhhc_jl where skbh = #{id}
+    </select>
+    <!--维护记录导出-->
+    <select id="findOnewhjlByid" resultType="com.xinhai.caiyun.systemmanager.api.Whjldc">
+        select skbh,sbmc,ggxh,whrq,whjl,whr,whbz from t_jdwhhc_jl where skbh = #{id}
+    </select>
+    <!--核查记录导出-->
+    <select id="findOnehcjlByid" resultType="com.xinhai.caiyun.systemmanager.api.Hcjldc">
+        select skbh,sbmc,ggxh,hcrq,hcyj,hcjl,hcjg,hcr,hcbz from t_jdwhhc_jl where skbh = #{id}
+    </select>
+</mapper>

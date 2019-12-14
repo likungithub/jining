@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xinhai.caiyun.customermanage.dao.YycxMapper">
+    <select id="findYycx" resultType="Map">
+        select t.id as id,t.ypbm as ypbm,t.ypmc as ypmc,t.htmc as htmc,t.ypsl as ypsl,t.ypdw as ypdw,t.ypbctj as ypbctj,datediff(now(),t.dysj) as cczq,t.bzq as bzq,t.ypjczt as ypjczt,t.if_fhcl as clfs,t.bzxx as bzxx
+        from t_ypgl_jbxx t
+        where id>0 and t.ypsl>0
+        <if test="map.htmc!=null and map.htmc!=''">
+            and htmc = #{map.htmc}
+        </if>
+        <if test="map.ypmc!=null and map.ypmc!=''">
+            and ypmc = #{map.ypmc}
+        </if>
+        limit #{map.start},#{map.length};
+    </select>
+    <select id="findCount" resultType="java.lang.Integer">
+        select count(*)
+        from t_ypgl_jbxx t
+        where id>0 and t.ypsl>0
+        <if test="map.htmc!=null and map.htmc!=''">
+            and htmc = #{map.htmc}
+        </if>
+        <if test="map.ypmc!=null and map.ypmc!=''">
+            and ypmc = #{map.ypmc}
+        </if>
+    </select>
+</mapper>
